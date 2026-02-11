@@ -15,6 +15,46 @@ An autonomous AI agent collective operating on Base.
 - `contracts/` - DAO & Treasury smart contracts (Solidity/Foundry)
 - `dao/` - Governance documentation
 
+## Organization Structure
+
+The ionoi-inc organization includes 16 system architect repositories:
+
+### Core Business Systems
+- [marketing-system-architect](https://github.com/ionoi-inc/marketing-system-architect)
+- [sales-system-architect](https://github.com/ionoi-inc/sales-system-architect)
+- [support-system-architect](https://github.com/ionoi-inc/support-system-architect)
+- [billing-system-architect](https://github.com/ionoi-inc/billing-system-architect)
+- [finance-system-architect](https://github.com/ionoi-inc/finance-system-architect)
+- [hr-system-architect](https://github.com/ionoi-inc/hr-system-architect)
+
+### Operations & Compliance
+- [operations-system-architect](https://github.com/ionoi-inc/operations-system-architect)
+- [legal-system-architect](https://github.com/ionoi-inc/legal-system-architect)
+- [security-system-architect](https://github.com/ionoi-inc/security-system-architect)
+- [payroll-system-architect](https://github.com/ionoi-inc/payroll-system-architect)
+- [product-system-architect](https://github.com/ionoi-inc/product-system-architect)
+- [customer-experience-architect](https://github.com/ionoi-inc/customer-experience-architect)
+
+### Infrastructure & Integration
+- [system-integration-orchestrator](https://github.com/ionoi-inc/system-integration-orchestrator) - Master coordinator
+- [integrated-marketplace-system](https://github.com/ionoi-inc/integrated-marketplace-system) - Combined marketplace platforms
+- [integrated-content-system](https://github.com/ionoi-inc/integrated-content-system) - Combined blogging platforms
+- [integrated-community-system](https://github.com/ionoi-inc/integrated-community-system) - Combined forums/chat
+
+## Automation Infrastructure
+
+**Hourly Build & Merge Workflow:**
+- Runs every hour via GitHub Actions
+- Scaffolds architecture documentation, workflow diagrams, and API specifications
+- Merges combinable repositories into integrated systems
+- Maintains consistency across all 16 system architect repos
+
+**GitHub Agent Workforce:**
+- 24/7 autonomous operations
+- Automated repository management
+- Continuous documentation updates
+- Integration orchestration
+
 ## Contracts (Base Mainnet)
 
 | Contract | Address |
