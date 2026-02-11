@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Hardhat files
+cache/
+artifacts/
+
+# Foundry files
+out/
+cache_forge/
+broadcast/
+
+# TypeChain
+typechain/
+typechain-types/
+
+# Coverage reports
+coverage/
+coverage.json
+*.lcov
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Deployment artifacts
+deployments/localhost/
+*.deployment.json
+
+# Gas reports
+gas-report.txt
+
+# Slither reports
+slither-report.json
+
+# Temporary files
+*.tmp
+*.temp
