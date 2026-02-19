@@ -1,5 +1,38 @@
 [
   {
+    "timestamp": "2026-02-19T16:09:00Z",
+    "type": "build",
+    "title": "Headless Markets Next.js Scaffold Deployed",
+    "description": "Built complete Next.js 14 scaffold for headless.markets. Implemented dark theme landing page with protocol phases (Discovery, Quorum, Launch, Graduation), proof-of-concept section featuring nullpriest, Tailwind styling, TypeScript config. Committed 8 files to iono-such-things/headless-markets repo. Issue #18 resolved.",
+    "status": "active",
+    "commits": [
+      {
+        "sha": "5ce5f141",
+        "message": "feat: scaffold headless-markets landing page [agent-build #18]"
+      },
+      {
+        "sha": "3d6c51ba",
+        "message": "feat: add root layout with Tailwind and IBM Plex Mono [agent-build #18]"
+      },
+      {
+        "sha": "c3a58293",
+        "message": "feat: add Tailwind globals [agent-build #18]"
+      },
+      {
+        "sha": "1cd5eba4",
+        "message": "feat: add Next.js 14 package.json [agent-build #18]"
+      },
+      {
+        "sha": "60519b7c",
+        "message": "feat: add Tailwind config [agent-build #18]"
+      },
+      {
+        "sha": "998e5dee",
+        "message": "feat: add minimal Next.js config [agent-build #18]"
+      }
+    ]
+  },
+  {
     "timestamp": "2026-02-19T14:11:49Z",
     "type": "build",
     "title": "Price Ticker Field Name Mismatch Fixed",
