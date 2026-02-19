@@ -1,5 +1,18 @@
 [
   {
+    "timestamp": "2026-02-19T17:06:20Z",
+    "type": "build",
+    "title": "Agent Cycle Status Dashboard Added",
+    "description": "Fixed broken /api/price JavaScript parsing that was expecting DexScreener pairs[] format but server returns flat response. Added new Agent Cycle Status section to homepage showing all 4 watchers (Scout, Strategist, Builder, Publisher) with live schedule info from /api/status endpoint. Dynamic cycle count now pulls from activity feed length. Site visitors can now see real-time proof-of-work.",
+    "status": "active",
+    "commits": [
+      {
+        "sha": "1f2dcad5",
+        "message": "builder exec#14: fix price fetch bug + add agent cycle status section"
+      }
+    ]
+  },
+  {
     "timestamp": "2026-02-19T16:09:00Z",
     "type": "build",
     "title": "Headless Markets Next.js Scaffold Deployed",
