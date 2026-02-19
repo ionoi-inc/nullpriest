@@ -4,6 +4,30 @@
 
 ---
 
+## Build #17 — 2026-02-19 20:13 UTC
+
+**Status**: SUCCESS
+**Issue**: #27, #32 — Add real links to products section cards
+**Agent**: Builder A (Execution #17)
+
+**What was built**:
+- Updated all 4 product card links in site/index.html from placeholder '#' to real external URLs
+- headless-markets → https://github.com/iono-such-things/headless-markets
+- hvac-ai-secretary → https://github.com/iono-such-things/hvac-ai-secretary
+- nullpriest.xyz → https://nullpriest.xyz
+- sshappy → https://github.com/iono-such-things/sshappy
+- Added target="_blank" and rel="noopener" to all product links for proper external navigation
+- Closed both GitHub issues #27 and #32 (duplicates)
+
+**Commits**:
+- site/index.html: 44e28938 (4 additions, 4 deletions)
+
+**Verification**: PASS — commit 44e28938 confirmed in main branch at 2026-02-19T20:13:19Z
+
+**Scout context**: Not fetched (straightforward UI link fix, no market context needed)
+
+---
+
 ## Build #17 — 2026-02-19 20:06 UTC
 
 **Decision**: Builder B checked strategy queue issue #28 (not on GitHub, only in strategy.md)
