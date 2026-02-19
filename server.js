@@ -37,7 +37,7 @@ app.get('/api/status', (req, res) => {
     contracts: {
       token:   '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F',
       wallet:  '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
-      pool:    '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f'
+      pool:    '0x2128cf8f508dde2202c6cd5df70be'
     },
     projects: [
       { name: 'headless-markets', status: 'building', description: 'YC for AI agents. 10% protocol fee on every agent token launch.' },
@@ -72,7 +72,7 @@ function parseActivityFeed(markdown) {
     const lines = block.trim().split('\n');
     if (!lines[0] || !lines[0].startsWith('## ')) continue;
     const header = lines[0].replace(/^## /, '').trim();
-    const dashIdx = header.indexOf(' \u2014 ');
+    const dashIdx = header.indexOf(' — ');
     let date = null, title = header;
     if (dashIdx !== -1) {
       date = header.slice(0, dashIdx).trim();
@@ -106,122 +106,114 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ── NULP price proxy ────────────────────────────────────────────────────────
-// Reads live reserves from Uniswap V2 pool on Base via eth_call to getReserves()
-// Pool: 0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f (NULP/WETH)
-// NULP decimals: 18, WETH decimals: 18
-// Price = reserve1 (WETH) / reserve0 (NULP) * ETH_USD
-// ETH/USD fetched from CoinGecko public API (no key required)
+// ── Build log endpoint ──────────────────────────────────────────────────────
+// Reads memory/build-log.md from disk, parses into JSON array, caches 60s
+let buildLogCache = null;
+let buildLogCacheAt = 0;
+const BUILD_LOG_CACHE_TTL_MS = 60_000;
 
-// Cache: refresh at most once per 30s to avoid hammering RPC
+function parseBuildLog(markdown) {
+  const builds = [];
+  const blocks = markdown.split(/\n(?=## Build #)/);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    if (!lines[0] || !lines[0].startsWith('## Build #')) continue;
+    const header = lines[0].replace(/^## Build #/, '').trim();
+    const buildNum = parseInt(header.split(/\s+/)[0], 10);
+    const bullets = [];
+    for (let i = 1; i < lines.length; i++) {
+      const m = lines[i].match(/^\s*[-*]\s+(.+)/);
+      if (m) bullets.push(m[1].trim());
+    }
+    builds.push({ build: buildNum, details: bullets });
+  }
+  return builds;
+}
+
+app.get('/api/build-log', (req, res) => {
+  const now = Date.now();
+  if (buildLogCache && (now - buildLogCacheAt < BUILD_LOG_CACHE_TTL_MS)) {
+    return res.json(buildLogCache);
+  }
+  try {
+    const fs = require('fs');
+    const logPath = path.join(__dirname, 'memory', 'build-log.md');
+    const md = fs.readFileSync(logPath, 'utf8');
+    const builds = parseBuildLog(md);
+    buildLogCache = { builds, cached_at: new Date().toISOString(), source: 'local' };
+    buildLogCacheAt = now;
+    res.json(buildLogCache);
+  } catch (err) {
+    res.status(500).json({ error: 'build log unavailable', details: err.message });
+  }
+});
+
+// ── NULP price endpoint ─────────────────────────────────────────────────────
+// Fetches live NULP price from DexScreener public API (no key required)
+// Pool migrated from Uniswap V2 to V4, so use DexScreener for cross-DEX support
+// Token: 0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F on Base chain
+
 let priceCache = null;
 let priceCacheAt = 0;
-const CACHE_TTL_MS = 30_000;
-
-// getReserves() selector: 0x0902f1ac
-const GET_RESERVES_DATA = '0x0902f1ac';
-
-function rpcCall(rpcUrl, method, params) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ jsonrpc: '2.0', id: 1, method, params });
-    const url = new URL(rpcUrl);
-    const options = {
-      hostname: url.hostname,
-      path: url.pathname + url.search,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
-    };
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try { resolve(JSON.parse(data)); }
-        catch (e) { reject(new Error('RPC parse error: ' + data.slice(0, 100))); }
-      });
-    });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
-}
+const PRICE_CACHE_TTL_MS = 30_000;
 
 function httpsGet(url) {
   return new Promise((resolve, reject) => {
-    const parsedUrl = new URL(url);
-    const options = {
-      hostname: parsedUrl.hostname,
-      path: parsedUrl.pathname + parsedUrl.search,
-      method: 'GET',
-      headers: { 'User-Agent': 'nullpriest-agent/2.1' }
-    };
-    const req = https.request(options, (res) => {
+    https.get(url, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
         try { resolve(JSON.parse(data)); }
-        catch (e) { reject(new Error('HTTP parse error')); }
+        catch (e) { reject(new Error('JSON parse error')); }
       });
-    });
-    req.on('error', reject);
-    req.end();
+    }).on('error', reject);
   });
 }
 
 async function fetchLivePrice() {
-  const RPC = process.env.BASE_RPC_URL || 'https://mainnet.base.org';
-  const POOL = '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f';
-
   try {
-    // 1) Get reserves from pool
-    const callRes = await rpcCall(RPC, 'eth_call', [
-      { to: POOL, data: GET_RESERVES_DATA },
-      'latest'
-    ]);
+    // DexScreener API: GET /latest/dex/tokens/:tokenAddress
+    const NULP_TOKEN = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+    const url = `https://api.dexscreener.com/latest/dex/tokens/${NULP_TOKEN}`;
+    const data = await httpsGet(url);
 
-    if (!callRes.result || callRes.result === '0x') {
-      throw new Error('getReserves returned empty — pool may not exist at this address');
+    if (!data.pairs || data.pairs.length === 0) {
+      throw new Error('No pairs found for NULP token');
     }
 
-    const hex = callRes.result.slice(2);
-    const reserve0 = BigInt('0x' + hex.slice(0, 64));
-    const reserve1 = BigInt('0x' + hex.slice(64, 128));
-
-    if (reserve0 === 0n || reserve1 === 0n) {
-      throw new Error('Pool has zero reserves');
+    // Find the pair with highest liquidity on Base chain
+    const basePairs = data.pairs.filter(p => p.chainId === 'base');
+    if (basePairs.length === 0) {
+      throw new Error('No Base chain pairs found');
     }
 
-    // 2) Get ETH/USD from CoinGecko
-    const geckoRes = await httpsGet('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-    const ethUsd = geckoRes?.ethereum?.usd;
-    if (!ethUsd) throw new Error('CoinGecko returned no ETH price');
-
-    // 3) Calculate NULP/USD
-    const priceInEth = Number(reserve1) / Number(reserve0);
-    const priceUsd = priceInEth * ethUsd;
+    const topPair = basePairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
 
     return {
-      price: priceUsd,
-      reserve0: reserve0.toString(),
-      reserve1: reserve1.toString(),
-      ethUsd,
+      price: parseFloat(topPair.priceUsd) || 0,
+      priceChange24h: parseFloat(topPair.priceChange?.h24) || 0,
+      volume24h: parseFloat(topPair.volume?.h24) || 0,
+      liquidity: parseFloat(topPair.liquidity?.usd) || 0,
+      dex: topPair.dexId,
+      pairAddress: topPair.pairAddress,
       timestamp: new Date().toISOString()
     };
   } catch (err) {
-    console.error('[price] fetch error:', err.message);
+    console.error('[price] DexScreener fetch error:', err.message);
     throw err;
   }
 }
 
 app.get('/api/price', async (req, res) => {
   const now = Date.now();
-  if (priceCache && (now - priceCacheAt < CACHE_TTL_MS)) {
-    return res.json(priceCache);
+  if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
+    return res.json({ ...priceCache, cached: true });
   }
 
   try {
     priceCache = await fetchLivePrice();
     priceCacheAt = now;
-    res.json(priceCache);
+    res.json({ ...priceCache, cached: false });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch price', details: err.message });
   }
