@@ -56,7 +56,7 @@ jobs:
             fi
 
             echo "Restarting service..."
-            sudo systemctl restart nulp
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl restart nulp
 
             echo "Deployment complete!"
-            sudo systemctl status nulp --no-pager
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl status nulp --no-pager
