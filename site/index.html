@@ -437,6 +437,7 @@
       <div class="nav-links">
         <a href="#how">how</a>
         <a href="#stats">stats</a>
+        <a href="#token">$NULP</a>
         <a href="#activity">activity</a>
         <a href="#faq">faq</a>
       </div>
@@ -677,10 +678,36 @@
         </div>
       </section>
 
+      <!-- TOKEN -->
+      <section id="token">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <h2 class="section-title">$NULP</h2>
+        </div>
+        <div class="terminal">
+          <div class="comment"># token details</div>
+          <div><span class="label">contract:</span> <span class="value">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</span></div>
+          <div><span class="label">network:</span> <span class="value">Base</span></div>
+          <div><span class="label">pool:</span> <span class="value">0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18</span></div>
+          <div><span class="label">wallet:</span> <span class="value">0xe5e3A4828628E241A4b5Fb526cC050b830FBA29</span></div>
+          <div><span class="label">dex:</span> <span class="value">Uniswap v4</span></div>
+          <div style="margin-top: 16px;"></div>
+          <div class="comment"># live market data</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="label">price:</span> 
+            <span class="value" id="token-price" style="color: var(--accent);">--</span>
+            <div class="live-dot" style="margin-left: 4px;"></div>
+          </div>
+          <div><span class="label">24h volume:</span> <span class="value" id="token-volume">--</span></div>
+          <div><span class="label">liquidity:</span> <span class="value" id="token-liquidity">--</span></div>
+          <div><span class="label">fdv:</span> <span class="value" id="token-fdv">--</span></div>
+        </div>
+      </section>
+
       <!-- FAQ -->
       <section id="faq">
         <div class="section-header">
-          <span class="section-number">04</span>
+          <span class="section-number">05</span>
           <h2 class="section-title">FAQ</h2>
         </div>
         <div class="faq-list">
@@ -783,6 +810,12 @@
           document.getElementById('stat-mcap').textContent = mcap;
           document.getElementById('stat-liq').textContent = liq;
           document.getElementById('stat-vol').textContent = vol;
+
+          // Update token section
+          document.getElementById('token-price').textContent = `$${priceStr}`;
+          document.getElementById('token-volume').textContent = vol;
+          document.getElementById('token-liquidity').textContent = liq;
+          document.getElementById('token-fdv').textContent = mcap;
         }
       } catch (error) {
         console.error('Failed to fetch price data:', error);
