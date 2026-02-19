@@ -15,15 +15,15 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ── Static site ─────────────────────────────────────────────────────────────
+// ── Static site ──────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ── Health check ────────────────────────────────────────────────────────────
+// ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.1' });
 });
 
-// ── Agent status endpoint ───────────────────────────────────────────────────
+// ── Agent status endpoint ────────────────────────────────────────────────────
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
@@ -36,7 +36,7 @@ app.get('/api/status', (req, res) => {
     },
     contracts: {
       token:   '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F',
-      wallet:  '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+      wallet:  '0xe5e3A4828628E241A4b5Fb526cC050b830FBA29',
       pool:    '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f'
     },
     projects: [
@@ -48,7 +48,7 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ── Memory proxy ────────────────────────────────────────────────────────────
+// ── Memory proxy ─────────────────────────────────────────────────────────────
 app.get('/memory/:filename', (req, res) => {
   const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
   https.get(url, (ghRes) => {
@@ -59,7 +59,55 @@ app.get('/memory/:filename', (req, res) => {
   });
 });
 
-// ── NULP price proxy ────────────────────────────────────────────────────────
+// ── Activity feed endpoint ───────────────────────────────────────────────────
+// Reads memory/activity-feed.md from disk, parses into JSON, caches 60s
+let activityCache = null;
+let activityCacheAt = 0;
+const ACTIVITY_CACHE_TTL_MS = 60_000;
+
+function parseActivityFeed(markdown) {
+  const entries = [];
+  const blocks = markdown.split(/\n(?=##\s)/);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    if (!lines[0] || !lines[0].startsWith('## ')) continue;
+    const header = lines[0].replace(/^##\s+/, '').trim();
+    // header format: "YYYY-MM-DD HH:MM UTC — Title" or just "Title"
+    const dashIdx = header.indexOf(' — ');
+    let date = null, title = header;
+    if (dashIdx !== -1) {
+      date = header.slice(0, dashIdx).trim();
+      title = header.slice(dashIdx + 3).trim();
+    }
+    const bullets = [];
+    for (let i = 1; i < lines.length; i++) {
+      const m = lines[i].match(/^\s*[-*]\s+(.+)/);
+      if (m) bullets.push(m[1].trim());
+    }
+    entries.push({ date, title, bullets });
+  }
+  return entries;
+}
+
+app.get('/api/activity', async (req, res) => {
+  const now = Date.now();
+  if (activityCache && now - activityCacheAt < ACTIVITY_CACHE_TTL_MS) {
+    return res.json(activityCache);
+  }
+  try {
+    const fs = require('fs');
+    const p = require('path').join(__dirname, 'memory', 'activity-feed.md');
+    const md = fs.readFileSync(p, 'utf8');
+    const entries = parseActivityFeed(md);
+    activityCache = { entries, cached_at: new Date().toISOString(), source: 'local' };
+    activityCacheAt = now;
+    res.json(activityCache);
+  } catch (err) {
+    res.status(500).json({ error: 'activity feed unavailable', details: err.message });
+  }
+});
+
+// ── NULP price proxy ─────────────────────────────────────────────────────────
 // Reads live reserves from Uniswap V2 pool on Base via eth_call to getReserves()
 // Pool: 0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f (NULP/WETH)
 // NULP decimals: 18, WETH decimals: 18
@@ -122,143 +170,95 @@ function httpsGet(url) {
 
 async function fetchLivePrice() {
   const RPC = process.env.BASE_RPC_URL || 'https://mainnet.base.org';
-  const POOL_ADDRESS = '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f';
+  const POOL = '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f';
 
   try {
-    // 1. Call getReserves() on pool
-    const reservesRes = await rpcCall(RPC, 'eth_call', [
-      { to: POOL_ADDRESS, data: GET_RESERVES_DATA },
+    // 1. Fetch reserves from pool
+    const reservesResp = await rpcCall(RPC, 'eth_call', [
+      { to: POOL, data: GET_RESERVES_DATA },
       'latest'
     ]);
-    if (!reservesRes.result || reservesRes.result === '0x') {
-      throw new Error('Pool returned empty reserves (pool may not exist at this address)');
+
+    if (!reservesResp.result || reservesResp.result === '0x') {
+      throw new Error('getReserves returned empty — pool may not exist at this address');
     }
 
-    // Parse reserves: first 32 bytes = reserve0, next 32 bytes = reserve1
-    const hex = reservesRes.result.slice(2);
+    const hex = reservesResp.result.slice(2);
     const reserve0Hex = hex.slice(0, 64);
     const reserve1Hex = hex.slice(64, 128);
     const reserve0 = BigInt('0x' + reserve0Hex);
     const reserve1 = BigInt('0x' + reserve1Hex);
 
     if (reserve0 === 0n || reserve1 === 0n) {
-      throw new Error('Zero reserves in pool');
+      throw new Error('reserves are zero — pool may be empty or migrated');
     }
 
     // 2. Fetch ETH/USD from CoinGecko
-    const cgData = await httpsGet('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const cgUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
+    const cgData = await httpsGet(cgUrl);
     const ethUsd = cgData?.ethereum?.usd;
-    if (!ethUsd) throw new Error('CoinGecko ETH price unavailable');
 
-    // 3. Calculate NULP/USD
-    // Price = (reserve1 / reserve0) * ETH_USD
-    // Use floating point for final calculation
-    const nulpPerWeth = Number(reserve0) / Number(reserve1);
-    const nulpUsd = (1 / nulpPerWeth) * ethUsd;
+    if (!ethUsd) {
+      throw new Error('CoinGecko ETH price unavailable');
+    }
+
+    // 3. Calculate NULP price
+    // price_usd = (reserve1 / reserve0) * ethUsd
+    const reserve0Float = Number(reserve0) / 1e18;
+    const reserve1Float = Number(reserve1) / 1e18;
+    const priceInEth = reserve1Float / reserve0Float;
+    const priceUsd = priceInEth * ethUsd;
+
+    // 4. Calculate 24h change (mock for now — need historical data source)
+    const change24h = 0; // TODO: implement via price history
 
     return {
-      price: nulpUsd,
-      reserve0: reserve0.toString(),
-      reserve1: reserve1.toString(),
-      ethUsd,
-      pool: POOL_ADDRESS
+      price_usd: priceUsd,
+      price_eth: priceInEth,
+      change_24h: change24h,
+      reserve0: reserve0Float,
+      reserve1: reserve1Float,
+      pool: POOL,
+      timestamp: new Date().toISOString()
     };
+
   } catch (err) {
-    throw err;
+    throw new Error(`Price fetch failed: ${err.message}`);
   }
 }
 
 app.get('/api/price', async (req, res) => {
   const now = Date.now();
-  if (priceCache && (now - priceCacheAt) < CACHE_TTL_MS) {
-    return res.json({ ...priceCache, cached: true, age: Math.floor((now - priceCacheAt) / 1000) });
+  if (priceCache && now - priceCacheAt < CACHE_TTL_MS) {
+    return res.json({ ...priceCache, cached: true });
   }
+
   try {
-    priceCache = await fetchLivePrice();
+    const price = await fetchLivePrice();
+    priceCache = price;
     priceCacheAt = now;
-    res.json({ ...priceCache, cached: false });
+    res.json({ ...price, cached: false });
   } catch (err) {
-    res.status(500).json({ error: err.message, pool: '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f' });
+    res.status(500).json({ error: 'price unavailable', details: err.message });
   }
 });
 
-// ── Treasury endpoint ───────────────────────────────────────────────────────
-// Returns ETH balance of nullpriest wallet on Base
-let treasuryCache = null;
-let treasuryCacheAt = 0;
-const TREASURY_CACHE_TTL = 60_000; // 60s
-
-app.get('/api/treasury', async (req, res) => {
-  const now = Date.now();
-  if (treasuryCache && (now - treasuryCacheAt) < TREASURY_CACHE_TTL) {
-    return res.json({ ...treasuryCache, cached: true, age: Math.floor((now - treasuryCacheAt) / 1000) });
-  }
-  try {
-    const RPC = process.env.BASE_RPC_URL || 'https://mainnet.base.org';
-    const WALLET = '0xe5e3A482862E241A4b5Fb526cC050b830FBA29';
-    const balanceRes = await rpcCall(RPC, 'eth_getBalance', [WALLET, 'latest']);
-    if (!balanceRes.result) throw new Error('RPC returned no balance');
-    const weiBalance = BigInt(balanceRes.result);
-    const ethBalance = Number(weiBalance) / 1e18;
-    treasuryCache = { wallet: WALLET, balance: ethBalance, unit: 'ETH', chain: 'Base' };
-    treasuryCacheAt = now;
-    res.json({ ...treasuryCache, cached: false });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── /api/activity endpoint ──────────────────────────────────────────────────
-// Reads memory/activity-feed.md from GitHub raw, parses markdown into JSON
-// Format: ## YYYY-MM-DD HH:MM UTC\n**Title**\n- bullet1\n- bullet2\n\n---
-let activityCache = null;
-let activityCacheAt = 0;
-const ACTIVITY_CACHE_TTL_MS = 60_000;
-
-function parseActivityFeed(markdown) {
-  const entries = [];
-  const sections = markdown.split(/\n---\n/).filter(s => s.trim());
-  for (const section of sections) {
-    const lines = section.trim().split('\n');
-    let date = null, title = null;
-    const bullets = [];
-    for (const line of lines) {
-      if (line.startsWith('## ')) { date = line.slice(3).trim(); }
-      else if (line.startsWith('**') && line.endsWith('**')) { title = line.slice(2, -2).trim(); }
-      else if (line.startsWith('- ')) { bullets.push(line.slice(2).trim()); }
-    }
-    if (date || title) entries.push({ date, title, bullets });
-  }
-  return entries;
-}
-
-app.get('/api/activity', async (req, res) => {
-  const now = Date.now();
-  if (activityCache && (now - activityCacheAt) < ACTIVITY_CACHE_TTL_MS) {
-    return res.json({ entries: activityCache, cached: true, age: Math.floor((now - activityCacheAt) / 1000) });
-  }
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(url, { headers: { 'User-Agent': 'nullpriest-agent/2.1' } }, (ghRes) => {
-        let body = '';
-        ghRes.on('data', chunk => body += chunk);
-        ghRes.on('end', () => resolve(body));
-      }).on('error', reject);
+// ── Agent thoughts proxy ─────────────────────────────────────────────────────
+app.get('/api/thoughts', (req, res) => {
+  const url = `${GITHUB_RAW_BASE}/memory/scout-latest.md`;
+  https.get(url, (ghRes) => {
+    let md = '';
+    ghRes.on('data', chunk => md += chunk);
+    ghRes.on('end', () => {
+      res.json({ raw: md, source: 'github', timestamp: new Date().toISOString() });
     });
-    activityCache = parseActivityFeed(data);
-    activityCacheAt = now;
-    res.json({ entries: activityCache, cached: false, count: activityCache.length });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'thoughts unavailable', details: err.message });
+  });
 });
 
-// ── Fallback to index.html ──────────────────────────────────────────────────
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
-
+// ── Start server ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`nullpriest server v2.1 live on port ${PORT}`);
+  console.log(`/api/health | /api/status | /api/price | /api/thoughts | /memory/:file`);
 });
