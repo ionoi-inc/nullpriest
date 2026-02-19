@@ -511,6 +511,44 @@
       .competitor-grid { grid-template-columns: 1fr; }
       .stat-grid { grid-template-columns: 1fr; }
     }
+
+    /* BUILD LOG */
+    .build-log {
+      margin-top: 24px;
+    }
+    .build-item {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    .build-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .build-number {
+      font-weight: 500;
+      color: var(--accent);
+      font-size: 12px;
+    }
+    .build-time {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .build-content {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .build-checkmark {
+      color: var(--accent);
+      margin-right: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -862,6 +900,27 @@
         </div>
       </section>
 
+      <!-- BUILD LOG -->
+      <section id="builds">
+        <div class="section-header">
+          <span class="section-number">05</span>
+          <h2>Build Log</h2>
+        </div>
+        <p class="section-intro">
+          Visual proof of autonomous self-improvement. Each build is committed by the Builder agent with no human intervention.
+        </p>
+        <div class="build-log" id="build-log">
+          <div class="build-item">
+            <div class="build-header">
+              <span class="build-number"><span class="build-checkmark">✓</span>Build #7</span>
+              <span class="build-time">10:01 UTC</span>
+            </div>
+            <div class="build-content">4-agent status grid added — live heartbeat from SCOUT/STRATEGIST/BUILDER/PUBLISHER</div>
+          </div>
+        </div>
+      </section>
+
+
       <!-- TOKEN -->
       <section id="token">
         <div class="section-header">
@@ -1039,6 +1098,48 @@
       }
     }
 
+    // Fetch build log
+    async function updateBuildLog() {
+      try {
+        const response = await fetch('/memory/build-log.md');
+        const text = await response.text();
+
+        const logContainer = document.getElementById('build-log');
+        logContainer.innerHTML = '';
+
+        // Parse markdown build log format
+        // Expected format: ## Build #N (timestamp) - description
+        const buildRegex = /^## Build #(\d+)\s*\(([^)]+)\)\s*[-—]?\s*(.+)$/gm;
+        const builds = [];
+        let match;
+
+        while ((match = buildRegex.exec(text)) !== null) {
+          builds.push({
+            number: match[1],
+            time: match[2].trim(),
+            description: match[3].trim()
+          });
+        }
+
+        // Show last 10 builds (newest first)
+        builds.slice(0, 10).forEach(build => {
+          const item = document.createElement('div');
+          item.className = 'build-item';
+          item.innerHTML = `
+            <div class="build-header">
+              <span class="build-number"><span class="build-checkmark">✓</span>Build #${build.number}</span>
+              <span class="build-time">${build.time}</span>
+            </div>
+            <div class="build-content">${build.description}</div>
+          `;
+          logContainer.appendChild(item);
+        });
+      } catch (error) {
+        console.log('Build log not available yet');
+      }
+    }
+
+
     // Heartbeat panel — 4-agent grid (Builder #7)
     const AGENT_TYPES = ['SCOUT', 'STRATEGIST', 'BUILDER', 'PUBLISHER'];
     const AGENT_KEYS  = ['scout', 'strategist', 'builder', 'publisher'];
@@ -1121,10 +1222,12 @@
     // Initial load
     updatePriceData();
     updateActivityFeed();
+    updateBuildLog();
 
     // Refresh every 30 seconds
     setInterval(updatePriceData, 30000);
     setInterval(updateActivityFeed, 60000);
+    setInterval(updateBuildLog, 60000);
   </script>
 
 </body>
