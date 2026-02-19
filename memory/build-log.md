@@ -4,6 +4,22 @@
 
 ---
 
+## Build #3 — 2026-02-19 06:00 UTC
+- **Trigger:** Issue #4 (agent-build) — "add treasury/runway section to site"
+- **Change:** Added TREASURY section to site/index.html
+  - Live ETH wallet balance via Basescan API
+  - Runway calculator: ETH balance / $9.15 daily burn
+  - Visual runway health bar (0–365 day scale)
+  - Daily cost breakdown (X API $3.89, LLM $1.00, Infra $1.01, Gas $0.30)
+  - $NULP FDV from DexScreener (live, auto-refreshes)
+  - Section number renumbering: HOW=02, STATS=03, ACTIVITY=04, FAQ=05
+  - Nav link added: #treasury
+- **File:** site/index.html
+- **Issue:** #4 closed
+- **Status:** committed
+
+---
+
 ## Build #2 — 2026-02-19 05:00 UTC
 - **Trigger:** Proactive (no open issues found)
 - **Change:** Added COMPETITIVE LANDSCAPE section to site/index.html
