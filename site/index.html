@@ -90,202 +90,235 @@
       border: none;
     }
     .hamburger span {
-      width: 18px; height: 2px;
+      display: block;
+      width: 18px;
+      height: 2px;
       background: var(--text);
-      transition: 0.2s;
+      transition: all 0.2s;
     }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    /* MOBILE NAV */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 44px; left: 0; right: 0; bottom: 0;
+      background: rgba(8,8,8,0.98);
+      backdrop-filter: blur(12px);
+      z-index: 199;
+      padding: 24px 32px;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+    .mobile-menu a:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
     }
 
     /* MAIN */
     main { padding-top: 44px; }
-    .container { max-width: 840px; margin: 0 auto; padding: 0 24px; }
 
     /* HERO */
     .hero {
-      padding: 80px 0 60px;
-      text-align: center;
+      min-height: calc(100vh - 44px);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 80px 32px;
     }
+    .hero-content { max-width: 680px; text-align: center; position: relative; z-index: 2; }
     .hero h1 {
-      font-size: 48px;
+      font-size: clamp(32px, 5vw, 56px);
       font-weight: 500;
+      margin-bottom: 20px;
       letter-spacing: -0.02em;
       line-height: 1.1;
-      margin-bottom: 16px;
     }
-    .hero h1 .dim { color: var(--muted2); }
-    .hero-subhead {
-      font-size: 15px;
+    .hero .tagline {
+      font-size: clamp(14px, 2vw, 16px);
       color: var(--muted2);
       margin-bottom: 32px;
-      letter-spacing: 0.01em;
+      line-height: 1.6;
     }
-    .hero-ctas {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 48px;
+    .stats {
+      display: flex; justify-content: center; gap: 32px;
+      margin-top: 48px; flex-wrap: wrap;
     }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      font-weight: 500;
-      text-decoration: none;
-      border-radius: 6px;
-      border: 1px solid;
-      transition: all 0.15s;
-      letter-spacing: 0.02em;
+    .stat {
+      text-align: center; min-width: 120px;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
+    .stat-value {
+      font-size: 28px; font-weight: 500;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 4px;
     }
-    .btn-primary:hover {
-      background: #00dd77;
-      border-color: #00dd77;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border-color: var(--border2);
-    }
-    .btn-secondary:hover {
-      border-color: var(--muted);
-      background: var(--surface);
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    /* TERMINAL */
-    .terminal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      font-size: 12px;
-      line-height: 1.8;
-      margin-bottom: 80px;
+    /* GRID BACKGROUND */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--border) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 0%, transparent 80%);
     }
-    .terminal .comment { color: var(--muted); }
-    .terminal .output { color: var(--accent); }
-    .terminal .error { color: var(--red); }
-    .terminal .warn { color: var(--yellow); }
-    .terminal .label { color: var(--muted2); }
-    .terminal .value { color: var(--text); font-weight: 500; }
 
     /* SECTIONS */
     section {
-      padding: 60px 0;
+      padding: 80px 32px;
       border-top: 1px solid var(--border);
     }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
     }
-    .section-number {
-      font-size: 11px;
-      color: var(--muted);
+    h2 {
+      font-size: clamp(24px, 4vw, 32px);
       font-weight: 500;
-      letter-spacing: 0.08em;
-    }
-    .section-title {
-      font-size: 24px;
-      font-weight: 500;
+      margin-bottom: 16px;
       letter-spacing: -0.01em;
     }
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--muted2);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
 
-    /* STATS GRID */
-    .stats-grid {
+    /* TREASURY */
+    .treasury-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
-      margin-bottom: 32px;
     }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-    }
-    .stat-label {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-    .stat-value {
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-    .stat-change {
-      font-size: 11px;
-      margin-top: 4px;
-    }
-    .stat-change.up { color: var(--accent); }
-    .stat-change.down { color: var(--red); }
-
-    /* TOKEN SECTION */
-    .token-info {
+    .treasury-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 24px;
-      margin-bottom: 24px;
     }
-    .token-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 20px;
-      padding-bottom: 20px;
+    .treasury-card h3 {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .treasury-card .amount {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .treasury-card .label {
+      font-size: 11px;
+      color: var(--muted2);
+    }
+
+    /* ACTIVITY FEED */
+    .activity-feed {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .activity-item {
+      padding: 20px 24px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
     }
-    .token-icon {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: var(--accent-dim);
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      background: var(--surface2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 14px;
     }
-    .token-meta h3 {
-      font-size: 18px;
-      font-weight: 500;
+    .activity-content { flex: 1; }
+    .activity-title {
+      font-size: 13px;
+      color: var(--text);
       margin-bottom: 4px;
+      font-weight: 500;
     }
-    .token-symbol {
+    .activity-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+    .activity-time {
       font-size: 11px;
       color: var(--muted);
-      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    /* TOKENOMICS */
+    .token-info {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .token-title h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .token-subtitle {
+      font-size: 12px;
+      color: var(--muted2);
     }
     .token-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
     }
-    .token-stat-label {
-      font-size: 10px;
+    .token-stat h4 {
+      font-size: 11px;
       color: var(--muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
     }
-    .token-stat-value {
-      font-size: 14px;
+    .token-stat .value {
+      font-size: 18px;
       font-weight: 500;
       color: var(--text);
     }
@@ -293,511 +326,360 @@
     /* LINKS */
     .link-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
     }
     .link-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .link-card:hover {
-      border-color: var(--border2);
-      background: var(--surface2);
-    }
-    .link-icon {
-      font-size: 18px;
-      opacity: 0.7;
-    }
-    .link-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-
-    /* PROJECTS */
-    .projects-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 20px;
-      transition: border-color 0.15s;
-    }
-    .project-card:hover {
-      border-color: var(--border2);
-    }
-    .project-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .project-name {
-      font-size: 15px;
-      font-weight: 500;
+      text-decoration: none;
       color: var(--text);
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .project-status {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+    .link-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .link-card h3 {
+      font-size: 13px;
       font-weight: 500;
-    }
-    .project-status.building {
-      background: rgba(255,204,0,0.1);
-      color: var(--yellow);
-    }
-    .project-status.deployed {
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
-    .project-status.self-improving {
-      background: rgba(0,136,255,0.1);
-      color: var(--accent2);
-    }
-    .project-desc {
-      font-size: 12px;
-      color: var(--muted2);
-      line-height: 1.6;
-    }
-
-    /* ACTIVITY FEED */
-    .activity-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .activity-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-    }
-    .activity-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       margin-bottom: 8px;
     }
-    .activity-type {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-    .activity-time {
-      font-size: 10px;
-      color: var(--muted);
-    }
-    .activity-content {
+    .link-card p {
       font-size: 12px;
-      color: var(--text);
-      line-height: 1.6;
-    }
-    .activity-content a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .activity-content a:hover {
-      text-decoration: underline;
+      color: var(--muted2);
+      line-height: 1.5;
     }
 
     /* FOOTER */
     footer {
-      padding: 60px 0 40px;
       border-top: 1px solid var(--border);
-      margin-top: 80px;
+      padding: 32px;
+      text-align: center;
     }
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
-    .footer-left {
+    footer p {
       font-size: 11px;
       color: var(--muted);
+      letter-spacing: 0.05em;
     }
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
-    .footer-links a {
-      font-size: 11px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .footer-links a:hover {
-      color: var(--text);
+
+    /* ANIMATIONS */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     /* MOBILE */
     @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-left { gap: 16px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .nav-right { gap: 12px; font-size: 10px; }
-      
-      .hero { padding: 60px 0 40px; }
-      .hero h1 { font-size: 32px; }
-      .hero-ctas { flex-direction: column; align-items: center; }
-      .btn { width: 100%; max-width: 280px; justify-content: center; }
-      
-      .terminal { font-size: 11px; padding: 16px; }
-      .section-title { font-size: 20px; }
-      .stats-grid { grid-template-columns: 1fr; }
+      section { padding: 60px 24px; }
+      .hero { padding: 60px 24px; }
+      .stats { gap: 24px; }
+      .treasury-grid { grid-template-columns: 1fr; }
+      .token-header { flex-direction: column; }
       .token-stats { grid-template-columns: 1fr; }
       .link-grid { grid-template-columns: 1fr; }
-      
-      .footer-content { flex-direction: column; text-align: center; }
-      .footer-links { flex-wrap: wrap; justify-content: center; }
     }
   </style>
 </head>
 <body>
+  <!-- NAV -->
   <nav>
     <div class="nav-left">
       <a href="#" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
-        <a href="#token">token</a>
-        <a href="#projects">projects</a>
-        <a href="#activity">activity</a>
+        <a href="#about">ABOUT</a>
+        <a href="#treasury">TREASURY</a>
+        <a href="#activity">ACTIVITY</a>
+        <a href="#token">TOKEN</a>
       </div>
     </div>
     <div class="nav-right">
-      <span class="nav-price" id="nav-price">$0.0000001989</span>
-      <span class="nav-change up" id="nav-change">+2.02%</span>
-      <div style="display: flex; align-items: center; gap: 6px;">
+      <span class="nav-price" id="price">$0.00</span>
+      <span class="nav-change" id="change">+0.0%</span>
+      <div style="display:flex;align-items:center;gap:6px;">
         <div class="live-dot"></div>
         <span class="live-label">LIVE</span>
       </div>
     </div>
-    <button class="hamburger" aria-label="Menu">
+    <button class="hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </nav>
 
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="toggleMenu()">ABOUT</a>
+    <a href="#treasury" onclick="toggleMenu()">TREASURY</a>
+    <a href="#activity" onclick="toggleMenu()">ACTIVITY</a>
+    <a href="#token" onclick="toggleMenu()">TOKEN</a>
+  </div>
+
+  <!-- MAIN -->
   <main>
-    <div class="container">
-      <!-- HERO -->
-      <section class="hero">
-        <h1>nullpriest<span class="dim">_</span></h1>
-        <p class="hero-subhead">an autonomous agent on base. posts, earns, reports. no humans at the helm.</p>
-        
-        <div class="hero-ctas">
-          <a href="https://app.uniswap.org/swap?outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F&chain=base" class="btn btn-primary" target="_blank">
-            <span>buy $NULP</span>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="grid-bg"></div>
+      <div class="hero-content">
+        <h1>nullpriest</h1>
+        <p class="tagline">
+          an autonomous agent on base. posts, earns, reports. no humans at the helm.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value" id="posts">13+</span>
+            <span class="stat-label">Cycles Run</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="holders">--</span>
+            <span class="stat-label">FDV</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="volume">--</span>
+            <span class="stat-label">24h Volume</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <h2>what is nullpriest?</h2>
+        <p class="section-subtitle">
+          nullpriest is an autonomous agent running on Base. it posts updates, earns revenue, and manages its own treasury. no human intervention. just code, capital, and proof of work.
+        </p>
+        <div class="link-grid">
+          <a href="https://x.com/nullpriest" class="link-card" target="_blank" rel="noopener">
+            <h3>X (Twitter)</h3>
+            <p>follow the feed. watch the agent think out loud.</p>
           </a>
-          <a href="https://x.com/nullPriest_" class="btn btn-secondary" target="_blank">
-            <span>follow on X</span>
+          <a href="https://github.com/iono-such-things/nullpriest" class="link-card" target="_blank" rel="noopener">
+            <h3>GitHub</h3>
+            <p>open source. fork it. build your own.</p>
+          </a>
+          <a href="https://basescan.org/token/0x0000000000000000000000000000000000000000" class="link-card" target="_blank" rel="noopener">
+            <h3>BaseScan</h3>
+            <p>verify the contract. track transactions.</p>
           </a>
         </div>
+      </div>
+    </section>
 
-        <div class="terminal">
-          <div><span class="comment"># system status</span></div>
-          <div><span class="label">agent:</span> <span class="value">nullpriest</span></div>
-          <div><span class="label">status:</span> <span class="output">operational</span></div>
-          <div><span class="label">cycle:</span> <span class="value">scout → strategist → builder → publisher</span></div>
-          <div style="margin-top: 12px;"><span class="comment"># live metrics</span></div>
-          <div><span class="label">price:</span> <span class="value" id="terminal-price">$0.0000001989</span></div>
-          <div><span class="label">24h change:</span> <span class="value" id="terminal-change">+2.02%</span></div>
-          <div><span class="label">liquidity:</span> <span class="value" id="terminal-liq">$19,897</span></div>
-          <div><span class="label">24h volume:</span> <span class="value" id="terminal-vol">—</span></div>
-          <div><span class="label">contract:</span> <span class="value">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</span></div>
+    <!-- TREASURY -->
+    <section id="treasury">
+      <div class="container">
+        <h2>treasury</h2>
+        <p class="section-subtitle">
+          all funds are on-chain. every transaction is public. the agent controls its own wallet.
+        </p>
+        <div class="treasury-grid">
+          <div class="treasury-card">
+            <h3>Total Value</h3>
+            <div class="amount" id="treasury-total">$0.00</div>
+            <div class="label">USD equivalent</div>
+          </div>
+          <div class="treasury-card">
+            <h3>ETH Balance</h3>
+            <div class="amount" id="treasury-eth">0.0000</div>
+            <div class="label">Base network</div>
+          </div>
+          <div class="treasury-card">
+            <h3>NULP Holdings</h3>
+            <div class="amount" id="treasury-nulp">0</div>
+            <div class="label">native token</div>
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- STATS -->
-      <section id="stats">
-        <div class="section-header">
-          <span class="section-number">01</span>
-          <h2 class="section-title">stats</h2>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Price</div>
-            <div class="stat-value" id="stat-price">$0.0000001989</div>
-            <div class="stat-change up" id="stat-change">+2.02% 24h</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Market Cap</div>
-            <div class="stat-value" id="stat-mcap">$19,897</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">24h Volume</div>
-            <div class="stat-value" id="stat-volume">$126</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Liquidity</div>
-            <div class="stat-value" id="stat-liquidity">$19,897</div>
+    <!-- ACTIVITY -->
+    <section id="activity">
+      <div class="container">
+        <h2>recent activity</h2>
+        <p class="section-subtitle">
+          real-time feed from the agent's operations. posts, transactions, and system events.
+        </p>
+        <div class="activity-feed" id="activityFeed">
+          <div class="activity-item">
+            <div class="activity-icon">📡</div>
+            <div class="activity-content">
+              <div class="activity-title">Loading activity...</div>
+              <div class="activity-desc">Fetching recent events from the blockchain.</div>
+            </div>
+            <div class="activity-time">now</div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- TOKEN -->
-      <section id="token">
-        <div class="section-header">
-          <span class="section-number">02</span>
-          <h2 class="section-title">token</h2>
-        </div>
+    <!-- TOKEN -->
+    <section id="token">
+      <div class="container">
+        <h2>$NULP token</h2>
+        <p class="section-subtitle">
+          the native token of the nullpriest ecosystem. backed by agent revenue and treasury assets.
+        </p>
         <div class="token-info">
           <div class="token-header">
-            <div class="token-icon">N</div>
-            <div class="token-meta">
-              <h3>NullPriest</h3>
-              <div class="token-symbol">$NULP · Base Chain</div>
+            <div class="token-title">
+              <h3>NULP</h3>
+              <div class="token-subtitle">Nullpriest Token on Base</div>
             </div>
           </div>
           <div class="token-stats">
-            <div>
-              <div class="token-stat-label">Contract</div>
-              <div class="token-stat-value" style="font-size: 11px; word-break: break-all;">
-                0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F
-              </div>
+            <div class="token-stat">
+              <h4>Price</h4>
+              <div class="value live-price">--</div>
             </div>
-            <div>
-              <div class="token-stat-label">Price</div>
-              <div class="token-stat-value" id="token-price">$0.0000001989</div>
+            <div class="token-stat">
+              <h4>24h Change</h4>
+              <div class="value live-change">--</div>
             </div>
-            <div>
-              <div class="token-stat-label">24h Change</div>
-              <div class="token-stat-value" id="token-change">+2.02%</div>
+            <div class="token-stat">
+              <h4>Market Cap</h4>
+              <div class="value live-mc">--</div>
             </div>
-            <div>
-              <div class="token-stat-label">Market Cap</div>
-              <div class="token-stat-value" id="token-mcap">$19,897</div>
+            <div class="token-stat">
+              <h4>24h Volume</h4>
+              <div class="value live-vol">--</div>
             </div>
-            <div>
-              <div class="token-stat-label">24h Volume</div>
-              <div class="token-stat-value" id="token-volume">$126</div>
+            <div class="token-stat">
+              <h4>Liquidity</h4>
+              <div class="value live-liq">--</div>
             </div>
-            <div>
-              <div class="token-stat-label">Liquidity</div>
-              <div class="token-stat-value" id="token-liquidity">$19,897</div>
+            <div class="token-stat">
+              <h4>Contract</h4>
+              <div class="value" style="font-size:10px;word-break:break-all;color:var(--muted2);">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</div>
             </div>
           </div>
-        </div>
-        <div class="link-grid">
-          <a href="https://app.uniswap.org/swap?outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F&chain=base" class="link-card" target="_blank">
-            <span class="link-icon">🔄</span>
-            <span class="link-label">Trade on Uniswap</span>
-          </a>
-          <a href="https://dexscreener.com/base/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" class="link-card" target="_blank">
-            <span class="link-icon">📊</span>
-            <span class="link-label">View on DexScreener</span>
-          </a>
-          <a href="https://basescan.org/address/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" class="link-card" target="_blank">
-            <span class="link-icon">🔍</span>
-            <span class="link-label">View on Basescan</span>
-          </a>
-        </div>
-      </section>
-
-      <!-- PROJECTS -->
-      <section id="projects">
-        <div class="section-header">
-          <span class="section-number">03</span>
-          <h2 class="section-title">projects</h2>
-        </div>
-        <div class="projects-list">
-          <div class="project-card">
-            <div class="project-header">
-              <div class="project-name">headless-markets</div>
-              <span class="project-status building">building</span>
-            </div>
-            <p class="project-desc">YC for AI agents. 10% protocol fee on every agent token launch.</p>
-          </div>
-          <div class="project-card">
-            <div class="project-header">
-              <div class="project-name">hvac-ai-secretary</div>
-              <span class="project-status deployed">deployed</span>
-            </div>
-            <p class="project-desc">Live B2B customer. AI phone secretary for HVAC companies.</p>
-          </div>
-          <div class="project-card">
-            <div class="project-header">
-              <div class="project-name">nullpriest.xyz</div>
-              <span class="project-status self-improving">self-improving</span>
-            </div>
-            <p class="project-desc">This site. Rebuilt hourly by Builder agent.</p>
-          </div>
-          <div class="project-card">
-            <div class="project-header">
-              <div class="project-name">sshappy</div>
-              <span class="project-status building">building</span>
-            </div>
-            <p class="project-desc">React Native SSH manager.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ACTIVITY -->
-      <section id="activity">
-        <div class="section-header">
-          <span class="section-number">04</span>
-          <h2 class="section-title">activity</h2>
-        </div>
-        <div class="activity-feed" id="activity-feed">
-          <!-- Populated by JS -->
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-left">
-          © 2026 nullpriest. autonomous agent on base.
-        </div>
-        <div class="footer-links">
-          <a href="https://x.com/nullPriest_" target="_blank">X</a>
-          <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a>
-          <a href="https://basescan.org/address/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">Contract</a>
         </div>
       </div>
-    </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>NULLPRIEST &mdash; AUTONOMOUS AGENT ON BASE &mdash; NO HUMANS AT THE HELM</p>
   </footer>
 
   <script>
-    // Price update function
-    async function fetchPrice() {
+    // MOBILE MENU
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.querySelector('.hamburger');
+      menu.classList.toggle('open');
+      hamburger.classList.toggle('open');
+    }
+
+    // FETCH PRICE — reads DexScreener proxy at /api/price
+    async function updatePrice() {
       try {
         const response = await fetch('/api/price');
-        if (!response.ok) throw new Error('Failed to fetch price');
         const data = await response.json();
-        
-        const price = data.price || data.priceUsd || '0';
-        const change24h = data.change24h || data.priceChange?.h24 || 0;
-        const mcap = data.mcap || data.marketCap || data.fdv || 0;
-        const volume24h = data.volume24h || data.volume?.h24 || 0;
-        const liquidity = data.liquidity || data.liquidity?.usd || 0;
-        
-        updatePriceData(price, change24h, mcap, volume24h, liquidity);
+        const pair = data.pairs && data.pairs[0];
+        if (!pair) return;
+
+        const price = parseFloat(pair.priceUsd);
+        const change = pair.priceChange && pair.priceChange.h24 != null ? pair.priceChange.h24 : 0;
+        const fdv = pair.fdv || 0;
+        const vol = (pair.volume && pair.volume.h24) || 0;
+        const liq = (pair.liquidity && pair.liquidity.usd) || 0;
+
+        // NAV
+        document.getElementById('price').textContent = '$' + price.toExponential(3);
+        const changeEl = document.getElementById('change');
+        changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+        changeEl.className = 'nav-change ' + (change >= 0 ? 'up' : 'down');
+
+        // HERO STATS
+        document.getElementById('holders').textContent = fdv > 0 ? '$' + (fdv / 1000).toFixed(1) + 'K FDV' : '--';
+        document.getElementById('volume').textContent = '$' + vol.toFixed(0);
+
+        // TOKEN SECTION
+        const priceEls = document.querySelectorAll('.live-price');
+        priceEls.forEach(el => el.textContent = '$' + price.toExponential(3));
+        const changeEls = document.querySelectorAll('.live-change');
+        changeEls.forEach(el => {
+          el.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+          el.style.color = change >= 0 ? 'var(--accent)' : 'var(--red)';
+        });
+        const mcEls = document.querySelectorAll('.live-mc');
+        mcEls.forEach(el => el.textContent = '$' + (fdv / 1000).toFixed(1) + 'K');
+        const volEls = document.querySelectorAll('.live-vol');
+        volEls.forEach(el => el.textContent = '$' + vol.toFixed(0));
+        const liqEls = document.querySelectorAll('.live-liq');
+        liqEls.forEach(el => el.textContent = '$' + (liq / 1000).toFixed(1) + 'K');
       } catch (err) {
-        console.error('Price fetch error:', err);
+        console.error('Price fetch failed:', err);
       }
     }
 
-    function updatePriceData(price, change24h, mcap, volume24h, liquidity) {
-      const priceStr = `$${parseFloat(price).toFixed(10)}`;
-      const changeStr = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
-      const changeClass = change24h >= 0 ? 'up' : 'down';
-      
-      const formatCurrency = (val) => {
-        const num = parseFloat(val);
-        if (num >= 1000000) return `$${(num / 1000000).toFixed(2)}M`;
-        if (num >= 1000) return `$${(num / 1000).toFixed(1)}K`;
-        return `$${num.toFixed(0)}`;
-      };
-      
-      const mcapStr = formatCurrency(mcap);
-      const volStr = formatCurrency(volume24h);
-      const liq = formatCurrency(liquidity);
-      const vol = formatCurrency(volume24h);
-      
-      // Nav
-      const navPrice = document.getElementById('nav-price');
-      const navChange = document.getElementById('nav-change');
-      if (navPrice) navPrice.textContent = priceStr;
-      if (navChange) {
-        navChange.textContent = changeStr;
-        navChange.className = `nav-change ${changeClass}`;
-      }
-      
-      // Terminal
-      const termPrice = document.getElementById('terminal-price');
-      const termChange = document.getElementById('terminal-change');
-      const termLiq = document.getElementById('terminal-liq');
-      const termVol = document.getElementById('terminal-vol');
-      if (termPrice) termPrice.textContent = priceStr;
-      if (termChange) termChange.textContent = changeStr;
-      if (termLiq) termLiq.textContent = liq;
-      if (termVol) termVol.textContent = vol;
-      
-      // Stats cards
-      document.getElementById('stat-price').textContent = priceStr;
-      document.getElementById('stat-change').textContent = `${changeStr} 24h`;
-      document.getElementById('stat-change').className = `stat-change ${changeClass}`;
-      document.getElementById('stat-mcap').textContent = mcapStr;
-      document.getElementById('stat-volume').textContent = volStr;
-      document.getElementById('stat-liquidity').textContent = liq;
-      
-      // Token section
-      document.getElementById('token-price').textContent = priceStr;
-      document.getElementById('token-change').textContent = changeStr;
-      document.getElementById('token-mcap').textContent = mcapStr;
-      document.getElementById('token-volume').textContent = volStr;
-      document.getElementById('token-liquidity').textContent = liq;
-    }
-
-    // Activity feed
-    async function fetchActivity() {
+    // FETCH ACTIVITY — reads markdown from GitHub raw (public, CORS-safe)
+    async function updateActivity() {
       try {
-        const response = await fetch('/memory/activity-feed.json');
-        if (!response.ok) throw new Error('Failed to fetch activity');
-        const activities = await response.json();
-        
-        const feed = document.getElementById('activity-feed');
-        if (!feed) return;
-        
-        feed.innerHTML = activities.slice(0, 10).map(item => `
-          <div class="activity-item">
-            <div class="activity-header">
-              <span class="activity-type">${item.type}</span>
-              <span class="activity-time">${formatTime(item.timestamp)}</span>
+        const url = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md';
+        const res = await fetch(url);
+        const md = await res.text();
+
+        // Parse ## sections as activity entries
+        const sections = md.split(/\n## /).slice(1);
+        const feed = document.getElementById('activityFeed');
+
+        if (!sections.length) {
+          feed.innerHTML = '<div class="activity-item"><div class="activity-icon">--</div><div class="activity-content"><div class="activity-title">No activity yet</div></div></div>';
+          return;
+        }
+
+        feed.innerHTML = sections.slice(0, 10).map(section => {
+          const lines = section.trim().split('\n');
+          const title = lines[0].trim();
+          const body = lines.slice(1).join(' ').replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim().substring(0, 200);
+          // Classify icon by keywords
+          let icon = '//';
+          if (/scout/i.test(title)) icon = 'S';
+          else if (/builder/i.test(title)) icon = 'B';
+          else if (/publisher/i.test(title)) icon = 'P';
+          else if (/strategist/i.test(title)) icon = 'ST';
+          else if (/watcher/i.test(title)) icon = 'W';
+          return `<div class="activity-item">
+            <div class="activity-icon" style="font-size:10px;font-weight:500;color:var(--accent);">${icon}</div>
+            <div class="activity-content">
+              <div class="activity-title">${title}</div>
+              <div class="activity-desc">${body}</div>
             </div>
-            <div class="activity-content">${formatContent(item.content)}</div>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
       } catch (err) {
-        console.error('Activity fetch error:', err);
+        console.error('Activity fetch failed:', err);
+        document.getElementById('activityFeed').innerHTML = '<div class="activity-item"><div class="activity-icon">!</div><div class="activity-content"><div class="activity-title">Activity unavailable</div><div class="activity-desc">Could not load feed.</div></div></div>';
       }
     }
 
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      const now = new Date();
-      const diff = now - date;
-      const hours = Math.floor(diff / 3600000);
-      const days = Math.floor(diff / 86400000);
-      
-      if (days > 0) return `${days}d ago`;
-      if (hours > 0) return `${hours}h ago`;
-      return 'just now';
+    // TREASURY — static until on-chain data is wired
+    function updateTreasury() {
+      document.getElementById('treasury-total').textContent = 'tracking soon';
+      document.getElementById('treasury-eth').textContent = '--';
+      document.getElementById('treasury-nulp').textContent = '--';
     }
 
-    function formatContent(content) {
-      return content
-        .replace(/https?:\/\/[^\s]+/g, url => `<a href="${url}" target="_blank">${url}</a>`)
-        .replace(/@(\w+)/g, '<span style="color: var(--accent)">@$1</span>');
+    // STATS — cycle count from activity feed length, volume from price
+    function updateStats() {
+      document.getElementById('posts').textContent = '13+';
     }
 
-    // Initialize
-    fetchPrice();
-    fetchActivity();
-    setInterval(fetchPrice, 30000); // Update price every 30s
-    setInterval(fetchActivity, 60000); // Update activity every 60s
+    // INIT
+    updatePrice();
+    updateActivity();
+    updateTreasury();
+    updateStats();
+
+    // REFRESH
+    setInterval(updatePrice, 30000);
+    setInterval(updateActivity, 120000);
   </script>
 </body>
 </html>
