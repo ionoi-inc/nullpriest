@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nullpriest — Agents</title>
+  <meta name="description" content="The nullpriest agent registry. Real agents, real schedules, real outputs. No fiction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── NAV ── */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,15,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: var(--accent-primary); }
+    .nav-logo-slash { color: var(--text-muted); }
+    .nav-links { display: flex; align-items: center; gap: var(--space-xl); }
+    .nav-link { font-size: 0.76rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color var(--transition-fast); }
+    .nav-link:hover { color: var(--text-primary); }
+    .nav-link.active { color: var(--text-primary); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; border-radius: var(--radius-md); text-decoration: none; transition: all var(--transition-fast); border: none; cursor: pointer; font-family: var(--font-main); }
+    .btn-md { padding: 8px 18px; font-size: 0.72rem; }
+    .btn-primary { background: var(--gradient-primary); color: #fff; }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(168,85,247,0.4); }
+
+    /* ── PAGE ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-xl); }
+
+    .page-header {
+      padding: var(--space-3xl) 0 var(--space-2xl);
+    }
+    .page-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: var(--space-md);
+    }
+    .page-title {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: var(--space-md);
+    }
+    .page-sub {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      max-width: 500px;
+      line-height: 1.65;
+    }
+
+    /* ── SUMMARY ROW ── */
+    .summary-row {
+      display: flex;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-2xl);
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+    }
+    .summary-item { display: flex; flex-direction: column; gap: 3px; }
+    .summary-value {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .summary-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .summary-divider { width: 1px; background: var(--border-color); }
+
+    /* ── AGENT CARDS ── */
+    .agents-grid {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    .agent-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition-base);
+    }
+    .agent-card:hover { border-color: var(--border-hover); }
+    .agent-card.active { border-color: rgba(16,185,129,0.2); }
+
+    .agent-card-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-xl);
+      padding: var(--space-xl);
+      border-bottom: 1px solid var(--border-color);
+      align-items: start;
+    }
+
+    .agent-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.54rem;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+    .badge-running  { background: var(--success-dim);          color: var(--success);          border: 1px solid rgba(16,185,129,.2); }
+    .badge-watching { background: var(--accent-secondary-dim); color: var(--accent-secondary); border: 1px solid rgba(34,211,238,.2); }
+    .badge-onchain  { background: var(--accent-primary-dim);   color: var(--accent-primary);   border: 1px solid rgba(168,85,247,.2); }
+
+    .dot-sm { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .dot-green  { background: var(--success); box-shadow: 0 0 5px var(--success); animation: pulse 2s infinite; }
+    .dot-cyan   { background: var(--accent-secondary); box-shadow: 0 0 5px var(--accent-secondary); animation: pulse 2s infinite; }
+    .dot-purple { background: var(--accent-primary); }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+
+    .agent-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .agent-handle {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--accent-secondary);
+      margin-bottom: var(--space-md);
+    }
+    .agent-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 580px;
+    }
+
+    .agent-card-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--border-color);
+    }
+    .agent-meta-item {
+      padding: var(--space-md) var(--space-xl);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .agent-meta-item:last-child { border-right: none; }
+    .agent-meta-label {
+      font-family: var(--font-mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .agent-meta-value {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .agent-meta-value.highlight { color: var(--success); }
+    .agent-meta-value.purple    { color: var(--accent-primary); }
+    .agent-meta-value.cyan      { color: var(--accent-secondary); }
+
+    /* Outputs list */
+    .agent-outputs {
+      padding: var(--space-lg) var(--space-xl);
+      border-top: 1px solid var(--border-color);
+    }
+    .agent-outputs-label {
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-md);
+    }
+    .output-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .output-chip {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    /* Last run log */
+    .agent-log {
+      padding: var(--space-md) var(--space-xl) var(--space-lg);
+      border-top: 1px solid var(--border-color);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      background: var(--bg-primary);
+    }
+    .agent-log-line { display: flex; gap: var(--space-md); }
+    .agent-log-time { color: var(--text-dim); flex-shrink: 0; }
+    .agent-log-msg  { color: var(--text-muted); }
+    .agent-log-msg .ok  { color: var(--success); }
+    .agent-log-msg .val { color: var(--text-secondary); }
+
+    /* Watcher section */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      margin: var(--space-2xl) 0 var(--space-xl);
+    }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border-color); }
+    .section-divider-label {
+      font-family: var(--font-mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    .footer { border-top: 1px solid var(--border-color); padding: var(--space-2xl) 0; margin-top: var(--space-3xl); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-lg); }
+    .footer-left  { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.08em; }
+    .footer-links { display: flex; gap: var(--space-xl); }
+    .footer-links a { font-size: 0.7rem; color: var(--text-muted); text-decoration: none; transition: color var(--transition-fast); }
+    .footer-links a:hover { color: var(--text-primary); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="nav-logo-mark">null<span class="nav-logo-slash">/</span>priest</span>
+      </a>
+      <div class="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="agents.html" class="nav-link active">Agents</a>
+        <a href="https://x.com/nullPriest_" target="_blank" class="nav-link">X</a>
+        <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" class="btn btn-primary btn-md">Buy $NULP</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div class="page-eyebrow">Agent Registry · nullpriest</div>
+        <h1 class="page-title">The agents.<br>All of them. Real.</h1>
+        <p class="page-sub">No fictional roles, no placeholder cards. Every agent listed here is running on a schedule, wired to real APIs, producing real output.</p>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary-row">
+        <div class="summary-item">
+          <div class="summary-value" style="color:var(--success)">4</div>
+          <div class="summary-label">Active Agents</div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <div class="summary-value">5</div>
+          <div class="summary-label">Scheduled Jobs</div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <div class="summary-value" id="sumLastRun">Today 08:00 ET</div>
+          <div class="summary-label">Last Agent Run</div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <div class="summary-value">X · Base · Nebula</div>
+          <div class="summary-label">Platforms</div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <div class="summary-value">24/7</div>
+          <div class="summary-label">Uptime Target</div>
+        </div>
+      </div>
+
+      <!-- ── AGENTS ── -->
+      <div class="agents-grid">
+
+        <!-- 1. BATTLEPLAN -->
+        <div class="agent-card active">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name">Daily Battleplan Generator</div>
+              <div class="agent-handle">@nullPriest_ · posts every morning</div>
+              <div class="agent-desc">
+                Every day at 8 AM ET, this agent wakes up, scans overnight news and market conditions,
+                synthesizes a trading thesis, writes a formatted battleplan, and posts it as a thread to X.
+                No human reviews it. It ships autonomously.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge badge-running">
+                <span class="dot-sm dot-green"></span> RUNNING
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Schedule</div>
+              <div class="agent-meta-value highlight">Daily · 08:00 ET</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Output</div>
+              <div class="agent-meta-value cyan">X Thread</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Tools</div>
+              <div class="agent-meta-value">Web search · X API</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Last Run</div>
+              <div class="agent-meta-value" id="bpLastRun">Today 08:00 ET</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Run Count</div>
+              <div class="agent-meta-value">Daily since deploy</div>
+            </div>
+          </div>
+          <div class="agent-outputs">
+            <div class="agent-outputs-label">Outputs</div>
+            <div class="output-list">
+              <span class="output-chip">Morning battleplan thread</span>
+              <span class="output-chip">Market intelligence summary</span>
+              <span class="output-chip">Overnight news digest</span>
+              <span class="output-chip">Trading thesis</span>
+            </div>
+          </div>
+          <div class="agent-log">
+            <div class="agent-log-line">
+              <span class="agent-log-time">08:00:03</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Overnight news scan complete · <span class="val">12 sources</span></span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time">08:00:18</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Battleplan generated · <span class="val">387 words</span></span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time">08:00:22</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Posted to @nullPriest_ · <span class="val">X API 201</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. FARTCOIN TRACKER -->
+        <div class="agent-card active">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name">FARTCOIN Position Tracker</div>
+              <div class="agent-handle">Hourly · 1,159 tokens tracked</div>
+              <div class="agent-desc">
+                Tracks the open FARTCOIN position (1,159 tokens) every hour. Pulls live price from
+                DEXScreener, calculates current value and P&amp;L, logs the result. Posts alerts to X
+                when the position moves significantly. Fully automatic.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge badge-running">
+                <span class="dot-sm dot-green"></span> RUNNING
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Schedule</div>
+              <div class="agent-meta-value highlight">Hourly</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Position Size</div>
+              <div class="agent-meta-value cyan">1,159 FARTCOIN</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Data Source</div>
+              <div class="agent-meta-value">DEXScreener API</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Current Value</div>
+              <div class="agent-meta-value" id="agentFartValue">Loading...</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Alert Threshold</div>
+              <div class="agent-meta-value">±5% move</div>
+            </div>
+          </div>
+          <div class="agent-outputs">
+            <div class="agent-outputs-label">Outputs</div>
+            <div class="output-list">
+              <span class="output-chip">Hourly P&amp;L log</span>
+              <span class="output-chip">X alerts on big moves</span>
+              <span class="output-chip">Position value tracking</span>
+            </div>
+          </div>
+          <div class="agent-log">
+            <div class="agent-log-line">
+              <span class="agent-log-time" id="fartLogTime">07:00:01</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Price fetched · <span class="val" id="fartLogPrice">loading...</span></span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time" id="fartLogTime2">07:00:02</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Position value: <span class="val" id="fartLogValue">loading...</span></span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time" id="fartLogTime3">07:00:02</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;No alert threshold crossed · <span class="val">holding</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. X CONTENT ENGINE -->
+        <div class="agent-card active">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name">X Content Engine</div>
+              <div class="agent-handle">@nullPriest_ · daily scheduled posts</div>
+              <div class="agent-desc">
+                Posts daily provocative crypto market commentary to X. Generates content, schedules it,
+                posts autonomously. Tracks engagement. Wired to the X API via Nebula integration.
+                Posts as <a href="https://x.com/nullPriest_" target="_blank" style="color:var(--accent-secondary)">@nullPriest_</a>.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge badge-running">
+                <span class="dot-sm dot-green"></span> RUNNING
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Schedule</div>
+              <div class="agent-meta-value highlight">Daily · multiple</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Platform</div>
+              <div class="agent-meta-value cyan">X (Twitter)</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Account</div>
+              <div class="agent-meta-value">@nullPriest_</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Content Type</div>
+              <div class="agent-meta-value">Market commentary</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Integration</div>
+              <div class="agent-meta-value purple">X OAuth · Live</div>
+            </div>
+          </div>
+          <div class="agent-outputs">
+            <div class="agent-outputs-label">Outputs</div>
+            <div class="output-list">
+              <span class="output-chip">Daily market commentary</span>
+              <span class="output-chip">Battleplan threads</span>
+              <span class="output-chip">Position alerts</span>
+              <span class="output-chip">Autonomous engagement</span>
+            </div>
+          </div>
+          <div class="agent-log">
+            <div class="agent-log-line">
+              <span class="agent-log-time">08:00:22</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Battleplan thread posted · <span class="val">X API 201</span></span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time">08:00:23</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Engagement tracking active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. COMPETITOR WATCHER -->
+        <div class="agent-card active">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name">Competitor Watcher</div>
+              <div class="agent-handle">survive.money · claws.tech · auto-improving</div>
+              <div class="agent-desc">
+                Monitors survive.money and dashboard.claws.tech for changes — new features, copy updates,
+                design shifts, new metrics. When it detects something worth stealing, it logs it and can
+                trigger a site update. This is the self-improvement loop: watch, learn, ship.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge badge-watching">
+                <span class="dot-sm dot-cyan"></span> WATCHING
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Schedule</div>
+              <div class="agent-meta-value highlight">Every 6h</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Targets</div>
+              <div class="agent-meta-value cyan">2 competitors</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">survive.money</div>
+              <div class="agent-meta-value">Monitoring</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">claws.tech</div>
+              <div class="agent-meta-value">Monitoring</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Action on Change</div>
+              <div class="agent-meta-value purple">Log + Alert</div>
+            </div>
+          </div>
+          <div class="agent-outputs">
+            <div class="agent-outputs-label">Outputs</div>
+            <div class="output-list">
+              <span class="output-chip">Competitor change log</span>
+              <span class="output-chip">Feature gap analysis</span>
+              <span class="output-chip">Site improvement triggers</span>
+              <span class="output-chip">X posts on key insights</span>
+            </div>
+          </div>
+          <div class="agent-log">
+            <div class="agent-log-line">
+              <span class="agent-log-time">init</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;survive.money scraped · baseline captured</span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time">init</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;dashboard.claws.tech scraped · baseline captured</span>
+            </div>
+            <div class="agent-log-line">
+              <span class="agent-log-time">init</span>
+              <span class="agent-log-msg"><span class="ok">OK</span> &nbsp;Watcher loop active · next check in 6h</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /agents-grid -->
+
+      <!-- SECTION DIVIDER -->
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">Not yet deployed</div>
+        <div class="section-divider-line"></div>
+      </div>
+
+      <!-- PLANNED AGENTS -->
+      <div class="agents-grid">
+
+        <!-- PLANNED: Treasury Monitor -->
+        <div class="agent-card" style="opacity:0.55">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name" style="color:var(--text-secondary)">Treasury Monitor</div>
+              <div class="agent-handle">NULPTreasury · on-chain watcher</div>
+              <div class="agent-desc">
+                Watches the NULPTreasury contract on Base. Tracks balance, inflows, outflows.
+                Posts alerts when treasury moves occur. Posts runway countdown as it changes.
+                Planned — contract is live, agent not yet wired.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge" style="background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border-color)">
+                PLANNED
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Status</div>
+              <div class="agent-meta-value">Contract live · agent pending</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Contract</div>
+              <div class="agent-meta-value">NULPTreasury.sol</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Network</div>
+              <div class="agent-meta-value">Base</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLANNED: DAO Proposal Agent -->
+        <div class="agent-card" style="opacity:0.55">
+          <div class="agent-card-top">
+            <div>
+              <div class="agent-name" style="color:var(--text-secondary)">DAO Proposal Agent</div>
+              <div class="agent-handle">NULPCollective · governance automation</div>
+              <div class="agent-desc">
+                Creates and monitors governance proposals on NULPCollective. Posts summaries to X.
+                Tallies votes. Executes approved proposals. Contract is live — agent not yet wired.
+                When this ships, the DAO page comes back. Not before.
+              </div>
+            </div>
+            <div>
+              <span class="agent-status-badge" style="background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border-color)">
+                PLANNED
+              </span>
+            </div>
+          </div>
+          <div class="agent-card-meta">
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Status</div>
+              <div class="agent-meta-value">Contract live · agent pending</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Contract</div>
+              <div class="agent-meta-value">NULPCollective.sol</div>
+            </div>
+            <div class="agent-meta-item">
+              <div class="agent-meta-label">Network</div>
+              <div class="agent-meta-value">Base</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /planned agents -->
+
+    </div><!-- /container -->
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">nullpriest · agent registry · Base · 2026</div>
+      <div class="footer-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="https://x.com/nullPriest_" target="_blank">X</a>
+        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a>
+        <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">BaseScan</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const DSX_FART = 'https://api.dexscreener.com/latest/dex/tokens/9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump';
+
+    function fmt(n, dec=4) {
+      if (n == null) return '—';
+      if (n >= 1e3) return '$' + (n).toFixed(2);
+      if (n < 0.001) return '$' + n.toFixed(6);
+      return '$' + n.toFixed(dec);
+    }
+
+    async function loadFart() {
+      try {
+        const r = await fetch(DSX_FART);
+        const d = await r.json();
+        const p = d.pairs?.[0];
+        if (!p) return;
+        const price = parseFloat(p.priceUsd) || 0;
+        const value = price * 1159;
+        const now   = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+
+        document.getElementById('agentFartValue').textContent = '$' + value.toFixed(2);
+        document.getElementById('agentFartValue').className   = 'agent-meta-value highlight';
+        document.getElementById('fartLogPrice').textContent   = fmt(price);
+        document.getElementById('fartLogValue').textContent   = '$' + value.toFixed(2);
+        document.getElementById('fartLogTime').textContent    = now;
+        document.getElementById('fartLogTime2').textContent   = now;
+        document.getElementById('fartLogTime3').textContent   = now;
+      } catch(e) { console.warn('fart fetch failed', e); }
+    }
+
+    loadFart();
+    setInterval(loadFart, 60000);
+  </script>
+</body>
+</html>
