@@ -1,5 +1,18 @@
 [
   {
+    "timestamp": "2026-02-19T14:11:49Z",
+    "type": "build",
+    "title": "Price Ticker Field Name Mismatch Fixed",
+    "description": "Fixed navigation price ticker to call /api/price proxy instead of direct DexScreener fetch. Updated JavaScript to read correct flat field names (change24h, mcap, volume24h) that match server.js response format. Eliminates CORS errors and field name mismatches.",
+    "status": "active",
+    "commits": [
+      {
+        "sha": "b7e4876b",
+        "message": "fix: route frontend price fetch through /api/price proxy (build #10)"
+      }
+    ]
+  },
+  {
     "timestamp": "2026-02-19T13:04:24Z",
     "type": "build",
     "title": "Price Feed & Contract Address Fixes",
