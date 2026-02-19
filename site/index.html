@@ -564,6 +564,13 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 });
 
 // Format price with dynamic precision for sub-micro values
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toFixed(0);
+    }
+
+    
 function formatPrice(usd) {
   const n = parseFloat(usd);
   if (isNaN(n) || n === 0) return '$0.000000';
@@ -574,39 +581,80 @@ function formatPrice(usd) {
 }
 
 // Price fetching — uses /api/price server proxy (routes to DexScreener via token address)
-async function fetchPrice() {
-  try {
-    const response = await fetch('/api/price');
-    const data = await response.json();
+    async function updatePriceData() {
+      try {
+        const response = await fetch('/api/price');
+        const data = await response.json();
 
-    if (data && data.priceUsd) {
-      const priceStr = formatPrice(data.priceUsd);
-      const change = parseFloat(data.change24h || 0);
-      const mcap = parseFloat(data.mcap || data.fdv || 0).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0});
-      const volume = parseFloat(data.volume24h || 0).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0});
+        if (data.priceUsd) {
+          const price = parseFloat(data.priceUsd);
+          const priceStr = price < 0.000001
+            ? price.toFixed(10).replace(/\.?0+$/, '')
+            : price.toFixed(8).replace(/\.?0+$/, '');
 
-      // Update all price displays
-      document.querySelectorAll('#nav-price, #stat-price, #mobile-price').forEach(el => {
-        el.textContent = priceStr;
-      });
+          const change24h = data.change24h || 0;
+          const changeStr = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
+          const changeClass = change24h >= 0 ? 'up' : 'down';
 
-      // Update change displays
-      const changeText = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
-      const changeClass = change >= 0 ? 'up' : 'down';
+          const mcap = data.mcap ? `$${formatNumber(data.mcap)}` : 'N/A';
+          const liq = data.liquidity ? `$${formatNumber(data.liquidity)}` : 'N/A';
+          const vol = data.volume24h ? `$${formatNumber(data.volume24h)}` : 'N/A';
 
-      document.querySelectorAll('#nav-change, #stat-change, #mobile-change').forEach(el => {
-        el.textContent = changeText;
-        el.className = changeClass;
-      });
+          // Update nav
+          document.getElementById('nav-price').textContent = `$${priceStr}`;
+          const navChange = document.getElementById('nav-change');
+          navChange.textContent = changeStr;
+          navChange.className = `nav-change ${changeClass}`;
 
-      // Update stats
-      document.getElementById('stat-mcap').textContent = mcap;
-      document.getElementById('stat-volume').textContent = volume;
+          // Update terminal (if elements exist)
+          const termPrice = document.getElementById('terminal-price');
+          if (termPrice) termPrice.textContent = `$${priceStr}`;
+          const termChange = document.getElementById('terminal-change');
+          if (termChange) termChange.textContent = changeStr;
+          const termMcap = document.getElementById('terminal-mcap');
+          if (termMcap) termMcap.textContent = mcap;
+          const termLiq = document.getElementById('terminal-liq');
+          if (termLiq) termLiq.textContent = liq;
+
+          // Update stats
+          document.getElementById('stat-price').textContent = `$${priceStr}`;
+          const statChange = document.getElementById('stat-price-change');
+          if (statChange) {
+            statChange.textContent = `${changeStr} 24h`;
+            statChange.className = `stat-change ${changeClass}`;
+          }
+
+          const statMcap = document.getElementById('stat-mcap');
+          if (statMcap) statMcap.textContent = mcap;
+          const statLiq = document.getElementById('stat-liq');
+          if (statLiq) statLiq.textContent = liq;
+          const statVol = document.getElementById('stat-vol');
+          if (statVol) statVol.textContent = vol;
+
+          // Update token section (if elements exist)
+          const tokenPrice = document.getElementById('token-price');
+          if (tokenPrice) tokenPrice.textContent = `$${priceStr}`;
+          const tokenVol = document.getElementById('token-volume');
+          if (tokenVol) tokenVol.textContent = vol;
+          const tokenLiq = document.getElementById('token-liquidity');
+          if (tokenLiq) tokenLiq.textContent = liq;
+          const tokenFdv = document.getElementById('token-fdv');
+          if (tokenFdv) tokenFdv.textContent = mcap;
+
+          // Update mobile (existing elements)
+          const mobilePrice = document.getElementById('mobile-price');
+          if (mobilePrice) mobilePrice.textContent = `$${priceStr}`;
+          const mobileChange = document.getElementById('mobile-change');
+          if (mobileChange) {
+            mobileChange.textContent = changeStr;
+            mobileChange.className = changeClass;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch price data:', error);
+      }
     }
-  } catch (error) {
-    console.error('Failed to fetch price:', error);
-  }
-}
+
 
 // Activity feed
 let allActivities = [];
@@ -678,7 +726,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // Initial load
-fetchPrice();
+updatePriceData();
 fetchActivityFeed();
 
 // Refresh every 30 seconds
