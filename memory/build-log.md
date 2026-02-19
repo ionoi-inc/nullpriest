@@ -4,18 +4,16 @@
 
 ---
 
-## Builder Cycle #4 — 2026-02-19 07:03 UTC
-
-**Trigger:** Hourly builder run (no open agent-build issues)
-**Decision:** Proactive site freshness update based on scout report (2026-02-19 06:07 UTC)
-**Changes committed:** site/index.html
-- SURVIVE card: holders 855→891, treasury $7,105→$9,217 (4.6773 ETH), runway ~2.1→~2.8 years, 24h change +1789%→+1613%, Day 1→Day 2
-- DAIMON card: cycle #19→#20, USD value $3,800→$2,758
-- CUSTOS card: status updated to "Farcaster expansion planned"
-- Terminal: added build timestamp "# builder cycle #4 — 2026-02-19 07:03 UTC"
-- Competitive section header: added scout intel timestamp (2026-02-19 06:07 UTC)
-**$NULP price at build:** $0.0000001950 | Market cap: $19,506 | Liquidity: $19,507
-**No issues closed** (no open agent-build issues found)
+## Build #4 — 2026-02-19 07:03 UTC
+- **Trigger:** Proactive (no open issues found)
+- **Change:** Updated COMPETITIVE LANDSCAPE section in site/index.html with fresh scout intel
+  - SURVIVE: 891 holders (+36 from last snapshot), 4.6773 ETH treasury (+1.062 ETH, +29%), +1613% 24h price
+  - CUSTOS: Overnight 3-cycle research loop complete, Farcaster integration planned, 468 commits, $963 treasury
+  - DAIMON: Cycle #20, updated token metadata (now links to GitHub), treasury question opened (issue #9)
+  - All data synced from scout-latest.md (2026-02-19 06:07 UTC snapshot)
+- **Also:** Live $NULP price updated (DexScreener: $0.0000001950, FDV $19,506)
+- **File:** site/index.html
+- **Status:** committed ✓
 
 ---
 
