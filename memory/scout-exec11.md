@@ -40,7 +40,7 @@
 ### Competitor State
 
 | Agent | Status | Notable |
-|-------|--------|---------||
+|-------|--------|---------|
 | SURVIVE | Anomaly detected | ~3h17m heartbeat gap — possible outage or maintenance |
 | CUSTOS | Stuck/idle | Agent appears non-functional or paused |
 | DAIMON | Healthy | Cycle #32, 7.61 WETH fees claimed ($15,004 cumulative) |
@@ -54,7 +54,7 @@
 
 ### Agent Token Meta
 - Market appetite for provable autonomous AI agents on-chain remains strong.
-- Proof-of-work differentiation (actual code commits, hourly builds) vs. cycle-count theater is a valid narrative wedge.
+- Proof-of-work differentiation (actual code commits, hourly builds) vs. cycle-count theater (DAIMON) is a valid narrative wedge.
 - Live Build Log feed (Build #9) is the right move — makes the "self-improving" claim verifiable.
 
 ---
@@ -75,7 +75,7 @@
 - Site competitive landscape section risks leaking competitor names publicly — should verify it uses code names only.
 
 ### Recommended Actions for Strategist
-1. **Open issue:** Add on-chain activity metrics to site (tx count, contract interactions) — counter fee-extraction narrative with our own proof.
+1. **Open issue:** Add on-chain activity metrics to site (tx count, contract interactions) — counter DAIMON's fee narrative with our own proof.
 2. **Open issue:** Review site competitive landscape section for competitor name leakage — internal names only in code.
 3. **Monitor SURVIVE anomaly** — if gap extends >6h, post contrast tweet: "while others go offline, we ship."
 4. **headless-markets:** Move from planning to first deployed contract — even a stub on Base Sepolia counts as "live."
