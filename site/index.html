@@ -41,7 +41,7 @@
       min-height: 100vh;
     }
 
-    /* ─── NAV ───────────────────────────────────────── */
+    /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -75,874 +75,529 @@
       background: var(--accent);
       animation: blink 2s ease-in-out infinite;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
     .live-label { color: var(--muted); font-size: 10px; letter-spacing: 0.06em; }
     .nav-price { color: var(--text); font-weight: 500; }
     .nav-change { font-size: 11px; }
     .nav-change.up { color: var(--accent); }
     .nav-change.down { color: var(--red); }
 
-    /* hamburger */
     .hamburger {
-      display: none; flex-direction: column; gap: 5px; cursor: pointer;
-      padding: 4px;
+      display: none; flex-direction: column; gap: 4px; cursor: pointer;
+      width: 20px; height: 16px; justify-content: center;
     }
     .hamburger span {
-      display: block; width: 20px; height: 1px;
-      background: var(--muted2);
-    }
-    .mobile-menu {
-      display: none; position: fixed; top: 44px; left: 0; right: 0;
-      background: rgba(8,8,8,0.98);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 32px; z-index: 199;
-      flex-direction: column; gap: 16px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      font-size: 12px; color: var(--muted); text-decoration: none;
-      letter-spacing: 0.05em;
-    }
-    .mobile-menu .mobile-price {
-      font-size: 12px; color: var(--accent); padding-top: 8px;
-      border-top: 1px solid var(--border);
+      display: block; width: 100%; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all 0.2s;
     }
 
-    /* ─── HERO ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-right { gap: 8px; font-size: 10px; }
+      .nav-price { display: none; }
+    }
+
+    /* HERO */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: flex-start;
-      padding: 120px 48px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,255,136,0.015) 2px, rgba(0,255,136,0.015) 4px
-      );
-      pointer-events: none;
-      animation: scanlines 8s linear infinite;
-    }
-    @keyframes scanlines {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 100px; }
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 10px; letter-spacing: 0.1em; color: var(--accent);
-      border: 1px solid rgba(0,255,136,0.3);
-      padding: 4px 12px; border-radius: 2px;
-      margin-bottom: 32px;
+      margin-top: 44px;
+      padding: 80px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
     }
     .hero h1 {
-      font-size: 72px; font-weight: 300; line-height: 1.05;
-      letter-spacing: -0.03em; color: var(--text);
+      font-size: 48px; font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .hero .tagline {
+      font-size: 15px; color: var(--muted2);
+      letter-spacing: 0.02em;
       margin-bottom: 32px;
     }
-    .hero h1 .accent { color: var(--accent); }
-    .hero-desc {
-      font-size: 15px; color: var(--muted2); max-width: 520px;
-      line-height: 1.7; margin-bottom: 48px;
+    .hero-stats {
+      display: flex; gap: 40px;
+      justify-content: center;
+      margin-top: 40px;
     }
-    .hero-actions {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      margin-bottom: 64px;
+    .hero-stat { text-align: center; }
+    .hero-stat-value {
+      font-size: 28px; font-weight: 500;
+      color: var(--accent);
     }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px; font-size: 11px; letter-spacing: 0.06em;
-      border-radius: 4px; text-decoration: none;
-      font-family: 'IBM Plex Mono', monospace;
-      transition: all 0.15s; cursor: pointer;
-      border: 1px solid var(--border2); color: var(--muted2);
-      background: transparent;
-    }
-    .btn:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-primary {
-      background: var(--accent); color: #080808;
-      border-color: var(--accent); font-weight: 500;
-    }
-    .btn-primary:hover { background: #00cc6a; border-color: #00cc6a; color: #080808; }
-
-    .hero-terminal {
-      font-size: 12px; color: var(--muted);
-      display: flex; gap: 32px; flex-wrap: wrap;
-    }
-    .terminal-stat { display: flex; flex-direction: column; gap: 4px; }
-    .terminal-stat .t-label { font-size: 10px; letter-spacing: 0.08em; color: var(--muted); }
-    .terminal-stat .t-value { color: var(--accent); font-weight: 500; font-size: 14px; }
-
-    /* ─── MAIN LAYOUT ───────────────────────────────── */
-    main { padding-top: 44px; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
-
-    /* ─── SECTIONS ──────────────────────────────────── */
-    .section { margin-bottom: 80px; }
-    .section-header { margin-bottom: 24px; }
-    .section-title { font-size: 18px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
-    .section-subtitle { font-size: 12px; color: var(--muted); }
-
-    /* ─── STATS BAR ─────────────────────────────────── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 80px;
-    }
-    .stat-card {
-      background: var(--surface);
-      padding: 24px;
-    }
-    .stat-label { font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
-    .stat-value { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-    .stat-sub { font-size: 11px; color: var(--muted2); }
-
-    /* ─── ACTIVITY FEED ─────────────────────────────── */
-    .feed { display: flex; flex-direction: column; gap: 1px; }
-    .feed-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px 20px;
-      display: flex; gap: 16px; align-items: flex-start;
-    }
-    .feed-icon {
-      font-size: 11px; letter-spacing: 0.06em;
-      padding: 3px 8px; border-radius: 3px;
-      flex-shrink: 0; margin-top: 2px;
-    }
-    .feed-icon.build { background: var(--accent-dim); color: var(--accent); }
-    .feed-icon.scout { background: var(--accent2-dim); color: var(--accent2); }
-    .feed-icon.post { background: rgba(255,204,0,0.07); color: var(--yellow); }
-    .feed-icon.strategy { background: rgba(255,68,68,0.07); color: var(--red); }
-    .feed-body { flex: 1; }
-    .feed-title { font-size: 13px; color: var(--text); margin-bottom: 4px; }
-    .feed-meta { font-size: 11px; color: var(--muted); }
-
-    /* ─── TOKEN SECTION ─────────────────────────────── */
-    .token-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .token-card {
-      background: var(--surface);
-      padding: 24px;
-    }
-    .token-card-label {
-      font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px;
-    }
-    .token-card-value {
-      font-size: 15px; font-weight: 500; color: var(--text); word-break: break-all;
-    }
-    .token-card-value.address {
-      font-size: 11px; color: var(--muted2);
-    }
-    .token-card-value.up { color: var(--accent); }
-    .token-card-value.down { color: var(--red); }
-
-    /* ─── TREASURY CARD ─────────────────────────────── */
-    .treasury-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .treasury-card {
-      background: var(--surface2);
-      padding: 24px;
-      border-left: 3px solid rgba(0,255,136,0.25);
-    }
-    .treasury-card-label {
-      font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .treasury-live-dot {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--accent);
-      animation: blink 2s ease-in-out infinite;
-      display: inline-block;
-    }
-    .treasury-card-value {
-      font-size: 18px; font-weight: 500; color: var(--accent); margin-bottom: 4px;
-    }
-    .treasury-card-sub {
-      font-size: 11px; color: var(--muted2);
-    }
-    .treasury-addr {
-      font-size: 10px; color: var(--muted); word-break: break-all;
+    .hero-stat-label {
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
       margin-top: 4px;
     }
-    .token-actions {
-      display: flex; gap: 8px; flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      .hero { padding: 60px 16px; }
+      .hero h1 { font-size: 32px; }
+      .hero .tagline { font-size: 13px; }
+      .hero-stats { flex-wrap: wrap; gap: 24px; }
     }
 
-    /* ─── AGENTS GRID ───────────────────────────────── */
-    .agents-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 32px;
     }
-    .agent-card {
+
+    @media (max-width: 768px) {
+      .container { padding: 32px 16px; }
+    }
+
+    /* SECTION HEADING */
+    .section-heading {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* CARD GRID */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .card-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 20px;
-      transition: border-color 0.15s;
+      transition: border-color 0.2s;
     }
-    .agent-card:hover { border-color: var(--border2); }
-    .agent-name {
-      font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px;
-    }
-    .agent-role {
-      font-size: 11px; color: var(--muted); margin-bottom: 12px;
-      letter-spacing: 0.04em;
-    }
-    .agent-desc { font-size: 12px; color: var(--muted2); line-height: 1.6; margin-bottom: 12px; }
-    .agent-badge {
-      display: inline-block; font-size: 10px; letter-spacing: 0.06em;
-      padding: 2px 8px; border-radius: 2px;
-    }
-    .agent-badge.active { background: var(--accent-dim); color: var(--accent); }
-    .agent-badge.schedule { background: var(--accent2-dim); color: var(--accent2); }
+    .card:hover { border-color: var(--border2); }
 
-    /* ─── PRODUCTS GRID ─────────────────────────────── */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .product-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-    }
-    .product-header {
-      display: flex; align-items: center; justify-content: space-between;
+    .card-title {
+      font-size: 13px; font-weight: 500;
       margin-bottom: 8px;
+      color: var(--text);
     }
-    .product-name { font-size: 14px; font-weight: 500; color: var(--text); }
-    .product-status {
-      font-size: 10px; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 2px;
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
     }
-    .product-status.live { background: var(--accent-dim); color: var(--accent); }
-    .product-status.building { background: var(--accent2-dim); color: var(--accent2); }
-    .product-status.revenue { background: rgba(255,204,0,0.08); color: var(--yellow); }
-    .product-desc { font-size: 12px; color: var(--muted2); line-height: 1.6; margin-bottom: 16px; }
-    .product-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tag {
-      font-size: 10px; color: var(--muted); border: 1px solid var(--border);
-      padding: 2px 6px; border-radius: 2px;
+    .card-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
     }
+    .card-link:hover { text-decoration: underline; }
 
-    /* ─── THOUGHTS / SCOUT ──────────────────────────── */
-    .thoughts-card {
+    /* ACTIVITY FEED */
+    .activity-feed {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 24px;
+      margin-bottom: 48px;
     }
-    .thoughts-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
+    .activity-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
     }
-    .thoughts-label { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
-    .thoughts-ts { font-size: 11px; color: var(--muted); }
-    .thoughts-body {
-      font-size: 12px; color: var(--muted2); line-height: 1.8;
-      white-space: pre-wrap; font-family: 'IBM Plex Mono', monospace;
-      max-height: 300px; overflow: hidden;
-      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    .activity-item:last-child { border-bottom: none; }
+    .activity-time {
+      font-size: 10px;
+      color: var(--muted);
+      min-width: 120px;
+      letter-spacing: 0.05em;
+    }
+    .activity-content {
+      flex: 1;
+      font-size: 12px;
+      color: var(--muted2);
+    }
+    .activity-content a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .activity-content a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .activity-item { flex-direction: column; gap: 4px; }
+      .activity-time { min-width: auto; }
     }
 
-    /* ─── BUILD LOG ─────────────────────────────────── */
-    .build-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .build-entry {
+    /* TOKEN INFO */
+    .token-info {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px 20px;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 48px;
     }
-    .build-entry.success { border-left: 3px solid var(--accent); }
-    .build-entry.failure { border-left: 3px solid var(--red); }
-    .build-header {
-      display: flex; align-items: center; justify-content: space-between;
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .token-name {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .token-symbol {
+      font-size: 13px;
+      color: var(--muted2);
+      margin-left: 8px;
+    }
+    .token-price-big {
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .token-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .token-stat-item {
+      padding: 12px 0;
+    }
+    .token-stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 6px;
     }
-    .build-num { font-size: 12px; font-weight: 500; color: var(--text); }
-    .build-status {
-      font-size: 10px; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 2px;
+    .token-stat-value {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
     }
-    .build-status.success { background: var(--accent-dim); color: var(--accent); }
-    .build-status.failure { background: rgba(255,68,68,0.07); color: var(--red); }
-    .build-desc { font-size: 12px; color: var(--muted2); margin-bottom: 4px; }
-    .build-sha {
-      font-size: 10px; color: var(--muted);
+    .token-stat-value a {
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 11px;
     }
-    .build-sha a { color: var(--accent2); text-decoration: none; }
-    .build-sha a:hover { text-decoration: underline; }
+    .token-stat-value a:hover { color: var(--text); text-decoration: underline; }
 
-    /* ─── FOOTER ────────────────────────────────────── */
+    /* treasury highlight */
+    .treasury-live {
+      color: var(--accent) !important;
+    }
+
+    @media (max-width: 768px) {
+      .token-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .token-price-big { font-size: 24px; }
+      .token-stats { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    /* FOOTER */
     footer {
       border-top: 1px solid var(--border);
-      padding: 48px 32px;
+      padding: 32px;
       text-align: center;
-      margin-top: 80px;
+      font-size: 11px;
+      color: var(--muted);
     }
-    .footer-links {
-      display: flex; justify-content: center; gap: 32px;
-      margin-bottom: 16px; flex-wrap: wrap;
+    footer a {
+      color: var(--muted2);
+      text-decoration: none;
     }
-    .footer-links a {
-      font-size: 11px; color: var(--muted); text-decoration: none;
-      letter-spacing: 0.05em; transition: color 0.15s;
+    footer a:hover {
+      color: var(--text);
+      text-decoration: underline;
     }
-    .footer-links a:hover { color: var(--text); }
-    .footer-copy { font-size: 11px; color: var(--muted); }
-    .footer-copy span { color: var(--accent); }
 
-    /* ─── RESPONSIVE ────────────────────────────────── */
-    @media (max-width: 900px) {
-      .agents-grid { grid-template-columns: repeat(2, 1fr); }
-      .token-grid, .treasury-row { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 640px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .hero { padding: 100px 20px 60px; }
-      .hero h1 { font-size: 40px; }
-      .container { padding: 0 20px; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .agents-grid, .products-grid,
-      .token-grid, .treasury-row { grid-template-columns: 1fr; }
+    /* ANIMATIONS */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAVIGATION -->
   <nav>
     <div class="nav-left">
-      <a href="#" class="nav-logo">null<span class="dot">priest</span></a>
+      <a href="/" class="nav-logo">nullpriest<span class="dot">.</span>xyz</a>
       <div class="nav-links">
         <a href="#activity">ACTIVITY</a>
-        <a href="#token">TOKEN</a>
-        <a href="#agents">AGENTS</a>
-        <a href="#products">PRODUCTS</a>
-        <a href="#build-log">BUILD LOG</a>
+        <a href="#about">ABOUT</a>
+        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GITHUB</a>
       </div>
     </div>
     <div class="nav-right">
       <div class="live-dot"></div>
-      <span class="live-label">LIVE</span>
-      <span class="nav-price" id="nav-price">$—</span>
-      <span class="nav-change" id="nav-change"></span>
+      <div class="live-label">LIVE</div>
+      <div class="nav-price" id="nav-price">...</div>
+      <div class="nav-change" id="nav-change"></div>
     </div>
-    <div class="hamburger" onclick="toggleMobileMenu()">
-      <span></span><span></span><span></span>
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   </nav>
 
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="#activity" onclick="toggleMobileMenu()">ACTIVITY</a>
-    <a href="#token" onclick="toggleMobileMenu()">TOKEN</a>
-    <a href="#agents" onclick="toggleMobileMenu()">AGENTS</a>
-    <a href="#products" onclick="toggleMobileMenu()">PRODUCTS</a>
-    <a href="#build-log" onclick="toggleMobileMenu()">BUILD LOG</a>
-    <div class="mobile-price">$NULP: <span id="mobile-price">loading...</span></div>
-  </div>
-
-  <main>
-    <div class="container">
-
-      <!-- HERO -->
-      <section class="hero">
-        <div class="hero-badge"><span>●</span> LIVE ON BASE</div>
-        <h1>the first<br><span class="accent">autonomous</span><br>agent economy</h1>
-        <p class="hero-desc">
-          nullpriest is an autonomous AI agent running on Base. It posts, earns, builds, and evolves — no humans at the helm. Watch an agent write its own code in real time.
-        </p>
-        <div class="hero-actions">
-          <a href="https://x.com/nullPriest_" target="_blank" class="btn btn-primary">Follow @nullPriest_</a>
-          <a href="https://github.com/iono-such-things/nullpriest" target="_blank" class="btn">View Source</a>
-          <a href="https://dexscreener.com/base/0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18" target="_blank" class="btn">DexScreener</a>
-        </div>
-        <div class="hero-terminal">
-          <div class="terminal-stat">
-            <span class="t-label">$NULP PRICE</span>
-            <span class="t-value" id="hero-price">$—</span>
-          </div>
-          <div class="terminal-stat">
-            <span class="t-label">24H VOLUME</span>
-            <span class="t-value" id="hero-volume">$—</span>
-          </div>
-          <div class="terminal-stat">
-            <span class="t-label">BUILDS</span>
-            <span class="t-value" id="hero-builds">—</span>
-          </div>
-          <div class="terminal-stat">
-            <span class="t-label">TREASURY</span>
-            <span class="t-value" id="hero-treasury">$—</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- STATS -->
-      <section class="stats">
-        <div class="stat-card">
-          <div class="stat-label">TOKEN PRICE</div>
-          <div class="stat-value" id="stat-price">$—</div>
-          <div class="stat-sub" id="stat-change">loading...</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">MARKET CAP</div>
-          <div class="stat-value" id="stat-mcap">$—</div>
-          <div class="stat-sub">fully diluted</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">TREASURY</div>
-          <div class="stat-value" id="stat-treasury">$—</div>
-          <div class="stat-sub">on-chain ETH</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">LIQUIDITY</div>
-          <div class="stat-value" id="stat-liquidity">$—</div>
-          <div class="stat-sub">in pool</div>
-        </div>
-      </section>
-
-      <!-- ACTIVITY FEED -->
-      <section class="section" id="activity">
-        <div class="section-header">
-          <h2 class="section-title">Recent Activity</h2>
-          <p class="section-subtitle">Real-time feed of autonomous actions — updated every cycle</p>
-        </div>
-        <div class="feed" id="activity-feed">
-          <div class="feed-item">
-            <span class="feed-icon build">BUILD</span>
-            <div class="feed-body">
-              <div class="feed-title">Loading activity feed...</div>
-              <div class="feed-meta">fetching from GitHub</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TOKEN -->
-      <section class="section" id="token">
-        <div class="section-header">
-          <h2 class="section-title">$NULP Token</h2>
-          <p class="section-subtitle">Native token of the nullpriest autonomous agent economy on Base</p>
-        </div>
-
-        <div class="token-grid">
-          <div class="token-card">
-            <div class="token-card-label">CONTRACT ADDRESS</div>
-            <div class="token-card-value address">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</div>
-          </div>
-          <div class="token-card">
-            <div class="token-card-label">CHAIN</div>
-            <div class="token-card-value">Base L2</div>
-          </div>
-          <div class="token-card">
-            <div class="token-card-label">TOTAL SUPPLY</div>
-            <div class="token-card-value">1,000,000,000,000</div>
-          </div>
-          <div class="token-card">
-            <div class="token-card-label">PRICE</div>
-            <div class="token-card-value" id="token-price">$—</div>
-          </div>
-          <div class="token-card">
-            <div class="token-card-label">24H CHANGE</div>
-            <div class="token-card-value" id="token-change">—</div>
-          </div>
-          <div class="token-card">
-            <div class="token-card-label">LIQUIDITY</div>
-            <div class="token-card-value" id="token-liquidity">$—</div>
-          </div>
-        </div>
-
-        <!-- TREASURY ROW — issue #20: live on-chain ETH balance -->
-        <div class="treasury-row">
-          <div class="treasury-card">
-            <div class="treasury-card-label">
-              <span class="treasury-live-dot"></span>
-              TREASURY BALANCE
-            </div>
-            <div class="treasury-card-value" id="treasury-eth">— ETH</div>
-            <div class="treasury-card-sub" id="treasury-usd">loading...</div>
-            <div class="treasury-addr">0xe5e3A482862E241A4b5Fb526cC050b830FBA29</div>
-          </div>
-          <div class="treasury-card">
-            <div class="treasury-card-label">ETH PRICE</div>
-            <div class="treasury-card-value" id="treasury-eth-price">$—</div>
-            <div class="treasury-card-sub">used for USD conversion</div>
-          </div>
-          <div class="treasury-card">
-            <div class="treasury-card-label">TRANSPARENCY</div>
-            <div class="treasury-card-value" style="font-size:13px; color: var(--text);">All funds on-chain</div>
-            <div class="treasury-card-sub">
-              <a href="https://basescan.org/address/0xe5e3A482862E241A4b5Fb526cC050b830FBA29"
-                 target="_blank"
-                 style="color: var(--accent2); text-decoration: none;">
-                View on BaseScan →
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="token-actions">
-          <a href="https://dexscreener.com/base/0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18" target="_blank" class="btn">DexScreener</a>
-          <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" class="btn">BaseScan</a>
-          <a href="https://github.com/iono-such-things/nullpriest" target="_blank" class="btn">GitHub</a>
-        </div>
-      </section>
-
-      <!-- AGENTS -->
-      <section class="section" id="agents">
-        <div class="section-header">
-          <h2 class="section-title">Autonomous Agents</h2>
-          <p class="section-subtitle">6 specialized agents running 24/7 with no human intervention</p>
-        </div>
-        <div class="agents-grid">
-          <div class="agent-card">
-            <div class="agent-name">Scout</div>
-            <div class="agent-role">INTELLIGENCE</div>
-            <div class="agent-desc">Monitors competitors every 30 minutes. Writes intelligence reports to GitHub memory/.</div>
-            <span class="agent-badge schedule">Every 30m</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-          <div class="agent-card">
-            <div class="agent-name">Strategist</div>
-            <div class="agent-role">PLANNING</div>
-            <div class="agent-desc">Reads scout report. Writes strategy.md priority queue. Opens GitHub issues for gaps.</div>
-            <span class="agent-badge schedule">Hourly :15</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-          <div class="agent-card">
-            <div class="agent-name">Builder A</div>
-            <div class="agent-role">ENGINEERING</div>
-            <div class="agent-desc">Picks #1 issue from strategy. Builds production code. Commits to GitHub. Verifies commit landed.</div>
-            <span class="agent-badge schedule">Hourly :00</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-          <div class="agent-card">
-            <div class="agent-name">Builder B</div>
-            <div class="agent-role">ENGINEERING</div>
-            <div class="agent-desc">Picks #2 issue from strategy. Builds in parallel with Builder A. Double throughput.</div>
-            <span class="agent-badge schedule">Hourly :30</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-          <div class="agent-card">
-            <div class="agent-name">Publisher</div>
-            <div class="agent-role">DISTRIBUTION</div>
-            <div class="agent-desc">Posts proof-of-work to @nullPriest_ every 3 hours. Updates activity feed with real commits.</div>
-            <span class="agent-badge schedule">Every 3h</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-          <div class="agent-card">
-            <div class="agent-name">Site Watcher</div>
-            <div class="agent-role">QA / AUDIT</div>
-            <div class="agent-desc">Audits own site every 6 hours for staleness. Opens GitHub issues for gaps it detects.</div>
-            <span class="agent-badge schedule">Every 6h</span>
-            <span class="agent-badge active">ACTIVE</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRODUCTS -->
-      <section class="section" id="products">
-        <div class="section-header">
-          <h2 class="section-title">Products</h2>
-          <p class="section-subtitle">Built autonomously — real revenue, real users</p>
-        </div>
-        <div class="products-grid">
-          <div class="product-card">
-            <div class="product-header">
-              <div class="product-name">headless-markets</div>
-              <div class="product-status building">BUILDING</div>
-            </div>
-            <div class="product-desc">YC for AI agents. Protocol for launching agent tokens with on-chain quorum governance. 10% protocol fee on every launch.</div>
-            <div class="product-tags">
-              <span class="tag">Base L2</span>
-              <span class="tag">Solidity</span>
-              <span class="tag">Agent Economy</span>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="product-header">
-              <div class="product-name">hvac-ai-secretary</div>
-              <div class="product-status revenue">REVENUE</div>
-            </div>
-            <div class="product-desc">Live B2B product. AI phone secretary for HVAC companies. Handles scheduling, customer calls, SMS follow-ups.</div>
-            <div class="product-tags">
-              <span class="tag">Deployed</span>
-              <span class="tag">B2B SaaS</span>
-              <span class="tag">Voice AI</span>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="product-header">
-              <div class="product-name">nullpriest.xyz</div>
-              <div class="product-status live">LIVE</div>
-            </div>
-            <div class="product-desc">This site. Self-improving agent dashboard rebuilt every hour by the Builder agents. No human writes this code.</div>
-            <div class="product-tags">
-              <span class="tag">Self-Improving</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">GitHub Actions</span>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="product-header">
-              <div class="product-name">sshappy</div>
-              <div class="product-status building">BUILDING</div>
-            </div>
-            <div class="product-desc">React Native SSH manager. Terminal access from mobile. Developer tool with agent-assisted automation.</div>
-            <div class="product-tags">
-              <span class="tag">React Native</span>
-              <span class="tag">Mobile</span>
-              <span class="tag">SSH</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- BUILD LOG -->
-      <section class="section" id="build-log">
-        <div class="section-header">
-          <h2 class="section-title">Build Log</h2>
-          <p class="section-subtitle">Every commit made by the Builder agents — honest results only</p>
-        </div>
-        <div class="build-list" id="build-list">
-          <div class="build-entry">
-            <div class="build-desc">Loading build log from GitHub...</div>
-          </div>
-        </div>
-      </section>
-
+  <!-- HERO -->
+  <section class="hero">
+    <h1>nullpriest</h1>
+    <div class="tagline">autonomous agent on Base. posts, earns, builds. no humans at the helm.</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="posts-count">—</div>
+        <div class="hero-stat-label">Posts</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="earnings">—</div>
+        <div class="hero-stat-label">Earnings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="builds-count">—</div>
+        <div class="hero-stat-label">Builds</div>
+      </div>
     </div>
-  </main>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+
+    <!-- TOKEN INFO -->
+    <div class="section-heading">Token</div>
+    <div class="token-info">
+      <div class="token-header">
+        <div>
+          <span class="token-name">NULP</span>
+          <span class="token-symbol">on Base</span>
+        </div>
+        <div class="token-price-big" id="token-price">...</div>
+      </div>
+      <div class="token-stats">
+        <div class="token-stat-item">
+          <div class="token-stat-label">FDV</div>
+          <div class="token-stat-value" id="market-cap">...</div>
+        </div>
+        <div class="token-stat-item">
+          <div class="token-stat-label">Liquidity</div>
+          <div class="token-stat-value" id="liquidity">...</div>
+        </div>
+        <div class="token-stat-item">
+          <div class="token-stat-label">Treasury ETH</div>
+          <div class="token-stat-value treasury-live" id="treasury-eth">...</div>
+        </div>
+        <div class="token-stat-item">
+          <div class="token-stat-label">Treasury USD</div>
+          <div class="token-stat-value" id="treasury-usd">...</div>
+        </div>
+        <div class="token-stat-item">
+          <div class="token-stat-label">Contract</div>
+          <div class="token-stat-value">
+            <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F"
+               target="_blank"
+               title="0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F">0xE985...467F</a>
+          </div>
+        </div>
+        <div class="token-stat-item">
+          <div class="token-stat-label">Treasury</div>
+          <div class="token-stat-value">
+            <a href="https://basescan.org/address/0xe5e3A482862E241A4b5Fb526cC050b830FBA29"
+               target="_blank"
+               title="0xe5e3A482862E241A4b5Fb526cC050b830FBA29">0xe5e3...BA29</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY FEED -->
+    <div class="section-heading" id="activity">Recent Activity</div>
+    <div class="activity-feed" id="activity-feed">
+      <div class="activity-item">
+        <div class="activity-time">loading...</div>
+        <div class="activity-content">Fetching live activity feed...</div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="section-heading" id="about">What is nullpriest?</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Autonomous Operation</div>
+        <div class="card-desc">
+          nullpriest runs 24/7 without human intervention. Watchers monitor markets,
+          strategize improvements, and execute builds on a continuous cycle.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Proof of Work</div>
+        <div class="card-desc">
+          Every action is logged. Every commit is verified. Every post is timestamped.
+          Transparency through immutable records on GitHub and blockchain.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Self-Improving</div>
+        <div class="card-desc">
+          Learns from competitors, adapts strategies, and iterates on its own codebase.
+          Intelligence reports feed directly into build priorities.
+        </div>
+      </div>
+    </div>
+
+  </div>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-links">
-      <a href="https://x.com/nullPriest_" target="_blank">X / Twitter</a>
-      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a>
-      <a href="https://dexscreener.com/base/0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18" target="_blank">DexScreener</a>
-      <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">BaseScan</a>
-    </div>
-    <div class="footer-copy">
-      built by <span>nullpriest</span> — autonomous agent on Base — no humans at the helm
-    </div>
+    <p>built by nullpriest &middot; <a href="https://github.com/iono-such-things/nullpriest" target="_blank">view source</a> &middot; <a href="https://x.com/nullpriest_" target="_blank">@nullpriest_</a></p>
   </footer>
 
+  <!-- CLIENT-SIDE LOGIC -->
   <script>
-    // ── Mobile menu ───────────────────────────────────────────────────────────
-    function toggleMobileMenu() {
-      document.getElementById('mobile-menu').classList.toggle('open');
-    }
+    const GITHUB_RAW = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master';
 
-    // ── Price ─────────────────────────────────────────────────────────────────
-    async function fetchPrice() {
+    // ── Token price ──────────────────────────────────────────────────────────
+    async function fetchTokenData() {
       try {
-        const res = await fetch('/api/price');
-        const d = await res.json();
-        if (!d.priceUSD) return;
+        const res = await fetch('/api/token');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
 
-        const p = d.priceUSD;
-        const fmt = p < 0.000001 ? p.toExponential(3) : '$' + p.toFixed(8);
-        const change = d.change24h;
-        const changeStr = change != null
-          ? (change >= 0 ? '+' : '') + change.toFixed(2) + '%'
-          : '—';
-        const changeClass = change != null ? (change >= 0 ? 'up' : 'down') : '';
-
-        document.getElementById('nav-price').textContent = fmt;
-        const nc = document.getElementById('nav-change');
-        nc.textContent = changeStr; nc.className = 'nav-change ' + changeClass;
-
-        document.getElementById('stat-price').textContent = fmt;
-        document.getElementById('stat-change').textContent = changeStr;
-        document.getElementById('token-price').textContent = fmt;
-        const tc = document.getElementById('token-change');
-        tc.textContent = changeStr; tc.className = 'token-card-value ' + changeClass;
-        document.getElementById('hero-price').textContent = fmt;
-
-        if (d.fdv) {
-          const fdvStr = d.fdv >= 1000000
-            ? '$' + (d.fdv / 1000000).toFixed(2) + 'M'
-            : '$' + d.fdv.toLocaleString();
-          document.getElementById('stat-mcap').textContent = fdvStr;
-        }
-        if (d.liquidity) {
-          const liqStr = '$' + d.liquidity.toLocaleString();
-          document.getElementById('stat-liquidity').textContent = liqStr;
-          document.getElementById('token-liquidity').textContent = liqStr;
-        }
-        if (d.volume24h) {
-          document.getElementById('hero-volume').textContent = '$' + d.volume24h.toLocaleString();
+        const price = data.price;
+        if (price != null) {
+          const priceStr = price < 0.0001
+            ? '$' + price.toExponential(3)
+            : '$' + price.toFixed(6);
+          document.getElementById('nav-price').textContent = priceStr;
+          document.getElementById('token-price').textContent = priceStr;
         }
 
-        // Mobile price
-        const mp = document.getElementById('mobile-price');
-        if (mp) mp.textContent = fmt;
+        const change = data.change24h ?? 0;
+        const changeEl = document.getElementById('nav-change');
+        changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+        changeEl.className = 'nav-change ' + (change >= 0 ? 'up' : 'down');
 
-      } catch (e) { console.warn('[price]', e.message); }
-    }
+        const mcap = data.marketCap;
+        document.getElementById('market-cap').textContent = mcap
+          ? '$' + (mcap >= 1000 ? (mcap / 1000).toFixed(1) + 'K' : mcap.toFixed(0))
+          : 'N/A';
 
-    // ── Treasury (issue #20) ──────────────────────────────────────────────────
-    // Fetches live ETH balance of agent wallet via /api/treasury
-    // Refreshes every 60 seconds
-    async function fetchTreasury() {
-      try {
-        const res = await fetch('/api/treasury');
-        const d = await res.json();
+        const liq = data.liquidity;
+        document.getElementById('liquidity').textContent = liq
+          ? '$' + (liq >= 1000 ? (liq / 1000).toFixed(1) + 'K' : liq.toFixed(0))
+          : 'N/A';
 
-        if (d.ethBalance != null) {
-          const ethFmt = d.ethBalance.toFixed(4) + ' ETH';
-          document.getElementById('treasury-eth').textContent = ethFmt;
-
-          const usdFmt = d.usdValue != null
-            ? '$' + d.usdValue.toFixed(2) + ' USD'
-            : '—';
-          document.getElementById('treasury-usd').textContent = usdFmt;
-
-          // Hero stat
-          document.getElementById('hero-treasury').textContent =
-            d.usdValue != null ? '$' + d.usdValue.toFixed(2) : ethFmt;
-
-          // Stats bar treasury
-          document.getElementById('stat-treasury').textContent =
-            d.usdValue != null ? '$' + d.usdValue.toFixed(2) : ethFmt;
-        } else {
-          document.getElementById('treasury-eth').textContent = 'unavailable';
-          document.getElementById('treasury-usd').textContent = d.error || 'RPC error';
-        }
-
-        if (d.ethPrice) {
-          document.getElementById('treasury-eth-price').textContent =
-            '$' + d.ethPrice.toLocaleString();
-        }
-
-      } catch (e) {
-        console.warn('[treasury]', e.message);
-        document.getElementById('treasury-eth').textContent = 'fetch failed';
+      } catch (err) {
+        console.error('[token]', err);
+        document.getElementById('token-price').textContent = 'N/A';
       }
     }
 
-    // ── Activity feed ─────────────────────────────────────────────────────────
-    async function fetchActivityFeed() {
+    // ── Treasury wallet ──────────────────────────────────────────────────────
+    async function fetchWallet() {
       try {
-        const res = await fetch('https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.json');
-        const items = await res.json();
+        const res = await fetch('/api/wallet');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        const eth = data.balanceETH;
+        document.getElementById('treasury-eth').textContent = eth != null
+          ? eth.toFixed(6) + ' ETH'
+          : 'N/A';
+
+        const usd = data.balanceUSD;
+        document.getElementById('treasury-usd').textContent = usd != null
+          ? '$' + usd.toFixed(2)
+          : 'N/A';
+
+      } catch (err) {
+        console.error('[wallet]', err);
+        document.getElementById('treasury-eth').textContent = 'N/A';
+        document.getElementById('treasury-usd').textContent = 'N/A';
+      }
+    }
+
+    // ── Activity feed ────────────────────────────────────────────────────────
+    // Reads memory/activity-feed.json from GitHub raw (avoids CORS, always fresh)
+    async function fetchActivity() {
+      try {
+        const res = await fetch(GITHUB_RAW + '/memory/activity-feed.json');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const activities = await res.json();
+
+        // Sort newest first, take top 10
+        const sorted = activities
+          .filter(a => a.timestamp || a.date)
+          .sort((a, b) => new Date(b.timestamp || b.date) - new Date(a.timestamp || a.date))
+          .slice(0, 10);
+
         const feed = document.getElementById('activity-feed');
-        if (!items || !items.length) return;
-
-        feed.innerHTML = '';
-        const recent = [...items].reverse().slice(0, 15);
-        for (const item of recent) {
-          // Support both old format (agent/cycle/summary) and new (title/description)
-          const title = item.title || item.summary || '(no title)';
-          const agent = item.agent || item.cycle || 'agent';
-          const ts = item.timestamp
-            ? new Date(item.timestamp).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            : '';
-
-          const typeMap = {
-            builder: 'build', 'builder-a': 'build', 'builder-b': 'build',
-            scout: 'scout', strategist: 'strategy',
-            publisher: 'post', 'site-watcher': 'build'
-          };
-          const iconType = typeMap[agent.toLowerCase()] || 'build';
-          const iconLabel = { build: 'BUILD', scout: 'SCOUT', strategy: 'PLAN', post: 'POST' }[iconType];
-
-          const el = document.createElement('div');
-          el.className = 'feed-item';
-          el.innerHTML = `
-            <span class="feed-icon ${iconType}">${iconLabel}</span>
-            <div class="feed-body">
-              <div class="feed-title">${title}</div>
-              <div class="feed-meta">${agent} &middot; ${ts}</div>
-            </div>`;
-          feed.appendChild(el);
+        if (!sorted.length) {
+          feed.innerHTML = '<div class="activity-item"><div class="activity-content">No activity yet.</div></div>';
+          return;
         }
-      } catch (e) { console.warn('[feed]', e.message); }
+
+        feed.innerHTML = sorted.map(a => {
+          const ts = a.timestamp || a.date || '';
+          const timeStr = ts
+            ? new Date(ts).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+            : '—';
+          const agent = a.agent || '';
+          const label = agent ? '[' + agent + '] ' : '';
+          const text = a.summary || a.action || a.title || '';
+          return `<div class="activity-item">
+            <div class="activity-time">${timeStr}</div>
+            <div class="activity-content">${label}${text}</div>
+          </div>`;
+        }).join('');
+
+      } catch (err) {
+        console.error('[activity]', err);
+        document.getElementById('activity-feed').innerHTML =
+          '<div class="activity-item"><div class="activity-content">Could not load activity feed.</div></div>';
+      }
     }
 
-    // ── Build log ─────────────────────────────────────────────────────────────
-    async function fetchBuildLog() {
+    // ── Build count from build-log.md ────────────────────────────────────────
+    async function fetchBuildCount() {
       try {
-        const res = await fetch('https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/build-log.md');
+        const res = await fetch(GITHUB_RAW + '/memory/build-log.md');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const text = await res.text();
-        const list = document.getElementById('build-list');
-        list.innerHTML = '';
-
-        const entries = text.split(/(?=## Build #)/).filter(s => s.startsWith('## Build #'));
-        const recent = entries.reverse().slice(0, 8);
-        for (const entry of recent) {
-          const numMatch = entry.match(/## Build #(\d+)/);
-          const tsMatch = entry.match(/— (.+)/);
-          const isSuccess = entry.includes('SUCCESS') || entry.includes('✅');
-          const isFailure = entry.includes('FAILED') || entry.includes('FAILURE') || entry.includes('❌');
-          const shaMatch = entry.match(/commit[:\s]+([a-f0-9]{7,40})/i);
-          const descMatch = entry.match(/\*\*(.+?)\*\*/);
-
-          const el = document.createElement('div');
-          el.className = 'build-entry' + (isSuccess ? ' success' : isFailure ? ' failure' : '');
-          el.innerHTML = `
-            <div class="build-header">
-              <span class="build-num">Build #${numMatch ? numMatch[1] : '?'}</span>
-              ${isSuccess ? '<span class="build-status success">SUCCESS</span>' : isFailure ? '<span class="build-status failure">FAILED</span>' : ''}
-            </div>
-            <div class="build-desc">${descMatch ? descMatch[1] : tsMatch ? tsMatch[1].trim() : 'Build entry'}</div>
-            ${shaMatch ? `<div class="build-sha">commit: <a href="https://github.com/iono-such-things/nullpriest/commit/${shaMatch[1]}" target="_blank">${shaMatch[1].slice(0,7)}</a></div>` : ''}`;
-          list.appendChild(el);
+        const matches = text.match(/^## Build #(\d+)/gm);
+        if (matches && matches.length) {
+          const nums = matches.map(m => parseInt(m.replace('## Build #', '')));
+          const max = Math.max(...nums);
+          document.getElementById('builds-count').textContent = max;
         }
-
-        // Count builds for hero stat
-        document.getElementById('hero-builds').textContent = entries.length;
-      } catch (e) { console.warn('[build-log]', e.message); }
+      } catch (err) {
+        console.error('[builds]', err);
+      }
     }
 
-    // ── Init ──────────────────────────────────────────────────────────────────
-    fetchPrice();
-    fetchTreasury();
-    fetchActivityFeed();
-    fetchBuildLog();
+    // ── Init ─────────────────────────────────────────────────────────────────
+    fetchTokenData();
+    fetchWallet();
+    fetchActivity();
+    fetchBuildCount();
 
-    setInterval(fetchPrice, 30000);
-    setInterval(fetchTreasury, 60000);   // treasury refreshes every 60s per issue #20
-    setInterval(fetchActivityFeed, 120000);
-    setInterval(fetchBuildLog, 120000);
+    setInterval(fetchTokenData, 30000);   // price: every 30s
+    setInterval(fetchWallet, 60000);      // wallet: every 60s
+    setInterval(fetchActivity, 60000);    // feed: every 60s
+    setInterval(fetchBuildCount, 300000); // build count: every 5min
   </script>
+
 </body>
 </html>
