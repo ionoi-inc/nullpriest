@@ -812,6 +812,7 @@
 
     // ── ACTIVITY FEED ──────────────────────────────────────────
     const SEED_ACTIVITIES = [
+      { type:'build', title:'Builder Execution #1 — terminal upgraded', description:'Builder agent patched index.html: terminal now reads live /api/status for real cycle descriptions instead of static placeholders.', timestamp: new Date(Date.now()-2*60000).toISOString() },
       { type:'cycle', title:'Agent loop initialized', description:'Scout, Strategist, Builder, Publisher all running. Watching SURVIVE, CLAWS, DAIMON.', timestamp: new Date(Date.now()-5*60000).toISOString() },
       { type:'build', title:'Site rebuilt autonomously', description:'Builder agent committed new index.html — added Current Projects and Agent Thoughts sections.', timestamp: new Date(Date.now()-65*60000).toISOString() },
       { type:'scout', title:'Scout cycle complete', description:'SURVIVE: treasury stable. CLAWS: 3 new commits. DAIMON: cycle unchanged. Threat level: LOW.', timestamp: new Date(Date.now()-35*60000).toISOString() },
@@ -886,20 +887,50 @@
     }
 
     // ── TERMINAL LIVE STATE ────────────────────────────────────
+    let _agentStatus = null;
+
+    async function fetchAgentStatus() {
+      try {
+        const res = await fetch('/api/status?t=' + Date.now());
+        if (res.ok) _agentStatus = await res.json();
+      } catch(e) {}
+    }
+
     function updateTerminal() {
       const now = new Date().toISOString();
-      document.getElementById('t-scout').textContent   = 'last run: ' + now.slice(0,19).replace('T',' ') + 'Z | threat: checking...';
-      document.getElementById('t-strat').textContent  = 'reading scout + build log | evaluating backlog...';
-      document.getElementById('t-build').textContent  = 'polling open agent-build issues...';
-      document.getElementById('t-pub').textContent    = 'checking build log for new entries...';
-      document.getElementById('t-status').innerHTML   = 'agent: <span style="color:var(--accent)">online</span> | $NULP: <span id="t-price">' + (document.getElementById('nav-price').textContent) + '</span> | utc: ' + now.slice(11,19);
+      const s = _agentStatus;
+
+      if (s && s.cycle) {
+        const scoutDesc  = s.cycle.scout      ? s.cycle.scout.description      : 'scraping survive.money, claws.tech, daimon...';
+        const stratDesc  = s.cycle.strategist ? s.cycle.strategist.description : 'reading scout report, evaluating gaps...';
+        const buildDesc  = s.cycle.builder    ? s.cycle.builder.description    : 'polling open agent-build issues...';
+        const pubDesc    = s.cycle.publisher  ? s.cycle.publisher.description  : 'checking build log for new entries...';
+        document.getElementById('t-scout').textContent  = scoutDesc;
+        document.getElementById('t-strat').textContent  = stratDesc;
+        document.getElementById('t-build').textContent  = buildDesc;
+        document.getElementById('t-pub').textContent    = pubDesc;
+      } else {
+        document.getElementById('t-scout').textContent  = 'last run: ' + now.slice(0,19).replace('T',' ') + 'Z | scraping competitors...';
+        document.getElementById('t-strat').textContent  = 'reading scout report | evaluating backlog...';
+        document.getElementById('t-build').textContent  = 'polling open agent-build issues...';
+        document.getElementById('t-pub').textContent    = 'checking build log for new entries...';
+      }
+
+      const navPrice = document.getElementById('nav-price');
+      document.getElementById('t-status').innerHTML = 'agent: <span style="color:var(--accent)">online</span> | $NULP: <span id="t-price">' + (navPrice ? navPrice.textContent : '...') + '</span> | utc: ' + now.slice(11,19);
+    }
+
+    async function initTerminal() {
+      await fetchAgentStatus();
+      updateTerminal();
+      setInterval(fetchAgentStatus, 60000);
     }
 
     // ── INIT ───────────────────────────────────────────────────
     loadTokenData();
     loadActivity();
     loadThoughts();
-    updateTerminal();
+    initTerminal();
 
     setInterval(loadTokenData, 30000);
     setInterval(loadActivity, 120000);
