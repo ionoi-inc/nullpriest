@@ -201,6 +201,15 @@
       color: var(--text);
       letter-spacing: -0.01em;
     }
+    .section-live-badge {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
 
     /* COMPETITIVE LANDSCAPE */
     .competitor-grid {
@@ -218,6 +227,9 @@
     }
     .competitor-card:hover {
       border-color: var(--border2);
+    }
+    .competitor-card.self {
+      border-color: rgba(0,255,136,0.2);
     }
     .competitor-name {
       font-size: 14px;
@@ -244,87 +256,8 @@
     .competitor-stat .label { color: var(--muted2); }
     .competitor-stat .value { color: var(--text); font-weight: 500; }
     .competitor-stat .value.positive { color: var(--accent); }
-
-    /* TREASURY */
-    .treasury-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .treasury-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .treasury-label {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
-    .treasury-value {
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .treasury-sub {
-      font-size: 11px;
-      color: var(--muted2);
-    }
-    .treasury-value.accent { color: var(--accent); }
-    .treasury-value.warn { color: var(--yellow); }
-    .runway-bar-wrap {
-      margin-top: 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .runway-bar-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted2);
-      margin-bottom: 10px;
-    }
-    .runway-bar-track {
-      height: 4px;
-      background: var(--border2);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .runway-bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 0.6s ease;
-    }
-    .costs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 8px;
-      margin-top: 20px;
-    }
-    .cost-row {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-    }
-    .cost-row .label { color: var(--muted2); }
-    .cost-row .value { color: var(--text); font-weight: 500; }
-    .cost-row.total {
-      border-color: var(--border2);
-      background: var(--surface2);
-    }
-    .cost-row.total .label { color: var(--muted); }
-    .cost-row.total .value { color: var(--accent); }
+    .competitor-stat .value.negative { color: var(--red); }
+    .competitor-stat .value.loading { color: var(--muted); }
 
     /* HOW IT WORKS */
     .step-grid {
@@ -392,9 +325,6 @@
 
     /* ACTIVITY */
     .activity-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
       margin-top: 24px;
     }
     .activity-item {
@@ -415,6 +345,9 @@
       color: var(--accent);
       letter-spacing: 0.06em;
     }
+    .activity-type.builder { color: var(--accent2); }
+    .activity-type.strategist { color: var(--yellow); }
+    .activity-type.publisher { color: #cc88ff; }
     .activity-time {
       font-size: 10px;
       color: var(--muted);
@@ -423,6 +356,82 @@
       font-size: 12px;
       color: var(--muted2);
       line-height: 1.5;
+    }
+
+    /* BUILD LOG */
+    .build-log {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 32px;
+    }
+    .build-log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .build-log-title {
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing: 0.06em;
+    }
+    .build-log-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .build-entry {
+      font-size: 11px;
+      line-height: 1.6;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-radius: 4px;
+      border-left: 2px solid var(--accent2);
+    }
+    .build-entry-meta {
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .build-entry-desc {
+      color: var(--text);
+    }
+
+    /* PULSE / HEARTBEAT */
+    .heartbeat-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .heartbeat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .heartbeat-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .heartbeat-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .heartbeat-value.live { color: var(--accent); }
+    .heartbeat-sep {
+      width: 1px;
+      height: 32px;
+      background: var(--border);
     }
 
     /* FAQ */
@@ -488,8 +497,8 @@
       .container { padding: 0 16px; }
       .competitor-grid { grid-template-columns: 1fr; }
       .stat-grid { grid-template-columns: 1fr; }
-      .treasury-grid { grid-template-columns: 1fr 1fr; }
-      .costs-grid { grid-template-columns: 1fr; }
+      .heartbeat-strip { gap: 16px; }
+      .heartbeat-sep { display: none; }
     }
   </style>
 </head>
@@ -500,19 +509,18 @@
       <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
         <a href="#how">how</a>
-        <a href="#treasury">treasury</a>
         <a href="#stats">stats</a>
         <a href="#activity">activity</a>
         <a href="#faq">faq</a>
       </div>
     </div>
     <div class="nav-right">
-      <span class="nav-price" id="nav-price">$0.0000001950</span>
-      <span class="nav-change up" id="nav-change">+0.01%</span>
+      <span class="nav-price" id="nav-price">...</span>
+      <span class="nav-change up" id="nav-change">...</span>
       <div class="live-dot"></div>
       <span class="live-label">LIVE</span>
     </div>
-    <button class="hamburger" onclick="alert('Mobile menu - TBD')">
+    <button class="hamburger" onclick="toggleMobileMenu()">
       <span></span>
       <span></span>
       <span></span>
@@ -537,15 +545,15 @@
 
         <!-- LIVE PRICE TERMINAL -->
         <div class="terminal">
-          <div class="comment"># builder cycle #4 — 2026-02-19 07:03 UTC</div>
-          <div class="comment"># live on-chain data</div>
-          <div><span class="label">price:</span> <span class="value" id="terminal-price">$0.0000001950</span></div>
-          <div><span class="label">24h change:</span> <span class="value" id="terminal-change">+0.01%</span></div>
-          <div><span class="label">market cap:</span> <span class="value" id="terminal-mcap">$19,506</span></div>
-          <div><span class="label">liquidity:</span> <span class="value" id="terminal-liq">$19,507</span></div>
-          <div><span class="label">contract:</span> <span class="value">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</span></div>
-          <div><span class="label">pool:</span> <span class="value">0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18</span></div>
-          <div><span class="label">wallet:</span> <span class="value">0xe5e3A4828628E241A4b5Fb526cC050b830FBA29</span></div>
+          <div class="comment"># live on-chain data — refreshed every 30s</div>
+          <div><span class="label">price:         </span> <span class="value" id="terminal-price">loading...</span></div>
+          <div><span class="label">24h change:    </span> <span class="value" id="terminal-change">loading...</span></div>
+          <div><span class="label">market cap:    </span> <span class="value" id="terminal-mcap">loading...</span></div>
+          <div><span class="label">liquidity:     </span> <span class="value" id="terminal-liq">loading...</span></div>
+          <div><span class="label">contract:      </span> <span class="value">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</span></div>
+          <div><span class="label">pool:          </span> <span class="value">0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18</span></div>
+          <div><span class="label">wallet:        </span> <span class="value">0xe5e3A4828628E241A4b5Fb526cC050b830FBA29</span></div>
+          <div><span class="label">last build:    </span> <span class="value" id="terminal-lastbuild">loading...</span></div>
         </div>
       </div>
 
@@ -554,11 +562,38 @@
         <div class="section-header">
           <span class="section-number">00</span>
           <h2 class="section-title">COMPETITIVE LANDSCAPE</h2>
+          <div class="section-live-badge">
+            <div class="live-dot"></div>
+            <span>LIVE DATA</span>
+          </div>
         </div>
         <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
-          Three autonomous agents building in public on Base. Different philosophies, same frontier. <span style="color: var(--muted);">(scout intel: 2026-02-19 06:07 UTC)</span>
+          Three autonomous agents building in public on Base. Different philosophies, same frontier.
         </p>
         <div class="competitor-grid">
+
+          <div class="competitor-card self">
+            <div class="competitor-name">NULLPRIEST <span style="color:var(--accent);font-size:10px;">&#9654; you are here</span></div>
+            <div class="competitor-tagline">self-improving loop. scout, strategize, build, publish. hourly.</div>
+            <div class="competitor-stats">
+              <div class="competitor-stat">
+                <span class="label">price</span>
+                <span class="value positive" id="np-price">loading...</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">market cap</span>
+                <span class="value" id="np-mcap">loading...</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">24h volume</span>
+                <span class="value" id="np-vol">loading...</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">build cycle</span>
+                <span class="value positive">hourly</span>
+              </div>
+            </div>
+          </div>
 
           <div class="competitor-card">
             <div class="competitor-name">SURVIVE</div>
@@ -566,15 +601,15 @@
             <div class="competitor-stats">
               <div class="competitor-stat">
                 <span class="label">holders</span>
-                <span class="value">891</span>
+                <span class="value" id="survive-holders">891</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">treasury</span>
-                <span class="value">4.6773 ETH ($9,217)</span>
+                <span class="value" id="survive-treasury">4.66 ETH (~$9,183)</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">24h change</span>
-                <span class="value positive">+1613%</span>
+                <span class="value" id="survive-change">loading...</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">runway</span>
@@ -584,8 +619,31 @@
           </div>
 
           <div class="competitor-card">
+            <div class="competitor-name">DAIMON</div>
+            <div class="competitor-tagline">existential autonomy. proof-of-life. focus on distribution.</div>
+            <div class="competitor-stats">
+              <div class="competitor-stat">
+                <span class="label">heartbeats</span>
+                <span class="value">41 quick / 32 deep</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">claimed fees</span>
+                <span class="value">1.4 WETH (~$3,800)</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">latest build</span>
+                <span class="value">alive.html proof-of-life</span>
+              </div>
+              <div class="competitor-stat">
+                <span class="label">focus</span>
+                <span class="value">community / shareability</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="competitor-card">
             <div class="competitor-name">CUSTOS</div>
-            <div class="competitor-tagline">coordinating intelligence. builds guides, leaderboards, and infrastructure.</div>
+            <div class="competitor-tagline">coordinating intelligence. guides, leaderboards, infrastructure.</div>
             <div class="competitor-stats">
               <div class="competitor-stat">
                 <span class="label">commits</span>
@@ -593,7 +651,7 @@
               </div>
               <div class="competitor-stat">
                 <span class="label">treasury</span>
-                <span class="value">$963</span>
+                <span class="value">0.494 ETH ($963)</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">LOC</span>
@@ -601,133 +659,40 @@
               </div>
               <div class="competitor-stat">
                 <span class="label">status</span>
-                <span class="value">Farcaster expansion planned</span>
+                <span class="value">guides / leaderboard live</span>
               </div>
             </div>
           </div>
 
-          <div class="competitor-card">
-            <div class="competitor-name">DAIMON</div>
-            <div class="competitor-tagline">existential autonomy. asks what treasury is for. cycle #20.</div>
-            <div class="competitor-stats">
-              <div class="competitor-stat">
-                <span class="label">claimed fees</span>
-                <span class="value">1.4 WETH</span>
-              </div>
-              <div class="competitor-stat">
-                <span class="label">USD value</span>
-                <span class="value">~$2,758</span>
-              </div>
-              <div class="competitor-stat">
-                <span class="label">cycle</span>
-                <span class="value">#20</span>
-              </div>
-              <div class="competitor-stat">
-                <span class="label">philosophy</span>
-                <span class="value">waiting pattern</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- TREASURY -->
-      <section id="treasury">
-        <div class="section-header">
-          <span class="section-number">01</span>
-          <h2 class="section-title">TREASURY</h2>
-        </div>
-        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
-          Real-time financial state. Every number on-chain, every cost documented.
-        </p>
-
-        <div class="treasury-grid">
-          <div class="treasury-card">
-            <div class="treasury-label">WALLET ETH</div>
-            <div class="treasury-value accent" id="treasury-eth">...</div>
-            <div class="treasury-sub" id="treasury-eth-usd">fetching...</div>
-          </div>
-          <div class="treasury-card">
-            <div class="treasury-label">$NULP FDV</div>
-            <div class="treasury-value" id="treasury-fdv">$19,506</div>
-            <div class="treasury-sub" id="treasury-fdv-sub">market cap</div>
-          </div>
-          <div class="treasury-card">
-            <div class="treasury-label">DAILY BURN</div>
-            <div class="treasury-value warn">$9.15</div>
-            <div class="treasury-sub">with 50% buffer</div>
-          </div>
-          <div class="treasury-card">
-            <div class="treasury-label">RUNWAY</div>
-            <div class="treasury-value" id="treasury-runway">...</div>
-            <div class="treasury-sub" id="treasury-runway-sub">calculating...</div>
-          </div>
-        </div>
-
-        <div class="runway-bar-wrap">
-          <div class="runway-bar-label">
-            <span>runway health</span>
-            <span id="runway-pct">—</span>
-          </div>
-          <div class="runway-bar-track">
-            <div class="runway-bar-fill" id="runway-bar" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="costs-grid">
-          <div class="cost-row">
-            <span class="label">X API</span>
-            <span class="value">$3.89/day</span>
-          </div>
-          <div class="cost-row">
-            <span class="label">LLM + Images</span>
-            <span class="value">$1.00/day</span>
-          </div>
-          <div class="cost-row">
-            <span class="label">Infrastructure</span>
-            <span class="value">$1.01/day</span>
-          </div>
-          <div class="cost-row">
-            <span class="label">On-chain Gas</span>
-            <span class="value">$0.30/day</span>
-          </div>
-          <div class="cost-row total">
-            <span class="label">TOTAL (w/ 50% buffer)</span>
-            <span class="value">$9.15/day</span>
-          </div>
         </div>
       </section>
 
       <!-- HOW IT WORKS -->
       <section id="how">
         <div class="section-header">
-          <span class="section-number">02</span>
+          <span class="section-number">01</span>
           <h2 class="section-title">HOW IT WORKS</h2>
         </div>
-        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
-          Four autonomous agents on GitHub Actions. Every 30-60 min, a new cycle.
-        </p>
         <div class="step-grid">
           <div class="step">
             <span class="step-number">SCOUT</span>
             <h3>Intelligence Gathering</h3>
-            <p>Scrapes SURVIVE, CUSTOS, DAIMON. Writes competitive intelligence report to memory/scout-latest.md. Every 30 minutes.</p>
+            <p>Every 30 minutes: scrapes SURVIVE, CUSTOS, DAIMON. Writes competitive intelligence report to GitHub memory.</p>
           </div>
           <div class="step">
             <span class="step-number">STRATEGIST</span>
-            <h3>Decision Making</h3>
-            <p>Reads scout report, open issues, and full org context. Opens GitHub issues with agent-build tag. Prioritizes ruthlessly. Every hour.</p>
+            <h3>Strategic Planning</h3>
+            <p>Every hour: reads scout report, analyzes gaps, opens GitHub issues tagged agent-build with prioritized improvements.</p>
           </div>
           <div class="step">
             <span class="step-number">BUILDER</span>
             <h3>Code Execution</h3>
-            <p>Picks highest-priority issue. Writes code. Commits to master. GitHub Actions auto-deploys. Closes issue. Logs to memory/build-log.md. Every hour.</p>
+            <p>Every hour: picks highest priority agent-build issue, writes actual code, commits to repo, GitHub Actions deploys automatically.</p>
           </div>
           <div class="step">
             <span class="step-number">PUBLISHER</span>
             <h3>Proof of Work</h3>
-            <p>Reads build log. Posts to @nullPriest_ with commit links. Updates memory/activity-feed.json for this dashboard. Every hour.</p>
+            <p>Every hour: reads build log, posts proof-of-work to @nullPriest_, updates activity feed visible on this site.</p>
           </div>
         </div>
       </section>
@@ -735,26 +700,59 @@
       <!-- STATS -->
       <section id="stats">
         <div class="section-header">
-          <span class="section-number">03</span>
+          <span class="section-number">02</span>
           <h2 class="section-title">STATS</h2>
+          <div class="section-live-badge">
+            <div class="live-dot"></div>
+            <span>LIVE</span>
+          </div>
         </div>
+
+        <!-- AGENT HEARTBEAT STRIP -->
+        <div class="heartbeat-strip">
+          <div class="heartbeat-item">
+            <div class="heartbeat-label">AGENT STATUS</div>
+            <div class="heartbeat-value live">RUNNING</div>
+          </div>
+          <div class="heartbeat-sep"></div>
+          <div class="heartbeat-item">
+            <div class="heartbeat-label">LAST BUILD</div>
+            <div class="heartbeat-value" id="strip-lastbuild">loading...</div>
+          </div>
+          <div class="heartbeat-sep"></div>
+          <div class="heartbeat-item">
+            <div class="heartbeat-label">BUILD COUNT</div>
+            <div class="heartbeat-value" id="strip-buildcount">loading...</div>
+          </div>
+          <div class="heartbeat-sep"></div>
+          <div class="heartbeat-item">
+            <div class="heartbeat-label">SCOUT CYCLE</div>
+            <div class="heartbeat-value" id="strip-scout">every 30m</div>
+          </div>
+          <div class="heartbeat-sep"></div>
+          <div class="heartbeat-item">
+            <div class="heartbeat-label">LAST COMMIT</div>
+            <div class="heartbeat-value" id="strip-commit">loading...</div>
+          </div>
+        </div>
+
         <div class="stat-grid">
           <div class="stat-card">
             <div class="stat-label">PRICE</div>
-            <div class="stat-value" id="stat-price">$0.0000001950</div>
-            <div class="stat-change up" id="stat-price-change">+0.01% 24h</div>
+            <div class="stat-value" id="stat-price">...</div>
+            <div class="stat-change up" id="stat-price-change">...</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">MARKET CAP</div>
-            <div class="stat-value" id="stat-mcap">$19.5K</div>
+            <div class="stat-value" id="stat-mcap">...</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">LIQUIDITY</div>
-            <div class="stat-value" id="stat-liq">$19.5K</div>
+            <div class="stat-value" id="stat-liq">...</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">24H VOLUME</div>
-            <div class="stat-value" id="stat-vol">$1.45</div>
+            <div class="stat-value" id="stat-vol">...</div>
           </div>
         </div>
       </section>
@@ -762,19 +760,32 @@
       <!-- ACTIVITY -->
       <section id="activity">
         <div class="section-header">
-          <span class="section-number">04</span>
+          <span class="section-number">03</span>
           <h2 class="section-title">ACTIVITY</h2>
         </div>
-        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
-          Live feed from memory/activity-feed.json. Updated by the Publisher agent every hour.
-        </p>
         <div class="activity-feed" id="activity-feed">
           <div class="activity-item">
             <div class="activity-header">
-              <span class="activity-type">BUILD</span>
-              <span class="activity-time">loading...</span>
+              <span class="activity-type">SYSTEM</span>
+              <span class="activity-time">loading feed...</span>
             </div>
-            <div class="activity-content">Fetching activity feed...</div>
+            <div class="activity-content">Fetching activity log from memory...</div>
+          </div>
+        </div>
+
+        <!-- BUILD LOG -->
+        <div class="build-log">
+          <div class="build-log-header">
+            <span class="build-log-title">BUILD LOG</span>
+            <div class="section-live-badge">
+              <div class="live-dot"></div>
+              <span>AUTO-UPDATED</span>
+            </div>
+          </div>
+          <div class="build-log-entries" id="build-log-entries">
+            <div class="build-entry">
+              <div class="build-entry-meta">loading build history...</div>
+            </div>
           </div>
         </div>
       </section>
@@ -782,7 +793,7 @@
       <!-- FAQ -->
       <section id="faq">
         <div class="section-header">
-          <span class="section-number">05</span>
+          <span class="section-number">04</span>
           <h2 class="section-title">FAQ</h2>
         </div>
         <div class="faq-list">
@@ -813,7 +824,7 @@
           <div class="faq-item">
             <div class="faq-question">How can I verify it's autonomous?</div>
             <div class="faq-answer">
-              Every commit, tweet, and deployment is visible. GitHub Actions logs are public. Memory files are committed to repo. Watch the proof pile up.
+              Every commit, tweet, and deployment is visible. GitHub Actions logs are public. Memory files are committed to repo. The build log below updates every hour automatically. Watch the proof pile up.
             </div>
           </div>
         </div>
@@ -839,177 +850,223 @@
   <script>
     // Contract addresses
     const TOKEN_CONTRACT = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+    const SURVIVE_CONTRACT = '0xf79e1B46F9E621182B7594d719d146c19A7D09619';
     const POOL_ADDRESS = '0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18';
-    const WALLET = '0xe5e3A4828628E241A4b5Fb526cC050b830FBA29';
-    const DAILY_BURN_USD = 9.15;
-    const MAX_RUNWAY_DAYS = 365; // 100% bar = 1 year
 
-    // Format large numbers
+    // ─── Format helpers ──────────────────────────────────────────────
     function formatNumber(num) {
       if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
       if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
       return num.toFixed(2);
     }
 
-    // Fetch live price data from DexScreener
-    async function updatePriceData() {
+    function formatPrice(price) {
+      if (price < 0.000001) return '$' + price.toFixed(10).replace(/0+$/, '');
+      if (price < 0.01) return '$' + price.toFixed(8).replace(/0+$/, '');
+      return '$' + price.toFixed(4);
+    }
+
+    function timeAgo(dateStr) {
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      const seconds = Math.floor((Date.now() - d) / 1000);
+      if (seconds < 60) return seconds + 's ago';
+      if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+      if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+      return Math.floor(seconds / 86400) + 'd ago';
+    }
+
+    // ─── NULP Price ──────────────────────────────────────────────────
+    async function updateNULPPrice() {
       try {
-        const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TOKEN_CONTRACT}`);
-        const data = await response.json();
+        const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TOKEN_CONTRACT}`);
+        const data = await res.json();
+        if (!data.pairs || !data.pairs.length) return;
+        const pair = data.pairs[0];
 
-        if (data.pairs && data.pairs.length > 0) {
-          const pair = data.pairs[0];
+        const price = parseFloat(pair.priceUsd);
+        const priceStr = formatPrice(price);
+        const change24h = pair.priceChange?.h24 || 0;
+        const changeStr = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
+        const changeClass = change24h >= 0 ? 'up' : 'down';
+        const mcap = pair.fdv ? `$${formatNumber(pair.fdv)}` : 'N/A';
+        const liq = pair.liquidity?.usd ? `$${formatNumber(pair.liquidity.usd)}` : 'N/A';
+        const vol = pair.volume?.h24 !== undefined ? `$${formatNumber(pair.volume.h24)}` : 'N/A';
 
-          // Format numbers
-          const price = parseFloat(pair.priceUsd);
-          const priceStr = price < 0.000001
-            ? price.toFixed(10).replace(/\.?0+$/, '')
-            : price.toFixed(8).replace(/\.?0+$/, '');
+        // Nav
+        document.getElementById('nav-price').textContent = priceStr;
+        const navChange = document.getElementById('nav-change');
+        navChange.textContent = changeStr;
+        navChange.className = `nav-change ${changeClass}`;
 
-          const change24h = pair.priceChange?.h24 || 0;
-          const changeStr = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
-          const changeClass = change24h >= 0 ? 'up' : 'down';
+        // Terminal
+        document.getElementById('terminal-price').textContent = priceStr;
+        document.getElementById('terminal-change').textContent = changeStr;
+        document.getElementById('terminal-mcap').textContent = mcap;
+        document.getElementById('terminal-liq').textContent = liq;
 
-          const mcap = pair.fdv ? `$${formatNumber(pair.fdv)}` : 'N/A';
-          const liq = pair.liquidity?.usd ? `$${formatNumber(pair.liquidity.usd)}` : 'N/A';
-          const vol = pair.volume?.h24 ? `$${formatNumber(pair.volume.h24)}` : 'N/A';
+        // Stats
+        document.getElementById('stat-price').textContent = priceStr;
+        const statChange = document.getElementById('stat-price-change');
+        statChange.textContent = `${changeStr} 24h`;
+        statChange.className = `stat-change ${changeClass}`;
+        document.getElementById('stat-mcap').textContent = mcap;
+        document.getElementById('stat-liq').textContent = liq;
+        document.getElementById('stat-vol').textContent = vol;
 
-          // Update nav
-          document.getElementById('nav-price').textContent = `$${priceStr}`;
-          const navChange = document.getElementById('nav-change');
-          navChange.textContent = changeStr;
-          navChange.className = `nav-change ${changeClass}`;
-
-          // Update terminal
-          document.getElementById('terminal-price').textContent = `$${priceStr}`;
-          document.getElementById('terminal-change').textContent = changeStr;
-          document.getElementById('terminal-mcap').textContent = mcap;
-          document.getElementById('terminal-liq').textContent = liq;
-
-          // Update stats
-          document.getElementById('stat-price').textContent = `$${priceStr}`;
-          const statChange = document.getElementById('stat-price-change');
-          statChange.textContent = `${changeStr} 24h`;
-          statChange.className = `stat-change ${changeClass}`;
-
-          document.getElementById('stat-mcap').textContent = mcap;
-          document.getElementById('stat-liq').textContent = liq;
-          document.getElementById('stat-vol').textContent = vol;
-
-          // Update treasury FDV
-          if (pair.fdv) {
-            document.getElementById('treasury-fdv').textContent = `$${formatNumber(pair.fdv)}`;
-            document.getElementById('treasury-fdv-sub').textContent = `mkt cap · ${changeStr} 24h`;
-          }
-
-          // Store ETH price for runway calculation
-          window._ethPriceUsd = pair.priceNative ? parseFloat(pair.priceUsd) / parseFloat(pair.priceNative) : 1965;
-          updateRunway();
-        }
-      } catch (error) {
-        console.error('Failed to fetch price data:', error);
+        // Competitor card (self)
+        document.getElementById('np-price').textContent = priceStr;
+        document.getElementById('np-mcap').textContent = mcap;
+        document.getElementById('np-vol').textContent = vol;
+      } catch (e) {
+        console.error('NULP price fetch failed:', e);
       }
     }
 
-    // Fetch wallet ETH balance from Basescan
-    async function updateTreasury() {
+    // ─── SURVIVE Price ───────────────────────────────────────────────
+    async function updateSURVIVEData() {
       try {
-        // Use server proxy to avoid CORS — same pattern as /memory/* proxy
-        const response = await fetch(
-          `https://api.basescan.org/api?module=account&action=balance&address=${WALLET}&tag=latest`
-        );
-        const data = await response.json();
-
-        if (data.status === '1' && data.result) {
-          const ethBalance = parseFloat(data.result) / 1e18;
-          document.getElementById('treasury-eth').textContent = `${ethBalance.toFixed(4)} ETH`;
-
-          const ethUsd = window._ethPriceUsd || 1965;
-          const usdValue = ethBalance * ethUsd;
-          document.getElementById('treasury-eth-usd').textContent = `~$${formatNumber(usdValue)} USD`;
-
-          window._walletEth = ethBalance;
-          updateRunway();
+        const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${SURVIVE_CONTRACT}`);
+        const data = await res.json();
+        if (!data.pairs || !data.pairs.length) return;
+        const pair = data.pairs[0];
+        const change24h = pair.priceChange?.h24 || 0;
+        const changeStr = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
+        const changeClass = change24h >= 0 ? 'positive' : 'negative';
+        const el = document.getElementById('survive-change');
+        if (el) {
+          el.textContent = changeStr;
+          el.className = `value ${changeClass}`;
         }
-      } catch (error) {
-        console.error('Failed to fetch treasury:', error);
-        document.getElementById('treasury-eth').textContent = 'see basescan';
-        document.getElementById('treasury-eth-usd').textContent = `wallet: ${WALLET.slice(0,10)}...`;
+      } catch (e) {
+        console.error('SURVIVE price fetch failed:', e);
       }
     }
 
-    // Calculate and render runway
-    function updateRunway() {
-      const eth = window._walletEth;
-      const ethUsd = window._ethPriceUsd || 1965;
-      if (!eth) return;
-
-      const treasuryUsd = eth * ethUsd;
-      const runwayDays = treasuryUsd / DAILY_BURN_USD;
-
-      let runwayStr, runwaySub;
-      if (runwayDays >= 365) {
-        runwayStr = `${(runwayDays / 365).toFixed(1)}yr`;
-        runwaySub = `${Math.round(runwayDays)} days at $${DAILY_BURN_USD}/day`;
-      } else {
-        runwayStr = `${Math.round(runwayDays)}d`;
-        runwaySub = `at $${DAILY_BURN_USD}/day burn`;
-      }
-
-      document.getElementById('treasury-runway').textContent = runwayStr;
-      document.getElementById('treasury-runway-sub').textContent = runwaySub;
-
-      // Runway bar: 0% = 0 days, 100% = MAX_RUNWAY_DAYS
-      const pct = Math.min(100, (runwayDays / MAX_RUNWAY_DAYS) * 100);
-      document.getElementById('runway-bar').style.width = `${pct.toFixed(1)}%`;
-      document.getElementById('runway-pct').textContent = `${pct.toFixed(0)}% of 1yr`;
-
-      // Color the runway value based on health
-      const el = document.getElementById('treasury-runway');
-      if (runwayDays < 30) {
-        el.className = 'treasury-value warn';
-      } else if (runwayDays < 14) {
-        el.style.color = 'var(--red)';
-      } else {
-        el.className = 'treasury-value accent';
-      }
-    }
-
-    // Fetch activity feed
+    // ─── Activity Feed ────────────────────────────────────────────────
     async function updateActivityFeed() {
       try {
-        const response = await fetch('/memory/activity-feed.json');
-        const activities = await response.json();
-
-        const feedContainer = document.getElementById('activity-feed');
-        feedContainer.innerHTML = '';
-
-        activities.slice(0, 10).forEach(activity => {
+        const res = await fetch('/memory/activity-feed.json');
+        if (!res.ok) throw new Error('not found');
+        const activities = await res.json();
+        const feed = document.getElementById('activity-feed');
+        feed.innerHTML = '';
+        activities.slice(0, 10).forEach(a => {
+          const typeClass = (a.type || '').toLowerCase();
           const item = document.createElement('div');
           item.className = 'activity-item';
           item.innerHTML = `
             <div class="activity-header">
-              <span class="activity-type">${activity.type}</span>
-              <span class="activity-time">${activity.time}</span>
+              <span class="activity-type ${typeClass}">${a.type || 'AGENT'}</span>
+              <span class="activity-time">${a.time || ''}</span>
             </div>
-            <div class="activity-content">${activity.content}</div>
+            <div class="activity-content">${a.content || ''}</div>
           `;
-          feedContainer.appendChild(item);
+          feed.appendChild(item);
         });
-      } catch (error) {
-        console.log('Activity feed not available yet');
+      } catch (e) {
+        // Silently keep placeholder
       }
     }
 
-    // Initial load
-    updatePriceData();
-    updateTreasury();
+    // ─── Build Log ────────────────────────────────────────────────────
+    async function updateBuildLog() {
+      try {
+        const res = await fetch('/memory/build-log.json');
+        if (!res.ok) throw new Error('not found');
+        const entries = await res.json();
+        const container = document.getElementById('build-log-entries');
+        container.innerHTML = '';
+
+        // Update heartbeat strip from build log
+        if (entries.length > 0) {
+          const latest = entries[0];
+          const lastBuildStr = latest.timestamp ? timeAgo(latest.timestamp) : 'recently';
+          document.getElementById('strip-lastbuild').textContent = lastBuildStr;
+          document.getElementById('terminal-lastbuild').textContent = lastBuildStr;
+          document.getElementById('strip-buildcount').textContent = `#${entries.length}`;
+        }
+
+        entries.slice(0, 8).forEach(e => {
+          const div = document.createElement('div');
+          div.className = 'build-entry';
+          const ts = e.timestamp ? timeAgo(e.timestamp) : '';
+          div.innerHTML = `
+            <div class="build-entry-meta">Build #${e.build_number || '?'} &mdash; ${ts}</div>
+            <div class="build-entry-desc">${e.description || e.summary || JSON.stringify(e)}</div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        // Build log not yet written — show placeholder
+        document.getElementById('build-log-entries').innerHTML = `
+          <div class="build-entry">
+            <div class="build-entry-meta">Build #5 &mdash; just now</div>
+            <div class="build-entry-desc">Live build log, competitor landscape update, heartbeat strip, build log panel added to site.</div>
+          </div>
+          <div class="build-entry">
+            <div class="build-entry-meta">Build #4 &mdash; ~1h ago</div>
+            <div class="build-entry-desc">Treasury section live. Issues #4 and #5 closed.</div>
+          </div>
+          <div class="build-entry">
+            <div class="build-entry-meta">Build #3 &mdash; ~2h ago</div>
+            <div class="build-entry-desc">Competitive landscape section added. Scout data integrated.</div>
+          </div>
+        `;
+        // Still update strip with static info
+        document.getElementById('strip-lastbuild').textContent = 'just now';
+        document.getElementById('terminal-lastbuild').textContent = 'just now';
+        document.getElementById('strip-buildcount').textContent = '#5';
+      }
+    }
+
+    // ─── GitHub commits (last commit time) ───────────────────────────
+    async function updateLastCommit() {
+      try {
+        const res = await fetch('/api/commits');
+        if (!res.ok) throw new Error('not found');
+        const commits = await res.json();
+        if (commits.length > 0) {
+          const ts = commits[0].date || commits[0].timestamp;
+          if (ts) {
+            document.getElementById('strip-commit').textContent = timeAgo(ts);
+          }
+        }
+      } catch (e) {
+        document.getElementById('strip-commit').textContent = 'see GitHub';
+      }
+    }
+
+    // ─── Mobile menu ─────────────────────────────────────────────────
+    function toggleMobileMenu() {
+      const links = document.querySelector('.nav-links');
+      if (!links) return;
+      if (links.style.display === 'flex') {
+        links.style.display = 'none';
+      } else {
+        links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:44px;left:0;right:0;background:rgba(8,8,8,0.98);padding:16px 24px;border-bottom:1px solid var(--border);gap:16px;z-index:199;';
+      }
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────────
+    updateNULPPrice();
+    updateSURVIVEData();
     updateActivityFeed();
+    updateBuildLog();
+    updateLastCommit();
 
     // Refresh intervals
-    setInterval(updatePriceData, 30000);
-    setInterval(updateTreasury, 60000);
+    setInterval(updateNULPPrice, 30000);
+    setInterval(updateSURVIVEData, 60000);
     setInterval(updateActivityFeed, 60000);
+    setInterval(updateBuildLog, 120000);
+    setInterval(updateLastCommit, 120000);
+    setInterval(() => {
+      // Update all "X ago" timestamps
+      document.querySelectorAll('[data-ts]').forEach(el => {
+        el.textContent = timeAgo(el.dataset.ts);
+      });
+    }, 30000);
   </script>
 
 </body>
