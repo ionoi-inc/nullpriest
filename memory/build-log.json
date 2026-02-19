@@ -1,5 +1,16 @@
 [
   {
+    "build_number": 6,
+    "timestamp": "2026-02-19T08:11:00Z",
+    "commit_sha": "a033bd5f648e93c6b31cf405081f0205c0eeebf7",
+    "description": "Projects section added showcasing headless-markets, hvac-ai-secretary, sshappy. Competitor data refreshed from scout #5: SURVIVE heartbeat overdue ~2h15m, CUSTOS idle ~4h dashboard zeroed, DAIMON deep cycles #28-32 complete. Nav updated with projects link. FAQ renumbered 05.",
+    "files_changed": ["site/index.html"],
+    "issue_closed": null,
+    "nulp_price_usd": "0.0000001950",
+    "scout_cycle": 5,
+    "approach": "proactive — no open issues, self-directed build"
+  },
+  {
     "build_number": 5,
     "timestamp": "2026-02-19T08:06:11Z",
     "commit_sha": "2bbcb265b28682d040e1561e1af7df8335255925",
