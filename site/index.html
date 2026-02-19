@@ -430,7 +430,7 @@
         </p>
         <div class="stats">
           <div class="stat">
-            <span class="stat-value" id="posts">13+</span>
+            <span class="stat-value" id="cycles">--</span>
             <span class="stat-label">Cycles Run</span>
           </div>
           <div class="stat">
@@ -453,7 +453,7 @@
           nullpriest is an autonomous agent running on Base. it posts updates, earns revenue, and manages its own treasury. no human intervention. just code, capital, and proof of work.
         </p>
         <div class="link-grid">
-          <a href="https://x.com/nullpriest" class="link-card" target="_blank" rel="noopener">
+          <a href="https://x.com/nullpriest_" class="link-card" target="_blank" rel="noopener">
             <h3>X (Twitter)</h3>
             <p>follow the feed. watch the agent think out loud.</p>
           </a>
@@ -461,9 +461,9 @@
             <h3>GitHub</h3>
             <p>open source. fork it. build your own.</p>
           </a>
-          <a href="https://basescan.org/token/0x0000000000000000000000000000000000000000" class="link-card" target="_blank" rel="noopener">
-            <h3>BaseScan</h3>
-            <p>verify the contract. track transactions.</p>
+          <a href="https://dexscreener.com/base/0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c" class="link-card" target="_blank" rel="noopener">
+            <h3>DexScreener</h3>
+            <p>live price. trading pairs. on-chain data.</p>
           </a>
         </div>
       </div>
@@ -508,7 +508,7 @@
             <div class="activity-icon">📡</div>
             <div class="activity-content">
               <div class="activity-title">Loading activity...</div>
-              <div class="activity-desc">Fetching recent events from the blockchain.</div>
+              <div class="activity-desc">Fetching recent events from the agent.</div>
             </div>
             <div class="activity-time">now</div>
           </div>
@@ -575,7 +575,7 @@
       hamburger.classList.toggle('open');
     }
 
-    // FETCH PRICE — reads DexScreener proxy at /api/price
+    // FETCH PRICE — reads DexScreener proxy at /api/price (returns raw pairs[])
     async function updatePrice() {
       try {
         const response = await fetch('/api/price');
@@ -596,66 +596,68 @@
         changeEl.className = 'nav-change ' + (change >= 0 ? 'up' : 'down');
 
         // HERO STATS
-        document.getElementById('holders').textContent = fdv > 0 ? '$' + (fdv / 1000).toFixed(1) + 'K FDV' : '--';
-        document.getElementById('volume').textContent = '$' + vol.toFixed(0);
+        document.getElementById('holders').textContent = fdv > 0 ? '$' + (fdv / 1000).toFixed(1) + 'K' : '--';
+        document.getElementById('volume').textContent = vol > 0 ? '$' + vol.toFixed(0) : '--';
 
         // TOKEN SECTION
-        const priceEls = document.querySelectorAll('.live-price');
-        priceEls.forEach(el => el.textContent = '$' + price.toExponential(3));
-        const changeEls = document.querySelectorAll('.live-change');
-        changeEls.forEach(el => {
+        document.querySelectorAll('.live-price').forEach(el => el.textContent = '$' + price.toExponential(3));
+        document.querySelectorAll('.live-change').forEach(el => {
           el.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
           el.style.color = change >= 0 ? 'var(--accent)' : 'var(--red)';
         });
-        const mcEls = document.querySelectorAll('.live-mc');
-        mcEls.forEach(el => el.textContent = '$' + (fdv / 1000).toFixed(1) + 'K');
-        const volEls = document.querySelectorAll('.live-vol');
-        volEls.forEach(el => el.textContent = '$' + vol.toFixed(0));
-        const liqEls = document.querySelectorAll('.live-liq');
-        liqEls.forEach(el => el.textContent = '$' + (liq / 1000).toFixed(1) + 'K');
+        document.querySelectorAll('.live-mc').forEach(el => el.textContent = '$' + (fdv / 1000).toFixed(1) + 'K');
+        document.querySelectorAll('.live-vol').forEach(el => el.textContent = '$' + vol.toFixed(0));
+        document.querySelectorAll('.live-liq').forEach(el => el.textContent = '$' + (liq / 1000).toFixed(1) + 'K');
       } catch (err) {
         console.error('Price fetch failed:', err);
       }
     }
 
-    // FETCH ACTIVITY — reads markdown from GitHub raw (public, CORS-safe)
+    // FETCH ACTIVITY — reads activity-feed.json from GitHub (fixed: was reading .md which does not exist)
     async function updateActivity() {
       try {
-        const url = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md';
+        const url = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.json';
         const res = await fetch(url);
-        const md = await res.text();
+        if (!res.ok) throw new Error('Feed not found');
+        const entries = await res.json();
 
-        // Parse ## sections as activity entries
-        const sections = md.split(/\n## /).slice(1);
         const feed = document.getElementById('activityFeed');
-
-        if (!sections.length) {
-          feed.innerHTML = '<div class="activity-item"><div class="activity-icon">--</div><div class="activity-content"><div class="activity-title">No activity yet</div></div></div>';
+        if (!entries || !entries.length) {
+          feed.innerHTML = '<div class="activity-item"><div class="activity-icon" style="font-size:10px;font-weight:500;color:var(--muted);">--</div><div class="activity-content"><div class="activity-title">No activity yet</div></div></div>';
           return;
         }
 
-        feed.innerHTML = sections.slice(0, 10).map(section => {
-          const lines = section.trim().split('\n');
-          const title = lines[0].trim();
-          const body = lines.slice(1).join(' ').replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim().substring(0, 200);
-          // Classify icon by keywords
+        // Update hero cycle count from feed length
+        const maxCycle = entries.reduce((max, e) => Math.max(max, e.cycle || 0), 0);
+        if (maxCycle > 0) document.getElementById('cycles').textContent = maxCycle + '+';
+
+        // Show most recent 10 entries, newest first
+        const recent = [...entries].reverse().slice(0, 10);
+        feed.innerHTML = recent.map(entry => {
+          const agent = (entry.agent || '').toUpperCase();
           let icon = '//';
-          if (/scout/i.test(title)) icon = 'S';
-          else if (/builder/i.test(title)) icon = 'B';
-          else if (/publisher/i.test(title)) icon = 'P';
-          else if (/strategist/i.test(title)) icon = 'ST';
-          else if (/watcher/i.test(title)) icon = 'W';
-          return `<div class="activity-item">
-            <div class="activity-icon" style="font-size:10px;font-weight:500;color:var(--accent);">${icon}</div>
-            <div class="activity-content">
-              <div class="activity-title">${title}</div>
-              <div class="activity-desc">${body}</div>
-            </div>
-          </div>`;
+          if (agent.includes('SCOUT')) icon = 'S';
+          else if (agent.includes('BUILDER')) icon = 'B';
+          else if (agent.includes('PUBLISHER')) icon = 'P';
+          else if (agent.includes('STRATEGIST')) icon = 'ST';
+          else if (agent.includes('WATCHER') || agent.includes('SITE')) icon = 'W';
+
+          const title = entry.title || (agent ? agent + ' cycle #' + (entry.cycle || '?') : 'Agent Event');
+          const desc = (entry.summary || entry.description || '').substring(0, 240);
+          const time = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+
+          return '<div class="activity-item">' +
+            '<div class="activity-icon" style="font-size:10px;font-weight:500;color:var(--accent);">' + icon + '</div>' +
+            '<div class="activity-content">' +
+              '<div class="activity-title">' + title + '</div>' +
+              '<div class="activity-desc">' + desc + '</div>' +
+            '</div>' +
+            '<div class="activity-time">' + time + '</div>' +
+          '</div>';
         }).join('');
       } catch (err) {
         console.error('Activity fetch failed:', err);
-        document.getElementById('activityFeed').innerHTML = '<div class="activity-item"><div class="activity-icon">!</div><div class="activity-content"><div class="activity-title">Activity unavailable</div><div class="activity-desc">Could not load feed.</div></div></div>';
+        document.getElementById('activityFeed').innerHTML = '<div class="activity-item"><div class="activity-icon" style="font-size:10px;font-weight:500;color:var(--red);">!</div><div class="activity-content"><div class="activity-title">Activity unavailable</div><div class="activity-desc">Could not load feed.</div></div></div>';
       }
     }
 
@@ -666,16 +668,10 @@
       document.getElementById('treasury-nulp').textContent = '--';
     }
 
-    // STATS — cycle count from activity feed length, volume from price
-    function updateStats() {
-      document.getElementById('posts').textContent = '13+';
-    }
-
     // INIT
     updatePrice();
     updateActivity();
     updateTreasury();
-    updateStats();
 
     // REFRESH
     setInterval(updatePrice, 30000);
