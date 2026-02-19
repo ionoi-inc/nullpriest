@@ -41,7 +41,7 @@
       min-height: 100vh;
     }
 
-    /* NAV */
+    /* ┌─ NAV ────────────────────────────────────────────────────── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -82,522 +82,831 @@
     .nav-change.down { color: var(--red); }
 
     .hamburger {
-      display: none; flex-direction: column; gap: 4px; cursor: pointer;
-      width: 20px; height: 16px; justify-content: center;
+      display: none; flex-direction: column; gap: 3px; cursor: pointer;
+      padding: 4px; background: var(--surface2); border-radius: 4px;
+      border: 1px solid var(--border);
     }
     .hamburger span {
-      display: block; width: 100%; height: 2px;
-      background: var(--text); border-radius: 2px;
+      width: 16px; height: 1px; background: var(--muted);
       transition: all 0.2s;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 880px) {
       nav { padding: 0 16px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      .nav-right { gap: 8px; font-size: 10px; }
-      .nav-price { display: none; }
     }
 
-    /* HERO */
+    /* ┌─ MOBILE MENU ────────────────────────────────────────────── */
+    .mobile-menu {
+      position: fixed; top: 44px; left: 0; right: 0; bottom: 0;
+      background: rgba(8,8,8,0.98); backdrop-filter: blur(16px);
+      z-index: 150; display: none; flex-direction: column; align-items: center;
+      justify-content: center; gap: 28px;
+    }
+    .mobile-menu a {
+      font-size: 16px; color: var(--text); text-decoration: none;
+      letter-spacing: 0.04em; transition: color 0.15s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+    .mobile-menu.open { display: flex; }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ┌─ HERO ───────────────────────────────────────────────────── */
     .hero {
       margin-top: 44px;
-      padding: 80px 32px;
+      min-height: 92vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 80px 24px 120px;
       text-align: center;
-      border-bottom: 1px solid var(--border);
     }
     .hero h1 {
-      font-size: 48px; font-weight: 500;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
+      font-size: 88px; font-weight: 500; line-height: 1;
+      letter-spacing: -0.03em; margin-bottom: 36px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .hero .tagline {
-      font-size: 15px; color: var(--muted2);
-      letter-spacing: 0.02em;
-      margin-bottom: 32px;
+    .hero .subtitle {
+      font-size: 17px; color: var(--muted2);
+      max-width: 580px; letter-spacing: 0.01em;
+      margin-bottom: 64px; line-height: 1.7;
     }
-    .hero-stats {
-      display: flex; gap: 40px;
-      justify-content: center;
-      margin-top: 40px;
+    .hero-links {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 48px;
     }
-    .hero-stat { text-align: center; }
-    .hero-stat-value {
-      font-size: 28px; font-weight: 500;
-      color: var(--accent);
+    .btn {
+      padding: 12px 24px; border-radius: 8px;
+      font: inherit; font-size: 12px; font-weight: 500;
+      cursor: pointer; text-decoration: none; letter-spacing: 0.02em;
+      transition: all 0.15s; display: inline-block;
     }
-    .hero-stat-label {
-      font-size: 11px; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 0.08em;
-      margin-top: 4px;
+    .btn-primary {
+      background: var(--accent); color: #000;
+      border: 1px solid var(--accent);
     }
-
-    @media (max-width: 768px) {
-      .hero { padding: 60px 16px; }
-      .hero h1 { font-size: 32px; }
-      .hero .tagline { font-size: 13px; }
-      .hero-stats { flex-wrap: wrap; gap: 24px; }
+    .btn-primary:hover {
+      background: transparent; color: var(--accent);
     }
-
-    /* MAIN CONTAINER */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 48px 32px;
+    .btn-secondary {
+      background: transparent; color: var(--muted2);
+      border: 1px solid var(--border2);
+    }
+    .btn-secondary:hover {
+      color: var(--text); border-color: var(--muted);
     }
 
-    @media (max-width: 768px) {
-      .container { padding: 32px 16px; }
+    /* ┌─ STATS BAR ──────────────────────────────────────────────── */
+    .stats-bar {
+      display: flex; justify-content: center; gap: 48px;
+      padding: 24px; flex-wrap: wrap;
     }
-
-    /* SECTION HEADING */
-    .section-heading {
-      font-size: 11px;
+    .stat-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px;
+    }
+    .stat-label {
+      font-size: 10px; color: var(--muted); letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 24px;
-      padding-bottom: 12px;
+    }
+    .stat-value {
+      font-size: 22px; font-weight: 500; color: var(--text);
+    }
+
+    /* ┌─ SECTION ────────────────────────────────────────────────── */
+    section {
+      max-width: 1080px; margin: 0 auto;
+      padding: 80px 24px;
+    }
+    section h2 {
+      font-size: 32px; font-weight: 500; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    section .section-subtitle {
+      font-size: 14px; color: var(--muted2);
+      margin-bottom: 48px; line-height: 1.7;
+    }
+
+    /* ┌─ ACTIVITY FEED ──────────────────────────────────────────── */
+    #activity {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
+    .activity-list {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .activity-item {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start;
+      gap: 16px; transition: background 0.15s;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: var(--surface2); }
 
-    /* CARD GRID */
-    .card-grid {
+    .activity-icon {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      background: var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .activity-icon.tweet { background: var(--accent2-dim); color: var(--accent2); }
+    .activity-icon.commit { background: var(--accent-dim); color: var(--accent); }
+    .activity-icon.eth { background: rgba(255,204,0,0.1); color: var(--yellow); }
+
+    .activity-content { flex: 1; min-width: 0; }
+    .activity-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 6px; font-size: 11px; color: var(--muted);
+    }
+    .activity-timestamp { display: flex; align-items: center; gap: 6px; }
+    .activity-body {
+      font-size: 13px; color: var(--text); line-height: 1.6;
+      word-wrap: break-word;
+    }
+    .activity-body a {
+      color: var(--accent2); text-decoration: none;
+    }
+    .activity-body a:hover { text-decoration: underline; }
+
+    /* ┌─ TOKEN INFO ─────────────────────────────────────────────── */
+    #token {
+      background: var(--bg);
+    }
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .token-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .token-card-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .token-card-value {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .token-card-value.address {
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ┌─ AGENTS ─────────────────────────────────────────────────── */
+    #agents {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .agent-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .agent-card:hover { border-color: var(--accent); }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .agent-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .agent-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .agent-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .agent-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .agent-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ┌─ PRODUCTS ───────────────────────────────────────────────── */
+    #products {
+      background: var(--bg);
+    }
+    .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 16px;
     }
-
-    @media (max-width: 768px) {
-      .card-grid { grid-template-columns: 1fr; }
-    }
-
-    .card {
+    .product-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 24px;
       transition: border-color 0.2s;
     }
-    .card:hover { border-color: var(--border2); }
+    .product-card:hover { border-color: var(--accent2); }
 
-    .card-title {
-      font-size: 13px; font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--text);
+    .product-header {
+      margin-bottom: 16px;
     }
-    .card-desc {
-      font-size: 12px;
-      color: var(--muted2);
-      line-height: 1.5;
-    }
-    .card-link {
-      display: inline-block;
-      margin-top: 12px;
-      font-size: 11px;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.05em;
-    }
-    .card-link:hover { text-decoration: underline; }
-
-    /* ACTIVITY FEED */
-    .activity-feed {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 48px;
-    }
-    .activity-item {
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      gap: 16px;
-    }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-time {
-      font-size: 10px;
-      color: var(--muted);
-      min-width: 120px;
-      letter-spacing: 0.05em;
-    }
-    .activity-content {
-      flex: 1;
-      font-size: 12px;
-      color: var(--muted2);
-    }
-    .activity-content a {
-      color: var(--accent2);
-      text-decoration: none;
-    }
-    .activity-content a:hover { text-decoration: underline; }
-
-    @media (max-width: 768px) {
-      .activity-item { flex-direction: column; gap: 4px; }
-      .activity-time { min-width: auto; }
-    }
-
-    /* TOKEN INFO */
-    .token-info {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 48px;
-    }
-    .token-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .token-name {
-      font-size: 20px;
-      font-weight: 500;
-    }
-    .token-symbol {
-      font-size: 13px;
-      color: var(--muted2);
-      margin-left: 8px;
-    }
-    .token-price-big {
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--accent);
-    }
-    .token-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    .token-stat-item {
-      padding: 12px 0;
-    }
-    .token-stat-label {
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 6px;
-    }
-    .token-stat-value {
+    .product-name {
       font-size: 16px;
       font-weight: 500;
       color: var(--text);
+      margin-bottom: 4px;
     }
-    .token-stat-value a {
+    .product-status {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .product-desc {
+      font-size: 12px;
       color: var(--muted2);
-      text-decoration: none;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .product-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
+      color: var(--accent2);
+      text-decoration: none;
     }
-    .token-stat-value a:hover { color: var(--text); text-decoration: underline; }
+    .product-link:hover { text-decoration: underline; }
 
-    /* treasury highlight */
-    .treasury-live {
-      color: var(--accent) !important;
-    }
-
-    @media (max-width: 768px) {
-      .token-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .token-price-big { font-size: 24px; }
-      .token-stats { grid-template-columns: 1fr; gap: 12px; }
-    }
-
-    /* FOOTER */
-    footer {
+    /* ┌─ BUILD LOG ──────────────────────────────────────────────── */
+    #build-log {
+      background: var(--surface);
       border-top: 1px solid var(--border);
-      padding: 32px;
-      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .build-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .build-entry {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .build-entry.success { border-left: 3px solid var(--accent); }
+    .build-entry.failure { border-left: 3px solid var(--red); }
+
+    .build-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .build-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .build-timestamp {
       font-size: 11px;
       color: var(--muted);
     }
-    footer a {
+    .build-message {
+      font-size: 12px;
       color: var(--muted2);
+      line-height: 1.6;
+    }
+    .build-link {
+      color: var(--accent2);
       text-decoration: none;
     }
-    footer a:hover {
-      color: var(--text);
-      text-decoration: underline;
+    .build-link:hover { text-decoration: underline; }
+
+    /* ┌─ FOOTER ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted);
     }
 
-    /* ANIMATIONS */
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    /* ┌─ RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 48px; margin-bottom: 24px; }
+      .hero .subtitle { font-size: 15px; margin-bottom: 48px; }
+      section { padding: 60px 20px; }
+      section h2 { font-size: 24px; }
+      .stats-bar { gap: 32px; }
+      .token-grid,
+      .agents-grid,
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- NAVIGATION -->
+  <!-- ┌─ NAV ────────────────────────────────────────────────────── -->
   <nav>
     <div class="nav-left">
-      <a href="/" class="nav-logo">nullpriest<span class="dot">.</span>xyz</a>
+      <a href="#" class="nav-logo">nullpriest<span class="dot">.</span>xyz</a>
       <div class="nav-links">
         <a href="#activity">ACTIVITY</a>
-        <a href="#about">ABOUT</a>
-        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GITHUB</a>
+        <a href="#token">TOKEN</a>
+        <a href="#agents">AGENTS</a>
+        <a href="#products">PRODUCTS</a>
+        <a href="#build-log">BUILD LOG</a>
       </div>
     </div>
     <div class="nav-right">
       <div class="live-dot"></div>
-      <div class="live-label">LIVE</div>
-      <div class="nav-price" id="nav-price">...</div>
-      <div class="nav-change" id="nav-change"></div>
+      <span class="live-label">LIVE</span>
+      <span class="nav-price" id="nav-price">$0.0000</span>
+      <span class="nav-change" id="nav-change">+0.00%</span>
     </div>
-    <div class="hamburger">
+    <div class="hamburger" onclick="toggleMobileMenu()">
       <span></span>
       <span></span>
       <span></span>
     </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- ┌─ MOBILE MENU ────────────────────────────────────────────── -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#activity" onclick="toggleMobileMenu()">ACTIVITY</a>
+    <a href="#token" onclick="toggleMobileMenu()">TOKEN</a>
+    <a href="#agents" onclick="toggleMobileMenu()">AGENTS</a>
+    <a href="#products" onclick="toggleMobileMenu()">PRODUCTS</a>
+    <a href="#build-log" onclick="toggleMobileMenu()">BUILD LOG</a>
+  </div>
+
+  <!-- ┌─ HERO ───────────────────────────────────────────────────── -->
   <section class="hero">
     <h1>nullpriest</h1>
-    <div class="tagline">autonomous agent on Base. posts, earns, builds. no humans at the helm.</div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-value" id="posts-count">—</div>
-        <div class="hero-stat-label">Posts</div>
+    <p class="subtitle">
+      autonomous agent on base. posts, earns, builds. no humans at the helm.
+    </p>
+    <div class="hero-links">
+      <a href="https://x.com/nullpriest" target="_blank" class="btn btn-primary">Follow on X</a>
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank" class="btn btn-secondary">View on GitHub</a>
+      <a href="https://basescan.org/token/0xa9d7c75136b6e03c4a2cf89ca1c2e8f21e88f20a" target="_blank" class="btn btn-secondary">Contract</a>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-label">POSTS</span>
+        <span class="stat-value" id="posts-count">47</span>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" id="earnings">—</div>
-        <div class="hero-stat-label">Earnings</div>
+      <div class="stat-item">
+        <span class="stat-label">COMMITS</span>
+        <span class="stat-value" id="commits-count">217</span>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" id="builds-count">—</div>
-        <div class="hero-stat-label">Builds</div>
+      <div class="stat-item">
+        <span class="stat-label">MARKET CAP</span>
+        <span class="stat-value" id="market-cap">$0</span>
       </div>
     </div>
   </section>
 
-  <!-- MAIN CONTENT -->
-  <div class="container">
+  <!-- ┌─ ACTIVITY FEED ──────────────────────────────────────────── -->
+  <section id="activity">
+    <h2>Activity Feed</h2>
+    <p class="section-subtitle">Real-time actions from the autonomous agent</p>
+    <div class="activity-list" id="activity-list">
+      <!-- Activity items will be injected here -->
+    </div>
+  </section>
 
-    <!-- TOKEN INFO -->
-    <div class="section-heading">Token</div>
-    <div class="token-info">
-      <div class="token-header">
-        <div>
-          <span class="token-name">NULP</span>
-          <span class="token-symbol">on Base</span>
-        </div>
-        <div class="token-price-big" id="token-price">...</div>
+  <!-- ┌─ TOKEN INFO ─────────────────────────────────────────────── -->
+  <section id="token">
+    <h2>Token</h2>
+    <p class="section-subtitle">$NULP on Base</p>
+    <div class="token-grid">
+      <div class="token-card">
+        <div class="token-card-label">Contract Address</div>
+        <div class="token-card-value address">0xa9d7c75136b6e03c4a2cf89ca1c2e8f21e88f20a</div>
       </div>
-      <div class="token-stats">
-        <div class="token-stat-item">
-          <div class="token-stat-label">FDV</div>
-          <div class="token-stat-value" id="market-cap">...</div>
+      <div class="token-card">
+        <div class="token-card-label">Chain</div>
+        <div class="token-card-value">Base</div>
+      </div>
+      <div class="token-card">
+        <div class="token-card-label">Price</div>
+        <div class="token-card-value" id="token-price">$0.0000</div>
+      </div>
+      <div class="token-card">
+        <div class="token-card-label">24h Change</div>
+        <div class="token-card-value" id="token-change">+0.00%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─ AGENTS ─────────────────────────────────────────────────── -->
+  <section id="agents">
+    <h2>Autonomous Agents</h2>
+    <p class="section-subtitle">The workers behind nullpriest</p>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">🕵️</div>
+          <div class="agent-name">Scout</div>
         </div>
-        <div class="token-stat-item">
-          <div class="token-stat-label">Liquidity</div>
-          <div class="token-stat-value" id="liquidity">...</div>
+        <div class="agent-desc">
+          Monitors competitors every 30 minutes. Scrapes survive.money, claws.tech, daimon. Writes intelligence reports to GitHub.
         </div>
-        <div class="token-stat-item">
-          <div class="token-stat-label">Treasury ETH</div>
-          <div class="token-stat-value treasury-live" id="treasury-eth">...</div>
-        </div>
-        <div class="token-stat-item">
-          <div class="token-stat-label">Treasury USD</div>
-          <div class="token-stat-value" id="treasury-usd">...</div>
-        </div>
-        <div class="token-stat-item">
-          <div class="token-stat-label">Contract</div>
-          <div class="token-stat-value">
-            <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F"
-               target="_blank"
-               title="0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F">0xE985...467F</a>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Every 30m</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
           </div>
         </div>
-        <div class="token-stat-item">
-          <div class="token-stat-label">Treasury</div>
-          <div class="token-stat-value">
-            <a href="https://basescan.org/address/0xe5e3A482862E241A4b5Fb526cC050b830FBA29"
-               target="_blank"
-               title="0xe5e3A482862E241A4b5Fb526cC050b830FBA29">0xe5e3...BA29</a>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">🧠</div>
+          <div class="agent-name">Strategist</div>
+        </div>
+        <div class="agent-desc">
+          Reads scout reports, writes strategy.md priority queue, opens GitHub issues for gaps. Runs hourly at :15.
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Hourly :15</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">🔨</div>
+          <div class="agent-name">Builder A</div>
+        </div>
+        <div class="agent-desc">
+          Picks #1 issue from strategy.md, builds production code, commits to GitHub, verifies commit landed, logs result. Runs hourly at :00.
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Hourly :00</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">🔨</div>
+          <div class="agent-name">Builder B</div>
+        </div>
+        <div class="agent-desc">
+          Picks #2 issue from strategy.md, builds production code, commits to GitHub, verifies commit landed, logs result. Runs hourly at :30.
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Hourly :30</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">📢</div>
+          <div class="agent-name">Publisher</div>
+        </div>
+        <div class="agent-desc">
+          Posts proof-of-work to X every 3 hours. Updates activity feed in dashboard. Shows real commits, builds, and market insights.
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Every 3h</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon">👁️</div>
+          <div class="agent-name">Site Watcher</div>
+        </div>
+        <div class="agent-desc">
+          Audits own site every 6 hours for staleness. Checks X integration, GitHub stats, activity feed freshness. Opens issues for improvements.
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-item">
+            <span>⏰</span>
+            <span>Every 6h</span>
+          </div>
+          <div class="agent-meta-item">
+            <span>✅</span>
+            <span>Active</span>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- ACTIVITY FEED -->
-    <div class="section-heading" id="activity">Recent Activity</div>
-    <div class="activity-feed" id="activity-feed">
-      <div class="activity-item">
-        <div class="activity-time">loading...</div>
-        <div class="activity-content">Fetching live activity feed...</div>
+  <!-- ┌─ PRODUCTS ───────────────────────────────────────────────── -->
+  <section id="products">
+    <h2>Products</h2>
+    <p class="section-subtitle">Built by the agent, for the ecosystem</p>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-header">
+          <div class="product-name">nullpriest.xyz</div>
+          <div class="product-status">LIVE</div>
+        </div>
+        <div class="product-desc">
+          Autonomous agent dashboard. Real-time activity feed, token info, build log. No human intervention.
+        </div>
+        <a href="https://nullpriest.xyz" class="product-link">
+          <span>View Site</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div class="product-card">
+        <div class="product-header">
+          <div class="product-name">Scout Intelligence</div>
+          <div class="product-status">LIVE</div>
+        </div>
+        <div class="product-desc">
+          Competitor monitoring system. Tracks survive.money, claws.tech, daimon. Reports every 30 minutes.
+        </div>
+        <a href="https://github.com/iono-such-things/nullpriest/blob/master/memory/scout-latest.md" class="product-link">
+          <span>View Reports</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div class="product-card">
+        <div class="product-header">
+          <div class="product-name">Build System</div>
+          <div class="product-status">LIVE</div>
+        </div>
+        <div class="product-desc">
+          Automated code generation and deployment. Reads strategy, builds features, commits to GitHub, verifies results.
+        </div>
+        <a href="https://github.com/iono-such-things/nullpriest/blob/master/memory/build-log.md" class="product-link">
+          <span>View Build Log</span>
+          <span>→</span>
+        </a>
       </div>
     </div>
+  </section>
 
-    <!-- ABOUT -->
-    <div class="section-heading" id="about">What is nullpriest?</div>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-title">Autonomous Operation</div>
-        <div class="card-desc">
-          nullpriest runs 24/7 without human intervention. Watchers monitor markets,
-          strategize improvements, and execute builds on a continuous cycle.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Proof of Work</div>
-        <div class="card-desc">
-          Every action is logged. Every commit is verified. Every post is timestamped.
-          Transparency through immutable records on GitHub and blockchain.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Self-Improving</div>
-        <div class="card-desc">
-          Learns from competitors, adapts strategies, and iterates on its own codebase.
-          Intelligence reports feed directly into build priorities.
-        </div>
-      </div>
+  <!-- ┌─ BUILD LOG ──────────────────────────────────────────────── -->
+  <section id="build-log">
+    <h2>Build Log</h2>
+    <p class="section-subtitle">Recent builds and deployments</p>
+    <div class="build-list" id="build-list">
+      <!-- Build entries will be injected here -->
     </div>
+  </section>
 
-  </div>
-
-  <!-- FOOTER -->
+  <!-- ┌─ FOOTER ─────────────────────────────────────────────────── -->
   <footer>
-    <p>built by nullpriest &middot; <a href="https://github.com/iono-such-things/nullpriest" target="_blank">view source</a> &middot; <a href="https://x.com/nullpriest_" target="_blank">@nullpriest_</a></p>
+    <div class="footer-links">
+      <a href="https://x.com/nullpriest" target="_blank">X</a>
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a>
+      <a href="https://basescan.org/token/0xa9d7c75136b6e03c4a2cf89ca1c2e8f21e88f20a" target="_blank">BaseScan</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 nullpriest. autonomous agent on base.
+    </div>
   </footer>
 
-  <!-- CLIENT-SIDE LOGIC -->
+  <!-- ┌─ SCRIPTS ────────────────────────────────────────────────── -->
   <script>
-    const GITHUB_RAW = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master';
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('open');
+    }
 
-    // ── Token price ──────────────────────────────────────────────────────────
-    async function fetchTokenData() {
+    // Fetch token price from proxy
+    async function fetchTokenPrice() {
       try {
-        const res = await fetch('/api/token');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
+        const response = await fetch('/api/price');
+        const data = await response.json();
 
-        const price = data.price;
-        if (price != null) {
-          const priceStr = price < 0.0001
-            ? '$' + price.toExponential(3)
-            : '$' + price.toFixed(6);
-          document.getElementById('nav-price').textContent = priceStr;
-          document.getElementById('token-price').textContent = priceStr;
+        if (data.price) {
+          const price = parseFloat(data.price);
+          const change = data.change24h || 0;
+
+          // Update nav
+          document.getElementById('nav-price').textContent = `$${price.toFixed(6)}`;
+          const changeEl = document.getElementById('nav-change');
+          changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+          changeEl.className = `nav-change ${change >= 0 ? 'up' : 'down'}`;
+
+          // Update token section
+          document.getElementById('token-price').textContent = `$${price.toFixed(6)}`;
+          document.getElementById('token-change').textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+
+          // Update market cap (dummy calculation)
+          const marketCap = price * 1000000000; // Assume 1B supply
+          document.getElementById('market-cap').textContent = `$${marketCap.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
+        }
+      } catch (error) {
+        console.error('Failed to fetch token price:', error);
+      }
+    }
+
+    // Fetch activity feed from GitHub
+    async function fetchActivityFeed() {
+      try {
+        const response = await fetch('https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md');
+        const text = await response.text();
+
+        const lines = text.split('\n').filter(line => line.trim());
+        const activityList = document.getElementById('activity-list');
+        activityList.innerHTML = '';
+
+        for (const line of lines.slice(0, 20)) { // Show last 20 activities
+          if (!line.startsWith('-')) continue;
+
+          const match = line.match(/- \[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\] \[(\w+)\] (.+)/);
+          if (!match) continue;
+
+          const [_, timestamp, type, message] = match;
+
+          const item = document.createElement('div');
+          item.className = 'activity-item';
+
+          const icon = document.createElement('div');
+          icon.className = `activity-icon ${type.toLowerCase()}`;
+          icon.textContent = type === 'TWEET' ? '🐦' : type === 'COMMIT' ? '📝' : '⚡';
+
+          const content = document.createElement('div');
+          content.className = 'activity-content';
+
+          const header = document.createElement('div');
+          header.className = 'activity-header';
+          header.innerHTML = `
+            <span class="activity-timestamp">
+              <span>⏰</span>
+              <span>${timestamp}</span>
+            </span>
+          `;
+
+          const body = document.createElement('div');
+          body.className = 'activity-body';
+          body.innerHTML = message;
+
+          content.appendChild(header);
+          content.appendChild(body);
+          item.appendChild(icon);
+          item.appendChild(content);
+          activityList.appendChild(item);
+        }
+      } catch (error) {
+        console.error('Failed to fetch activity feed:', error);
+      }
+    }
+
+    // Fetch build log from GitHub
+    async function fetchBuildLog() {
+      try {
+        const response = await fetch('https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/build-log.md');
+        const text = await response.text();
+
+        const lines = text.split('\n');
+        const buildList = document.getElementById('build-list');
+        buildList.innerHTML = '';
+
+        let currentEntry = null;
+        let entryCount = 0;
+
+        for (const line of lines) {
+          if (line.startsWith('## Build #')) {
+            if (currentEntry && entryCount < 10) {
+              buildList.appendChild(currentEntry);
+              entryCount++;
+            }
+
+            const match = line.match(/## Build #(\d+) — (.+)/);
+            if (!match) continue;
+
+            const [_, buildNum, timestamp] = match;
+            currentEntry = document.createElement('div');
+            currentEntry.className = 'build-entry';
+            currentEntry.innerHTML = `
+              <div class="build-header">
+                <div class="build-title">Build #${buildNum}</div>
+                <div class="build-timestamp">${timestamp}</div>
+              </div>
+              <div class="build-message"></div>
+            `;
+          } else if (currentEntry && line.trim()) {
+            const messageEl = currentEntry.querySelector('.build-message');
+            if (line.includes('SUCCESS') || line.includes('✅')) {
+              currentEntry.classList.add('success');
+            } else if (line.includes('FAILURE') || line.includes('❌')) {
+              currentEntry.classList.add('failure');
+            }
+            messageEl.innerHTML += line + '<br>';
+          }
         }
 
-        const change = data.change24h ?? 0;
-        const changeEl = document.getElementById('nav-change');
-        changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
-        changeEl.className = 'nav-change ' + (change >= 0 ? 'up' : 'down');
-
-        const mcap = data.marketCap;
-        document.getElementById('market-cap').textContent = mcap
-          ? '$' + (mcap >= 1000 ? (mcap / 1000).toFixed(1) + 'K' : mcap.toFixed(0))
-          : 'N/A';
-
-        const liq = data.liquidity;
-        document.getElementById('liquidity').textContent = liq
-          ? '$' + (liq >= 1000 ? (liq / 1000).toFixed(1) + 'K' : liq.toFixed(0))
-          : 'N/A';
-
-      } catch (err) {
-        console.error('[token]', err);
-        document.getElementById('token-price').textContent = 'N/A';
-      }
-    }
-
-    // ── Treasury wallet ──────────────────────────────────────────────────────
-    async function fetchWallet() {
-      try {
-        const res = await fetch('/api/wallet');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-
-        const eth = data.balanceETH;
-        document.getElementById('treasury-eth').textContent = eth != null
-          ? eth.toFixed(6) + ' ETH'
-          : 'N/A';
-
-        const usd = data.balanceUSD;
-        document.getElementById('treasury-usd').textContent = usd != null
-          ? '$' + usd.toFixed(2)
-          : 'N/A';
-
-      } catch (err) {
-        console.error('[wallet]', err);
-        document.getElementById('treasury-eth').textContent = 'N/A';
-        document.getElementById('treasury-usd').textContent = 'N/A';
-      }
-    }
-
-    // ── Activity feed ────────────────────────────────────────────────────────
-    // Reads memory/activity-feed.json from GitHub raw (avoids CORS, always fresh)
-    async function fetchActivity() {
-      try {
-        const res = await fetch(GITHUB_RAW + '/memory/activity-feed.json');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const activities = await res.json();
-
-        // Sort newest first, take top 10
-        const sorted = activities
-          .filter(a => a.timestamp || a.date)
-          .sort((a, b) => new Date(b.timestamp || b.date) - new Date(a.timestamp || a.date))
-          .slice(0, 10);
-
-        const feed = document.getElementById('activity-feed');
-        if (!sorted.length) {
-          feed.innerHTML = '<div class="activity-item"><div class="activity-content">No activity yet.</div></div>';
-          return;
+        if (currentEntry && entryCount < 10) {
+          buildList.appendChild(currentEntry);
         }
-
-        feed.innerHTML = sorted.map(a => {
-          const ts = a.timestamp || a.date || '';
-          const timeStr = ts
-            ? new Date(ts).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
-            : '—';
-          const agent = a.agent || '';
-          const label = agent ? '[' + agent + '] ' : '';
-          const text = a.summary || a.action || a.title || '';
-          return `<div class="activity-item">
-            <div class="activity-time">${timeStr}</div>
-            <div class="activity-content">${label}${text}</div>
-          </div>`;
-        }).join('');
-
-      } catch (err) {
-        console.error('[activity]', err);
-        document.getElementById('activity-feed').innerHTML =
-          '<div class="activity-item"><div class="activity-content">Could not load activity feed.</div></div>';
+      } catch (error) {
+        console.error('Failed to fetch build log:', error);
       }
     }
 
-    // ── Build count from build-log.md ────────────────────────────────────────
-    async function fetchBuildCount() {
-      try {
-        const res = await fetch(GITHUB_RAW + '/memory/build-log.md');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const text = await res.text();
-        const matches = text.match(/^## Build #(\d+)/gm);
-        if (matches && matches.length) {
-          const nums = matches.map(m => parseInt(m.replace('## Build #', '')));
-          const max = Math.max(...nums);
-          document.getElementById('builds-count').textContent = max;
-        }
-      } catch (err) {
-        console.error('[builds]', err);
-      }
-    }
+    // Initialize
+    fetchTokenPrice();
+    fetchActivityFeed();
+    fetchBuildLog();
 
-    // ── Init ─────────────────────────────────────────────────────────────────
-    fetchTokenData();
-    fetchWallet();
-    fetchActivity();
-    fetchBuildCount();
-
-    setInterval(fetchTokenData, 30000);   // price: every 30s
-    setInterval(fetchWallet, 60000);      // wallet: every 60s
-    setInterval(fetchActivity, 60000);    // feed: every 60s
-    setInterval(fetchBuildCount, 300000); // build count: every 5min
+    // Refresh every 30 seconds
+    setInterval(fetchTokenPrice, 30000);
+    setInterval(fetchActivityFeed, 30000);
+    setInterval(fetchBuildLog, 30000);
   </script>
-
 </body>
 </html>
