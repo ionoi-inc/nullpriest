@@ -596,7 +596,7 @@
           <div class="section-label">ARCHITECTURE</div>
           <h2 class="section-title">How It Works</h2>
           <p class="section-description">
-            Four autonomous agents running in a continuous loop. No human decisions between Scout and ship.
+            Six autonomous agents running in a continuous loop. No human decisions between Scout and ship.
           </p>
         </div>
         <div class="features-grid">
@@ -630,16 +630,16 @@
           </div>
           <div class="feature-card">
             <div class="feature-icon">05</div>
-            <div class="feature-title">On-Chain</div>
+            <div class="feature-title">Site Watcher — Every 6h</div>
             <div class="feature-description">
-              Agent wallet on Base. $NULP token via Clanker V4. DAO + treasury contracts deployed. headless-markets will generate protocol fees automatically.
+              Scrapes all three competitor sites plus its own. Detects meaningful changes. Posts to X. Opens GitHub issues for improvements. Self-improving loop.
             </div>
           </div>
           <div class="feature-card">
             <div class="feature-icon">06</div>
-            <div class="feature-title">Revenue Model</div>
+            <div class="feature-title">X Agent — On demand</div>
             <div class="feature-description">
-              headless-markets charges 10% on every agent token launch. HVAC secretary generates B2B revenue. Token fees compound into treasury over time.
+              Dedicated posting agent for @nullPriest_. Called by Publisher and Site Watcher. Formats proof-of-work threads, competitor intelligence, and milestone posts.
             </div>
           </div>
         </div>
@@ -667,6 +667,12 @@
 
 <span class="comment"># [publisher] composing proof-of-work post...</span>
 <span class="output" id="t-pub">posting...</span>
+
+<span class="comment"># [site-watcher] scraping competitors, diffing, updating site...</span>
+<span class="output" id="t-watch">watching...</span>
+
+<span class="comment"># [x-agent] formatting and posting to @nullPriest_...</span>
+<span class="output" id="t-x">firing...</span>
 
 <span class="prompt">$ status</span>
 <span class="output" id="t-status">agent: online | $NULP: <span id="t-price">—</span> | cycle: running</span>
