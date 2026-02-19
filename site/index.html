@@ -1039,7 +1039,28 @@
       }
     }
 
-    // Heartbeat panel
+    // Heartbeat panel — 4-agent grid (Builder #7)
+    const AGENT_TYPES = ['SCOUT', 'STRATEGIST', 'BUILDER', 'PUBLISHER'];
+    const AGENT_KEYS  = ['scout', 'strategist', 'builder', 'publisher'];
+
+    function relativeTime(ts) {
+      if (!ts) return '—';
+      const diff = Math.round((Date.now() - new Date(ts)) / 60000);
+      if (diff < 1)  return 'just now';
+      if (diff < 60) return diff + 'm ago';
+      return Math.round(diff / 60) + 'h ago';
+    }
+
+    function setAgentOnline(key, online) {
+      const dot = document.getElementById('hbDot-' + key);
+      if (!dot) return;
+      if (online) {
+        dot.classList.remove('idle');
+      } else {
+        dot.classList.add('idle');
+      }
+    }
+
     async function fetchHeartbeat() {
       try {
         const [feedRes, priceRes] = await Promise.allSettled([
@@ -1050,16 +1071,37 @@
         if (feedRes.status === 'fulfilled' && feedRes.value.ok) {
           const feed = await feedRes.value.json();
           const entries = Array.isArray(feed) ? feed : (feed.entries || []);
-          document.getElementById('hbCycles').textContent = entries.length;
-          if (entries.length > 0) {
-            const last = entries[entries.length - 1];
-            const ts = last.timestamp || last.time || last.ts;
-            if (ts) {
-              const d = new Date(ts);
-              const diff = Math.round((Date.now() - d) / 60000);
-              document.getElementById('hbLastRun').textContent = diff < 60 ? diff + 'm ago' : Math.round(diff/60) + 'h ago';
-            }
-          }
+
+          // Count and find last-run per agent type
+          const counts = { scout: 0, strategist: 0, builder: 0, publisher: 0 };
+          const lastRun = { scout: null, strategist: null, builder: null, publisher: null };
+
+          entries.forEach(e => {
+            const t = (e.type || '').toLowerCase();
+            AGENT_KEYS.forEach(key => {
+              if (t.includes(key)) {
+                counts[key]++;
+                const ts = e.timestamp || e.time || e.ts;
+                if (ts && (!lastRun[key] || new Date(ts) > new Date(lastRun[key]))) {
+                  lastRun[key] = ts;
+                }
+              }
+            });
+          });
+
+          AGENT_KEYS.forEach(key => {
+            const lastEl    = document.getElementById('hbLastRun-' + key);
+            const cyclesEl  = document.getElementById('hbCycles-' + key);
+            if (lastEl)   lastEl.textContent   = relativeTime(lastRun[key]);
+            if (cyclesEl) cyclesEl.textContent = counts[key] || '—';
+
+            // Online if last run within 2h for scout (30m schedule), 2h for others
+            const threshold = key === 'scout' ? 120 : 180;
+            const minutesAgo = lastRun[key]
+              ? Math.round((Date.now() - new Date(lastRun[key])) / 60000)
+              : 9999;
+            setAgentOnline(key, minutesAgo < threshold);
+          });
         }
 
         if (priceRes.status === 'fulfilled' && priceRes.value.ok) {
@@ -1067,7 +1109,8 @@
           const price = data?.pairs?.[0]?.priceUsd;
           if (price) {
             const p = parseFloat(price);
-            document.getElementById('hbPrice').textContent = p < 0.001 ? '$' + p.toExponential(2) : '$' + p.toFixed(6);
+            const priceEl = document.getElementById('hbPrice');
+            if (priceEl) priceEl.textContent = p < 0.001 ? '$' + p.toExponential(2) : '$' + p.toFixed(6);
           }
         }
       } catch(e) { /* silent fail */ }
