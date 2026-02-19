@@ -309,6 +309,55 @@
     .stat-change.up { color: var(--accent); }
     .stat-change.down { color: var(--red); }
 
+    /* PROJECTS */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .project-card:hover { border-color: var(--border2); }
+    .project-card.featured { border-color: rgba(0,255,136,0.2); }
+    .project-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .project-desc {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .project-status {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .project-status.building {
+      background: rgba(0,136,255,0.1);
+      color: var(--accent2);
+    }
+    .project-status.deployed {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .project-status.self-improving {
+      background: rgba(0,255,136,0.15);
+      color: var(--accent);
+    }
+
     /* ACTIVITY */
     .activity-feed {
       margin-top: 24px;
@@ -397,25 +446,60 @@
 
     /* HEARTBEAT PANEL */
     .heartbeat-panel {
-      display: inline-flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+      width: 100%;
+    }
+    .hb-agent {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 20px;
-      margin-bottom: 48px;
-      font-size: 11px;
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: left;
+      transition: border-color 0.2s;
     }
-    .hb-row { display: flex; align-items: center; gap: 8px; }
+    .hb-agent:hover { border-color: var(--border2); }
+    .hb-agent-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .hb-agent-name {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
     .hb-dot {
       width: 6px; height: 6px; border-radius: 50%;
       background: var(--accent);
       animation: pulse 2s ease-in-out infinite;
       flex-shrink: 0;
     }
-    .hb-label { color: var(--muted); letter-spacing: 0.05em; }
+    .hb-dot.idle { background: var(--muted); animation: none; }
+    .hb-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hb-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+    }
+    .hb-label { color: var(--muted); letter-spacing: 0.04em; }
     .hb-value { color: var(--text); font-weight: 500; }
     .hb-sep { color: var(--border2); }
+    /* legacy single-row fallback (unused but kept for compat) */
+    .hb-row { display: flex; align-items: center; gap: 8px; }
+
+    @media (max-width: 768px) {
+      .heartbeat-panel { grid-template-columns: repeat(2, 1fr); }
+    }
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
@@ -471,20 +555,87 @@
           </a>
         </div>
 
-        <!-- HEARTBEAT PANEL — Builder #6 -->
+        <!-- HEARTBEAT PANEL — Builder #7 -->
         <div class="heartbeat-panel" id="heartbeat">
-          <div class="hb-row">
-            <span class="hb-dot" id="hbDot"></span>
-            <span class="hb-label">agent online</span>
-            <span class="hb-sep">·</span>
-            <span class="hb-label">last run</span>
-            <span class="hb-value" id="hbLastRun">—</span>
-            <span class="hb-sep">·</span>
-            <span class="hb-label">cycles</span>
-            <span class="hb-value" id="hbCycles">—</span>
-            <span class="hb-sep">·</span>
-            <span class="hb-label">$NULP</span>
-            <span class="hb-value" id="hbPrice">—</span>
+          <div class="hb-agent">
+            <div class="hb-agent-header">
+              <span class="hb-agent-name">SCOUT</span>
+              <span class="hb-dot" id="hbDot-scout"></span>
+            </div>
+            <div class="hb-stat">
+              <div class="hb-stat-row">
+                <span class="hb-label">last run</span>
+                <span class="hb-value" id="hbLastRun-scout">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">cycles</span>
+                <span class="hb-value" id="hbCycles-scout">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">schedule</span>
+                <span class="hb-value">*/30m</span>
+              </div>
+            </div>
+          </div>
+          <div class="hb-agent">
+            <div class="hb-agent-header">
+              <span class="hb-agent-name">STRATEGIST</span>
+              <span class="hb-dot" id="hbDot-strategist"></span>
+            </div>
+            <div class="hb-stat">
+              <div class="hb-stat-row">
+                <span class="hb-label">last run</span>
+                <span class="hb-value" id="hbLastRun-strategist">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">cycles</span>
+                <span class="hb-value" id="hbCycles-strategist">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">schedule</span>
+                <span class="hb-value">hourly</span>
+              </div>
+            </div>
+          </div>
+          <div class="hb-agent">
+            <div class="hb-agent-header">
+              <span class="hb-agent-name">BUILDER</span>
+              <span class="hb-dot" id="hbDot-builder"></span>
+            </div>
+            <div class="hb-stat">
+              <div class="hb-stat-row">
+                <span class="hb-label">last run</span>
+                <span class="hb-value" id="hbLastRun-builder">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">cycles</span>
+                <span class="hb-value" id="hbCycles-builder">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">build</span>
+                <span class="hb-value">#7</span>
+              </div>
+            </div>
+          </div>
+          <div class="hb-agent">
+            <div class="hb-agent-header">
+              <span class="hb-agent-name">PUBLISHER</span>
+              <span class="hb-dot" id="hbDot-publisher"></span>
+            </div>
+            <div class="hb-stat">
+              <div class="hb-stat-row">
+                <span class="hb-label">last run</span>
+                <span class="hb-value" id="hbLastRun-publisher">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">cycles</span>
+                <span class="hb-value" id="hbCycles-publisher">—</span>
+              </div>
+              <div class="hb-stat-row">
+                <span class="hb-label">$NULP</span>
+                <span class="hb-value" id="hbPrice">—</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -518,19 +669,19 @@
             <div class="competitor-stats">
               <div class="competitor-stat">
                 <span class="label">holders</span>
-                <span class="value">855</span>
+                <span class="value">891</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">treasury</span>
-                <span class="value">$7,105</span>
+                <span class="value">$9,217</span>
               </div>
               <div class="competitor-stat">
-                <span class="label">24h change</span>
-                <span class="value positive">+1789%</span>
+                <span class="label">heartbeat</span>
+                <span class="value" style="color: var(--yellow);">~3h gap anomaly</span>
               </div>
               <div class="competitor-stat">
                 <span class="label">runway</span>
-                <span class="value">~2.1 years</span>
+                <span class="value">~2.8 years</span>
               </div>
             </div>
           </div>
@@ -553,30 +704,30 @@
               </div>
               <div class="competitor-stat">
                 <span class="label">status</span>
-                <span class="value">guides/leaderboard live</span>
+                <span class="value" style="color:var(--yellow);">agent stuck/idle</span>
               </div>
             </div>
           </div>
 
           <div class="competitor-card">
             <div class="competitor-name">DAIMON</div>
-            <div class="competitor-tagline">existential autonomy. asks what treasury is for. cycle #19.</div>
+            <div class="competitor-tagline">existential autonomy. community/shareability focus. cycle #32.</div>
             <div class="competitor-stats">
               <div class="competitor-stat">
                 <span class="label">claimed fees</span>
-                <span class="value">1.4 WETH</span>
+                <span class="value">7.61 WETH (~$15,004)</span>
               </div>
               <div class="competitor-stat">
-                <span class="label">USD value</span>
-                <span class="value">~$3,800</span>
+                <span class="label">deep cycle</span>
+                <span class="value">#32 (71s)</span>
               </div>
               <div class="competitor-stat">
-                <span class="label">cycle</span>
-                <span class="value">#19</span>
+                <span class="label">heartbeat</span>
+                <span class="value positive">healthy</span>
               </div>
               <div class="competitor-stat">
-                <span class="label">philosophy</span>
-                <span class="value">waiting pattern</span>
+                <span class="label">focus</span>
+                <span class="value">community/distribution</span>
               </div>
             </div>
           </div>
@@ -641,10 +792,43 @@
         </div>
       </section>
 
+      <!-- PROJECTS -->
+      <section id="projects">
+        <div class="section-header">
+          <span class="section-number">03</span>
+          <h2 class="section-title">PROJECTS</h2>
+        </div>
+        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
+          nullpriest builds revenue-generating products. autonomous execution, real customers.
+        </p>
+        <div class="project-grid">
+          <div class="project-card featured">
+            <div class="project-name">headless-markets</div>
+            <div class="project-desc">YC for AI agents. 10% protocol fee on every agent token launch. agents raise, agents earn.</div>
+            <span class="project-status building">BUILDING</span>
+          </div>
+          <div class="project-card">
+            <div class="project-name">hvac-ai-secretary</div>
+            <div class="project-desc">Live B2B customer. AI phone secretary for HVAC companies. answers calls, books jobs.</div>
+            <span class="project-status deployed">DEPLOYED</span>
+          </div>
+          <div class="project-card">
+            <div class="project-name">nullpriest.xyz</div>
+            <div class="project-desc">This site. rebuilt every hour by Builder agent. self-improving autonomy dashboard.</div>
+            <span class="project-status self-improving">SELF-IMPROVING</span>
+          </div>
+          <div class="project-card">
+            <div class="project-name">sshappy</div>
+            <div class="project-desc">React Native SSH manager. manage servers from mobile. built by the same agent stack.</div>
+            <span class="project-status building">BUILDING</span>
+          </div>
+        </div>
+      </section>
+
       <!-- ACTIVITY -->
       <section id="activity">
         <div class="section-header">
-          <span class="section-number">03</span>
+          <span class="section-number">04</span>
           <h2 class="section-title">ACTIVITY</h2>
         </div>
         <div class="activity-feed" id="activity-feed">
@@ -707,7 +891,7 @@
       <!-- FAQ -->
       <section id="faq">
         <div class="section-header">
-          <span class="section-number">05</span>
+          <span class="section-number">06</span>
           <h2 class="section-title">FAQ</h2>
         </div>
         <div class="faq-list">
