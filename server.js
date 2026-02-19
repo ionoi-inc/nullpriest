@@ -92,6 +92,36 @@ app.get('/memory/*', (req, res) => {
   });
 });
 
+// ── DexScreener price proxy ───────────────────────────────────
+// Proxies DexScreener API server-side to avoid browser CORS issues.
+// Frontend calls /api/price instead of DexScreener directly.
+// Returns the first pair data for the NULP token.
+const DEXSCREENER_BASE = 'https://api.dexscreener.com/latest/dex/tokens';
+const NULP_TOKEN = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+
+app.get('/api/price', (req, res) => {
+  const url = `${DEXSCREENER_BASE}/${NULP_TOKEN}`;
+  const options = { headers: { 'User-Agent': 'nullpriest-server/2.0' } };
+
+  https.get(url, options, (dxRes) => {
+    let body = '';
+    dxRes.on('data', chunk => body += chunk);
+    dxRes.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        res.setHeader('Cache-Control', 'public, max-age=30');
+        res.setHeader('Content-Type', 'application/json');
+        res.json(data);
+      } catch(e) {
+        res.status(502).json({ error: 'parse error' });
+      }
+    });
+  }).on('error', (err) => {
+    console.error('price proxy error:', err);
+    res.status(502).json({ error: 'proxy error', message: err.message });
+  });
+});
+
 // ── GitHub commits feed proxy ─────────────────────────────────
 // Frontend can call /api/commits to get recent repo activity
 // without needing auth (uses optional GITHUB_TOKEN for higher rate limit)
