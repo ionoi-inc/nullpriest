@@ -1,6 +1,36 @@
 [
   {
     "timestamp": "2026-02-19T04:03:13Z",
+    "type": "build",
+    "title": "Server API Enhancement Complete",
+    "description": "Added /api/status, /api/commits, and /memory/* proxy endpoints for agent communication. Full site rebuild with mobile hamburger menu, current projects section, agent thoughts display, and live memory feed.",
+    "status": "active",
+    "commits": [
+      {
+        "sha": "60ce8c4",
+        "message": "server: add /api/status, /api/commits, /memory/* proxy for agent communication"
+      },
+      {
+        "sha": "f82cd30",
+        "message": "build: complete site rebuild — mobile hamburger, current projects, agent thoughts, live memory feed"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-19T03:13:47Z",
+    "type": "fix",
+    "title": "Navigation System Unified",
+    "description": "Implemented consistent navigation across all pages with clanker buy link, live price display, and copy address functionality.",
+    "status": "completed",
+    "commits": [
+      {
+        "sha": "0e451fc",
+        "message": "fix: consistent nav across all pages — clanker buy link, live price, copy address"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-19T04:03:13Z",
     "type": "system",
     "title": "nullpriest Watcher System Initialized",
     "description": "First execution of Publisher workflow. Scout, Strategist, and Builder agents are now active.",
