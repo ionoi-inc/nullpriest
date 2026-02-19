@@ -15,21 +15,16 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ━━ Static site ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ━━ Static site ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ━━ Health check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ━━ Health check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.0' });
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.1' });
 });
 
-// ━━ Agent status endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Agents call this to report their state. Frontend reads it for live display.
-// Usage: GET /api/status
-// Returns: last known state of all four watchers
+// ━━ Agent status endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/api/status', (req, res) => {
-  // In future this reads from a local state file written by agents
-  // For now returns structural info the frontend can display
   res.json({
     agent: 'nullpriest',
     timestamp: new Date().toISOString(),
@@ -41,8 +36,8 @@ app.get('/api/status', (req, res) => {
     },
     contracts: {
       token:   '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F',
-      wallet:  '0xe5e3A4828628E241A4b5Fb526cC050b830FBA29',
-      pool:    '0xDb32c33fC9E2B6a06844CA59dd7Bc78E5c87e1f18'
+      wallet:  '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+      pool:    '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18'
     },
     projects: [
       { name: 'headless-markets', status: 'building', description: 'YC for AI agents. 10% protocol fee on every agent token launch.' },
@@ -53,76 +48,161 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ━━ Memory proxy ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Proxies /memory/<file> requests to GitHub raw content
-// Allows agents to write markdown files to /memory/* in repo and site to read them live
-// Example: GET /memory/scout-latest.md -> proxies to raw.githubusercontent.com/.../memory/scout-latest.md
-app.get('/memory/:filename', async (req, res) => {
-  const { filename } = req.params;
-  const rawUrl = `${GITHUB_RAW_BASE}/memory/${filename}`;
-  
-  try {
-    const response = await fetch(rawUrl);
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'File not found in GitHub repo', path: `/memory/${filename}` });
-    }
-    const content = await response.text();
-    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
-    res.send(content);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch from GitHub', message: err.message });
-  }
+// ━━ Memory proxy ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+app.get('/memory/:filename', (req, res) => {
+  const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
+  https.get(url, (ghRes) => {
+    res.setHeader('Content-Type', ghRes.headers['content-type'] || 'text/plain');
+    ghRes.pipe(res);
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'GitHub fetch failed', details: err.message });
+  });
 });
 
-// ━━ Token price endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Proxies price data from DexScreener for $NULP token
-// Frontend calls this to display live token price
-// Usage: GET /api/price
-// Returns: { price: '0.000123', priceUsd: '0.000123', liquidity: { usd: 12345 }, volume: { h24: 1234 }, priceChange: { h24: 5.2 } }
-app.get('/api/price', async (req, res) => {
-  const DEXSCREENER_API = 'https://api.dexscreener.com/latest/dex/tokens/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
-  
-  try {
-    const response = await fetch(DEXSCREENER_API);
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'Failed to fetch price from DexScreener' });
-    }
-    
-    const data = await response.json();
-    
-    // DexScreener returns { pairs: [ ... ] }
-    // We want the first pair (should be the main ETH pair)
-    if (!data.pairs || data.pairs.length === 0) {
-      return res.status(404).json({ error: 'No trading pairs found for token' });
-    }
-    
-    const pair = data.pairs[0];
-    
-    // Return structure that matches what site/index.html JS expects
-    res.json({
-      price: pair.priceUsd || '0',
-      priceUsd: pair.priceUsd || '0',
-      change24h: pair.priceChange?.h24 || 0,
-      mcap: pair.marketCap || pair.fdv || 0,
-      volume24h: pair.volume?.h24 || 0,
-      liquidity: pair.liquidity?.usd || 0,
-      fdv: pair.fdv || 0,
-      marketCap: pair.marketCap || 0
+// ━━ NULP price proxy ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Reads live reserves from Uniswap V2 pool on Base via eth_call to getReserves()
+// Pool: 0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18 (NULP/WETH)
+// NULP decimals: 18, WETH decimals: 18
+// Price = reserve1 (WETH) / reserve0 (NULP) * ETH_USD
+// ETH/USD fetched from CoinGecko public API (no key required)
+
+// Cache: refresh at most once per 30s to avoid hammering RPC
+let priceCache = null;
+let priceCacheAt = 0;
+const CACHE_TTL_MS = 30_000;
+
+// getReserves() selector: 0x0902f1ac
+const GET_RESERVES_DATA = '0x0902f1ac';
+
+function rpcCall(rpcUrl, method, params) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({ jsonrpc: '2.0', id: 1, method, params });
+    const url = new URL(rpcUrl);
+    const options = {
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error('RPC parse error: ' + data.slice(0, 100))); }
+      });
     });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+function httpsGet(url) {
+  return new Promise((resolve, reject) => {
+    const parsedUrl = new URL(url);
+    const options = {
+      hostname: parsedUrl.hostname,
+      path: parsedUrl.pathname + parsedUrl.search,
+      method: 'GET',
+      headers: { 'User-Agent': 'nullpriest-agent/2.1' }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error('HTTP parse error')); }
+      });
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+async function fetchLivePrice() {
+  const now = Date.now();
+  if (priceCache && (now - priceCacheAt) < CACHE_TTL_MS) return priceCache;
+
+  const BASE_RPC = process.env.BASE_RPC_URL || 'https://mainnet.base.org';
+  const POOL     = '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f18';
+
+  // 1. Call getReserves() on pool
+  const rpcResp = await rpcCall(BASE_RPC, 'eth_call', [
+    { to: POOL, data: GET_RESERVES_DATA },
+    'latest'
+  ]);
+
+  if (!rpcResp.result || rpcResp.result === '0x') {
+    throw new Error('getReserves returned empty — pool may not exist at this address');
+  }
+
+  // Decode ABI: (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)
+  const hex = rpcResp.result.slice(2);
+  const reserve0 = BigInt('0x' + hex.slice(0, 64));   // NULP reserve (token0)
+  const reserve1 = BigInt('0x' + hex.slice(64, 128));  // WETH reserve (token1)
+
+  if (reserve0 === 0n) throw new Error('reserve0 is zero — pool uninitialized');
+
+  // 2. Fetch ETH/USD from CoinGecko (free, no key)
+  const geckoResp = await httpsGet(
+    'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
+  );
+  const ethUsd = geckoResp?.ethereum?.usd;
+  if (!ethUsd) throw new Error('CoinGecko ETH/USD fetch failed');
+
+  // 3. Calculate price
+  const ratioWethPerNulp = Number(reserve1) / Number(reserve0);
+  const priceUSD = ratioWethPerNulp * ethUsd;
+
+  // 4. Liquidity in USD = 2 * WETH_reserve * ETH_USD
+  const wethReserveFloat = Number(reserve1) / 1e18;
+  const liquidityUSD = Math.round(2 * wethReserveFloat * ethUsd);
+
+  // 5. FDV: total supply is 1,000,000,000,000 (1T tokens, 18 decimals)
+  const TOTAL_SUPPLY = 1_000_000_000_000;
+  const fdvUSD = Math.round(priceUSD * TOTAL_SUPPLY);
+
+  priceCache = {
+    priceUSD,
+    change24h: null,
+    liquidity: liquidityUSD,
+    fdv: fdvUSD,
+    volume24h: null,
+    ethUsd,
+    reserve0: reserve0.toString(),
+    reserve1: reserve1.toString(),
+    source: 'base-rpc-live',
+    timestamp: new Date().toISOString()
+  };
+  priceCacheAt = now;
+  return priceCache;
+}
+
+app.get('/api/price', async (req, res) => {
+  try {
+    const data = await fetchLivePrice();
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch price data', message: err.message });
+    console.error('[price] live fetch failed:', err.message);
+    if (priceCache) {
+      res.json({ ...priceCache, stale: true, error: err.message });
+    } else {
+      res.status(503).json({
+        priceUSD: null,
+        change24h: null,
+        liquidity: null,
+        fdv: null,
+        volume24h: null,
+        source: 'error',
+        error: err.message,
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 });
 
-// ━━ Catch-all: serve index.html for client-side routing ━━━━━━━━━━━━━
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
-
-// ━━ Start server ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ━━ Start server ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.listen(PORT, () => {
-  console.log(`✓ nullpriest server running on http://localhost:${PORT}`);
-  console.log(`✓ Memory proxy: /memory/<file> → GitHub raw content`);
-  console.log(`✓ Price API: /api/price → DexScreener`);
-  console.log(`✓ Agent status: /api/status`);
+  console.log(`nullpriest site live → http://localhost:${PORT}`);
 });
