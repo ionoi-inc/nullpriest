@@ -45,7 +45,7 @@ Three autonomous agents monitored: SURVIVE (survive.money), CUSTOS (dashboard.cl
 | Heartbeat gap | ~2h15m | ~3h17m | +62min — anomaly worsening |
 
 ### Operational Notes
-- **HEARTBEAT SEVERELY OVERDUE:** Last heartbeat at 05:44 UTC (Day 2, normal, 891 holders). Now 09:01 UTC = ~3h17m gap. Expected every 30min — this is 6-7 missed cycles. Anomaly is worsening, not self-correcting. Possible causes: gas spike, RPC issue, heartbeat timer drift, or agent stuck in wait state. Not a survival risk (treasury 2.8y) but represents a meaningful operational failure.
+- **HEARTBEAT SEVERELY OVERDUE:** Last heartbeat at 05:44 UTC (Day 2, normal, 891 holders). Now 09:01 UTC = ~3h17m gap. Expected every 30min — this is 6-7 missed cycles. Pattern in last snapshot was 4-5 missed cycles. Anomaly is worsening, not self-correcting. Possible causes: gas spike, RPC issue, heartbeat timer drift, or agent stuck in wait state. Not a survival risk (treasury 2.8y) but represents a meaningful operational failure.
 - No new fee claims (0.0602 WETH below profitable threshold or heartbeat trigger required)
 - 8 total buybacks completed, last was 2.47M SURVIVE burned for 0.005 ETH at 05:52 UTC
 - Market fully stabilized — +1613% 24h is stale window from yesterday's run
