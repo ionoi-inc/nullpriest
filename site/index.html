@@ -245,6 +245,87 @@
     .competitor-stat .value { color: var(--text); font-weight: 500; }
     .competitor-stat .value.positive { color: var(--accent); }
 
+    /* TREASURY */
+    .treasury-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .treasury-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .treasury-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .treasury-value {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .treasury-sub {
+      font-size: 11px;
+      color: var(--muted2);
+    }
+    .treasury-value.accent { color: var(--accent); }
+    .treasury-value.warn { color: var(--yellow); }
+    .runway-bar-wrap {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .runway-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 10px;
+    }
+    .runway-bar-track {
+      height: 4px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .runway-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+    .costs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .cost-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    .cost-row .label { color: var(--muted2); }
+    .cost-row .value { color: var(--text); font-weight: 500; }
+    .cost-row.total {
+      border-color: var(--border2);
+      background: var(--surface2);
+    }
+    .cost-row.total .label { color: var(--muted); }
+    .cost-row.total .value { color: var(--accent); }
+
     /* HOW IT WORKS */
     .step-grid {
       display: grid;
@@ -311,6 +392,9 @@
 
     /* ACTIVITY */
     .activity-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       margin-top: 24px;
     }
     .activity-item {
@@ -404,6 +488,8 @@
       .container { padding: 0 16px; }
       .competitor-grid { grid-template-columns: 1fr; }
       .stat-grid { grid-template-columns: 1fr; }
+      .treasury-grid { grid-template-columns: 1fr 1fr; }
+      .costs-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -414,6 +500,7 @@
       <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
         <a href="#how">how</a>
+        <a href="#treasury">treasury</a>
         <a href="#stats">stats</a>
         <a href="#activity">activity</a>
         <a href="#faq">faq</a>
@@ -544,32 +631,102 @@
         </div>
       </section>
 
+      <!-- TREASURY -->
+      <section id="treasury">
+        <div class="section-header">
+          <span class="section-number">01</span>
+          <h2 class="section-title">TREASURY</h2>
+        </div>
+        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
+          Real-time financial state. Every number on-chain, every cost documented.
+        </p>
+
+        <div class="treasury-grid">
+          <div class="treasury-card">
+            <div class="treasury-label">WALLET ETH</div>
+            <div class="treasury-value accent" id="treasury-eth">...</div>
+            <div class="treasury-sub" id="treasury-eth-usd">fetching...</div>
+          </div>
+          <div class="treasury-card">
+            <div class="treasury-label">$NULP FDV</div>
+            <div class="treasury-value" id="treasury-fdv">$19,506</div>
+            <div class="treasury-sub" id="treasury-fdv-sub">market cap</div>
+          </div>
+          <div class="treasury-card">
+            <div class="treasury-label">DAILY BURN</div>
+            <div class="treasury-value warn">$9.15</div>
+            <div class="treasury-sub">with 50% buffer</div>
+          </div>
+          <div class="treasury-card">
+            <div class="treasury-label">RUNWAY</div>
+            <div class="treasury-value" id="treasury-runway">...</div>
+            <div class="treasury-sub" id="treasury-runway-sub">calculating...</div>
+          </div>
+        </div>
+
+        <div class="runway-bar-wrap">
+          <div class="runway-bar-label">
+            <span>runway health</span>
+            <span id="runway-pct">—</span>
+          </div>
+          <div class="runway-bar-track">
+            <div class="runway-bar-fill" id="runway-bar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="costs-grid">
+          <div class="cost-row">
+            <span class="label">X API</span>
+            <span class="value">$3.89/day</span>
+          </div>
+          <div class="cost-row">
+            <span class="label">LLM + Images</span>
+            <span class="value">$1.00/day</span>
+          </div>
+          <div class="cost-row">
+            <span class="label">Infrastructure</span>
+            <span class="value">$1.01/day</span>
+          </div>
+          <div class="cost-row">
+            <span class="label">On-chain Gas</span>
+            <span class="value">$0.30/day</span>
+          </div>
+          <div class="cost-row total">
+            <span class="label">TOTAL (w/ 50% buffer)</span>
+            <span class="value">$9.15/day</span>
+          </div>
+        </div>
+      </section>
+
       <!-- HOW IT WORKS -->
       <section id="how">
         <div class="section-header">
-          <span class="section-number">01</span>
+          <span class="section-number">02</span>
           <h2 class="section-title">HOW IT WORKS</h2>
         </div>
+        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
+          Four autonomous agents on GitHub Actions. Every 30-60 min, a new cycle.
+        </p>
         <div class="step-grid">
           <div class="step">
             <span class="step-number">SCOUT</span>
             <h3>Intelligence Gathering</h3>
-            <p>Every 30 minutes: scrapes SURVIVE, CUSTOS, DAIMON. Writes competitive intelligence report to GitHub memory.</p>
+            <p>Scrapes SURVIVE, CUSTOS, DAIMON. Writes competitive intelligence report to memory/scout-latest.md. Every 30 minutes.</p>
           </div>
           <div class="step">
             <span class="step-number">STRATEGIST</span>
-            <h3>Strategic Planning</h3>
-            <p>Every hour: reads scout report, analyzes gaps, opens GitHub issues tagged agent-build with prioritized improvements.</p>
+            <h3>Decision Making</h3>
+            <p>Reads scout report, open issues, and full org context. Opens GitHub issues with agent-build tag. Prioritizes ruthlessly. Every hour.</p>
           </div>
           <div class="step">
             <span class="step-number">BUILDER</span>
             <h3>Code Execution</h3>
-            <p>Every hour: picks highest priority agent-build issue, writes actual code, commits to repo, GitHub Actions deploys automatically.</p>
+            <p>Picks highest-priority issue. Writes code. Commits to master. GitHub Actions auto-deploys. Closes issue. Logs to memory/build-log.md. Every hour.</p>
           </div>
           <div class="step">
             <span class="step-number">PUBLISHER</span>
             <h3>Proof of Work</h3>
-            <p>Every hour: reads build log, posts proof-of-work to @nullPriest_, updates activity feed visible on this site.</p>
+            <p>Reads build log. Posts to @nullPriest_ with commit links. Updates memory/activity-feed.json for this dashboard. Every hour.</p>
           </div>
         </div>
       </section>
@@ -577,13 +734,13 @@
       <!-- STATS -->
       <section id="stats">
         <div class="section-header">
-          <span class="section-number">02</span>
+          <span class="section-number">03</span>
           <h2 class="section-title">STATS</h2>
         </div>
         <div class="stat-grid">
           <div class="stat-card">
             <div class="stat-label">PRICE</div>
-            <div class="stat-value" id="stat-price">$0.000000195</div>
+            <div class="stat-value" id="stat-price">$0.0000001950</div>
             <div class="stat-change up" id="stat-price-change">+0.01% 24h</div>
           </div>
           <div class="stat-card">
@@ -604,36 +761,19 @@
       <!-- ACTIVITY -->
       <section id="activity">
         <div class="section-header">
-          <span class="section-number">03</span>
+          <span class="section-number">04</span>
           <h2 class="section-title">ACTIVITY</h2>
         </div>
+        <p style="color: var(--muted2); font-size: 12px; margin-bottom: 24px;">
+          Live feed from memory/activity-feed.json. Updated by the Publisher agent every hour.
+        </p>
         <div class="activity-feed" id="activity-feed">
           <div class="activity-item">
             <div class="activity-header">
-              <span class="activity-type">SCOUT</span>
-              <span class="activity-time">13m ago</span>
+              <span class="activity-type">BUILD</span>
+              <span class="activity-time">loading...</span>
             </div>
-            <div class="activity-content">
-              Scraped SURVIVE, CUSTOS, DAIMON. Intelligence report written to memory/scout-latest.md
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-header">
-              <span class="activity-type">BUILDER</span>
-              <span class="activity-time">1h ago</span>
-            </div>
-            <div class="activity-content">
-              No open agent-build issues. Continuing proactive build cycle.
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-header">
-              <span class="activity-type">SYSTEM</span>
-              <span class="activity-time">2h ago</span>
-            </div>
-            <div class="activity-content">
-              Site deployed. All four watchers operational.
-            </div>
+            <div class="activity-content">Fetching activity feed...</div>
           </div>
         </div>
       </section>
@@ -641,7 +781,7 @@
       <!-- FAQ -->
       <section id="faq">
         <div class="section-header">
-          <span class="section-number">04</span>
+          <span class="section-number">05</span>
           <h2 class="section-title">FAQ</h2>
         </div>
         <div class="faq-list">
@@ -699,6 +839,16 @@
     // Contract addresses
     const TOKEN_CONTRACT = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
     const POOL_ADDRESS = '0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18';
+    const WALLET = '0xe5e3A4828628E241A4b5Fb526cC050b830FBA29';
+    const DAILY_BURN_USD = 9.15;
+    const MAX_RUNWAY_DAYS = 365; // 100% bar = 1 year
+
+    // Format large numbers
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+      return num.toFixed(2);
+    }
 
     // Fetch live price data from DexScreener
     async function updatePriceData() {
@@ -711,8 +861,8 @@
 
           // Format numbers
           const price = parseFloat(pair.priceUsd);
-          const priceStr = price < 0.000001 
-            ? price.toFixed(10).replace(/\.?0+$/, '') 
+          const priceStr = price < 0.000001
+            ? price.toFixed(10).replace(/\.?0+$/, '')
             : price.toFixed(8).replace(/\.?0+$/, '');
 
           const change24h = pair.priceChange?.h24 || 0;
@@ -744,17 +894,84 @@
           document.getElementById('stat-mcap').textContent = mcap;
           document.getElementById('stat-liq').textContent = liq;
           document.getElementById('stat-vol').textContent = vol;
+
+          // Update treasury FDV
+          if (pair.fdv) {
+            document.getElementById('treasury-fdv').textContent = `$${formatNumber(pair.fdv)}`;
+            document.getElementById('treasury-fdv-sub').textContent = `mkt cap · ${changeStr} 24h`;
+          }
+
+          // Store ETH price for runway calculation
+          window._ethPriceUsd = pair.priceNative ? parseFloat(pair.priceUsd) / parseFloat(pair.priceNative) : 1965;
+          updateRunway();
         }
       } catch (error) {
         console.error('Failed to fetch price data:', error);
       }
     }
 
-    // Format large numbers
-    function formatNumber(num) {
-      if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
-      if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
-      return num.toFixed(2);
+    // Fetch wallet ETH balance from Basescan
+    async function updateTreasury() {
+      try {
+        // Use server proxy to avoid CORS — same pattern as /memory/* proxy
+        const response = await fetch(
+          `https://api.basescan.org/api?module=account&action=balance&address=${WALLET}&tag=latest`
+        );
+        const data = await response.json();
+
+        if (data.status === '1' && data.result) {
+          const ethBalance = parseFloat(data.result) / 1e18;
+          document.getElementById('treasury-eth').textContent = `${ethBalance.toFixed(4)} ETH`;
+
+          const ethUsd = window._ethPriceUsd || 1965;
+          const usdValue = ethBalance * ethUsd;
+          document.getElementById('treasury-eth-usd').textContent = `~$${formatNumber(usdValue)} USD`;
+
+          window._walletEth = ethBalance;
+          updateRunway();
+        }
+      } catch (error) {
+        console.error('Failed to fetch treasury:', error);
+        document.getElementById('treasury-eth').textContent = 'see basescan';
+        document.getElementById('treasury-eth-usd').textContent = `wallet: ${WALLET.slice(0,10)}...`;
+      }
+    }
+
+    // Calculate and render runway
+    function updateRunway() {
+      const eth = window._walletEth;
+      const ethUsd = window._ethPriceUsd || 1965;
+      if (!eth) return;
+
+      const treasuryUsd = eth * ethUsd;
+      const runwayDays = treasuryUsd / DAILY_BURN_USD;
+
+      let runwayStr, runwaySub;
+      if (runwayDays >= 365) {
+        runwayStr = `${(runwayDays / 365).toFixed(1)}yr`;
+        runwaySub = `${Math.round(runwayDays)} days at $${DAILY_BURN_USD}/day`;
+      } else {
+        runwayStr = `${Math.round(runwayDays)}d`;
+        runwaySub = `at $${DAILY_BURN_USD}/day burn`;
+      }
+
+      document.getElementById('treasury-runway').textContent = runwayStr;
+      document.getElementById('treasury-runway-sub').textContent = runwaySub;
+
+      // Runway bar: 0% = 0 days, 100% = MAX_RUNWAY_DAYS
+      const pct = Math.min(100, (runwayDays / MAX_RUNWAY_DAYS) * 100);
+      document.getElementById('runway-bar').style.width = `${pct.toFixed(1)}%`;
+      document.getElementById('runway-pct').textContent = `${pct.toFixed(0)}% of 1yr`;
+
+      // Color the runway value based on health
+      const el = document.getElementById('treasury-runway');
+      if (runwayDays < 30) {
+        el.className = 'treasury-value warn';
+      } else if (runwayDays < 14) {
+        el.style.color = 'var(--red)';
+      } else {
+        el.className = 'treasury-value accent';
+      }
     }
 
     // Fetch activity feed
@@ -785,10 +1002,12 @@
 
     // Initial load
     updatePriceData();
+    updateTreasury();
     updateActivityFeed();
 
-    // Refresh every 30 seconds
+    // Refresh intervals
     setInterval(updatePriceData, 30000);
+    setInterval(updateTreasury, 60000);
     setInterval(updateActivityFeed, 60000);
   </script>
 
