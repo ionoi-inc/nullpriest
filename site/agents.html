@@ -11,19 +11,21 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     /* ── NAV ── */
-    .nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,15,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); }
-    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; height: 56px; }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo-mark { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: var(--accent-primary); }
-    .nav-logo-slash { color: var(--text-muted); }
-    .nav-links { display: flex; align-items: center; gap: var(--space-xl); }
-    .nav-link { font-size: 0.76rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color var(--transition-fast); }
-    .nav-link:hover { color: var(--text-primary); }
-    .nav-link.active { color: var(--text-primary); }
-    .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; border-radius: var(--radius-md); text-decoration: none; transition: all var(--transition-fast); border: none; cursor: pointer; font-family: var(--font-main); }
-    .btn-md { padding: 8px 18px; font-size: 0.72rem; }
-    .btn-primary { background: var(--gradient-primary); color: #fff; }
-    .btn-primary:hover { box-shadow: 0 0 24px rgba(168,85,247,0.4); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 44px; background: rgba(8,8,8,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #1e1e1e; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { font-size: 13px; font-weight: 500; color: #e8e8e8; text-decoration: none; letter-spacing: -0.01em; font-family: 'IBM Plex Mono', monospace; }
+    .nav-logo .dot { color: #00ff88; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 11px; color: #555; text-decoration: none; letter-spacing: 0.05em; transition: color 0.15s; font-family: 'IBM Plex Mono', monospace; }
+    .nav-links a:hover, .nav-links a.active { color: #e8e8e8; }
+    .nav-right { display: flex; align-items: center; gap: 16px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
+    .nav-price { color: #e8e8e8; font-weight: 500; }
+    .nav-change.up { color: #00ff88; }
+    .nav-change.down { color: #ff4444; }
+    .live-dot { width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: pulse 2s ease-in-out infinite; }
+    .live-label { color: #555; font-size: 10px; letter-spacing: 0.1em; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    body { padding-top: 44px; }
 
     /* ── PAGE ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-xl); }
@@ -249,17 +251,21 @@
 <body>
 
   <!-- NAV -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="nav-logo-mark">null<span class="nav-logo-slash">/</span>priest</span>
-      </a>
+  <nav>
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo">null<span class="dot">priest</span></a>
       <div class="nav-links">
-        <a href="dashboard.html" class="nav-link">Dashboard</a>
-        <a href="agents.html" class="nav-link active">Agents</a>
-        <a href="https://x.com/nullPriest_" target="_blank" class="nav-link">X</a>
-        <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" class="btn btn-primary btn-md">Buy $NULP</a>
+        <a href="dashboard.html">dashboard</a>
+        <a href="agents.html" class="active">agents</a>
+        <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>
+        <a href="https://www.clanker.world/clanker/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">buy $NULP</a>
       </div>
+    </div>
+    <div class="nav-right">
+      <span class="live-label">LIVE</span>
+      <div class="live-dot"></div>
+      <span class="nav-price" id="nav-price">—</span>
+      <span class="nav-change" id="nav-change">—</span>
     </div>
   </nav>
 
@@ -684,6 +690,27 @@
 
     loadFart();
     setInterval(loadFart, 60000);
+  </script>
+
+  <script>
+    // ── NAV LIVE PRICE ──
+    (async function navPrice() {
+      const ADDR = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+      try {
+        const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${ADDR}`);
+        const d = await r.json();
+        const p = d.pairs?.[0];
+        if (!p) return;
+        const price = parseFloat(p.priceUsd) || 0;
+        const chg   = p.priceChange?.h24;
+        const fmtP  = price < 0.001 ? '$' + price.toFixed(6) : price < 1 ? '$' + price.toFixed(4) : '$' + price.toFixed(2);
+        const fmtC  = chg != null ? (chg > 0 ? '+' : '') + chg.toFixed(2) + '%' : '—';
+        const navP  = document.getElementById('nav-price');
+        const navC  = document.getElementById('nav-change');
+        if (navP) navP.textContent = fmtP;
+        if (navC) { navC.textContent = fmtC; navC.className = 'nav-change ' + (chg >= 0 ? 'up' : 'down'); }
+      } catch(e) {}
+    })();
   </script>
 </body>
 </html>
