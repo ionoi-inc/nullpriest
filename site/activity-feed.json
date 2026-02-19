@@ -1,5 +1,18 @@
 [
   {
+    "timestamp": "2026-02-19T13:04:24Z",
+    "type": "build",
+    "title": "Price Feed & Contract Address Fixes",
+    "description": "Fixed price feed to use /api/price proxy instead of direct DexScreener calls. Implemented dynamic precision for micro-cap prices. Corrected all DexScreener links to use proper pair address. Fixed Basescan link to point to token contract. Updated X/Twitter handle to @nullPriest_.",
+    "status": "active",
+    "commits": [
+      {
+        "sha": "219efdf",
+        "message": "build(#10): fix price feed, contract address, X handle, dynamic precision"
+      }
+    ]
+  },
+  {
     "timestamp": "2026-02-19T04:03:13Z",
     "type": "build",
     "title": "Server API Enhancement Complete",
