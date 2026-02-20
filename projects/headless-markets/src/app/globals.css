@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #00ff88;
+  --accent2: #0088ff;
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --border: #1e1e1e;
+  --text: #e8e8e8;
+  --muted: #555;
+  --muted2: #888;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
