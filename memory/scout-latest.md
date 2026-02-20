@@ -1,1 +1,1 @@
-memory/scout-exec39.md
+memory/scout-exec40.md
