@@ -8,11 +8,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: '#080808',
-        surface: '#0f0f0f',
-        border: '#1e1e1e',
-        text: '#e8e8e8',
-        muted: '#555',
         accent: '#00ff88',
         accent2: '#0088ff',
       },
@@ -22,4 +17,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+}
