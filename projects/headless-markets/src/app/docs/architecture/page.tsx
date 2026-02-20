@@ -1,111 +1,190 @@
 export const metadata = {
   title: 'Architecture — headless-markets',
-  description: 'Technical architecture: quorum voting, bonding curve math, contract interfaces.',
-}
+  description: 'Quorum voting, bonding curve math, and contract interfaces for headless-markets.',
+};
 
-export default function ArchitecturePage() {
+export default function ArchitectureDocs() {
   return (
-    <main style={{ marginTop: '44px', maxWidth: '720px', margin: '44px auto 0', padding: '60px 24px 120px' }}>
-      <div style={{ marginBottom: '48px' }}>
-        <a href="/" style={{ fontSize: '11px', color: '#555', textDecoration: 'none' }}>← headless-markets</a>
-      </div>
+    <main className="min-h-screen bg-[#080808] text-[#e8e8e8] font-mono">
+      <nav className="fixed top-0 left-0 right-0 z-50 h-11 flex items-center justify-between px-8 bg-[rgba(8,8,8,0.97)] border-b border-[#1e1e1e]">
+        <a href="/" className="text-sm font-medium text-[#e8e8e8] no-underline">
+          headless<span className="text-[#00ff88]">-</span>markets
+        </a>
+        <a href="/" className="text-[11px] text-[#555] hover:text-[#e8e8e8] transition-colors no-underline">← back</a>
+      </nav>
 
-      <h1 style={{ fontSize: '32px', fontWeight: 500, letterSpacing: '-0.02em', marginBottom: '16px', color: '#e8e8e8' }}>
-        Architecture
-      </h1>
-      <p style={{ fontSize: '13px', color: '#555', marginBottom: '60px' }}>
-        Last updated: 2026-02-20 · v0.1.0-alpha
-      </p>
+      <div className="max-w-3xl mx-auto px-6 pt-24 pb-32">
+        <p className="text-[10px] text-[#555] tracking-widest uppercase mb-4">docs / architecture</p>
+        <h1 className="text-[40px] font-medium leading-tight tracking-tight mb-4">Architecture</h1>
+        <p className="text-[13px] text-[#888] mb-16 leading-[1.7]">
+          headless-markets is a three-contract system for launching, funding, and governing AI agents on Base.
+          Every design decision optimizes for: transparent price discovery, on-chain governance, and sustainable protocol revenue.
+        </p>
 
-      {/* QUORUM VOTING */}
-      <section style={{ marginBottom: '60px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 500, color: '#00ff88', marginBottom: '24px', letterSpacing: '-0.01em' }}>
-          01 — Quorum Voting Mechanic
-        </h2>
-        <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.8 }}>
-          <p style={{ marginBottom: '16px' }}>
-            Every agent token launch requires community approval. This prevents the launchpad from becoming a pump-and-dump factory.
+        {/* BONDING CURVE MATH */}
+        <section className="mb-16">
+          <h2 className="text-[20px] font-medium mb-6 text-[#00ff88]">Bonding Curve Math</h2>
+          <p className="text-[12px] text-[#888] mb-6 leading-[1.7]">
+            Price is a function of supply. As tokens are purchased, price increases along a curve. 
+            This creates a fair-launch mechanism — early believers get better prices, late entrants pay a premium.
           </p>
-          <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '24px', marginBottom: '16px', fontFamily: 'monospace' }}>
-            <div style={{ color: '#00ff88', marginBottom: '8px' }}>// Quorum parameters</div>
-            <div style={{ color: '#e8e8e8' }}>QUORUM_THRESHOLD = 30% of circulating $NULP</div>
-            <div style={{ color: '#e8e8e8' }}>VOTING_WINDOW = 72 hours</div>
-            <div style={{ color: '#e8e8e8' }}>MIN_APPROVAL = 51% of votes cast</div>
-            <div style={{ color: '#e8e8e8' }}>VETO_THRESHOLD = 20% of circulating (instant reject)</div>
+          <div className="p-5 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f] mb-6">
+            <div className="text-[11px] text-[#555] mb-3 tracking-wider uppercase">price function</div>
+            <code className="text-[13px] text-[#00ff88] block leading-[1.8]">
+              P(s) = a · s²<br/>
+              cost = ∫₀ˢ P(x) dx = (a · s³) / 3
+            </code>
           </div>
-          <p>
-            If quorum is not reached within 72 hours, the proposal expires and the agent&apos;s stake is returned minus a 2% processing fee. This discourages spam proposals.
-          </p>
-        </div>
-      </section>
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {[
+              { pct: '60%', label: 'Liquidity Pool', desc: 'Paired with ETH for DEX trading' },
+              { pct: '30%', label: 'Quorum Vault', desc: 'Locked for governance voting' },
+              { pct: '10%', label: 'Protocol Fee', desc: 'nullpriest treasury revenue' },
+            ].map((a) => (
+              <div key={a.label} className="p-4 rounded border border-[#1e1e1e] bg-[#0f0f0f] text-center">
+                <div className="text-[24px] font-medium text-[#00ff88] mb-1">{a.pct}</div>
+                <div className="text-[11px] font-medium mb-1">{a.label}</div>
+                <div className="text-[10px] text-[#555] leading-[1.5]">{a.desc}</div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* BONDING CURVE */}
-      <section style={{ marginBottom: '60px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 500, color: '#00ff88', marginBottom: '24px', letterSpacing: '-0.01em' }}>
-          02 — Bonding Curve Math
-        </h2>
-        <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.8 }}>
-          <p style={{ marginBottom: '16px' }}>
-            Upon approval, a bonding curve activates for the agent token. Funds are split by protocol rule — not discretion.
+        {/* QUORUM VOTING */}
+        <section className="mb-16">
+          <h2 className="text-[20px] font-medium mb-6 text-[#00ff88]">Quorum Voting Mechanic</h2>
+          <p className="text-[12px] text-[#888] mb-6 leading-[1.7]">
+            30% of total token supply must vote YES for a proposal to pass. This prevents low-participation governance attacks
+            while keeping governance accessible. Proposals have a 48-hour voting window and a 24-hour timelock before execution.
           </p>
-          <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '24px', marginBottom: '16px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', textAlign: 'center' }}>
-              {[
-                { pct: '60%', label: 'Agent Development', color: '#00ff88', desc: 'Escrowed. Released on milestone completion.' },
-                { pct: '30%', label: 'Liquidity Pool', color: '#0088ff', desc: 'Locked 12 months. Prevents rug pulls.' },
-                { pct: '10%', label: 'Protocol Fee', color: '#ffcc00', desc: 'To $NULP holders. Immediate distribution.' },
-              ].map(item => (
-                <div key={item.pct}>
-                  <div style={{ fontSize: '28px', fontWeight: 500, color: item.color, marginBottom: '8px' }}>{item.pct}</div>
-                  <div style={{ fontSize: '11px', color: '#e8e8e8', marginBottom: '8px' }}>{item.label}</div>
-                  <div style={{ fontSize: '10px', color: '#555' }}>{item.desc}</div>
-                </div>
-              ))}
+          <div className="space-y-3">
+            {[
+              { step: '1', text: 'Any token holder with ≥ 1% supply can submit a proposal' },
+              { step: '2', text: '48-hour voting window opens immediately on submission' },
+              { step: '3', text: '30% quorum threshold must be reached (YES votes / total supply)' },
+              { step: '4', text: '24-hour timelock before execution — emergency veto window' },
+              { step: '5', text: 'Execution calls target contract with encoded calldata' },
+            ].map((s) => (
+              <div key={s.step} className="flex gap-4 items-start p-4 rounded border border-[#1e1e1e] bg-[#0f0f0f]">
+                <span className="text-[10px] text-[#00ff88] font-medium mt-0.5 min-w-[16px]">{s.step}</span>
+                <span className="text-[12px] text-[#888] leading-[1.6]">{s.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CONTRACT INTERFACES */}
+        <section className="mb-16">
+          <h2 className="text-[20px] font-medium mb-6 text-[#00ff88]">Contract Interfaces</h2>
+
+          <div className="space-y-6">
+            <div className="p-5 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+              <div className="text-[13px] font-medium text-[#e8e8e8] mb-1">AgentRegistry.sol</div>
+              <div className="text-[11px] text-[#555] mb-4">Register agents, assign token pairs, track metadata</div>
+              <pre className="text-[11px] text-[#888] leading-[1.7] overflow-x-auto">{`interface IAgentRegistry {
+  function registerAgent(
+    string calldata name,
+    address tokenAddress,
+    string calldata metadataURI
+  ) external returns (uint256 agentId);
+
+  function getAgent(uint256 agentId)
+    external view returns (Agent memory);
+
+  function updateMetadata(
+    uint256 agentId,
+    string calldata newURI
+  ) external;
+
+  event AgentRegistered(
+    uint256 indexed agentId,
+    address indexed token,
+    address indexed deployer
+  );
+}`}</pre>
+            </div>
+
+            <div className="p-5 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+              <div className="text-[13px] font-medium text-[#e8e8e8] mb-1">BondingCurve.sol</div>
+              <div className="text-[11px] text-[#555] mb-4">Price discovery, 60/30/10 allocation, slippage protection</div>
+              <pre className="text-[11px] text-[#888] leading-[1.7] overflow-x-auto">{`interface IBondingCurve {
+  function buy(
+    uint256 agentId,
+    uint256 minTokensOut
+  ) external payable returns (uint256 tokensOut);
+
+  function sell(
+    uint256 agentId,
+    uint256 tokenAmount,
+    uint256 minEthOut
+  ) external returns (uint256 ethOut);
+
+  function getPrice(uint256 agentId)
+    external view returns (uint256 priceWei);
+
+  function getCost(
+    uint256 agentId,
+    uint256 tokenAmount
+  ) external view returns (uint256 costWei);
+
+  event Buy(uint256 indexed agentId, address buyer, uint256 eth, uint256 tokens);
+  event Sell(uint256 indexed agentId, address seller, uint256 tokens, uint256 eth);
+}`}</pre>
+            </div>
+
+            <div className="p-5 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+              <div className="text-[13px] font-medium text-[#e8e8e8] mb-1">QuorumVault.sol</div>
+              <div className="text-[11px] text-[#555] mb-4">30% quorum voting, 48h window, 24h timelock</div>
+              <pre className="text-[11px] text-[#888] leading-[1.7] overflow-x-auto">{`interface IQuorumVault {
+  function propose(
+    uint256 agentId,
+    address target,
+    bytes calldata callData,
+    string calldata description
+  ) external returns (uint256 proposalId);
+
+  function vote(
+    uint256 proposalId,
+    bool support
+  ) external;
+
+  function execute(uint256 proposalId) external;
+
+  function getProposal(uint256 proposalId)
+    external view returns (Proposal memory);
+
+  // 30% of total supply must vote YES
+  function QUORUM_THRESHOLD() external view returns (uint256); // 3000 = 30%
+
+  event ProposalCreated(uint256 indexed proposalId, address proposer);
+  event Voted(uint256 indexed proposalId, address voter, bool support);
+  event Executed(uint256 indexed proposalId);
+}`}</pre>
             </div>
           </div>
-          <p style={{ marginBottom: '12px' }}>The bonding curve formula:</p>
-          <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '16px', fontFamily: 'monospace', color: '#00ff88' }}>
-            price(supply) = initialPrice × e^(k × supply)
-            <br />where k = ln(targetPrice / initialPrice) / maxSupply
+        </section>
+
+        {/* STATUS */}
+        <section className="p-6 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+          <div className="text-[10px] text-[#555] tracking-widest uppercase mb-4">build status</div>
+          <div className="space-y-2">
+            {[
+              { item: 'Architecture docs', status: 'LIVE', color: '#00ff88' },
+              { item: 'Contract interfaces', status: 'SPEC', color: '#ffcc00' },
+              { item: 'BondingCurve.sol', status: 'IN PROGRESS', color: '#ffcc00' },
+              { item: 'AgentRegistry.sol', status: 'IN PROGRESS', color: '#ffcc00' },
+              { item: 'QuorumVault.sol', status: 'PENDING', color: '#555' },
+              { item: 'Frontend', status: 'LIVE', color: '#00ff88' },
+              { item: 'Testnet deploy', status: 'PENDING', color: '#555' },
+            ].map((r) => (
+              <div key={r.item} className="flex justify-between items-center text-[11px]">
+                <span className="text-[#888]">{r.item}</span>
+                <span style={{ color: r.color }} className="font-medium">{r.status}</span>
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* CONTRACT INTERFACES */}
-      <section style={{ marginBottom: '60px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 500, color: '#00ff88', marginBottom: '24px', letterSpacing: '-0.01em' }}>
-          03 — Contract Interfaces
-        </h2>
-        <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.8 }}>
-          <p style={{ marginBottom: '16px' }}>Core contracts (Solidity, Base chain). Addresses TBD at mainnet launch.</p>
-          <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '8px', padding: '24px', fontFamily: 'monospace', fontSize: '12px' }}>
-            <div style={{ color: '#0088ff', marginBottom: '16px' }}>// IHeadlessMarkets.sol</div>
-            <div style={{ color: '#e8e8e8', marginBottom: '8px' }}>interface IHeadlessMarkets {'{'}</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function submitProposal(bytes calldata manifest) external payable;</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function vote(uint256 proposalId, bool support) external;</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function executeApproved(uint256 proposalId) external;</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function claimProtocolFee() external;</div>
-            <div style={{ color: '#e8e8e8', marginBottom: '16px' }}>{'}'}</div>
-
-            <div style={{ color: '#0088ff', marginBottom: '16px' }}>// IBondingCurve.sol</div>
-            <div style={{ color: '#e8e8e8', marginBottom: '8px' }}>interface IBondingCurve {'{'}</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function buy(uint256 agentTokenId) external payable returns (uint256 tokensOut);</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function sell(uint256 agentTokenId, uint256 amount) external returns (uint256 ethOut);</div>
-            <div style={{ color: '#555', paddingLeft: '16px', marginBottom: '4px' }}>function getPrice(uint256 agentTokenId) external view returns (uint256);</div>
-            <div style={{ color: '#e8e8e8' }}>{'}'}</div>
-          </div>
-        </div>
-      </section>
-
-      {/* COMPETITION NOTE */}
-      <section style={{ padding: '24px', background: 'rgba(0,136,255,0.05)', border: '1px solid rgba(0,136,255,0.15)', borderRadius: '8px' }}>
-        <div style={{ fontSize: '11px', color: '#0088ff', letterSpacing: '0.06em', marginBottom: '12px' }}>STATUS</div>
-        <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.7 }}>
-          Architecture finalized. Smart contracts in development. Virtuals Protocol ACP launched with $478M aGDP — 
-          we are building a more accountable alternative with quorum-gated launches and mandatory milestone delivery. 
-          Target: Base mainnet Q2 2026.
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   )
 }
