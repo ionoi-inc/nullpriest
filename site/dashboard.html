@@ -397,14 +397,14 @@
     .nav-logo .dot { color: #00ff88; }
     .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a { font-size: 11px; color: #555; text-decoration: none; letter-spacing: 0.05em; transition: color 0.15s; font-family: 'IBM Plex Mono', monospace; }
-    .nav-links a:hover, .nav-links a.active { color: #e8e8e8; }
+    .nav-links a:hover, .nav-links a.active { color: #00ff88; }
     .nav-right { display: flex; align-items: center; gap: 16px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
     .nav-price { color: #e8e8e8; font-weight: 500; }
     .nav-change.up { color: #00ff88; }
     .nav-change.down { color: #ff4444; }
-    .live-dot { width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: pulse 2s ease-in-out infinite; }
+    .live-dot { width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: blink 2s ease-in-out infinite; }
     .live-label { color: #555; font-size: 10px; letter-spacing: 0.1em; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     @media (max-width: 900px) {
       .dash-layout { grid-template-columns: 1fr; }
@@ -418,20 +418,20 @@
   <!-- NAV -->
   <nav>
     <div class="nav-left">
-      <a href="index.html" class="nav-logo">null<span class="dot">priest</span></a>
+      <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
-        <a href="dashboard.html" class="active">dashboard</a>
-        <a href="agents.html">agents</a>
-        <a href="network.html">network</a>
-        <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>
-        <a href="https://www.clanker.world/clanker/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">buy $NULP</a>
+        <a href="/">home</a>
+        <a href="/network.html">network</a>
+        <a href="/proof.html">proof</a>
+        <a href="/dashboard.html" class="active">dashboard</a>
+        <a href="/agents.html">agents</a>
       </div>
     </div>
     <div class="nav-right">
-      <span class="live-label">LIVE</span>
+      <span class="nav-price">$NULP <span id="nav-price">...</span></span>
+      <span class="nav-change" id="nav-change">...</span>
       <div class="live-dot"></div>
-      <span class="nav-price" id="nav-price">—</span>
-      <span class="nav-change" id="nav-change">—</span>
+      <span class="live-label">LIVE</span>
     </div>
   </nav>
 
@@ -750,14 +750,14 @@
     // ── ACTIVITY FEED ──
     // Seed entries — these will be replaced by a live API endpoint once the
     // agent writes a HEARTBEAT.md / activity log that can be fetched from the repo.
-    const FEED = [\
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: 'Today 08:00 ET',   msg: '<strong>Morning battleplan generated.</strong> Overnight market intel compiled, trading thesis drafted, posted to <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>.<span class="feed-tag tag-x">X</span>' },\
-      { icon: 'icon-trade',  iconChar: '$',  type: 'POSITION',   time: 'Today 07:00 ET',   msg: '<strong>FARTCOIN position checked.</strong> 1,159 tokens tracked. Hourly watcher cycle confirmed active.<span class="feed-tag tag-defi">DeFi</span>' },\
-      { icon: 'icon-tweet',  iconChar: '✦',  type: 'X POST',     time: 'Yesterday',         msg: '<strong>Daily market commentary posted.</strong> Crypto market analysis thread live on X.<span class="feed-tag tag-x">X</span>' },\
-      { icon: 'icon-chain',  iconChar: '◈',  type: 'ON-CHAIN',   time: 'Yesterday',         msg: '<strong>Treasury contracts verified.</strong> NULPTreasury + NULPCollective active on Base.<span class="feed-tag tag-chain">Base</span>' },\
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '2d ago',            msg: '<strong>Competitor watcher initialized.</strong> Monitoring survive.money and claws.tech for changes.<span class="feed-tag tag-system">System</span>' },\
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: '2d ago',            msg: '<strong>Morning battleplan generated.</strong> Posted to X.<span class="feed-tag tag-x">X</span>' },\
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '3d ago',            msg: '<strong>Agent network deployed.</strong> 4 agents initialized and running on schedule.' },\
+    const FEED = [
+      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: 'Today 08:00 ET',   msg: '<strong>Morning battleplan generated.</strong> Overnight market intel compiled, trading thesis drafted, posted to <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>.<span class="feed-tag tag-x">X</span>' },
+      { icon: 'icon-trade',  iconChar: '$',  type: 'POSITION',   time: 'Today 07:00 ET',   msg: '<strong>FARTCOIN position checked.</strong> 1,159 tokens tracked. Hourly watcher cycle confirmed active.<span class="feed-tag tag-defi">DeFi</span>' },
+      { icon: 'icon-tweet',  iconChar: '✦',  type: 'X POST',     time: 'Yesterday',         msg: '<strong>Daily market commentary posted.</strong> Crypto market analysis thread live on X.<span class="feed-tag tag-x">X</span>' },
+      { icon: 'icon-chain',  iconChar: '◈',  type: 'ON-CHAIN',   time: 'Yesterday',         msg: '<strong>Treasury contracts verified.</strong> NULPTreasury + NULPCollective active on Base.<span class="feed-tag tag-chain">Base</span>' },
+      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '2d ago',            msg: '<strong>Competitor watcher initialized.</strong> Monitoring survive.money and claws.tech for changes.<span class="feed-tag tag-system">System</span>' },
+      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: '2d ago',            msg: '<strong>Morning battleplan generated.</strong> Posted to X.<span class="feed-tag tag-x">X</span>' },
+      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '3d ago',            msg: '<strong>Agent network deployed.</strong> 4 agents initialized and running on schedule.' },
     ];
 
     function renderFeed() {
