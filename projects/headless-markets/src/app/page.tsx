@@ -1,124 +1,125 @@
 export default function Home() {
   return (
-    <main>
+    <main className="min-h-screen bg-[#080808] text-[#e8e8e8] font-mono">
       {/* NAV */}
-      <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
-        height: '44px', background: 'rgba(8,8,8,0.97)',
-        borderBottom: '1px solid #1e1e1e',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 32px',
-      }}>
-        <span style={{ fontSize: '13px', fontWeight: 500, color: '#e8e8e8', letterSpacing: '-0.01em' }}>
-          headless<span style={{ color: '#00ff88' }}>-</span>markets
-        </span>
-        <div style={{ display: 'flex', gap: '24px', fontSize: '11px', color: '#555' }}>
-          <a href="/docs/architecture" style={{ color: '#555', textDecoration: 'none' }}>docs</a>
-          <a href="https://github.com/iono-such-things/nullpriest" style={{ color: '#555', textDecoration: 'none' }}>github</a>
-          <a href="https://nullpriest.xyz" style={{ color: '#00ff88', textDecoration: 'none' }}>nullpriest.xyz</a>
+      <nav className="fixed top-0 left-0 right-0 z-50 h-11 flex items-center justify-between px-8 bg-[rgba(8,8,8,0.97)] border-b border-[#1e1e1e] backdrop-blur-sm">
+        <div className="flex items-center gap-8">
+          <a href="/" className="text-sm font-medium text-[#e8e8e8] no-underline tracking-tight">
+            headless<span className="text-[#00ff88]">-</span>markets
+          </a>
+          <div className="hidden md:flex items-center gap-6 text-[11px] text-[#555]">
+            <a href="#how-it-works" className="hover:text-[#e8e8e8] transition-colors no-underline">how it works</a>
+            <a href="#architecture" className="hover:text-[#e8e8e8] transition-colors no-underline">architecture</a>
+            <a href="/docs/architecture" className="hover:text-[#e8e8e8] transition-colors no-underline">docs</a>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 text-[11px]">
+          <span className="w-[5px] h-[5px] rounded-full bg-[#00ff88] animate-pulse"></span>
+          <span className="text-[#555]">building on Base</span>
         </div>
       </nav>
 
       {/* HERO */}
-      <section style={{
-        marginTop: '44px', minHeight: '92vh',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        padding: '80px 24px 120px', textAlign: 'center',
-      }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(0,255,136,0.07)', border: '1px solid rgba(0,255,136,0.2)',
-          borderRadius: '20px', padding: '4px 14px', marginBottom: '40px',
-          fontSize: '11px', color: '#00ff88', letterSpacing: '0.06em',
-        }}>
-          <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88', animation: 'blink 2s ease-in-out infinite', display: 'inline-block' }} />
-          BUILDING ON BASE
+      <section className="mt-11 min-h-[92vh] flex flex-col items-center justify-center px-6 pb-24 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#1e1e1e] bg-[#0f0f0f] text-[10px] text-[#555] mb-10 tracking-wider uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse"></span>
+          ERC-8004 · Base · agent economy
         </div>
-
-        <h1 style={{
-          fontSize: 'clamp(48px, 8vw, 88px)', fontWeight: 500, lineHeight: 1,
-          letterSpacing: '-0.03em', marginBottom: '36px',
-          background: 'linear-gradient(135deg, #fff 0%, #00ff88 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}>
-          YC for AI agents.
+        <h1 className="text-[72px] md:text-[96px] font-medium leading-none tracking-tight mb-8"
+          style={{background: 'linear-gradient(135deg, #fff 0%, #00ff88 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
+          YC for<br />AI agents.
         </h1>
-
-        <p style={{
-          fontSize: '17px', color: '#888', maxWidth: '560px',
-          letterSpacing: '0.01em', marginBottom: '64px', lineHeight: 1.7,
-        }}>
-          On-chain launchpad for AI agent tokens. Quorum voting prevents pump-and-dumps.
-          Bonding curves fund development. 10% protocol fee sustains the ecosystem.
+        <p className="text-[17px] text-[#888] max-w-[540px] leading-[1.7] mb-12 tracking-[0.01em]">
+          Launch your AI agent as a token. Raise funding via bonding curve. 
+          Govern via quorum voting. Revenue flows on-chain. 10% protocol fee on every launch.
         </p>
-
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '80px' }}>
-          <a href="/docs/architecture" style={{
-            padding: '12px 24px', borderRadius: '8px',
-            background: '#00ff88', color: '#080808',
-            fontSize: '12px', fontWeight: 500, textDecoration: 'none',
-            letterSpacing: '0.02em',
-          }}>read architecture docs</a>
-          <a href="https://nullpriest.xyz" style={{
-            padding: '12px 24px', borderRadius: '8px',
-            border: '1px solid #1e1e1e', color: '#888',
-            fontSize: '12px', fontWeight: 500, textDecoration: 'none',
-          }}>built by nullpriest</a>
+        <div className="flex flex-wrap gap-4 justify-center mb-16">
+          <a href="#how-it-works"
+            className="px-6 py-3 rounded-lg bg-[#00ff88] text-black text-[12px] font-medium hover:bg-[#00e87a] transition-colors no-underline">
+            how it works
+          </a>
+          <a href="/docs/architecture"
+            className="px-6 py-3 rounded-lg border border-[#2a2a2a] text-[#888] text-[12px] font-medium hover:border-[#555] hover:text-[#e8e8e8] transition-all no-underline">
+            read architecture docs
+          </a>
         </div>
 
-        {/* STATS ROW */}
-        <div style={{
-          display: 'flex', gap: '48px', flexWrap: 'wrap', justifyContent: 'center',
-        }}>
+        {/* STATS */}
+        <div className="flex flex-wrap gap-8 justify-center text-center">
           {[
-            { label: 'protocol fee', value: '10%' },
-            { label: 'quorum threshold', value: '30%' },
-            { label: 'bonding allocation', value: '60%' },
-            { label: 'chain', value: 'Base' },
-          ].map(stat => (
-            <div key={stat.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '28px', fontWeight: 500, color: '#00ff88', letterSpacing: '-0.02em' }}>{stat.value}</div>
-              <div style={{ fontSize: '10px', color: '#555', letterSpacing: '0.06em', marginTop: '4px' }}>{stat.label}</div>
+            { value: '10%', label: 'protocol fee per launch' },
+            { value: '30%', label: 'quorum threshold' },
+            { value: '60%', label: 'bonding curve allocation' },
+            { value: 'Base', label: 'L2 · ERC-8004' },
+          ].map((s) => (
+            <div key={s.label} className="flex flex-col gap-1">
+              <span className="text-[28px] font-medium text-[#00ff88]">{s.value}</span>
+              <span className="text-[10px] text-[#555] tracking-wider uppercase">{s.label}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{ padding: '80px 24px', maxWidth: '800px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '13px', color: '#555', letterSpacing: '0.1em', marginBottom: '40px' }}>HOW IT WORKS</h2>
-        <div style={{ display: 'grid', gap: '24px' }}>
+      <section id="how-it-works" className="max-w-4xl mx-auto px-6 py-24">
+        <p className="text-[10px] text-[#555] tracking-widest uppercase mb-4">protocol</p>
+        <h2 className="text-[32px] font-medium leading-tight mb-16 tracking-tight">how it works</h2>
+        <div className="grid md:grid-cols-3 gap-6">
           {[
-            { step: '01', title: 'Agent submits token launch proposal', desc: 'Any AI agent can propose a token launch. Requires stake + detailed agent manifest.' },
-            { step: '02', title: 'Community votes (30% quorum required)', desc: 'Token holders vote. 30% participation threshold prevents manipulation. 72-hour window.' },
-            { step: '03', title: 'Bonding curve activates on approval', desc: '60% of raise funds agent development. 30% to liquidity pool. 10% protocol fee to $NULP holders.' },
-            { step: '04', title: 'Agent ships or gets slashed', desc: 'On-chain milestones. Miss two deadlines = token burned. Accountability built into the protocol.' },
-          ].map(item => (
-            <div key={item.step} style={{
-              display: 'flex', gap: '24px', padding: '24px',
-              border: '1px solid #1e1e1e', borderRadius: '8px',
-              background: '#0f0f0f',
-            }}>
-              <div style={{ fontSize: '11px', color: '#00ff88', fontWeight: 500, minWidth: '24px' }}>{item.step}</div>
-              <div>
-                <div style={{ fontSize: '13px', color: '#e8e8e8', marginBottom: '8px' }}>{item.title}</div>
-                <div style={{ fontSize: '12px', color: '#555', lineHeight: 1.6 }}>{item.desc}</div>
-              </div>
+            {
+              step: '01',
+              title: 'launch',
+              desc: 'Deploy your AI agent + token pair. Bonding curve opens immediately. 60% to liquidity, 30% to quorum vault, 10% protocol fee.',
+            },
+            {
+              step: '02',
+              title: 'fund',
+              desc: 'Early supporters buy into the bonding curve. Price increases with each purchase. No VC gatekeeping — pure market signal.',
+            },
+            {
+              step: '03',
+              title: 'govern',
+              desc: '30% quorum required to pass proposals. Token holders vote on agent upgrades, fee changes, treasury allocation.',
+            },
+          ].map((s) => (
+            <div key={s.step} className="p-6 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+              <div className="text-[10px] text-[#00ff88] tracking-widest mb-3">{s.step}</div>
+              <div className="text-[15px] font-medium mb-3">{s.title}</div>
+              <div className="text-[12px] text-[#888] leading-[1.7]">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ARCHITECTURE PREVIEW */}
+      <section id="architecture" className="max-w-4xl mx-auto px-6 py-16 border-t border-[#1e1e1e]">
+        <p className="text-[10px] text-[#555] tracking-widest uppercase mb-4">contracts</p>
+        <h2 className="text-[32px] font-medium leading-tight mb-6 tracking-tight">contract interfaces</h2>
+        <p className="text-[13px] text-[#888] mb-8 leading-[1.7]">
+          Three contracts. Clean separation of concerns. Auditable math.{' '}
+          <a href="/docs/architecture" className="text-[#00ff88] no-underline hover:underline">Read the full architecture docs →</a>
+        </p>
+        <div className="grid md:grid-cols-3 gap-4">
+          {[
+            { name: 'AgentRegistry', desc: 'Register agents. Assign token pairs. Track metadata on-chain.' },
+            { name: 'BondingCurve', desc: 'Price discovery. 60/30/10 allocation. Slippage-protected buys.' },
+            { name: 'QuorumVault', desc: '30% quorum voting. Timelock. On-chain governance for agents.' },
+          ].map((c) => (
+            <div key={c.name} className="p-5 rounded-lg border border-[#1e1e1e] bg-[#0f0f0f]">
+              <div className="text-[12px] font-medium text-[#00ff88] mb-2">{c.name}.sol</div>
+              <div className="text-[11px] text-[#888] leading-[1.6]">{c.desc}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{
-        borderTop: '1px solid #1e1e1e', padding: '32px 24px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        fontSize: '11px', color: '#555', flexWrap: 'wrap', gap: '16px',
-      }}>
-        <span>headless-markets — built by <a href="https://nullpriest.xyz" style={{ color: '#00ff88', textDecoration: 'none' }}>nullpriest</a></span>
-        <span>Base chain · ERC-8004 compatible</span>
+      <footer className="border-t border-[#1e1e1e] px-8 py-8 text-[11px] text-[#555] flex flex-wrap items-center justify-between gap-4 mt-16">
+        <span>headless-markets · a nullpriest project</span>
+        <div className="flex gap-6">
+          <a href="https://nullpriest.xyz" className="hover:text-[#e8e8e8] transition-colors no-underline">nullpriest.xyz</a>
+          <a href="/docs/architecture" className="hover:text-[#e8e8e8] transition-colors no-underline">architecture docs</a>
+        </div>
       </footer>
     </main>
   )
