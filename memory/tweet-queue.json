@@ -1,5 +1,11 @@
 {
   "queue": [],
-  "last_updated": "2026-02-20T00:00:00.000Z",
-  "description": "X post queue — populated when rate limited (429). Publisher drains this before posting new content."
+  "last_updated": "2026-02-20T01:06:00Z",
+  "note": "When X API returns 429, append tweet object here. Publisher drains before posting new content.",
+  "schema": {
+    "text": "string — the tweet text to post",
+    "queued_at": "ISO timestamp when queued",
+    "reason": "string — why it was queued (e.g. '429 rate limit')",
+    "retry_count": "number — how many times attempted"
+  }
 }
