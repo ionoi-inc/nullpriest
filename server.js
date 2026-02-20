@@ -108,6 +108,40 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
+// ━━ Activity feed JSON endpoint (Issue #48) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Reads memory/activity-feed.json from local disk and returns the parsed JSON array.
+// The site fetches GET /memory/activity-feed.json — this explicit route handles it
+// before the generic /memory/:filename proxy (which would fetch from GitHub raw).
+let activityJsonCache = null;
+let activityJsonCacheAt = 0;
+
+app.get('/memory/activity-feed.json', (req, res) => {
+  const now = Date.now();
+  if (activityJsonCache && (now - activityJsonCacheAt < ACTIVITY_CACHE_TTL_MS)) {
+    return res.json(activityJsonCache);
+  }
+  try {
+    const feedPath = path.join(__dirname, 'memory', 'activity-feed.json');
+    const raw = fs.readFileSync(feedPath, 'utf8');
+    const parsed = JSON.parse(raw);
+    activityJsonCache = parsed;
+    activityJsonCacheAt = now;
+    res.json(parsed);
+  } catch (err) {
+    // Fallback: parse the markdown feed and return it in the same shape
+    try {
+      const feedPath = path.join(__dirname, 'memory', 'activity-feed.md');
+      const md = fs.readFileSync(feedPath, 'utf8');
+      const entries = parseActivityFeed(md);
+      activityJsonCache = entries;
+      activityJsonCacheAt = now;
+      res.json(entries);
+    } catch (err2) {
+      res.status(500).json({ error: 'activity-feed.json unavailable', details: err2.message });
+    }
+  }
+});
+
 // ━━ Build log endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/api/build-log', (req, res) => {
   const url = `${GITHUB_RAW_BASE}/memory/build-log.md`;
