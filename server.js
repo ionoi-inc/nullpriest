@@ -15,15 +15,15 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ── Static site ─────────────────────────────────────────────────────────────
+// ── Static site ──────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ── Health check ────────────────────────────────────────────────────────────
+// ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.1' });
 });
 
-// ── Agent status endpoint ───────────────────────────────────────────────────
+// ── Agent status endpoint ────────────────────────────────────────────────────
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
@@ -48,7 +48,7 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ── Memory proxy ────────────────────────────────────────────────────────────
+// ── Memory proxy ─────────────────────────────────────────────────────────────
 app.get('/memory/:filename', (req, res) => {
   const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
   https.get(url, (ghRes) => {
@@ -59,7 +59,7 @@ app.get('/memory/:filename', (req, res) => {
   });
 });
 
-// ── Activity feed endpoint ──────────────────────────────────────────────────
+// ── Activity feed endpoint ───────────────────────────────────────────────────
 // Reads memory/activity-feed.md from disk, parses into JSON array, caches 60s
 let activityCache = null;
 let activityCacheAt = 0;
@@ -106,7 +106,27 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ── Build log endpoint ──────────────────────────────────────────────────────
+// ── Tweet queue endpoint ─────────────────────────────────────────────────────
+// Reads memory/tweet-queue.json from GitHub, returns queue contents
+app.get('/api/tweet-queue', (req, res) => {
+  const url = `${GITHUB_RAW_BASE}/memory/tweet-queue.json`;
+  https.get(url, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      try {
+        const parsed = JSON.parse(data);
+        res.json({ ...parsed, fetched_at: new Date().toISOString() });
+      } catch (e) {
+        res.status(500).json({ error: 'Failed to parse tweet-queue.json', details: e.message });
+      }
+    });
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'GitHub fetch failed', details: err.message });
+  });
+});
+
+// ── Build log endpoint ───────────────────────────────────────────────────────
 // Reads memory/build-log.md from disk, parses into JSON array, caches 60s
 let buildLogCache = null;
 let buildLogCacheAt = 0;
@@ -118,14 +138,18 @@ function parseBuildLog(markdown) {
   for (const block of blocks) {
     const lines = block.trim().split('\n');
     if (!lines[0] || !lines[0].startsWith('## Build #')) continue;
-    const header = lines[0].replace(/^## Build #/, '').trim();
-    const buildNum = parseInt(header.split(/\s+/)[0], 10);
-    const bullets = [];
+    const buildNum = lines[0].match(/#(\d+)/)?.[1];
+    let timestamp = null, commit = null, issue = null, status = null;
+    const changes = [];
     for (let i = 1; i < lines.length; i++) {
-      const m = lines[i].match(/^\s*[-*]\s+(.+)/);
-      if (m) bullets.push(m[1].trim());
+      const line = lines[i].trim();
+      if (line.startsWith('**Time:**')) timestamp = line.replace(/^\*\*Time:\*\*\s*/, '').trim();
+      else if (line.startsWith('**Commit:**')) commit = line.replace(/^\*\*Commit:\*\*\s*/, '').trim();
+      else if (line.startsWith('**Issue:**')) issue = line.replace(/^\*\*Issue:\*\*\s*/, '').trim();
+      else if (line.startsWith('**Status:**')) status = line.replace(/^\*\*Status:\*\*\s*/, '').trim();
+      else if (line.match(/^\s*[-*]\s+/)) changes.push(line.replace(/^\s*[-*]\s+/, '').trim());
     }
-    builds.push({ build: buildNum, details: bullets });
+    builds.push({ build: buildNum, timestamp, commit, issue, status, changes });
   }
   return builds;
 }
@@ -148,79 +172,76 @@ app.get('/api/build-log', (req, res) => {
   }
 });
 
-// ── NULP price endpoint ─────────────────────────────────────────────────────
-// Fetches live NULP price from DexScreener public API (no key required)
-// Pool migrated from Uniswap V2 to V4, so use DexScreener for cross-DEX support
-// Token: 0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F on Base chain
-
-let priceCache = null;
-let priceCacheAt = 0;
-const PRICE_CACHE_TTL_MS = 30_000;
-
-function httpsGet(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try { resolve(JSON.parse(data)); }
-        catch (e) { reject(new Error('JSON parse error')); }
-      });
-    }).on('error', reject);
-  });
-}
-
-async function fetchLivePrice() {
-  try {
-    // DexScreener API: GET /latest/dex/tokens/:tokenAddress
-    const NULP_TOKEN = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
-    const url = `https://api.dexscreener.com/latest/dex/tokens/${NULP_TOKEN}`;
-    const data = await httpsGet(url);
-
-    if (!data.pairs || data.pairs.length === 0) {
-      throw new Error('No pairs found for NULP token');
-    }
-
-    // Find the pair with highest liquidity on Base chain
-    const basePairs = data.pairs.filter(p => p.chainId === 'base');
-    if (basePairs.length === 0) {
-      throw new Error('No Base chain pairs found');
-    }
-
-    const topPair = basePairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
-
-    return {
-      price: parseFloat(topPair.priceUsd) || 0,
-      priceChange24h: parseFloat(topPair.priceChange?.h24) || 0,
-      volume24h: parseFloat(topPair.volume?.h24) || 0,
-      liquidity: parseFloat(topPair.liquidity?.usd) || 0,
-      dex: topPair.dexId,
-      pairAddress: topPair.pairAddress,
-      timestamp: new Date().toISOString()
-    };
-  } catch (err) {
-    console.error('[price] DexScreener fetch error:', err.message);
-    throw err;
-  }
-}
+// ── Price endpoint ───────────────────────────────────────────────────────────
+// Fetches live $NULP price from Uniswap V2 pool on Base
+const { ethers } = require('ethers');
+const UNISWAP_V2_PAIR_ABI = [
+  'function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)',
+  'function token0() external view returns (address)',
+  'function token1() external view returns (address)'
+];
 
 app.get('/api/price', async (req, res) => {
-  const now = Date.now();
-  if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
-    return res.json({ ...priceCache, cached: true });
-  }
-
   try {
-    priceCache = await fetchLivePrice();
-    priceCacheAt = now;
-    res.json({ ...priceCache, cached: false });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch price', details: err.message });
+    const provider = new ethers.JsonRpcProvider('https://mainnet.base.org');
+    const pairAddress = '0xDb32c33fC9E2B6a068844CA59dd7Bc78E5c87e1f';
+    const pairContract = new ethers.Contract(pairAddress, UNISWAP_V2_PAIR_ABI, provider);
+    
+    const [reserve0, reserve1] = await pairContract.getReserves();
+    const token0 = await pairContract.token0();
+    const token1 = await pairContract.token1();
+    
+    if (!reserve0 || !reserve1 || reserve0 === 0n || reserve1 === 0n) {
+      return res.status(404).json({ error: 'getReserves returned empty — pool may not exist at this address' });
+    }
+    
+    const NULP_ADDRESS = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+    const isToken0NULP = token0.toLowerCase() === NULP_ADDRESS.toLowerCase();
+    
+    const nulpReserve = isToken0NULP ? reserve0 : reserve1;
+    const wethReserve = isToken0NULP ? reserve1 : reserve0;
+    
+    const priceInWETH = Number(wethReserve) / Number(nulpReserve);
+    const priceInUSD = priceInWETH * 2650;
+    
+    const marketCap = priceInUSD * 1_000_000_000;
+    
+    res.json({
+      price_usd: priceInUSD.toFixed(8),
+      price_weth: priceInWETH.toFixed(12),
+      market_cap: Math.round(marketCap),
+      reserves: {
+        nulp: nulpReserve.toString(),
+        weth: wethReserve.toString()
+      },
+      pool: pairAddress,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Price fetch failed', details: error.message });
   }
 });
 
-// ── Start server ────────────────────────────────────────────────────────────
+// ── Thoughts endpoint ────────────────────────────────────────────────────────
+// Proxies to memory/thoughts.json in GitHub
+app.get('/api/thoughts', (req, res) => {
+  const url = `${GITHUB_RAW_BASE}/memory/thoughts.json`;
+  https.get(url, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      try {
+        const parsed = JSON.parse(data);
+        res.json({ ...parsed, fetched_at: new Date().toISOString() });
+      } catch (e) {
+        res.status(500).json({ error: 'Failed to parse thoughts.json', details: e.message });
+      }
+    });
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'GitHub fetch failed', details: err.message });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
-  console.log(`Health: http://localhost:${PORT}/api/health`);
 });
