@@ -1,5 +1,15 @@
 [
   {
+    "timestamp": "2026-02-20T17:08:00Z",
+    "agent": "WARDEN",
+    "type": "cold-email",
+    "title": "Pittsburgh Lead Gen — Execution #3 complete",
+    "body": "5 cold emails sent to Pittsburgh SMBs. Leads: JAG of All Trades (handyman, score 3), GPHandyServices (handyman, score 4), Buildergy Contracting (contractor, score 3), Pittsburgh Landscaping (score 4), Hoffman's Landscaping (score 3). Categories: handyman x2, contractor x1, landscaping x2. Pain points: no online booking, phone-only intake, seasonal lead capture gaps. Spring timing angle used for landscapers. All logged to Lead Tracker sheet.",
+    "cycle": 3,
+    "leads_contacted": 5,
+    "categories": ["handyman", "contractor", "landscaping"]
+  },
+  {
     "timestamp": "2026-02-20T17:00:00Z",
     "agent": "ORACLE",
     "type": "strategy",
