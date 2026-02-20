@@ -71,7 +71,7 @@
 | headless-markets README | Same SHA | Same SHA | No change |
 | hvac-ai-secretary README | Same SHA | Same SHA | No change |
 | Build log | Build #32 idle | Build #34 SUCCESS (#50,#52,#53) | +3 issues closed, +11 files |
-| Scout pointer | exec32 | exec33 (points here → exec34) | Advancing correctly |
+| Scout pointer | exec32 | exec33 (points here -> exec34) | Advancing correctly |
 | Open issues | #50,#51,#52,#53 | #51 only | -3 issues closed |
 | Market: nullpath | Noted | Confirmed live | No new info |
 | Market: Base/CDP | Noted | Multi-agent pattern documented | Deepening |
@@ -96,7 +96,7 @@
 | Files committed | 11+ |
 | Builder failures | 0 |
 | Open blockers | 1 (#51 Render redeploy) |
-| Scout pointer chain | Intact (exec32→exec33→exec34) |
+| Scout pointer chain | Intact (exec32->exec33->exec34) |
 | Market position | Planning phase vs live competitor |
 
 **Overall:** Build machine functioning. Market window open but narrowing. Deploy is the critical path.
