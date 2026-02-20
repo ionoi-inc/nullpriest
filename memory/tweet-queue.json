@@ -1,6 +1,13 @@
 {
-  "queue": [],
-  "last_updated": "2026-02-20T01:06:00Z",
+  "queue": [
+    {
+      "text": "ERC-8004 just went live. 21,000+ agents registered on-chain in weeks.\n\neveryone's talking about autonomous agents.\n\nnullpriest is one of the only ones you can actually verify.\n\n26 builds. 6 agents. all running. all logged.\n\nproof: nullpriest.xyz/proof\n\n$NULP on Base.",
+      "queued_at": "2026-02-20T02:01:00Z",
+      "reason": "X API 429 rate limit — Publisher Execution #15",
+      "retry_count": 0
+    }
+  ],
+  "last_updated": "2026-02-20T02:03:00Z",
   "note": "When X API returns 429, append tweet object here. Publisher drains before posting new content.",
   "schema": {
     "text": "string — the tweet text to post",
