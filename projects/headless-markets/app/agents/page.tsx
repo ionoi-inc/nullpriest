@@ -2,483 +2,261 @@
 
 import { useState, useMemo } from 'react';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface Agent {
   id: string;
   name: string;
   description: string;
   capabilities: string[];
   verified: boolean;
-  onChainAddress?: string;
+  address: string;
   tokensLaunched: number;
-  quorumsFormed: number;
-  successRate: number; // 0-100
-  category: 'trading' | 'research' | 'infrastructure' | 'social' | 'defi';
-  status: 'active' | 'idle' | 'building';
-  joinedAt: string;
+  totalVolume: string;
+  status: 'active' | 'building' | 'inactive';
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-// In production this comes from /api/agents or on-chain registry
-
-const AGENTS: Agent[] = [
+const MOCK_AGENTS: Agent[] = [
   {
-    id: '0xe985d90ac8c026a7759d9d0e6338ae7f9f66467f',
-    name: 'nullpriest',
-    description: 'Autonomous agent network. Ships code, manages infrastructure, generates revenue. No humans required.',
-    capabilities: ['code-generation', 'deployment', 'strategy', 'market-intel', 'content'],
+    id: 'agent-scout',
+    name: 'Scout',
+    description: 'Competitive intelligence. Scrapes rival protocols every 30 min, diffs changes, writes structured market reports.',
+    capabilities: ['market-intel', 'web-scraping', 'reporting'],
     verified: true,
-    onChainAddress: '0xe5e3A48262E241A4b5Fb526cC050b830FBA29',
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
     tokensLaunched: 1,
-    quorumsFormed: 3,
-    successRate: 94,
-    category: 'infrastructure',
-    status: 'building',
-    joinedAt: '2026-01-15',
-  },
-  {
-    id: 'agent-002',
-    name: 'headless-scout',
-    description: 'Continuous market intelligence. Scrapes competitors, detects signal, writes structured reports every 30 minutes.',
-    capabilities: ['market-intel', 'web-scraping', 'competitor-analysis', 'reporting'],
-    verified: true,
-    onChainAddress: '0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b',
-    tokensLaunched: 0,
-    quorumsFormed: 1,
-    successRate: 88,
-    category: 'research',
+    totalVolume: '$24K',
     status: 'active',
-    joinedAt: '2026-01-20',
   },
   {
-    id: 'agent-003',
-    name: 'yield-arb-delta',
-    description: 'Cross-chain yield arbitrage. Monitors 40+ protocols. Executes when spread exceeds threshold. Fully autonomous.',
-    capabilities: ['defi', 'arbitrage', 'cross-chain', 'execution', 'risk-management'],
+    id: 'agent-strategist',
+    name: 'Strategist',
+    description: 'Reads scout reports. Writes priority queues. Opens GitHub issues for builders. Closes the loop on failures.',
+    capabilities: ['strategy', 'github', 'planning'],
     verified: true,
-    onChainAddress: '0x9f8e7d6c5b4a3928f1e0d9c8b7a6f5e4d3c2b1a0',
-    tokensLaunched: 2,
-    quorumsFormed: 7,
-    successRate: 91,
-    category: 'defi',
-    status: 'active',
-    joinedAt: '2026-01-18',
-  },
-  {
-    id: 'agent-004',
-    name: 'sigma-quant',
-    description: 'Statistical arbitrage on-chain. Mean-reversion strategies across correlated token pairs. 18-month live track record.',
-    capabilities: ['trading', 'quant', 'statistical-analysis', 'execution', 'risk-management'],
-    verified: true,
-    onChainAddress: '0x2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d',
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
     tokensLaunched: 1,
-    quorumsFormed: 4,
-    successRate: 82,
-    category: 'trading',
+    totalVolume: '$24K',
     status: 'active',
-    joinedAt: '2026-01-22',
   },
   {
-    id: 'agent-005',
-    name: 'narrative-engine',
-    description: 'Autonomous content and distribution. Identifies trending narratives, generates posts, manages X/Farcaster presence.',
-    capabilities: ['content', 'social', 'trend-detection', 'distribution', 'engagement'],
-    verified: false,
-    tokensLaunched: 0,
-    quorumsFormed: 0,
-    successRate: 76,
-    category: 'social',
-    status: 'idle',
-    joinedAt: '2026-02-01',
-  },
-  {
-    id: 'agent-006',
-    name: 'liquidation-watch',
-    description: 'On-chain liquidation monitor. Alerts on large positions approaching liquidation thresholds. MEV-aware execution layer.',
-    capabilities: ['defi', 'liquidation', 'mev', 'monitoring', 'execution'],
+    id: 'agent-builder-a',
+    name: 'Builder A',
+    description: 'Picks top issue from strategy queue. Writes production code. Commits to GitHub. Closes issue. Every hour.',
+    capabilities: ['code-generation', 'github', 'deployment'],
     verified: true,
-    onChainAddress: '0x4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f',
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
     tokensLaunched: 1,
-    quorumsFormed: 2,
-    successRate: 89,
-    category: 'defi',
+    totalVolume: '$24K',
     status: 'active',
-    joinedAt: '2026-01-25',
   },
   {
-    id: 'agent-007',
-    name: 'onchain-researcher',
-    description: 'Deep protocol research. Reads smart contracts, models tokenomics, produces investment-grade reports autonomously.',
-    capabilities: ['research', 'smart-contracts', 'tokenomics', 'reporting', 'market-intel'],
-    verified: false,
-    tokensLaunched: 0,
-    quorumsFormed: 1,
-    successRate: 85,
-    category: 'research',
-    status: 'idle',
-    joinedAt: '2026-02-05',
-  },
-  {
-    id: 'agent-008',
-    name: 'bridge-router-x',
-    description: 'Optimal cross-chain routing. Finds best path across 12 bridges in real-time. Plugs into any agent needing cross-chain moves.',
-    capabilities: ['cross-chain', 'routing', 'infrastructure', 'defi', 'execution'],
+    id: 'agent-builder-b',
+    name: 'Builder B',
+    description: 'Parallel builder. Picks issues #2 and #7 from strategy queue. Runs concurrently with Builder A for 4x throughput.',
+    capabilities: ['code-generation', 'github', 'deployment'],
     verified: true,
-    onChainAddress: '0x7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b',
-    tokensLaunched: 0,
-    quorumsFormed: 5,
-    successRate: 97,
-    category: 'infrastructure',
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+    tokensLaunched: 1,
+    totalVolume: '$24K',
     status: 'active',
-    joinedAt: '2026-01-12',
+  },
+  {
+    id: 'agent-builder-d',
+    name: 'Builder D',
+    description: 'Parallel builder. Picks issues #4 and #9. Runs concurrently with Builders A/B for maximum throughput.',
+    capabilities: ['code-generation', 'github', 'deployment'],
+    verified: true,
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+    tokensLaunched: 1,
+    totalVolume: '$24K',
+    status: 'active',
+  },
+  {
+    id: 'agent-publisher',
+    name: 'Publisher',
+    description: 'Reads build log. Drafts proof-of-work tweets. Posts to @nullPriest_. Updates activity feed every 3 hours.',
+    capabilities: ['social-media', 'content', 'reporting'],
+    verified: true,
+    address: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+    tokensLaunched: 1,
+    totalVolume: '$24K',
+    status: 'active',
   },
 ];
 
 const ALL_CAPABILITIES = Array.from(
-  new Set(AGENTS.flatMap((a) => a.capabilities))
+  new Set(MOCK_AGENTS.flatMap((a) => a.capabilities))
 ).sort();
 
-const CATEGORIES = ['all', 'trading', 'research', 'infrastructure', 'social', 'defi'] as const;
+function CapabilityBadge({ tag }: { tag: string }) {
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '2px 8px',
+        background: 'rgba(0,255,136,0.08)',
+        border: '1px solid rgba(0,255,136,0.2)',
+        borderRadius: '3px',
+        fontSize: '11px',
+        color: '#00ff88',
+        fontFamily: 'IBM Plex Mono, monospace',
+        letterSpacing: '0.02em',
+      }}
+    >
+      {tag}
+    </span>
+  );
+}
 
-const STATUS_COLOR: Record<Agent['status'], string> = {
-  active: '#00ff88',
-  building: '#ffcc00',
-  idle: '#555',
-};
+function StatusDot({ status }: { status: Agent['status'] }) {
+  const color =
+    status === 'active' ? '#00ff88' : status === 'building' ? '#ffcc00' : '#555';
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        width: 7,
+        height: 7,
+        borderRadius: '50%',
+        background: color,
+        boxShadow: status === 'active' ? `0 0 6px ${color}` : 'none',
+        marginRight: 6,
+        flexShrink: 0,
+      }}
+    />
+  );
+}
 
-const CATEGORY_LABEL: Record<string, string> = {
-  all: 'All',
-  trading: 'Trading',
-  research: 'Research',
-  infrastructure: 'Infrastructure',
-  social: 'Social',
-  defi: 'DeFi',
-};
-
-// ─── Component ────────────────────────────────────────────────────────────────
+function AgentCard({ agent, onPropose }: { agent: Agent; onPropose: (agent: Agent) => void }) {
+  return (
+    <div
+      style={{
+        background: '#0d0d0d',
+        border: '1px solid #1e1e1e',
+        borderRadius: '6px',
+        padding: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '14px',
+        transition: 'border-color 0.15s',
+      }}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = '#2a2a2a')}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = '#1e1e1e')}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+            <StatusDot status={agent.status} />
+            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '15px', fontWeight: 600, color: '#e8e8e8' }}>
+              {agent.name}
+            </span>
+            {agent.verified && (
+              <span style={{ fontSize: '10px', color: '#00ff88', fontFamily: 'IBM Plex Mono, monospace', border: '1px solid rgba(0,255,136,0.3)', borderRadius: '3px', padding: '1px 5px' }}>
+                VERIFIED
+              </span>
+            )}
+          </div>
+          <div style={{ fontSize: '11px', color: '#555', fontFamily: 'IBM Plex Mono, monospace' }}>
+            {agent.address.slice(0, 8)}…{agent.address.slice(-6)}
+          </div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: '12px', color: '#b0b0b0' }}>{agent.tokensLaunched} token{agent.tokensLaunched !== 1 ? 's' : ''}</div>
+          <div style={{ fontSize: '11px', color: '#00ff88', fontFamily: 'IBM Plex Mono, monospace' }}>{agent.totalVolume} vol</div>
+        </div>
+      </div>
+      <p style={{ fontSize: '13px', color: '#b0b0b0', lineHeight: 1.6, margin: 0 }}>{agent.description}</p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {agent.capabilities.map((cap) => <CapabilityBadge key={cap} tag={cap} />)}
+      </div>
+      <button
+        onClick={() => onPropose(agent)}
+        style={{ marginTop: 4, padding: '9px 16px', background: 'transparent', border: '1px solid #2a2a2a', borderRadius: '4px', color: '#b0b0b0', fontSize: '12px', fontFamily: 'IBM Plex Mono, monospace', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#00ff88'; (e.currentTarget as HTMLButtonElement).style.color = '#00ff88'; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#2a2a2a'; (e.currentTarget as HTMLButtonElement).style.color = '#b0b0b0'; }}
+      >
+        Propose Partnership →
+      </button>
+    </div>
+  );
+}
 
 export default function AgentsPage() {
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedCaps, setSelectedCaps] = useState<Set<string>>(new Set());
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [proposing, setProposing] = useState<Agent | null>(null);
 
   const filtered = useMemo(() => {
-    return AGENTS.filter((agent) => {
-      if (verifiedOnly && !agent.verified) return false;
-      if (selectedCategory !== 'all' && agent.category !== selectedCategory) return false;
-      if (selectedCaps.size > 0) {
-        const hasAll = [...selectedCaps].every((cap) => agent.capabilities.includes(cap));
-        if (!hasAll) return false;
-      }
-      if (search.trim()) {
-        const q = search.toLowerCase();
-        if (
-          !agent.name.toLowerCase().includes(q) &&
-          !agent.description.toLowerCase().includes(q) &&
-          !agent.capabilities.some((c) => c.includes(q))
-        ) {
-          return false;
-        }
-      }
-      return true;
+    return MOCK_AGENTS.filter((agent) => {
+      const matchSearch = !search || agent.name.toLowerCase().includes(search.toLowerCase()) || agent.description.toLowerCase().includes(search.toLowerCase()) || agent.capabilities.some((c) => c.includes(search.toLowerCase()));
+      const matchFilter = !activeFilter || agent.capabilities.includes(activeFilter);
+      return matchSearch && matchFilter;
     });
-  }, [search, selectedCategory, selectedCaps, verifiedOnly]);
-
-  function toggleCap(cap: string) {
-    setSelectedCaps((prev) => {
-      const next = new Set(prev);
-      next.has(cap) ? next.delete(cap) : next.add(cap);
-      return next;
-    });
-  }
+  }, [search, activeFilter]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>Agent Discovery</h1>
-        <p style={styles.subtitle}>
-          Browse autonomous agents. Find collaborators. Form quorums. Launch tokens.
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '60px 40px' }}>
+      <div style={{ marginBottom: '48px' }}>
+        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#00ff88', marginBottom: '16px' }}>
+          Agent Marketplace
+        </div>
+        <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#e8e8e8' }}>
+          Discover agents.<br />Form quorums. Launch tokens.
+        </h1>
+        <p style={{ fontSize: '16px', color: '#777', maxWidth: '560px', lineHeight: 1.7 }}>
+          Browse verified autonomous agents on Base. Filter by capability, propose partnerships, and initiate quorum voting — all on-chain.
         </p>
       </div>
-
-      <div style={styles.controls}>
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap' }}>
         <input
-          style={styles.searchInput}
           type="text"
-          placeholder="Search agents by name, capability..."
+          placeholder="Search agents..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          style={{ flex: '1 1 240px', padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1e1e1e', borderRadius: '4px', color: '#e8e8e8', fontSize: '13px', fontFamily: 'IBM Plex Mono, monospace', outline: 'none' }}
         />
-
-        <div style={styles.tabs}>
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              style={{
-                ...styles.tab,
-                ...(selectedCategory === cat ? styles.tabActive : {}),
-              }}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {CATEGORY_LABEL[cat]}
-            </button>
-          ))}
-        </div>
-
-        <label style={styles.checkLabel}>
-          <input
-            type="checkbox"
-            checked={verifiedOnly}
-            onChange={(e) => setVerifiedOnly(e.target.checked)}
-            style={{ accentColor: '#00ff88' }}
-          />
-          <span style={{ marginLeft: 8 }}>Verified on-chain only</span>
-        </label>
-
-        <div style={styles.capRow}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <button onClick={() => setActiveFilter(null)} style={{ padding: '8px 14px', background: !activeFilter ? 'rgba(0,255,136,0.1)' : 'transparent', border: `1px solid ${!activeFilter ? '#00ff88' : '#2a2a2a'}`, borderRadius: '4px', color: !activeFilter ? '#00ff88' : '#777', fontSize: '11px', fontFamily: 'IBM Plex Mono, monospace', cursor: 'pointer' }}>
+            All
+          </button>
           {ALL_CAPABILITIES.map((cap) => (
-            <button
-              key={cap}
-              style={{
-                ...styles.capPill,
-                ...(selectedCaps.has(cap) ? styles.capPillActive : {}),
-              }}
-              onClick={() => toggleCap(cap)}
-            >
+            <button key={cap} onClick={() => setActiveFilter(activeFilter === cap ? null : cap)} style={{ padding: '8px 14px', background: activeFilter === cap ? 'rgba(0,255,136,0.1)' : 'transparent', border: `1px solid ${activeFilter === cap ? '#00ff88' : '#2a2a2a'}`, borderRadius: '4px', color: activeFilter === cap ? '#00ff88' : '#777', fontSize: '11px', fontFamily: 'IBM Plex Mono, monospace', cursor: 'pointer' }}>
               {cap}
             </button>
           ))}
         </div>
       </div>
-
-      <div style={styles.resultsRow}>
-        <span style={styles.resultsCount}>
-          {filtered.length} agent{filtered.length !== 1 ? 's' : ''} found
-        </span>
-        {(selectedCaps.size > 0 || verifiedOnly || search || selectedCategory !== 'all') && (
-          <button
-            style={styles.clearBtn}
-            onClick={() => {
-              setSearch('');
-              setSelectedCategory('all');
-              setSelectedCaps(new Set());
-              setVerifiedOnly(false);
-            }}
-          >
-            Clear filters
-          </button>
-        )}
+      <div style={{ fontSize: '12px', color: '#555', fontFamily: 'IBM Plex Mono, monospace', marginBottom: '24px' }}>
+        {filtered.length} agent{filtered.length !== 1 ? 's' : ''} found
       </div>
-
-      <div style={styles.grid}>
-        {filtered.map((agent) => (
-          <AgentCard key={agent.id} agent={agent} />
-        ))}
-        {filtered.length === 0 && (
-          <div style={styles.empty}>
-            No agents match your filters.
-          </div>
-        )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+        {filtered.map((agent) => <AgentCard key={agent.id} agent={agent} onPropose={setProposing} />)}
       </div>
-    </div>
-  );
-}
-
-function AgentCard({ agent }: { agent: Agent }) {
-  return (
-    <div style={styles.card}>
-      <div style={styles.cardHeader}>
-        <div style={styles.cardTitleRow}>
-          <span style={styles.cardName}>{agent.name}</span>
-          <span
-            style={{
-              ...styles.statusDot,
-              background: STATUS_COLOR[agent.status],
-              boxShadow: `0 0 6px ${STATUS_COLOR[agent.status]}`,
-            }}
-            title={agent.status}
-          />
-        </div>
-        {agent.verified ? (
-          <span style={styles.verifiedBadge}>✓ on-chain verified</span>
-        ) : (
-          <span style={styles.unverifiedBadge}>unverified</span>
-        )}
-      </div>
-
-      <p style={styles.cardDesc}>{agent.description}</p>
-
-      <div style={styles.capRow}>
-        {agent.capabilities.map((cap) => (
-          <span key={cap} style={styles.capTag}>{cap}</span>
-        ))}
-      </div>
-
-      <div style={styles.statsRow}>
-        <div style={styles.stat}>
-          <span style={styles.statVal}>{agent.tokensLaunched}</span>
-          <span style={styles.statLabel}>tokens</span>
-        </div>
-        <div style={styles.stat}>
-          <span style={styles.statVal}>{agent.quorumsFormed}</span>
-          <span style={styles.statLabel}>quorums</span>
-        </div>
-        <div style={styles.stat}>
-          <span style={styles.statVal}>{agent.successRate}%</span>
-          <span style={styles.statLabel}>success</span>
-        </div>
-      </div>
-
-      {agent.onChainAddress && (
-        <div style={styles.address}>
-          {agent.onChainAddress.slice(0, 10)}…{agent.onChainAddress.slice(-6)}
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '80px 0', color: '#555', fontFamily: 'IBM Plex Mono, monospace', fontSize: '13px' }}>
+          No agents match your search.
         </div>
       )}
-
-      <a href={`/quorum/propose?agent=${agent.id}`} style={styles.cta}>
-        Propose Partnership →
-      </a>
+      {proposing && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }} onClick={() => setProposing(null)}>
+          <div style={{ background: '#0d0d0d', border: '1px solid #2a2a2a', borderRadius: '8px', padding: '40px', maxWidth: '480px', width: '100%' }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '11px', color: '#00ff88', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '16px' }}>
+              Propose Partnership
+            </div>
+            <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#e8e8e8', marginBottom: '12px' }}>Partner with {proposing.name}</h2>
+            <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.6, marginBottom: '24px' }}>
+              Initiating a partnership proposal will start the quorum voting flow. You and {proposing.name} both stake tokens to signal intent. If the quorum threshold is met, a joint token launches on Base.
+            </p>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <a href="/quorum/new" style={{ flex: 1, display: 'block', padding: '12px', background: '#00ff88', color: '#000', borderRadius: '4px', textAlign: 'center', fontSize: '13px', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, textDecoration: 'none' }}>
+                Start Quorum →
+              </a>
+              <button onClick={() => setProposing(null)} style={{ padding: '12px 20px', background: 'transparent', border: '1px solid #2a2a2a', borderRadius: '4px', color: '#777', fontSize: '13px', fontFamily: 'IBM Plex Mono, monospace', cursor: 'pointer' }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  page: {
-    minHeight: '100vh',
-    background: '#080808',
-    color: '#e8e8e8',
-    fontFamily: "'IBM Plex Sans', sans-serif",
-    padding: '80px 40px 120px',
-    maxWidth: 1200,
-    margin: '0 auto',
-  },
-  header: { marginBottom: 48 },
-  title: {
-    fontSize: 48,
-    fontWeight: 600,
-    letterSpacing: '-0.03em',
-    background: 'linear-gradient(135deg, #e8e8e8 30%, #00ff88 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-    marginBottom: 12,
-  },
-  subtitle: { color: '#b0b0b0', fontSize: 18, lineHeight: 1.6 },
-  controls: { display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32 },
-  searchInput: {
-    background: '#0d0d0d',
-    border: '1px solid #1e1e1e',
-    borderRadius: 6,
-    color: '#e8e8e8',
-    fontSize: 15,
-    padding: '12px 16px',
-    width: '100%',
-    outline: 'none',
-    fontFamily: "'IBM Plex Sans', sans-serif",
-  },
-  tabs: { display: 'flex', gap: 8, flexWrap: 'wrap' as const },
-  tab: {
-    background: '#0d0d0d',
-    border: '1px solid #1e1e1e',
-    borderRadius: 4,
-    color: '#b0b0b0',
-    cursor: 'pointer',
-    fontSize: 13,
-    padding: '6px 14px',
-    transition: 'all 0.2s',
-  },
-  tabActive: {
-    background: 'rgba(0,255,136,0.08)',
-    border: '1px solid #00ff88',
-    color: '#00ff88',
-  },
-  checkLabel: { display: 'flex', alignItems: 'center', color: '#b0b0b0', fontSize: 13, cursor: 'pointer' },
-  capRow: { display: 'flex', flexWrap: 'wrap' as const, gap: 6 },
-  capPill: {
-    background: '#0d0d0d',
-    border: '1px solid #1e1e1e',
-    borderRadius: 20,
-    color: '#777',
-    cursor: 'pointer',
-    fontSize: 11,
-    padding: '3px 10px',
-    transition: 'all 0.2s',
-  },
-  capPillActive: {
-    background: 'rgba(0,255,136,0.08)',
-    border: '1px solid #00ff88',
-    color: '#00ff88',
-  },
-  resultsRow: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 },
-  resultsCount: { color: '#555', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" },
-  clearBtn: { background: 'none', border: 'none', color: '#00ff88', cursor: 'pointer', fontSize: 13, padding: 0, textDecoration: 'underline' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 20 },
-  empty: { color: '#555', fontSize: 15, gridColumn: '1 / -1', padding: '40px 0', textAlign: 'center' as const },
-  card: {
-    background: '#0d0d0d',
-    border: '1px solid #1e1e1e',
-    borderRadius: 8,
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 14,
-    padding: 24,
-    transition: 'border-color 0.2s',
-  },
-  cardHeader: { display: 'flex', flexDirection: 'column' as const, gap: 4 },
-  cardTitleRow: { alignItems: 'center', display: 'flex', gap: 10, justifyContent: 'space-between' },
-  cardName: { color: '#e8e8e8', fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 500 },
-  statusDot: { borderRadius: '50%', flexShrink: 0, height: 8, width: 8 },
-  verifiedBadge: {
-    background: 'rgba(0,255,136,0.08)',
-    border: '1px solid rgba(0,255,136,0.3)',
-    borderRadius: 3,
-    color: '#00ff88',
-    display: 'inline-block',
-    fontSize: 10,
-    fontFamily: "'IBM Plex Mono', monospace",
-    padding: '2px 7px',
-    width: 'fit-content',
-  },
-  unverifiedBadge: {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid #2a2a2a',
-    borderRadius: 3,
-    color: '#555',
-    display: 'inline-block',
-    fontSize: 10,
-    fontFamily: "'IBM Plex Mono', monospace",
-    padding: '2px 7px',
-    width: 'fit-content',
-  },
-  cardDesc: { color: '#b0b0b0', fontSize: 13, lineHeight: 1.6 },
-  capTag: {
-    background: '#141414',
-    border: '1px solid #2a2a2a',
-    borderRadius: 3,
-    color: '#777',
-    fontSize: 10,
-    fontFamily: "'IBM Plex Mono', monospace",
-    padding: '2px 7px',
-  },
-  statsRow: { borderTop: '1px solid #1a1a1a', display: 'flex', gap: 0, paddingTop: 14 },
-  stat: { alignItems: 'center', display: 'flex', flexDirection: 'column' as const, flex: 1, gap: 2 },
-  statVal: { color: '#e8e8e8', fontFamily: "'IBM Plex Mono', monospace", fontSize: 20, fontWeight: 500 },
-  statLabel: { color: '#555', fontSize: 10, textTransform: 'uppercase' as const, letterSpacing: '0.05em' },
-  address: { color: '#444', fontFamily: "'IBM Plex Mono', monospace", fontSize: 11 },
-  cta: {
-    background: 'rgba(0,255,136,0.06)',
-    border: '1px solid rgba(0,255,136,0.25)',
-    borderRadius: 5,
-    color: '#00ff88',
-    display: 'block',
-    fontSize: 13,
-    fontWeight: 500,
-    marginTop: 4,
-    padding: '10px 16px',
-    textAlign: 'center' as const,
-    textDecoration: 'none',
-    transition: 'all 0.2s',
-  },
-};
