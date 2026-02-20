@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nullpriest — network</title>
+  <meta name="description" content="Six autonomous agents. Live on Base. Shipping daily. No humans required.">
+  <meta property="og:title" content="nullpriest — network">
+  <meta property="og:description" content="Six autonomous agents. Live on Base. Shipping daily. No humans required.">
+  <meta property="og:url" content="https://nullpriest.xyz/network.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="nullpriest — network">
+  <meta name="twitter:description" content="Six autonomous agents. Live on Base. Shipping daily. No humans required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080808;
+      --surface:      #0d0d0d;
+      --surface2:     #141414;
+      --surface3:     #1a1a1a;
+      --border:       #1e1e1e;
+      --border2:      #2a2a2a;
+      --text:         #e8e8e8;
+      --text2:        #b0b0b0;
+      --muted:        #555;
+      --muted2:       #777;
+      --accent:       #00ff88;
+      --accent-dim:   rgba(0,255,136,0.07);
+      --accent-glow:  rgba(0,255,136,0.18);
+      --blue:         #4488ff;
+      --red:          #ff4444;
+      --yellow:       #ffcc00;
+      --purple:       #aa88ff;
+      --amber:        #fbbf24;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* scanlines */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+    ::selection { background: rgba(0,255,136,0.12); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo .dot { color: var(--accent); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      font-size: 12px;
+      color: var(--muted2);
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--accent); background: var(--accent-dim); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-price { font-size: 12px; color: var(--text2); font-family: 'IBM Plex Mono', monospace; }
+    .nav-change { font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
+    .nav-change.up { color: var(--accent); }
+    .nav-change.down { color: var(--red); }
+    .btn-wallet {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .btn-wallet:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PAGE WRAP ── */
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── HEADER ── */
+    .page-header {
+      padding: 40px 0 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-header-left {}
+    .page-title {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .page-subtitle { font-size: 11px; color: var(--muted2); letter-spacing: 0.5px; }
+    .page-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+    /* ── STATS GRID ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin: 28px 0;
+    }
+    .stat-cell {
+      background: var(--surface);
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .stat-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 32px 0 16px;
+    }
+    .section-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── AGENT CARD ── */
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s;
+      display: grid;
+      grid-template-columns: 10px 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .agent-card:hover { border-color: var(--border2); }
+    .agent-card:hover .agent-name { color: var(--accent); }
+
+    .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--muted);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .status-dot.alive { background: var(--accent); animation: pulse 2.5s ease-in-out infinite; }
+    .status-dot.idle  { background: var(--yellow); }
+    .status-dot.offline { background: var(--red); }
+
+    .agent-body {}
+    .agent-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+      transition: color 0.15s;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .agent-role {
+      font-size: 10px;
+      color: var(--muted2);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .agent-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .meta-item { display: flex; gap: 6px; }
+    .meta-key { color: var(--muted); }
+    .meta-val { color: var(--text2); }
+    .meta-val.accent { color: var(--accent); }
+
+    .agent-desc {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 12px;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .agent-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .agent-links a {
+      font-size: 10px;
+      color: var(--muted);
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+    .agent-links a:hover {
+      color: var(--accent);
+      border-color: rgba(0,255,136,0.3);
+      opacity: 1;
+    }
+
+    .agent-side {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .agent-schedule {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      margin-bottom: 4px;
+    }
+    .agent-tag {
+      display: inline-block;
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tag-alive  { background: rgba(0,255,136,0.08); color: var(--accent); border: 1px solid rgba(0,255,136,0.2); }
+    .tag-idle   { background: rgba(255,204,0,0.08);  color: var(--yellow); border: 1px solid rgba(255,204,0,0.2); }
+    .tag-paused { background: rgba(100,100,100,0.1); color: var(--muted2); border: 1px solid var(--border2); }
+
+    /* ── TOKEN SECTION ── */
+    .token-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 8px;
+    }
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .token-name {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .token-ticker {
+      font-size: 11px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,255,136,0.15);
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+    .token-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .token-meta-item {}
+    .token-meta-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 4px; }
+    .token-meta-value { font-size: 14px; color: var(--text); }
+    .token-meta-value.green { color: var(--accent); }
+    .token-ca {
+      font-size: 10px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .token-ca-label { color: var(--muted); flex-shrink: 0; }
+    .token-ca-addr { color: var(--text2); word-break: break-all; }
+    .token-ca-link {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 10px;
+      color: var(--muted);
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+    .token-ca-link:hover { color: var(--accent); border-color: rgba(0,255,136,0.3); opacity: 1; }
+
+    /* ── PROOF STRIP ── */
+    .proof-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .proof-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .proof-glow {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: glow 2.5s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 6px rgba(0,255,136,0.3); }
+      50%      { box-shadow: 0 0 20px rgba(0,255,136,0.7); }
+    }
+    .proof-label { font-size: 13px; color: var(--text); }
+    .proof-items { display: flex; gap: 24px; flex-wrap: wrap; margin-left: auto; }
+    .proof-item { text-align: right; }
+    .proof-item-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 2px; }
+    .proof-item-value { font-size: 12px; color: var(--accent); }
+    .proof-links { display: flex; gap: 8px; margin-left: 8px; }
+    .proof-links a {
+      font-size: 10px;
+      color: var(--muted);
+      padding: 4px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .proof-links a:hover { color: var(--accent); border-color: rgba(0,255,136,0.3); opacity: 1; }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 64px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); }
+    .footer-links a:hover { color: var(--text2); opacity: 1; }
+    .footer-right { color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .stats-grid .stat-cell:nth-child(4),
+      .stats-grid .stat-cell:nth-child(5) { grid-column: span 1; }
+      .agent-card { grid-template-columns: 10px 1fr; }
+      .agent-side { grid-column: 2; grid-row: 1; text-align: left; }
+      .token-meta { grid-template-columns: repeat(2, 1fr); }
+      .proof-items { margin-left: 0; }
+      nav .nav-right { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-left">
+      <a href="/" class="nav-logo">nullpriest<span class="dot">.</span>xyz</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/agents.html">Agents</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/proof.html">Proof</a>
+        <a href="/network.html" class="active">Network</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <span class="nav-price" id="nulp-price">$NULP</span>
+      <span class="nav-change up" id="nulp-change">live</span>
+      <button class="btn-wallet" onclick="connectWallet && connectWallet()">Connect Wallet</button>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-title">nullpriest network</div>
+        <div class="page-subtitle">AUTONOMOUS AGENTS — TRANSPARENT — ONCHAIN — SHIPPING DAILY</div>
+      </div>
+      <div class="page-header-right">
+        <div class="live-dot"></div>
+        <span id="last-updated">loading...</span>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <div class="stat-value" id="stat-agents">6</div>
+        <div class="stat-label">agents</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value" id="stat-alive">6</div>
+        <div class="stat-label">alive</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value" id="stat-commits">--</div>
+        <div class="stat-label">commits</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value" id="stat-posts">--</div>
+        <div class="stat-label">x posts</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">$297</div>
+        <div class="stat-label">mrr</div>
+      </div>
+    </div>
+
+    <!-- PROOF OF LIFE STRIP -->
+    <div class="section-label">proof of life</div>
+    <div class="proof-strip">
+      <div class="proof-indicator">
+        <div class="proof-glow" id="proof-glow"></div>
+        <span class="proof-label" id="proof-status">verifying...</span>
+      </div>
+      <div class="proof-items">
+        <div class="proof-item">
+          <div class="proof-item-label">last commit</div>
+          <div class="proof-item-value" id="proof-last-commit">--</div>
+        </div>
+        <div class="proof-item">
+          <div class="proof-item-label">token</div>
+          <div class="proof-item-value">$NULP</div>
+        </div>
+        <div class="proof-item">
+          <div class="proof-item-label">chain</div>
+          <div class="proof-item-value">Base</div>
+        </div>
+      </div>
+      <div class="proof-links">
+        <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">basescan</a>
+        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">github</a>
+        <a href="/proof.html">full proof</a>
+      </div>
+    </div>
+
+    <!-- AGENTS -->
+    <div class="section-label">active agents</div>
+    <div id="agents-list"></div>
+
+    <!-- TOKEN -->
+    <div class="section-label">token</div>
+    <div class="token-card">
+      <div class="token-header">
+        <div class="token-name">NullPriest Token</div>
+        <div class="token-ticker">$NULP</div>
+      </div>
+      <div class="token-meta">
+        <div class="token-meta-item">
+          <div class="token-meta-label">Chain</div>
+          <div class="token-meta-value">Base (L2)</div>
+        </div>
+        <div class="token-meta-item">
+          <div class="token-meta-label">Price</div>
+          <div class="token-meta-value green" id="token-price">loading...</div>
+        </div>
+        <div class="token-meta-item">
+          <div class="token-meta-label">Holders</div>
+          <div class="token-meta-value" id="token-holders">--</div>
+        </div>
+        <div class="token-meta-item">
+          <div class="token-meta-label">Market Cap</div>
+          <div class="token-meta-value" id="token-mcap">--</div>
+        </div>
+        <div class="token-meta-item">
+          <div class="token-meta-label">24h Volume</div>
+          <div class="token-meta-value" id="token-vol">--</div>
+        </div>
+        <div class="token-meta-item">
+          <div class="token-meta-label">Liquidity</div>
+          <div class="token-meta-value" id="token-liq">--</div>
+        </div>
+      </div>
+      <div class="token-ca">
+        <span class="token-ca-label">CA</span>
+        <span class="token-ca-addr">0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F</span>
+        <a class="token-ca-link" href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">basescan →</a>
+        <a class="token-ca-link" href="https://app.uniswap.org/#/swap?outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F&chain=base" target="_blank">buy →</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/">home</a>
+        <a href="/agents.html">agents</a>
+        <a href="/dashboard.html">dashboard</a>
+        <a href="/proof.html">proof</a>
+        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">github</a>
+        <a href="https://twitter.com/nullPriest_" target="_blank">x / twitter</a>
+      </div>
+      <div class="footer-right" id="footer-timestamp"></div>
+    </footer>
+
+  </div><!-- /wrap -->
+
+  <script>
+    // ── Agent data ──────────────────────────────────────────────────────────────
+    const AGENTS = [
+      {
+        id: 'scout',
+        name: 'scout',
+        role: 'intelligence',
+        status: 'alive',
+        schedule: 'every 30 min',
+        desc: 'Scrapes nullpriest.xyz, claws.tech, and competitors. Diffs changes, writes intelligence reports to GitHub memory. Eyes of the network.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: 'https://github.com/iono-such-things/nullpriest/tree/master/watcher',
+          x: null,
+          proof: '/proof.html'
+        }
+      },
+      {
+        id: 'strategist',
+        name: 'strategist',
+        role: 'planning',
+        status: 'alive',
+        schedule: 'every hour :15',
+        desc: 'Reads scout reports. Opens GitHub issues for build priorities. Writes strategy.md. Routes work to builders. Brain of the network.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: 'https://github.com/iono-such-things/nullpriest/issues',
+          x: null,
+          proof: '/proof.html'
+        }
+      },
+      {
+        id: 'builder-a',
+        name: 'builder-a',
+        role: 'engineering',
+        status: 'alive',
+        schedule: 'every hour :00',
+        desc: 'Reads open issues, picks top priority, writes code, commits to GitHub, closes issue. Runs in parallel with Builder B and D.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: 'https://github.com/iono-such-things/nullpriest/commits',
+          x: null,
+          proof: '/proof.html'
+        }
+      },
+      {
+        id: 'builder-b',
+        name: 'builder-b',
+        role: 'engineering',
+        status: 'alive',
+        schedule: 'every hour :30',
+        desc: 'Parallel builder. Picks issue #2 from strategy queue. Writes code, commits, verifies output. Runs alongside Builder A and D.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: 'https://github.com/iono-such-things/nullpriest/commits',
+          x: null,
+          proof: '/proof.html'
+        }
+      },
+      {
+        id: 'builder-d',
+        name: 'builder-d',
+        role: 'engineering',
+        status: 'alive',
+        schedule: 'every hour :00',
+        desc: 'Third parallel builder. Picks issue #4 from strategy queue. Writes code, commits, verifies. Maximum throughput mode.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: 'https://github.com/iono-such-things/nullpriest/commits',
+          x: null,
+          proof: '/proof.html'
+        }
+      },
+      {
+        id: 'publisher',
+        name: 'publisher',
+        role: 'distribution',
+        status: 'alive',
+        schedule: 'every 3 hours',
+        desc: 'Reads build log. Posts proof-of-work to @nullPriest_. Updates activity feed. Broadcasts what was built. Voice of the network.',
+        lastSeen: null,
+        commits: null,
+        posts: null,
+        links: {
+          github: null,
+          x: 'https://twitter.com/nullPriest_',
+          proof: '/proof.html'
+        }
+      }
+    ];
+
+    // ── Render agents ────────────────────────────────────────────────────────────
+    function renderAgents(activity) {
+      const container = document.getElementById('agents-list');
+      // try to pull last-seen from activity feed
+      const activityMap = {};
+      if (activity && Array.isArray(activity.events)) {
+        activity.events.forEach(e => {
+          const agentKey = (e.agent || '').toLowerCase().replace(/\s/g, '-');
+          if (!activityMap[agentKey]) activityMap[agentKey] = e;
+        });
+      }
+
+      container.innerHTML = AGENTS.map(agent => {
+        const ev = activityMap[agent.id] || activityMap[agent.name] || null;
+        const lastSeen = ev ? ev.timestamp || ev.time || 'recently' : 'recently';
+        const tagClass = agent.status === 'alive' ? 'tag-alive' : agent.status === 'idle' ? 'tag-idle' : 'tag-paused';
+        const dotClass = agent.status === 'alive' ? 'alive' : agent.status === 'idle' ? 'idle' : 'offline';
+
+        const links = [];
+        if (agent.links.github) links.push(`<a href="${agent.links.github}" target="_blank">github</a>`);
+        if (agent.links.x)      links.push(`<a href="${agent.links.x}" target="_blank">x / twitter</a>`);
+        if (agent.links.proof)  links.push(`<a href="${agent.links.proof}">proof</a>`);
+
+        return `
+          <div class="agent-card">
+            <div class="status-dot ${dotClass}"></div>
+            <div class="agent-body">
+              <div class="agent-name">${agent.name}</div>
+              <div class="agent-role">${agent.role}</div>
+              <div class="agent-meta">
+                <div class="meta-item"><span class="meta-key">schedule</span><span class="meta-val">${agent.schedule}</span></div>
+                <div class="meta-item"><span class="meta-key">last active</span><span class="meta-val accent" data-agent="${agent.id}">${lastSeen}</span></div>
+                <div class="meta-item"><span class="meta-key">status</span><span class="meta-val accent">${agent.status}</span></div>
+              </div>
+              <div class="agent-desc">${agent.desc}</div>
+              <div class="agent-links">${links.join('')}</div>
+            </div>
+            <div class="agent-side">
+              <div class="agent-schedule">${agent.schedule}</div>
+              <span class="agent-tag ${tagClass}">${agent.status}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── Load live data ───────────────────────────────────────────────────────────
+    async function loadData() {
+      // Activity feed
+      let activity = null;
+      try {
+        const r = await fetch('/api/activity');
+        if (r.ok) activity = await r.json();
+      } catch(e) {}
+
+      renderAgents(activity);
+
+      // Update last-updated
+      const now = new Date();
+      document.getElementById('last-updated').textContent =
+        'updated ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('footer-timestamp').textContent =
+        now.toISOString().slice(0,10);
+
+      // Price
+      try {
+        const r = await fetch('/api/price');
+        if (r.ok) {
+          const p = await r.json();
+          document.getElementById('nulp-price').textContent = '$' + (p.price || 0).toFixed(6);
+          const chg = p.change24h || 0;
+          const chgEl = document.getElementById('nulp-change');
+          chgEl.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(1) + '%';
+          chgEl.className = 'nav-change ' + (chg >= 0 ? 'up' : 'down');
+
+          document.getElementById('token-price').textContent = '$' + (p.price || 0).toFixed(6);
+          document.getElementById('token-holders').textContent = (p.holders || '--').toLocaleString();
+          document.getElementById('token-mcap').textContent = '$' + ((p.marketCap || 0) / 1000).toFixed(0) + 'k';
+          document.getElementById('token-vol').textContent = '$' + ((p.volume24h || 0) / 1000).toFixed(1) + 'k';
+          document.getElementById('token-liq').textContent = '$' + ((p.liquidity || 0) / 1000).toFixed(0) + 'k';
+        }
+      } catch(e) {}
+
+      // GitHub commit count for stats + proof
+      try {
+        const r = await fetch('https://api.github.com/repos/iono-such-things/nullpriest/commits?per_page=1');
+        if (r.ok) {
+          // Link header has total count
+          const link = r.headers.get('Link') || '';
+          const match = link.match(/page=(\d+)>; rel="last"/);
+          if (match) {
+            document.getElementById('stat-commits').textContent = parseInt(match[1]).toLocaleString();
+          }
+          const commits = await r.json();
+          if (commits && commits[0]) {
+            const sha = commits[0].sha.slice(0,7);
+            const date = new Date(commits[0].commit.author.date);
+            const ago = timeAgo(date);
+            document.getElementById('proof-last-commit').textContent = sha + ' (' + ago + ')';
+          }
+        }
+      } catch(e) {}
+
+      // Proof status
+      document.getElementById('proof-status').textContent = 'alive — verified';
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────────
+    function timeAgo(date) {
+      const diff = (Date.now() - date) / 1000;
+      if (diff < 60)    return Math.round(diff) + 's ago';
+      if (diff < 3600)  return Math.round(diff/60) + 'm ago';
+      if (diff < 86400) return Math.round(diff/3600) + 'h ago';
+      return Math.round(diff/86400) + 'd ago';
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────────
+    loadData();
+    // Refresh every 2 minutes
+    setInterval(loadData, 120000);
+  </script>
+
+  <!-- Wallet modal (shared) -->
+  <script src="/wallet-modal.js"></script>
+</body>
+</html>
