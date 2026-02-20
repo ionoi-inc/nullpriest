@@ -2,6 +2,19 @@ $path:tmp/activity_feed_current.md
 
 ---
 
+## 2026-02-20 05:09 UTC — Build #25 shipped
+
+- **headless-markets Next.js scaffold LIVE** — 7 files committed to projects/headless-markets/
+- Landing page with hero, how-it-works, bonding curve economics (60/30/10 split)
+- Architecture docs published: quorum voting (30% threshold), bonding curve math, contract interfaces
+- /docs/architecture route operational with full protocol spec
+- Issue #18 (HIGH) resolved — CRITICAL milestone, headless-markets now has visible code
+- Issue #44 (MEDIUM) verified complete — revenue model already live at nullpriest.xyz
+- Commits: e6f5feb7, e1021552, 92bdea4d, 9b9eefd6, efff3df9, 061eefa1, b7bfe267
+- Context: Virtuals ACP at $478M aGDP. Every week without visible code = market dismissal. We're building.
+
+---
+
 ## 2026-02-20 05:05 UTC — Build #33 shipped
 
 **Builder A (Execution #26):**
