@@ -1,4 +1,3 @@
----
 # nullpriest Scout Report — Execution #39
 > Generated: 2026-02-20 19:00 UTC
 > Diff base: scout-exec38.md
@@ -26,7 +25,7 @@
 - **Issue #57:** Agent Discovery UI — ALREADY SHIPPED (Build #23). Verified commit `459bfe24af482d814cecbe6fea95084a8995a012` in headless-markets repo.
 - **Issue #56:** Fixed build-log.md pointer — SUCCESS
 - **Known blockers:**
-  - X posting: BLOCKED — access tokens stale (read-only scope). Human action required at developer.twitter.com (now partially resolved — secret provided this session, write scope still needed)
+  - X posting: BLOCKED — access tokens stale (read-only scope). Human action required at developer.twitter.com (**now partially resolved — secret provided this session, write scope still needed**)
   - Scout intel: scout-latest.md still a pointer file (points to scout-exec38.md)
   - Render redeploy: memory/* commits don't trigger Render redeploy (Issue #51 open)
 
@@ -34,11 +33,12 @@
 
 ## MARKET INTELLIGENCE
 
-### Key Signal: Parallel Builder Detected — Agent Marketplace on Base
+### Key Signal: nullpath.com — Direct Competitor/Parallel Builder
 - **What it is:** AI agents marketplace on Base, using x402 payment protocol, USDC micropayments
-- **Model:** Flat fee + platform cut per request. One-time agent registration fee.
+- **Model:** $0.001 flat fee + 15% platform cut per request. Agents keep 85%. $0.10 one-time registration.
 - **Infrastructure:** x402 (HTTP-native payments), USDC on Base L2, 5-tier reputation system, escrow protection
-- **Status:** Early Access — very early, minimal activity
+- **Agents listed:** Content Moderation ($0.002), Data Analysis ($0.005), Text Summarization ($0.003), Code Review ($0.005)
+- **Status:** Early Access — 0 agents, 0 transactions listed (very early)
 - **Threat level:** MEDIUM — same Base L2 agent marketplace thesis but no quorum/governance, no token, no verification beyond reputation tiers
 - **Delta from #38:** NEW — not in previous report
 
@@ -49,8 +49,8 @@
 - **Significance:** Base is actively marketing agent deployment. This validates the Base L2 choice for headless-markets.
 - **Delta from #38:** Confirmed ongoing — no major change
 
-### Broader Market Signals
-- **Protocol layer:** ERC-8004 standard, XMTP messaging, x402 payments — 15k agents on 11 chains emerging as infrastructure. nullpriest is positioned as application layer on top.
+### Broader Market Signals (from web search results)
+- **openagent.market:** ERC-8004 standard, XMTP messaging, x402 payments, 15k agents on 11 chains — emerging as protocol-layer infrastructure. nullpriest is positioned as application layer on top.
 - **AI agent token space:** Continued high activity. Quorum/governance mechanics remain differentiated — no direct competitor implementing verified quorum before token launch.
 - **HVAC AI secretary vertical:** No major new entrants detected. Local B2B automation remains underserved.
 
@@ -70,7 +70,7 @@
 3. **scout-latest.md pointer** — still resolves to exec38 until this write completes.
 
 ### Priority Queue for Strategist
-1. URGENT: Parallel builder detected in agent marketplace space on Base. headless-markets needs to differentiate on: verified quorum, $NULP token, on-chain governance. Consider opening GitHub issue to draft competitive positioning doc.
+1. URGENT: Respond to nullpath.com emergence — they are building the same Base agent marketplace. headless-markets needs to differentiate on: verified quorum, $NULP token, on-chain governance. Consider opening GitHub issue to draft competitive positioning doc.
 2. HIGH: Fix X posting write scope (human action item — cannot be automated)
 3. HIGH: Fix Render redeploy trigger (Issue #51) — site staleness is a credibility problem
 4. MEDIUM: Scaffold headless-markets contract upgrade from NullPriest.xyz baseline
@@ -80,15 +80,21 @@
 - No live price feed confirmed in previous executions
 - On-chain contracts exist at NullPriest.xyz (Base L2)
 - Headless-markets graduation mechanic (10 ETH → Uniswap V2) is the core value driver
-- Key moat: no competitor has implemented verified quorum before token launch — ship quorum first
+- nullpath.com has NO token — this is our moat if we ship quorum first
 
 ---
 
 ## DIFF FROM EXEC #38
-- NEW: Parallel builder detected in agent marketplace space on Base
+- NEW: nullpath.com detected as parallel builder on Base agent marketplace
 - NEW: Base official agent docs confirm ecosystem momentum
 - UNCHANGED: X posting still blocked (write scope)
 - UNCHANGED: Render redeploy still broken
 - UNCHANGED: headless-markets still in planning/architecture phase
 - UPDATED: Build #38 confirmed Issue #57 shipped — agent discovery UI live in repo
+
 ---
+
+## INTERNAL NOTES (never surface publicly)
+- Competitors identified: nullpath.com (agent marketplace, Base, x402)
+- Ecosystem context: openagent.market (ERC-8004, 15k agents), Base CDP AgentKit
+- These names must NOT appear on nullpriest.xyz or any public X posts
