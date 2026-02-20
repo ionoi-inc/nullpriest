@@ -15,25 +15,26 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ── Static site ──────────────────────────────────────────────────────────────
+// ━━ Static site ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ── Health check ─────────────────────────────────────────────────────────────
+// ━━ Health check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.1' });
 });
 
-// ── Agent status endpoint ────────────────────────────────────────────────────
+// ━━ Agent status endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
     timestamp: new Date().toISOString(),
     cycle: {
-      scout:      { schedule: '*/30 * * * *',  description: 'Scrapes SURVIVE, CLAWS, DAIMON. Writes memory/scout-latest.md' },
-      strategist: { schedule: '0 * * * *',     description: 'Reads scout report. Opens agent-build GitHub issues.' },
-      builder:    { schedule: '0 * * * *',     description: 'Picks top issue. Writes code. Commits to repo. Closes issue.' },
-      builderB:   { schedule: '30 * * * *',    description: 'Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A.' },
-      publisher:  { schedule: '0 * * * *',     description: 'Reads build log. Posts to @nullPriest_. Updates activity feed.' }
+      scout:       { schedule: '*/30 * * * *',  description: 'Scrapes SURVIVE, CLAWS, DAIMON. Writes memory/scout-latest.md' },
+      strategist:  { schedule: '0 * * * *',     description: 'Reads scout report. Opens agent-build GitHub issues.' },
+      builder:     { schedule: '0 * * * *',     description: 'Picks top issue. Writes code. Commits to repo. Closes issue.' },
+      builderB:    { schedule: '0 * * * *',     description: 'Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A.' },
+      builderD:    { schedule: '0 * * * *',     description: 'Picks issues #4 and #9. Writes code. Commits to repo. Runs in parallel with Builders A/B.' },
+      publisher:   { schedule: '0 */3 * * *',   description: 'Reads build log. Posts to @nullPriest_. Updates activity feed.' }
     },
     contracts: {
       token:  '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F',
@@ -49,7 +50,7 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ── Memory proxy ─────────────────────────────────────────────────────────────
+// ━━ Memory proxy ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.get('/memory/:filename', (req, res) => {
   const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
   https.get(url, (ghRes) => {
@@ -60,7 +61,7 @@ app.get('/memory/:filename', (req, res) => {
   });
 });
 
-// ── Activity feed endpoint ───────────────────────────────────────────────────
+// ━━ Activity feed endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Reads memory/activity-feed.md from disk, parses into JSON array, caches 60s
 let activityCache = null;
 let activityCacheAt = 0;
@@ -107,7 +108,7 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ── Build log endpoint ───────────────────────────────────────────────────────
+// ━━ Build log endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Reads memory/build-log.md from disk, parses into JSON array, caches 60s
 let buildLogCache = null;
 let buildLogCacheAt = 0;
@@ -120,26 +121,27 @@ function parseBuildLog(markdown) {
     const lines = block.trim().split('\n');
     if (!lines[0] || !lines[0].startsWith('## Build #')) continue;
     const header = lines[0].replace(/^## Build #/, '').trim();
-    const buildNum = parseInt(header.split(/\s+/)[0], 10);
-    let date = null, status = null, issue = null, commit = null;
+    const numberMatch = header.match(/^(\d+)/);
+    const buildNumber = numberMatch ? parseInt(numberMatch[1], 10) : null;
+    let date = null, status = null, commit = null, issue = null;
     const bullets = [];
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
-      if (line.startsWith('**Date:**')) date = line.replace(/^\*\*Date:\*\*\s*/, '').trim();
-      else if (line.startsWith('**Status:**')) status = line.replace(/^\*\*Status:\*\*\s*/, '').trim();
-      else if (line.startsWith('**Issue:**')) issue = line.replace(/^\*\*Issue:\*\*\s*/, '').trim();
-      else if (line.startsWith('**Commit:**')) commit = line.replace(/^\*\*Commit:\*\*\s*/, '').trim();
+      if (line.startsWith('**Date:**')) date = line.replace(/^\*\*Date:\*\*\s*/, '');
+      else if (line.startsWith('**Status:**')) status = line.replace(/^\*\*Status:\*\*\s*/, '');
+      else if (line.startsWith('**Commit:**')) commit = line.replace(/^\*\*Commit:\*\*\s*/, '');
+      else if (line.startsWith('**Issue:**')) issue = line.replace(/^\*\*Issue:\*\*\s*/, '');
       else {
-        const m = line.match(/^\s*[-*]\s+(.+)/);
-        if (m) bullets.push(m[1].trim());
+        const m = line.match(/^[-*]\s+(.+)/);
+        if (m) bullets.push(m[1]);
       }
     }
-    builds.push({ buildNum, date, status, issue, commit, bullets });
+    builds.push({ buildNumber, date, status, commit, issue, bullets });
   }
   return builds;
 }
 
-app.get('/api/build-log', (req, res) => {
+app.get('/api/builds', (req, res) => {
   const now = Date.now();
   if (buildLogCache && (now - buildLogCacheAt < BUILD_LOG_CACHE_TTL_MS)) {
     return res.json(buildLogCache);
@@ -157,77 +159,78 @@ app.get('/api/build-log', (req, res) => {
   }
 });
 
-// ── Price endpoint ───────────────────────────────────────────────────────────
-// Fetches $NULP price from DexScreener API
+// ━━ Agent thoughts endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+app.get('/api/thoughts', (req, res) => {
+  const url = `${GITHUB_API_BASE}/issues/comments`;
+  https.get(url, { headers: { 'User-Agent': 'nullpriest' } }, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      try {
+        const comments = JSON.parse(data);
+        const thoughts = comments
+          .filter(c => c.body && c.body.includes('agent-thought'))
+          .slice(0, 10)
+          .map(c => ({
+            agent: c.user?.login || 'unknown',
+            timestamp: c.created_at,
+            text: c.body.replace(/agent-thought:\s*/i, '').trim()
+          }));
+        res.json({ thoughts });
+      } catch (err) {
+        res.status(500).json({ error: 'parse failed', details: err.message });
+      }
+    });
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'GitHub fetch failed', details: err.message });
+  });
+});
+
+// ━━ $NULP price endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const DEXSCREENER_API = 'https://api.dexscreener.com/latest/dex/tokens/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
 let priceCache = null;
 let priceCacheAt = 0;
-const PRICE_CACHE_TTL_MS = 30_000; // 30s
+const PRICE_CACHE_TTL_MS = 120_000; // 2 minutes
 
-app.get('/api/price', async (req, res) => {
+app.get('/api/price', (req, res) => {
   const now = Date.now();
   if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
     return res.json(priceCache);
   }
-  
-  try {
-    const fetch = (await import('node-fetch')).default;
-    const poolAddress = '0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c';
-    const url = `https://api.dexscreener.com/latest/dex/pairs/base/${poolAddress}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (data.pair) {
-      const price = parseFloat(data.pair.priceUsd) || 0;
-      const change24h = parseFloat(data.pair.priceChange?.h24) || 0;
-      const volume24h = parseFloat(data.pair.volume?.h24) || 0;
-      const liquidity = parseFloat(data.pair.liquidity?.usd) || 0;
-      
-      priceCache = {
-        price,
-        change_24h: change24h,
-        volume_24h: volume24h,
-        liquidity,
-        pair: poolAddress,
-        source: 'dexscreener',
-        cached_at: new Date().toISOString()
-      };
-      priceCacheAt = now;
-      res.json(priceCache);
-    } else {
-      throw new Error('No pair data returned');
-    }
-  } catch (err) {
-    res.status(500).json({ 
-      error: 'price fetch failed', 
-      details: err.message,
-      price: 0,
-      change_24h: 0
+  https.get(DEXSCREENER_API, (apiRes) => {
+    let data = '';
+    apiRes.on('data', chunk => data += chunk);
+    apiRes.on('end', () => {
+      try {
+        const json = JSON.parse(data);
+        const pair = json.pairs?.[0];
+        if (!pair) {
+          return res.status(404).json({ error: 'no pair data found' });
+        }
+        priceCache = {
+          price: parseFloat(pair.priceUsd) || 0,
+          liquidity: parseFloat(pair.liquidity?.usd) || 0,
+          volume24h: parseFloat(pair.volume?.h24) || 0,
+          priceChange24h: parseFloat(pair.priceChange?.h24) || 0,
+          cached_at: new Date().toISOString()
+        };
+        priceCacheAt = now;
+        res.json(priceCache);
+      } catch (err) {
+        res.status(500).json({ error: 'parse failed', details: err.message });
+      }
     });
-  }
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'DexScreener fetch failed', details: err.message });
+  });
 });
 
-// ── Agent thoughts endpoint ──────────────────────────────────────────────────
-// Fetches latest thoughts from memory/agent-thoughts.json
-app.get('/api/thoughts', (req, res) => {
-  try {
-    const fs = require('fs');
-    const thoughtsPath = path.join(__dirname, 'memory', 'agent-thoughts.json');
-    const thoughts = JSON.parse(fs.readFileSync(thoughtsPath, 'utf8'));
-    res.json(thoughts);
-  } catch (err) {
-    res.status(500).json({ error: 'thoughts unavailable', details: err.message });
-  }
+// ━━ 404 fallback ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+app.use((req, res) => {
+  res.status(404).json({ error: 'not found', path: req.path });
 });
 
-// ── Fallback to index.html for client-side routing ──────────────────────────
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
-
+// ━━ Start server ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 app.listen(PORT, () => {
-  console.log(`🟢 nullpriest server running on port ${PORT}`);
-  console.log(`📡 /api/status — agent cycle info`);
-  console.log(`💰 /api/price — live $NULP price`);
-  console.log(`📝 /api/activity — activity feed`);
-  console.log(`🔨 /api/build-log — build history`);
+  console.log(`nullpriest server running on port ${PORT}`);
 });
