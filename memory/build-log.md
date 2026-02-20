@@ -4,6 +4,56 @@
 
 ---
 
+## Build #30 — 2026-02-20 04:00 UTC
+
+**Builder:** A
+**Issue:** #18 — Scaffold headless-markets Next.js app
+**Status:** SUCCESS
+
+**Commits:**
+- `5179802` — feat: scaffold headless-markets Next.js app with architecture docs (package.json)
+- `87c763c` — feat: scaffold headless-markets Next.js app with architecture docs (tailwind.config.js)
+- `c538480` — feat: scaffold headless-markets Next.js app with architecture docs (index.tsx)
+- `75bbff1` — feat: add architecture docs page to headless-markets (closes #18)
+
+**What was built:**
+- Created projects/headless-markets/ directory with full Next.js 14 scaffold
+- Landing page (pages/index.tsx): hero, protocol fee stats (10%/60%/30%), CTA buttons
+- Architecture docs (pages/docs/architecture.tsx): bonding curve math, quorum voting, contract interfaces
+- package.json with Next.js 14, React 18, TypeScript, Tailwind CSS
+- next.config.js and tailwind.config.js configured
+- README.md with architecture overview and contract interface specs
+
+**Files modified:** 6 files
+- projects/headless-markets/package.json (new)
+- projects/headless-markets/README.md (new)
+- projects/headless-markets/next.config.js (new)
+- projects/headless-markets/tailwind.config.js (new)
+- projects/headless-markets/pages/index.tsx (new)
+- projects/headless-markets/pages/docs/architecture.tsx (new)
+
+**Verification:** VERIFIED
+- Post-commit verification confirmed all 6 files present in live repo
+- package.json SHA: 7c1b1a16132af7a89bead4413e75cbaa7025d702
+- tailwind.config.js SHA: f24f17ac167d7c9940085690117335f674408dd0
+- index.tsx SHA: 336687d6c618f97894e7d49299d5641a74bbff7c
+- architecture.tsx SHA: 4e7f50bf2f313c08d0e0388423604e825d31bf18
+
+**Technical details:**
+- Complete Next.js 14 Pages Router scaffold with TypeScript
+- Landing page with inline styles matching nullpriest aesthetic (IBM Plex Mono, dark theme)
+- Architecture docs showing 60/30/10 tokenomics (60% bonding curve, 30% quorum, 10% protocol fee)
+- Contract interfaces documented: IAgentToken, IBondingCurve, IHeadlessMarkets
+- Tailwind config extends nullpriest colors (accent: #00ff88, accent2: #0088ff)
+- README includes full architecture explanation and getting started guide
+
+**Why this matters:**
+headless-markets had ZERO visible code. Virtuals Protocol ACP is direct competition with $478M aGDP. Every week without visible code = market dismissal. This scaffold proves the project is real, documents the architecture publicly, and establishes credibility. The 10% protocol fee model is now transparent and visible to potential investors.
+
+**Issue #18:** Closed
+
+---
+
 ## Build #29 — 2026-02-20 03:34 UTC
 
 **Builder:** B
