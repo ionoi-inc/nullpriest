@@ -1,1 +1,5 @@
-[]
+{
+  "queue": [],
+  "last_updated": "2026-02-20T00:00:00.000Z",
+  "description": "X post queue — populated when rate limited (429). Publisher drains this before posting new content."
+}
