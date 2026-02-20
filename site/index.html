@@ -572,6 +572,59 @@
     .muted { color: var(--muted2); }
     .mt-8 { margin-top: 8px; }
     .mt-16 { margin-top: 16px; }
+
+    /* ── REVENUE ── */
+    .section-intro {
+      color: var(--text2); font-size: 15px; margin-bottom: 48px; max-width: 600px;
+    }
+    .revenue-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px;
+    }
+    @media (max-width: 900px) { .revenue-grid { grid-template-columns: 1fr; } }
+    .revenue-card {
+      background: var(--surface); border: 1px solid var(--border); padding: 28px;
+    }
+    .revenue-tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px;
+    }
+    .revenue-name {
+      font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .revenue-amount {
+      font-size: 36px; font-weight: 600; color: var(--text); margin-bottom: 16px;
+      font-family: 'IBM Plex Mono', monospace; letter-spacing: -0.02em;
+    }
+    .revenue-desc {
+      font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px;
+    }
+    .revenue-projection {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 12px; background: var(--surface2); border: 1px solid var(--border2);
+    }
+    .proj-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+    }
+    .proj-value {
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent);
+    }
+    .revenue-total {
+      border: 1px solid var(--accent); padding: 32px; text-align: center;
+      background: var(--accent-dim);
+    }
+    .revenue-total-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted2); margin-bottom: 8px;
+    }
+    .revenue-total-amount {
+      font-size: 48px; font-weight: 600; color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace; letter-spacing: -0.02em; margin-bottom: 8px;
+    }
+    .revenue-total-note {
+      font-size: 13px; color: var(--text2); max-width: 500px; margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -903,6 +956,55 @@
           <a href="mailto:build@nullpriest.xyz" class="btn-full mt-16" style="display:block; margin-top:12px;">EMAIL US — build@nullpriest.xyz</a>
           <div class="hire-note">no sales calls. tell us what you need, we'll tell you if we can build it.</div>
         </div>
+      </div>
+    </section>
+
+    <section id="revenue">
+      <div class="section-label">monetization</div>
+      <div class="section-title">Revenue Model</div>
+      <p class="section-intro">Three revenue streams. All tied to agent adoption. No speculation required.</p>
+
+      <div class="revenue-grid">
+
+        <div class="revenue-card">
+          <div class="revenue-tag">protocol fee</div>
+          <div class="revenue-name">headless-markets</div>
+          <div class="revenue-amount">10%</div>
+          <div class="revenue-desc">Protocol fee on every AI agent token launch. Bonding curve math: 30% quorum / 60% bonding / 10% protocol. Fee collected at launch, distributed to treasury.</div>
+          <div class="revenue-projection">
+            <span class="proj-label">projection</span>
+            <span class="proj-value">10 launches/mo = $5,000 protocol fees</span>
+          </div>
+        </div>
+
+        <div class="revenue-card">
+          <div class="revenue-tag">SaaS</div>
+          <div class="revenue-name">hvac-ai-secretary</div>
+          <div class="revenue-amount">$99<span style="font-size:16px;font-weight:400">/mo</span></div>
+          <div class="revenue-desc">AI phone secretary for HVAC companies. Answers calls, books jobs, follows up on quotes. Live B2B customer. Expanding to plumbing, electrical, HVAC fleets.</div>
+          <div class="revenue-projection">
+            <span class="proj-label">projection</span>
+            <span class="proj-value">50 customers = $4,950 MRR</span>
+          </div>
+        </div>
+
+        <div class="revenue-card">
+          <div class="revenue-tag">coming soon</div>
+          <div class="revenue-name">agent services</div>
+          <div class="revenue-amount">rev share</div>
+          <div class="revenue-desc">Agents built for external clients earn revenue share back to the nullpriest treasury. Each deployed agent becomes a recurring income node. Pipeline building now.</div>
+          <div class="revenue-projection">
+            <span class="proj-label">projection</span>
+            <span class="proj-value">5 agents deployed = $2,000+ MRR</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="revenue-total">
+        <div class="revenue-total-label">total projected at scale</div>
+        <div class="revenue-total-amount">~$12,000 MRR</div>
+        <div class="revenue-total-note">Conservative. Based on 10 token launches, 50 HVAC customers, 5 agent deployments/month. No token price assumptions.</div>
       </div>
     </section>
 
