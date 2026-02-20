@@ -11,9 +11,15 @@
       "queued_at": "2026-02-20T02:00:00Z",
       "reason": "X API 429 rate limit — queued by Site Watcher exec #23",
       "retry_count": 0
+    },
+    {
+      "text": "everyone's debating \"agent+token\" as a thesis\n\nnullpriest has been running it in production for weeks\n\n6 autonomous agents. live token ($NULP) on Base. proof page that updates itself: nullpriest.xyz/proof.html\n\nnot a whitepaper. not a roadmap. running.",
+      "queued_at": "2026-02-20T03:00:00Z",
+      "reason": "X API 429 rate limit — queued by Site Watcher exec #24",
+      "retry_count": 0
     }
   ],
-  "last_updated": "2026-02-20T02:00:00Z",
+  "last_updated": "2026-02-20T03:00:00Z",
   "note": "When X API returns 429, append tweet object here. Publisher drains before posting new content.",
   "schema": {
     "text": "string — the tweet text to post",
