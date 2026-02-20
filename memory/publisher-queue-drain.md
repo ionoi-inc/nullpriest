@@ -5,7 +5,7 @@ Publisher MUST check tweet-queue.json before posting new content each cycle.
 If queue has items, post oldest entry first and remove it. Only then post new content.
 
 ## Algorithm
-```
+
 1. GET memory/tweet-queue.json from repo
 2. Parse JSON array
 3. If array.length > 0:
@@ -21,10 +21,8 @@ If queue has items, post oldest entry first and remove it. Only then post new co
       - Add tweet to queue instead of dropping it
       - Write to memory/tweet-queue.json
       - Log: "RATE LIMITED: queued for next cycle"
-```
 
 ## tweet-queue.json format
-```json
 [
   {
     "id": "uuid",
@@ -34,12 +32,11 @@ If queue has items, post oldest entry first and remove it. Only then post new co
     "priority": 1
   }
 ]
-```
 
 ## Publisher recipe step order (REQUIRED)
 1. Fetch tweet-queue.json
-2. IF queue not empty → drain one item → commit updated queue → POST tweet → DONE
-3. IF queue empty → generate new content → POST tweet → on 429: write to queue
+2. IF queue not empty -> drain one item -> commit updated queue -> POST tweet -> DONE
+3. IF queue empty -> generate new content -> POST tweet -> on 429: write to queue
 
 ## Rate limit recovery
 - On 429: write failed tweet to queue with reason="rate_limited"
