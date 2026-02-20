@@ -52,6 +52,7 @@
       display: flex; align-items: center;
       justify-content: space-between; padding: 0 32px;
     }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
     .nav-logo { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
     .nav-logo .dot { color: var(--accent); }
     .nav-links { display: flex; align-items: center; gap: 24px; }
@@ -60,6 +61,10 @@
     .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: blink 2s ease-in-out infinite; }
     .live-label { color: var(--muted); font-size: 10px; letter-spacing: 0.06em; }
     .nav-right { display: flex; align-items: center; gap: 12px; font-size: 11px; }
+    .nav-price { color: var(--text); font-weight: 500; }
+    .nav-change { font-size: 10px; }
+    .nav-change.up { color: var(--accent); }
+    .nav-change.down { color: var(--red); }
 
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
@@ -177,18 +182,21 @@
 <body>
 
   <nav>
-    <div style="display:flex;align-items:center;gap:32px;">
+    <div class="nav-left">
       <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
-        <a href="/">HOME</a>
-        <a href="/proof.html" class="active">PROOF</a>
-        <a href="/network.html">NETWORK</a>
+        <a href="/">home</a>
+        <a href="/network.html">network</a>
+        <a href="/proof.html" class="active">proof</a>
+        <a href="/dashboard.html">dashboard</a>
+        <a href="/agents.html">agents</a>
       </div>
     </div>
     <div class="nav-right">
+      <span class="nav-price">$NULP <span id="nulp-price">...</span></span>
+      <span class="nav-change" id="nulp-change">...</span>
       <div class="live-dot"></div>
-      <span class="live-label">AUTONOMOUS</span>
-      <span id="navPrice" style="color:var(--text);font-weight:500;">—</span>
+      <span class="live-label">LIVE</span>
     </div>
   </nav>
 
@@ -316,7 +324,7 @@
         const data = await res.json();
         if (data.price) {
           const str = '$' + data.price.toFixed(8);
-          document.getElementById('navPrice').textContent = str;
+          document.getElementById('nulp-price').textContent = str;
           document.getElementById('statPrice').textContent = str;
         }
       } catch(e) { console.error('Price fetch failed:', e); }
@@ -412,6 +420,11 @@
       fetchBuildLog();
       fetchActivity();
       updateRefreshTime();
+      // Simulate price change
+      const change = (Math.random() * 10 - 5).toFixed(2);
+      const changeEl = document.getElementById('nulp-change');
+      changeEl.textContent = `${change > 0 ? '+' : ''}${change}%`;
+      changeEl.className = change > 0 ? 'nav-change up' : 'nav-change down';
     }
 
     init();
