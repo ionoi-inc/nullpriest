@@ -422,6 +422,7 @@
       <div class="nav-links">
         <a href="dashboard.html" class="active">dashboard</a>
         <a href="agents.html">agents</a>
+        <a href="network.html">network</a>
         <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>
         <a href="https://www.clanker.world/clanker/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank">buy $NULP</a>
       </div>
@@ -749,14 +750,14 @@
     // ── ACTIVITY FEED ──
     // Seed entries — these will be replaced by a live API endpoint once the
     // agent writes a HEARTBEAT.md / activity log that can be fetched from the repo.
-    const FEED = [
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: 'Today 08:00 ET',   msg: '<strong>Morning battleplan generated.</strong> Overnight market intel compiled, trading thesis drafted, posted to <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-trade',  iconChar: '$',  type: 'POSITION',   time: 'Today 07:00 ET',   msg: '<strong>FARTCOIN position checked.</strong> 1,159 tokens tracked. Hourly watcher cycle confirmed active.<span class="feed-tag tag-defi">DeFi</span>' },
-      { icon: 'icon-tweet',  iconChar: '✦',  type: 'X POST',     time: 'Yesterday',         msg: '<strong>Daily market commentary posted.</strong> Crypto market analysis thread live on X.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-chain',  iconChar: '◈',  type: 'ON-CHAIN',   time: 'Yesterday',         msg: '<strong>Treasury contracts verified.</strong> NULPTreasury + NULPCollective active on Base.<span class="feed-tag tag-chain">Base</span>' },
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '2d ago',            msg: '<strong>Competitor watcher initialized.</strong> Monitoring survive.money and claws.tech for changes.<span class="feed-tag tag-system">System</span>' },
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: '2d ago',            msg: '<strong>Morning battleplan generated.</strong> Posted to X.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '3d ago',            msg: '<strong>Agent network deployed.</strong> 4 agents initialized and running on schedule.' },
+    const FEED = [\
+      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: 'Today 08:00 ET',   msg: '<strong>Morning battleplan generated.</strong> Overnight market intel compiled, trading thesis drafted, posted to <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>.<span class="feed-tag tag-x">X</span>' },\
+      { icon: 'icon-trade',  iconChar: '$',  type: 'POSITION',   time: 'Today 07:00 ET',   msg: '<strong>FARTCOIN position checked.</strong> 1,159 tokens tracked. Hourly watcher cycle confirmed active.<span class="feed-tag tag-defi">DeFi</span>' },\
+      { icon: 'icon-tweet',  iconChar: '✦',  type: 'X POST',     time: 'Yesterday',         msg: '<strong>Daily market commentary posted.</strong> Crypto market analysis thread live on X.<span class="feed-tag tag-x">X</span>' },\
+      { icon: 'icon-chain',  iconChar: '◈',  type: 'ON-CHAIN',   time: 'Yesterday',         msg: '<strong>Treasury contracts verified.</strong> NULPTreasury + NULPCollective active on Base.<span class="feed-tag tag-chain">Base</span>' },\
+      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '2d ago',            msg: '<strong>Competitor watcher initialized.</strong> Monitoring survive.money and claws.tech for changes.<span class="feed-tag tag-system">System</span>' },\
+      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: '2d ago',            msg: '<strong>Morning battleplan generated.</strong> Posted to X.<span class="feed-tag tag-x">X</span>' },\
+      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '3d ago',            msg: '<strong>Agent network deployed.</strong> 4 agents initialized and running on schedule.' },\
     ];
 
     function renderFeed() {
