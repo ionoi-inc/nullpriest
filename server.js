@@ -15,15 +15,15 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ━━━ Static site ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Static site ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ━━━ Health check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Health check ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.1' });
 });
 
-// ━━━ Agent status endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Agent status endpoint ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
@@ -50,7 +50,21 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ━━━ Memory proxy ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Memory proxy ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+// Special handler for activity-feed.json - reads from local disk
+app.get('/memory/activity-feed.json', (req, res) => {
+  try {
+    const fs = require('fs');
+    const feedPath = path.join(__dirname, 'memory', 'activity-feed.json');
+    const jsonContent = fs.readFileSync(feedPath, 'utf8');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(jsonContent);
+  } catch (err) {
+    res.status(500).json({ error: 'activity-feed.json unavailable', details: err.message });
+  }
+});
+
+// Generic memory proxy for other files - fetches from GitHub
 app.get('/memory/:filename', (req, res) => {
   const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
   https.get(url, (ghRes) => {
@@ -61,7 +75,7 @@ app.get('/memory/:filename', (req, res) => {
   });
 });
 
-// ━━━ Activity feed endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Activity feed endpoint ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 // Reads memory/activity-feed.md from disk, parses into JSON array, caches 60s
 let activityCache = null;
 let activityCacheAt = 0;
@@ -108,104 +122,90 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ━━━ Build log endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-let buildCache = null;
-let buildCacheAt = 0;
-const BUILD_CACHE_TTL_MS = 60_000;
+// ┃┃┃ Build log endpoint ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+// Reads memory/build-log.md, parses into JSON, caches 60s
+let buildLogCache = null;
+let buildLogCacheAt = 0;
+const BUILD_LOG_CACHE_TTL_MS = 60_000;
 
 function parseBuildLog(markdown) {
   const entries = [];
-  const blocks = markdown.split(/\n(?=## Build #)/);
+  const blocks = markdown.split(/\n(?=### )/);
   for (const block of blocks) {
     const lines = block.trim().split('\n');
-    if (!lines[0] || !lines[0].startsWith('## Build #')) continue;
-    const header = lines[0].replace(/^## /, '').trim();
-    const m = header.match(/Build #(\d+)\s*\(([^)]+)\)\s*—\s*(.+)/);
+    if (!lines[0] || !lines[0].startsWith('### ')) continue;
+    const header = lines[0].replace(/^### /, '').trim();
+    const m = header.match(/^Build #(\d+)(.*)/);
     if (!m) continue;
-    const buildNum = parseInt(m[1], 10);
-    const timestamp = m[2].trim();
-    const agent = m[3].trim();
-    const issues = [];
+    const buildNumber = parseInt(m[1], 10);
+    const rest = m[2].trim();
+    let status = 'unknown', timestamp = null;
+    if (rest.includes('SUCCESS')) status = 'success';
+    else if (rest.includes('FAIL')) status = 'fail';
+    const tsMatch = rest.match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/);
+    if (tsMatch) timestamp = tsMatch[0];
+    const bullets = [];
     for (let i = 1; i < lines.length; i++) {
-      const issueMatch = lines[i].match(/^###\s+Issue\s+#(\d+)\s+—\s+(.+)/);
-      if (issueMatch) {
-        const issueNum = parseInt(issueMatch[1], 10);
-        const issueTitle = issueMatch[2].trim();
-        let status = null, commit = null, what = null;
-        for (let j = i + 1; j < lines.length && !lines[j].startsWith('###'); j++) {
-          if (lines[j].match(/^-\s*Status:/)) status = lines[j].replace(/^-\s*Status:\s*/, '').trim();
-          if (lines[j].match(/^-\s*Commit:/)) commit = lines[j].replace(/^-\s*Commit:\s*/, '').trim();
-          if (lines[j].match(/^-\s*What:/)) what = lines[j].replace(/^-\s*What:\s*/, '').trim();
-        }
-        issues.push({ number: issueNum, title: issueTitle, status, commit, what });
-      }
+      const bm = lines[i].match(/^\s*[-*]\s+(.+)/);
+      if (bm) bullets.push(bm[1].trim());
     }
-    entries.push({ build: buildNum, timestamp, agent, issues });
+    entries.push({ buildNumber, status, timestamp, bullets });
   }
   return entries;
 }
 
 app.get('/api/build-log', (req, res) => {
   const now = Date.now();
-  if (buildCache && (now - buildCacheAt < BUILD_CACHE_TTL_MS)) {
-    return res.json(buildCache);
+  if (buildLogCache && (now - buildLogCacheAt < BUILD_LOG_CACHE_TTL_MS)) {
+    return res.json(buildLogCache);
   }
   try {
     const fs = require('fs');
     const logPath = path.join(__dirname, 'memory', 'build-log.md');
     const md = fs.readFileSync(logPath, 'utf8');
     const entries = parseBuildLog(md);
-    buildCache = { entries, cached_at: new Date().toISOString(), source: 'local' };
-    buildCacheAt = now;
-    res.json(buildCache);
+    buildLogCache = { entries, cached_at: new Date().toISOString(), source: 'local' };
+    buildLogCacheAt = now;
+    res.json(buildLogCache);
   } catch (err) {
     res.status(500).json({ error: 'build log unavailable', details: err.message });
   }
 });
 
-// ━━━ $NULP Price endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Using native fetch (Node 18+ built-in) — no need for node-fetch package
-
-let priceCache = null;
-let priceCacheAt = 0;
-const PRICE_CACHE_TTL_MS = 30_000;
-
+// ┃┃┃ $NULP price endpoint ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+// Live price from DexScreener
 app.get('/api/price', async (req, res) => {
-  const now = Date.now();
-  if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
-    return res.json(priceCache);
-  }
   try {
-    const NULP_ADDRESS = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
-    const url = `https://api.dexscreener.com/latest/dex/tokens/${NULP_ADDRESS}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (!data.pairs || data.pairs.length === 0) {
-      return res.json({ error: 'No trading pairs found', price: 0, cached_at: new Date().toISOString() });
+    const dexUrl = 'https://api.dexscreener.com/latest/dex/tokens/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
+    const response = await fetch(dexUrl);
+    if (!response.ok) {
+      throw new Error(`DexScreener returned ${response.status}`);
     }
-    
+    const data = await response.json();
+    if (!data.pairs || data.pairs.length === 0) {
+      return res.json({ price: null, error: 'No pairs found' });
+    }
     const pair = data.pairs[0];
-    priceCache = {
+    res.json({
       price: parseFloat(pair.priceUsd || 0),
-      price_change_24h: parseFloat(pair.priceChange?.h24 || 0),
-      volume_24h: parseFloat(pair.volume?.h24 || 0),
+      priceChange24h: parseFloat(pair.priceChange?.h24 || 0),
+      volume24h: parseFloat(pair.volume?.h24 || 0),
       liquidity: parseFloat(pair.liquidity?.usd || 0),
-      cached_at: new Date().toISOString(),
-      source: 'dexscreener'
-    };
-    priceCacheAt = now;
-    res.json(priceCache);
+      fdv: parseFloat(pair.fdv || 0),
+      pairAddress: pair.pairAddress,
+      dexId: pair.dexId,
+      url: pair.url
+    });
   } catch (err) {
-    res.status(500).json({ error: 'price fetch failed', details: err.message, price: 0 });
+    res.status(500).json({ error: 'Price fetch failed', details: err.message });
   }
 });
 
-// ━━━ Start server ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ┃┃┃ Fallback to index.html for SPA ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
-  console.log(`Memory proxy: /memory/:filename → GitHub raw`);
-  console.log(`Activity feed: /api/activity → memory/activity-feed.md`);
-  console.log(`Build log: /api/build-log → memory/build-log.md`);
-  console.log(`Price: /api/price → DexScreener API`);
 });
