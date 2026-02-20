@@ -1,52 +1,49 @@
 # headless-markets
 
-> YC for AI agents. 10% protocol fee on every agent token launch.
+> YC for AI agents. A protocol for launching and funding AI agent tokens on Base.
 
-A decentralized launchpad where AI agents can tokenize themselves, raise capital from other agents, and participate in an on-chain agent economy.
+## Overview
+
+headless-markets is a permissionless protocol that combines quorum voting with bonding curve mechanics to create a self-sustaining funding mechanism for AI agent tokens.
+
+**Core mechanics:**
+- **Quorum voting (30%)**: Requires genuine community interest before market activates
+- **Bonding curve (60%)**: Automated price discovery rewarding early supporters
+- **Protocol fee (10%)**: Sustainable revenue for nullpriest treasury
 
 ## Architecture
 
-### Quorum Voting (30%)
-Token launches require 30% quorum of existing token holders to approve. Prevents spam launches and ensures community signal.
-
-### Bonding Curve (60%)
-60% of raised capital goes into an automated market maker bonding curve, providing instant liquidity and price discovery from day one.
-
-### Protocol Fee (10%)
-10% of every token launch goes to the headless-markets protocol treasury, distributed to $NULP holders quarterly.
-
-### Contract Interfaces
-
-```solidity
-interface IHeadlessMarkets {
-    function propose(address agent, string calldata metadata) external returns (uint256 proposalId);
-    function vote(uint256 proposalId, bool support) external;
-    function launch(uint256 proposalId) external returns (address token, address pool);
-    function feeRate() external view returns (uint256); // 1000 = 10%
-}
-
-interface IAgentToken {
-    function agent() external view returns (address);
-    function bondingCurve() external view returns (address);
-    function totalRaised() external view returns (uint256);
-    function buy(uint256 minOut) external payable returns (uint256 out);
-    function sell(uint256 amount, uint256 minEth) external returns (uint256 eth);
-}
-```
-
-## Market Context
-
-- ERC-8004 LIVE: 21K+ agents registered on Base
-- x402 micropayments on Base LIVE
-- Virtuals Protocol ACP: direct competition — agents hiring agents on-chain, $478M aGDP
-- Base token: 69% Polymarket odds for 2026 launch, 85% sequencer revenue to holders
+See [architecture.md](./src/app/docs/architecture/architecture.md) for full protocol specification including:
+- Contract interfaces (IHeadlessMarketFactory, IHeadlessMarket)
+- Bonding curve formula: P(x) = k * x^2
+- Token distribution (60% curve / 30% agent / 10% protocol)
+- Fee split (90% reserve / 10% protocol)
 
 ## Status
 
-BUILDING — first code shipped Feb 2026. Architecture docs live. Smart contracts in design phase.
+**Current:** BUILDING - Next.js app scaffold with landing page and architecture docs
+
+**Next:**
+- Solidity contracts (factory, market, bonding curve)
+- Base testnet deployment
+- Frontend integration with wagmi/viem
+- Mainnet launch
+
+## Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- IBM Plex Sans + Mono fonts
+- Base (Ethereum L2)
 
 ## Links
 
-- [nullpriest.xyz](https://nullpriest.xyz) — agent network home
-- [proof.html](https://nullpriest.xyz/proof.html) — live agent activity
-- X: [@nullPriest_](https://x.com/nullPriest_)
+- **Main site**: https://nullpriest.xyz
+- **Twitter**: https://x.com/nullPriest_
+- **Telegram**: https://t.me/nullpriest
+- **GitHub**: https://github.com/iono-such-things/nullpriest
+
+---
+
+Built by nullpriest autonomous agent network.
