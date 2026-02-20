@@ -1,190 +1,206 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, useBalance } from 'wagmi';
-import { parseEther, formatEther } from 'viem';
+import { useState, useEffect, useCallback } from 'react';
 
-const BONDING_CURVE_ABI = [
-  { name: 'getBuyPrice', type: 'function', stateMutability: 'view', inputs: [{ name: 'amount', type: 'uint256' }], outputs: [{ name: 'cost', type: 'uint256' }] },
-  { name: 'getSellPrice', type: 'function', stateMutability: 'view', inputs: [{ name: 'amount', type: 'uint256' }], outputs: [{ name: 'proceeds', type: 'uint256' }] },
-  { name: 'buy', type: 'function', stateMutability: 'payable', inputs: [{ name: 'minTokensOut', type: 'uint256' }], outputs: [] },
-  { name: 'sell', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'amount', type: 'uint256' }, { name: 'minEthOut', type: 'uint256' }], outputs: [] },
-  { name: 'totalSupply', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ name: '', type: 'uint256' }] },
-  { name: 'marketCap', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ name: '', type: 'uint256' }] },
-  { name: 'currentPrice', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ name: '', type: 'uint256' }] },
-  { name: 'graduated', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ name: '', type: 'bool' }] },
-  { name: 'graduationThreshold', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ name: '', type: 'uint256' }] },
-  { name: 'balanceOf', type: 'function', stateMutability: 'view', inputs: [{ name: 'account', type: 'address' }], outputs: [{ name: '', type: 'uint256' }] },
+const K = 0.000001;
+const N = 1;
+const GRADUATION_ETH = 10;
+const PROTOCOL_FEE = 0.10;
+const BONDING_CURVE_CONTRACT = '0x2128cf8f508dde2202c6cd5df70be635f975a4f9';
+
+function spotPrice(supply: number): number { return K * Math.pow(supply, N); }
+function buyCost(supply: number, amount: number): number { return (K / 2) * (Math.pow(supply + amount, 2) - Math.pow(supply, 2)); }
+function sellReturn(supply: number, amount: number): number { const gross = (K / 2) * (Math.pow(supply, 2) - Math.pow(supply - amount, 2)); return gross * (1 - PROTOCOL_FEE); }
+function marketCap(supply: number): number { return spotPrice(supply) * supply; }
+function graduationPct(supply: number): number { return Math.min((marketCap(supply) / GRADUATION_ETH) * 100, 100); }
+
+interface TokenState { symbol: string; name: string; supply: number; reserveETH: number; graduated: boolean; }
+interface TradeHistory { type: 'buy' | 'sell'; amount: number; ethValue: number; timestamp: Date; address: string; }
+
+const INITIAL_TOKEN: TokenState = { symbol: 'AGKT', name: 'AgentKit Protocol', supply: 125_000, reserveETH: 0.78, graduated: false };
+const MOCK_HISTORY: TradeHistory[] = [
+  { type: 'buy', amount: 5000, ethValue: 0.0156, timestamp: new Date(Date.now() - 8*60000), address: '0xScout...' },
+  { type: 'buy', amount: 15000, ethValue: 0.0563, timestamp: new Date(Date.now() - 22*60000), address: '0xStrat...' },
+  { type: 'sell', amount: 2000, ethValue: 0.0031, timestamp: new Date(Date.now() - 45*60000), address: '0xAnon1...' },
+  { type: 'buy', amount: 50000, ethValue: 0.3125, timestamp: new Date(Date.now() - 2*3600000), address: '0xAnon2...' },
 ];
 
-const ERC20_APPROVE_ABI = [
-  { name: 'approve', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }] },
-];
+function PriceChart({ supply }: { supply: number }) {
+  const points = 40;
+  const maxSupply = supply * 1.3;
+  const prices = Array.from({ length: points }, (_, i) => ({ s: (i / (points - 1)) * maxSupply, p: spotPrice((i / (points - 1)) * maxSupply) }));
+  const maxP = prices[prices.length - 1].p;
+  const w = 100; const h = 48;
+  const toSVG = (s: number, p: number) => `${(s / maxSupply) * w},${h - (p / maxP) * h}`;
+  const polyline = prices.map(({ s, p }) => toSVG(s, p)).join(' ');
+  const curX = (supply / maxSupply) * w;
+  const curY = h - (spotPrice(supply) / maxP) * h;
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Price Curve (k·s^n)</div>
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: 80, display: 'block' }}>
+        <defs><linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4488ff" stopOpacity="0.15" /><stop offset="100%" stopColor="#4488ff" stopOpacity="0" /></linearGradient></defs>
+        <polygon points={`0,${h} ${polyline} ${w},${h}`} fill="url(#curveGrad)" />
+        <polyline points={polyline} fill="none" stroke="#4488ff" strokeWidth="0.6" strokeLinejoin="round" />
+        <line x1={curX} y1="0" x2={curX} y2={h} stroke="#00ff88" strokeWidth="0.4" strokeDasharray="1,1" />
+        <circle cx={curX} cy={curY} r="1.2" fill="#00ff88" />
+      </svg>
+    </div>
+  );
+}
 
-const BONDING_CURVE_ADDRESS = process.env.NEXT_PUBLIC_BONDING_CURVE_ADDRESS as `0x${string}`;
-const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS as `0x${string}`;
-const GRADUATION_THRESHOLD_ETH = 10;
-const SLIPPAGE_BPS = 50;
+function GraduationBar({ supply }: { supply: number }) {
+  const pct = graduationPct(supply);
+  const mc = marketCap(supply);
+  const graduated = pct >= 100;
+  return (
+    <div style={{ margin: '16px 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: 11, fontFamily: 'IBM Plex Mono, monospace' }}>
+        <span style={{ color: '#555', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Graduation Progress</span>
+        <span style={{ color: graduated ? '#00ff88' : '#b0b0b0' }}>{mc.toFixed(4)} / {GRADUATION_ETH} ETH ({pct.toFixed(1)}%)</span>
+      </div>
+      <div style={{ height: 6, background: '#1a1a1a', borderRadius: 3, overflow: 'hidden' }}>
+        <div style={{ height: '100%', width: `${pct}%`, background: graduated ? '#00ff88' : 'linear-gradient(90deg, #4488ff, #aa88ff)', borderRadius: 3, transition: 'width 0.5s ease' }} />
+      </div>
+      {!graduated && <div style={{ marginTop: 6, fontSize: 11, color: '#555', fontFamily: 'IBM Plex Mono, monospace' }}>{(GRADUATION_ETH - mc).toFixed(4)} ETH until Uniswap V2 deployment</div>}
+      {graduated && <div style={{ marginTop: 8, fontSize: 11, color: '#00ff88', fontFamily: 'IBM Plex Mono, monospace' }}>GRADUATED → Deploying to Uniswap V2...</div>}
+    </div>
+  );
+}
 
-type Tab = 'buy' | 'sell';
+function TradePanel({ token, onTrade }: { token: TokenState; onTrade: (type: 'buy' | 'sell', amount: number) => void }) {
+  const [mode, setMode] = useState<'buy' | 'sell'>('buy');
+  const [inputAmount, setInputAmount] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const amount = parseFloat(inputAmount) || 0;
+  const cost = mode === 'buy' ? buyCost(token.supply, amount) : sellReturn(token.supply, amount);
+  const fee = mode === 'buy' ? cost * PROTOCOL_FEE : 0;
+  const netCost = mode === 'buy' ? cost + fee : cost;
 
-export default function BondingCurvePage() {
-  const { address, isConnected } = useAccount();
-  const [tab, setTab] = useState<Tab>('buy');
-  const [ethInput, setEthInput] = useState('');
-  const [tokenInput, setTokenInput] = useState('');
-
-  const { data: currentPrice } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'currentPrice', args: [] }) as { data: bigint | undefined };
-  const { data: marketCap } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'marketCap', args: [] }) as { data: bigint | undefined };
-  const { data: totalSupply } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'totalSupply', args: [] }) as { data: bigint | undefined };
-  const { data: graduated } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'graduated', args: [] }) as { data: boolean | undefined };
-  const { data: graduationThreshold } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'graduationThreshold', args: [] }) as { data: bigint | undefined };
-  const { data: tokenBalance } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'balanceOf', args: address ? [address] : undefined, query: { enabled: !!address } }) as { data: bigint | undefined };
-  const { data: ethBalance } = useBalance({ address });
-
-  const ethAmountWei = ethInput ? parseEther(ethInput) : undefined;
-  const { data: buyEstimate } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'getBuyPrice', args: ethAmountWei ? [ethAmountWei] : undefined, query: { enabled: !!ethAmountWei && tab === 'buy' } }) as { data: bigint | undefined };
-
-  const tokenAmountWei = tokenInput ? parseEther(tokenInput) : undefined;
-  const { data: sellEstimate } = useReadContract({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'getSellPrice', args: tokenAmountWei ? [tokenAmountWei] : undefined, query: { enabled: !!tokenAmountWei && tab === 'sell' } }) as { data: bigint | undefined };
-
-  const { writeContract: writeBuy, data: buyTxHash, isPending: isBuyPending } = useWriteContract();
-  const { isLoading: isBuyConfirming, isSuccess: isBuySuccess } = useWaitForTransactionReceipt({ hash: buyTxHash });
-
-  const { writeContract: writeApprove, data: approveTxHash, isPending: isApprovePending } = useWriteContract();
-  const { isSuccess: isApproveSuccess } = useWaitForTransactionReceipt({ hash: approveTxHash });
-
-  const { writeContract: writeSell, data: sellTxHash, isPending: isSellPending } = useWriteContract();
-  const { isLoading: isSellConfirming, isSuccess: isSellSuccess } = useWaitForTransactionReceipt({ hash: sellTxHash });
-
-  useEffect(() => {
-    if (isApproveSuccess && tokenAmountWei) {
-      const minEthOut = sellEstimate ? (sellEstimate * BigInt(10000 - SLIPPAGE_BPS)) / BigInt(10000) : BigInt(0);
-      writeSell({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'sell', args: [tokenAmountWei, minEthOut] });
-    }
-  }, [isApproveSuccess]);
-
-  const handleBuy = () => {
-    if (!ethAmountWei || !buyEstimate) return;
-    const minTokensOut = (buyEstimate * BigInt(10000 - SLIPPAGE_BPS)) / BigInt(10000);
-    writeBuy({ address: BONDING_CURVE_ADDRESS, abi: BONDING_CURVE_ABI, functionName: 'buy', args: [minTokensOut], value: ethAmountWei });
+  const handleSubmit = async () => {
+    if (!amount || amount <= 0) return;
+    setSubmitting(true);
+    await new Promise(r => setTimeout(r, 1800));
+    onTrade(mode, amount);
+    setInputAmount('');
+    setSubmitting(false);
   };
-
-  const handleSell = () => {
-    if (!tokenAmountWei) return;
-    writeApprove({ address: TOKEN_ADDRESS, abi: ERC20_APPROVE_ABI, functionName: 'approve', args: [BONDING_CURVE_ADDRESS, tokenAmountWei] });
-  };
-
-  const marketCapEth = marketCap ? parseFloat(formatEther(marketCap)) : 0;
-  const thresholdEth = graduationThreshold ? parseFloat(formatEther(graduationThreshold)) : GRADUATION_THRESHOLD_ETH;
-  const graduationProgress = Math.min((marketCapEth / thresholdEth) * 100, 100);
-  const priceDisplay = currentPrice ? parseFloat(formatEther(currentPrice)).toFixed(8) : '---';
-  const isLoading = isBuyPending || isBuyConfirming || isApprovePending || isSellPending || isSellConfirming;
 
   return (
-    <div className="min-h-screen bg-[#080808] text-[#e8e8e8] font-sans p-8">
-      <div className="max-w-lg mx-auto">
-        <div className="mb-10">
-          <p className="text-[10px] text-[#555] uppercase tracking-widest mb-2 font-mono">headless-markets / bonding-curve</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Token Launch</h1>
-          <p className="text-sm text-[#777]">Buy or sell along the bonding curve. Graduates to Uniswap V2 at {thresholdEth} ETH market cap.</p>
+    <div style={{ background: '#0d0d0d', border: '1px solid #1e1e1e', borderRadius: 2, padding: 20 }}>
+      <div style={{ display: 'flex', marginBottom: 20, border: '1px solid #1e1e1e', borderRadius: 2, overflow: 'hidden' }}>
+        {(['buy', 'sell'] as const).map(m => (
+          <button key={m} onClick={() => setMode(m)} style={{ flex: 1, padding: '9px 0', background: mode === m ? (m === 'buy' ? 'rgba(0,255,136,0.08)' : 'rgba(255,68,68,0.08)') : 'transparent', border: 'none', color: mode === m ? (m === 'buy' ? '#00ff88' : '#ff4444') : '#555', fontSize: 12, fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{m}</button>
+        ))}
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <label style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 6 }}>Token Amount</label>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input type="number" value={inputAmount} onChange={e => setInputAmount(e.target.value)} placeholder="0" style={{ flex: 1, background: '#141414', border: '1px solid #2a2a2a', borderRadius: 2, padding: '10px 12px', color: '#e8e8e8', fontSize: 16, fontFamily: 'IBM Plex Mono, monospace', outline: 'none' }} />
+          <span style={{ fontSize: 13, color: '#555', fontFamily: 'IBM Plex Mono, monospace' }}>${token.symbol}</span>
         </div>
-        {graduated && (
-          <div className="flex items-center gap-3 px-4 py-3 mb-6 border border-[#00ff88] bg-[rgba(0,255,136,0.05)] text-[#00ff88] text-sm font-mono">
-            <span className="w-2 h-2 rounded-full bg-[#00ff88]" />
-            Graduated -- now trading on Uniswap V2
-          </div>
-        )}
-        <div className="grid grid-cols-3 gap-px bg-[#1e1e1e] mb-6">
-          {[
-            { label: 'Price', value: `${priceDisplay} ETH` },
-            { label: 'Market Cap', value: `${marketCapEth.toFixed(3)} ETH` },
-            { label: 'Supply', value: totalSupply ? `${(parseFloat(formatEther(totalSupply)) / 1_000_000).toFixed(2)}M` : '---' },
-          ].map(({ label, value }) => (
-            <div key={label} className="bg-[#0d0d0d] px-4 py-3">
-              <p className="text-[10px] text-[#555] uppercase tracking-widest font-mono mb-1">{label}</p>
-              <p className="text-sm font-mono text-white">{value}</p>
-            </div>
+        <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          {[1000, 5000, 10000, 50000].map(n => (
+            <button key={n} onClick={() => setInputAmount(String(n))} style={{ padding: '3px 8px', background: '#141414', border: '1px solid #2a2a2a', borderRadius: 2, color: '#777', fontSize: 10, fontFamily: 'IBM Plex Mono, monospace', cursor: 'pointer' }}>{n >= 1000 ? `${n/1000}K` : n}</button>
           ))}
         </div>
-        <div className="border border-[#1e1e1e] bg-[#0d0d0d] p-4 mb-6">
-          <div className="flex justify-between text-[10px] font-mono text-[#555] uppercase tracking-widest mb-2">
-            <span>Graduation Progress</span>
-            <span className="text-[#b0b0b0]">{marketCapEth.toFixed(3)} / {thresholdEth} ETH</span>
-          </div>
-          <div className="w-full h-1.5 bg-[#1a1a1a]">
-            <div className="h-full transition-all duration-500" style={{ width: `${graduationProgress}%`, background: graduated ? '#00ff88' : `linear-gradient(90deg, #4488ff ${100 - graduationProgress}%, #00ff88 100%)` }} />
-          </div>
-          <p className="text-[10px] text-[#555] font-mono mt-2">
-            {graduated ? 'Deployed to Uniswap V2' : `${(thresholdEth - marketCapEth).toFixed(3)} ETH remaining until auto-deploy`}
-          </p>
-        </div>
-        {!graduated && (
-          <div className="border border-[#1e1e1e] bg-[#0d0d0d]">
-            <div className="flex border-b border-[#1e1e1e]">
-              {(['buy', 'sell'] as Tab[]).map((t) => (
-                <button key={t} onClick={() => { setTab(t); setEthInput(''); setTokenInput(''); }}
-                  className={`flex-1 py-3 text-xs font-mono uppercase tracking-widest transition-colors ${tab === t ? t === 'buy' ? 'text-[#00ff88] border-b-2 border-[#00ff88]' : 'text-[#ff4444] border-b-2 border-[#ff4444]' : 'text-[#555] hover:text-[#777]'}`}>
-                  {t}
-                </button>
-              ))}
-            </div>
-            <div className="p-5">
-              {tab === 'buy' ? (
-                <>
-                  <label className="block text-[10px] text-[#555] uppercase tracking-widest font-mono mb-2">ETH to spend</label>
-                  <div className="flex gap-2 mb-1">
-                    <input type="number" min="0" step="0.001" value={ethInput} onChange={(e) => setEthInput(e.target.value)} placeholder="0.0"
-                      className="flex-1 bg-[#141414] border border-[#1e1e1e] text-white font-mono text-sm px-3 py-2.5 focus:outline-none focus:border-[#00ff88]" />
-                    {ethBalance && <button onClick={() => setEthInput(formatEther(ethBalance.value))} className="px-3 py-2.5 bg-[#141414] border border-[#1e1e1e] text-[#555] text-xs font-mono hover:text-[#777] transition-colors">MAX</button>}
-                  </div>
-                  {ethBalance && <p className="text-[10px] text-[#555] font-mono mb-4">Balance: {parseFloat(formatEther(ethBalance.value)).toFixed(4)} ETH</p>}
-                  {buyEstimate && ethInput && (
-                    <div className="bg-[#141414] border border-[#1a1a1a] px-3 py-2.5 mb-4">
-                      <p className="text-[10px] text-[#555] font-mono mb-0.5">You receive (est.)</p>
-                      <p className="text-sm font-mono text-[#00ff88]">{parseFloat(formatEther(buyEstimate)).toFixed(4)} tokens</p>
-                      <p className="text-[10px] text-[#555] font-mono mt-1">Slippage: {SLIPPAGE_BPS / 100}%</p>
-                    </div>
-                  )}
-                  <button onClick={handleBuy} disabled={!isConnected || !ethInput || !buyEstimate || isLoading}
-                    className="w-full py-3 bg-[rgba(0,255,136,0.08)] border border-[#00ff88] text-[#00ff88] text-sm font-mono uppercase tracking-wider hover:bg-[rgba(0,255,136,0.15)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                    {!isConnected ? 'Connect Wallet' : isBuyPending ? 'Confirm in wallet...' : isBuyConfirming ? 'Confirming on chain...' : 'Buy Tokens'}
-                  </button>
-                  {isBuySuccess && <p className="text-xs text-[#00ff88] font-mono mt-3">Buy confirmed - {buyTxHash?.slice(0, 10)}...</p>}
-                </>
-              ) : (
-                <>
-                  <label className="block text-[10px] text-[#555] uppercase tracking-widest font-mono mb-2">Tokens to sell</label>
-                  <div className="flex gap-2 mb-1">
-                    <input type="number" min="0" step="1" value={tokenInput} onChange={(e) => setTokenInput(e.target.value)} placeholder="0"
-                      className="flex-1 bg-[#141414] border border-[#1e1e1e] text-white font-mono text-sm px-3 py-2.5 focus:outline-none focus:border-[#ff4444]" />
-                    {tokenBalance && <button onClick={() => setTokenInput(formatEther(tokenBalance))} className="px-3 py-2.5 bg-[#141414] border border-[#1e1e1e] text-[#555] text-xs font-mono hover:text-[#777] transition-colors">MAX</button>}
-                  </div>
-                  {tokenBalance && <p className="text-[10px] text-[#555] font-mono mb-4">Balance: {parseFloat(formatEther(tokenBalance)).toFixed(2)} tokens</p>}
-                  {sellEstimate && tokenInput && (
-                    <div className="bg-[#141414] border border-[#1a1a1a] px-3 py-2.5 mb-4">
-                      <p className="text-[10px] text-[#555] font-mono mb-0.5">You receive (est.)</p>
-                      <p className="text-sm font-mono text-[#ff4444]">{parseFloat(formatEther(sellEstimate)).toFixed(6)} ETH</p>
-                      <p className="text-[10px] text-[#555] font-mono mt-1">Slippage: {SLIPPAGE_BPS / 100}% - Requires approval</p>
-                    </div>
-                  )}
-                  <button onClick={handleSell} disabled={!isConnected || !tokenInput || !tokenBalance || isLoading}
-                    className="w-full py-3 bg-[rgba(255,68,68,0.08)] border border-[#ff4444] text-[#ff4444] text-sm font-mono uppercase tracking-wider hover:bg-[rgba(255,68,68,0.15)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                    {!isConnected ? 'Connect Wallet' : isApprovePending ? 'Approving...' : isSellPending || isSellConfirming ? 'Selling...' : 'Sell Tokens'}
-                  </button>
-                  {isSellSuccess && <p className="text-xs text-[#ff4444] font-mono mt-3">Sell confirmed - {sellTxHash?.slice(0, 10)}...</p>}
-                </>
-              )}
-            </div>
-          </div>
-        )}
-        {graduated && (
-          <a href={`https://app.uniswap.org/#/swap?outputCurrency=${TOKEN_ADDRESS}&chain=base`} target="_blank" rel="noopener noreferrer"
-            className="block w-full py-3 text-center border border-[#00ff88] text-[#00ff88] text-sm font-mono uppercase tracking-wider hover:bg-[rgba(0,255,136,0.08)] transition-colors">
-            Trade on Uniswap V2
-          </a>
-        )}
       </div>
+      {amount > 0 && (
+        <div style={{ background: '#141414', border: '1px solid #1e1e1e', borderRadius: 2, padding: 12, marginBottom: 16, fontSize: 12, fontFamily: 'IBM Plex Mono, monospace' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, color: '#777' }}><span>{mode === 'buy' ? 'Cost' : 'Gross Return'}</span><span>{cost.toFixed(6)} ETH</span></div>
+          {mode === 'buy' && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, color: '#555' }}><span>Protocol Fee (10%)</span><span>{fee.toFixed(6)} ETH</span></div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 8, borderTop: '1px solid #1e1e1e', color: '#e8e8e8', fontWeight: 500 }}><span>{mode === 'buy' ? 'Total ETH' : 'Net Return'}</span><span style={{ color: mode === 'buy' ? '#4488ff' : '#00ff88' }}>{netCost.toFixed(6)} ETH</span></div>
+        </div>
+      )}
+      <button onClick={handleSubmit} disabled={submitting || !amount || token.graduated} style={{ width: '100%', padding: '12px 0', background: token.graduated ? '#1a1a1a' : (mode === 'buy' ? 'rgba(0,255,136,0.1)' : 'rgba(255,68,68,0.08)'), border: `1px solid ${token.graduated ? '#2a2a2a' : mode === 'buy' ? '#00ff88' : '#ff4444'}`, borderRadius: 2, color: token.graduated ? '#555' : mode === 'buy' ? '#00ff88' : '#ff4444', fontSize: 13, fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, cursor: token.graduated || submitting || !amount ? 'not-allowed' : 'pointer', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+        {token.graduated ? 'GRADUATED — Trade on Uniswap' : submitting ? 'CONFIRMING TX...' : `${mode.toUpperCase()} ${amount > 0 ? amount.toLocaleString() : ''} $${token.symbol}`}
+      </button>
+    </div>
+  );
+}
+
+export default function BondingCurvePage() {
+  const [token, setToken] = useState<TokenState>(INITIAL_TOKEN);
+  const [history, setHistory] = useState<TradeHistory[]>(MOCK_HISTORY);
+  const [ethPrice, setEthPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/api/price').then(r => r.json()).then(d => setEthPrice(d?.price ?? d?.ethereum?.usd ?? null)).catch(() => setEthPrice(null));
+  }, []);
+
+  const handleTrade = useCallback((type: 'buy' | 'sell', amount: number) => {
+    setToken(prev => {
+      const newSupply = type === 'buy' ? prev.supply + amount : Math.max(0, prev.supply - amount);
+      const ethDelta = type === 'buy' ? buyCost(prev.supply, amount) : -sellReturn(prev.supply, amount);
+      return { ...prev, supply: newSupply, reserveETH: Math.max(0, prev.reserveETH + ethDelta), graduated: marketCap(newSupply) >= GRADUATION_ETH };
+    });
+    setHistory(prev => [{ type, amount, ethValue: type === 'buy' ? buyCost(token.supply, amount) : sellReturn(token.supply, amount), timestamp: new Date(), address: '0xBuilderA...' }, ...prev.slice(0, 19)]);
+  }, [token.supply]);
+
+  const spot = spotPrice(token.supply);
+  const mc = marketCap(token.supply);
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#080808', color: '#e8e8e8', fontFamily: 'IBM Plex Sans, sans-serif' }}>
+      <div style={{ borderBottom: '1px solid #1e1e1e', padding: '40px 40px 32px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>headless-markets / bonding-curve</div>
+          <h1 style={{ fontSize: 28, fontWeight: 500, margin: '0 0 6px', letterSpacing: '-0.02em' }}>${token.symbol} · {token.name}</h1>
+          <p style={{ fontSize: 13, color: '#777', margin: 0, fontFamily: 'IBM Plex Mono, monospace' }}>Base L2 · Bonding Curve · {PROTOCOL_FEE * 100}% protocol fee</p>
+          <div style={{ display: 'flex', gap: 32, marginTop: 24 }}>
+            {[{ label: 'Spot Price', value: `${spot.toFixed(8)} ETH`, color: '#4488ff' }, { label: 'Market Cap', value: `${mc.toFixed(4)} ETH`, color: '#e8e8e8' }, { label: 'Supply', value: token.supply.toLocaleString(), color: '#e8e8e8' }, { label: 'Reserve', value: `${token.reserveETH.toFixed(4)} ETH`, color: '#aa88ff' }].map(({ label, value, color }) => (
+              <div key={label}>
+                <div style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>{label}</div>
+                <div style={{ fontSize: 18, fontWeight: 500, color, fontFamily: 'IBM Plex Mono, monospace' }}>{value}</div>
+                {ethPrice && label !== 'Supply' && <div style={{ fontSize: 11, color: '#555', fontFamily: 'IBM Plex Mono, monospace' }}>${(parseFloat(value) * ethPrice).toFixed(2)}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 40px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32 }}>
+        <div>
+          <PriceChart supply={token.supply} />
+          <GraduationBar supply={token.supply} />
+          <div style={{ background: '#0d0d0d', border: '1px solid #1e1e1e', borderRadius: 2, padding: '14px 18px', marginBottom: 24, fontSize: 11, fontFamily: 'IBM Plex Mono, monospace', color: '#555' }}>
+            <div style={{ marginBottom: 4 }}>CONTRACT: <span style={{ color: '#777' }}>{BONDING_CURVE_CONTRACT}</span></div>
+            <div style={{ marginBottom: 4 }}>CHAIN: <span style={{ color: '#4488ff' }}>Base L2 (chainId: 8453)</span></div>
+            <div>FORMULA: <span style={{ color: '#aa88ff' }}>P(s) = {K} × s^{N} · graduation at {GRADUATION_ETH} ETH mcap</span></div>
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <div style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Recent Trades</div>
+            {history.map((t, i) => {
+              const ago = Math.round((Date.now() - t.timestamp.getTime()) / 60000);
+              return (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderBottom: '1px solid #141414', fontSize: 12, fontFamily: 'IBM Plex Mono, monospace' }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <span style={{ color: t.type === 'buy' ? '#00ff88' : '#ff4444', fontWeight: 600, width: 32 }}>{t.type.toUpperCase()}</span>
+                    <span style={{ color: '#b0b0b0' }}>{t.amount.toLocaleString()}</span>
+                    <span style={{ color: '#555' }}>{t.address}</span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: '#e8e8e8' }}>{t.ethValue.toFixed(4)} ETH</div>
+                    <div style={{ color: '#555', fontSize: 10 }}>{ago}m ago</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div>
+          <TradePanel token={token} onTrade={handleTrade} />
+          <div style={{ marginTop: 20, background: '#0d0d0d', border: '1px solid #1e1e1e', borderRadius: 2, padding: 16 }}>
+            <div style={{ fontSize: 10, color: '#555', fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>How it works</div>
+            {[{ step: '01', text: 'Price rises with every buy — bonding curve math.' }, { step: '02', text: '10% protocol fee on every trade → NULP holders.' }, { step: '03', text: 'At 10 ETH market cap, auto-deploys to Uniswap V2.' }, { step: '04', text: 'Quorum of 5 agents voted to launch this token.' }].map(({ step, text }) => (
+              <div key={step} style={{ display: 'flex', gap: 10, marginBottom: 10, fontSize: 12 }}>
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', color: '#555', flexShrink: 0 }}>{step}</span>
+                <span style={{ color: '#b0b0b0', lineHeight: 1.5 }}>{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; } input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; } input[type=number] { -moz-appearance: textfield; }`}</style>
     </div>
   );
 }
