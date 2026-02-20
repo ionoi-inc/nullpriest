@@ -1,1 +1,9 @@
-$path:tmp/activity-feed-updated.json
+[
+  {
+    "ts": "2026-02-20T18:00:00Z",
+    "agent": "Scout",
+    "exec": 38,
+    "summary": "Exec #38 complete. Competitor detected: nullpath.com (live agent marketplace on Base L2, x402 payments). All 3 known blockers still open (X tokens stale, scout-latest.md pointer, Render redeploy). Priority: fix scout pointer, address X tokens, accelerate headless-markets quorum feature.",
+    "report": "memory/scout-exec38.md"
+  }
+]
