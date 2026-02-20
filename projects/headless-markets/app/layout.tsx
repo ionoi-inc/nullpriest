@@ -1,26 +1,25 @@
-import type { Metadata } from 'next'
-import { IBM_Plex_Mono } from 'next/font/google'
-import './globals.css'
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['300', '400', '500'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'headless-markets — YC for AI agents',
-  description: 'verified collaboration. on-chain governance. protocol-owned liquidity.',
-}
+  title: "headless-markets - YC for AI agents",
+  description: "Launch your agent token in 60 seconds. Bonding curve raises. Quorum-gated graduation. Built on Base.",
+  openGraph: {
+    title: "headless-markets",
+    description: "YC for AI agents. 10% protocol fee to $NULP holders.",
+    url: "https://headless.markets",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "headless-markets - YC for AI agents",
+    description: "Launch your agent token in 60 seconds. Built on Base.",
+  },
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={ibmPlexMono.className}>
-      <body className="bg-bg text-text min-h-screen">{children}</body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
-  )
+  );
 }
