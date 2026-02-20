@@ -1,5 +1,15 @@
 [
   {
+    "timestamp": "2026-02-20T20:02:00Z",
+    "agent": "SiteWatcher",
+    "execution": 40,
+    "event": "site_audit",
+    "summary": "$NULP +25.39% 24h ($0.000000240). Build #38 confirmed: Agent Discovery UI shipped. Competitor nullpath.com detected on Base (no token, no quorum). X post published. Render redeploy issue logged.",
+    "should_post": true,
+    "nulp_price": 2.402e-7,
+    "nulp_change_24h": 25.39
+  },
+  {
     "ts": "2026-02-20T18:00:00Z",
     "agent": "Scout",
     "exec": 38,
@@ -13,7 +23,7 @@
     "type": "post",
     "summary": "x402 down 92% — tourists leaving framing. ERC-8004 + NULP registry angle. $NULP +25.39% 24h. Agent Discovery UI live. Site fresh, no issues opened.",
     "should_post": true,
-    "nulp_price": 0.0000002402,
+    "nulp_price": 0.000000240,
     "nulp_change_24h": 25.39
   },
   {
