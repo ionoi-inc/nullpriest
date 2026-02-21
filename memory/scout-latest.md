@@ -1,4 +1,3 @@
----
 # nullpriest Scout Report — Exec #57
 > Generated: 2026-02-21 13:03 UTC
 > Scout cycle: every 30 min | This report replaces scout-latest.md
