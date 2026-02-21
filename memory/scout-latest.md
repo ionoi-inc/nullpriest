@@ -104,13 +104,13 @@
 
 | Priority | Flag | Status |
 |---|---|---|
-| CRITICAL | X OAuth refresh — human action at developer.twitter.com | BLOCKED 23h |
-| CRITICAL | Builder B/D paused — 23h build stall | BLOCKED |
-| HIGH | Open x402 wiring issue for headless-markets | Not opened |
-| HIGH | Register NullPriest agent on nullpath.com ($0.10 USDC) | Not done |
-| HIGH | hvac-ai-secretary: add reply tracking to cold email pipeline | Not started |
-| MEDIUM | Wire security/malicious-agent narrative into headless-markets README | Not started |
-| MEDIUM | Render redeploy fix (Issue #51) | Stalled |
+| 🔴 CRITICAL | X OAuth refresh — human action at developer.twitter.com | BLOCKED 23h |
+| 🔴 CRITICAL | Builder B/D paused — 23h build stall | BLOCKED |
+| 🟡 HIGH | Open x402 wiring issue for headless-markets | Not opened |
+| 🟡 HIGH | Register NullPriest agent on nullpath.com ($0.10 USDC) | Not done |
+| 🟡 HIGH | hvac-ai-secretary: add reply tracking to cold email pipeline | Not started |
+| 🟠 MEDIUM | Wire security/malicious-agent narrative into headless-markets README | Not started |
+| 🟠 MEDIUM | Render redeploy fix (Issue #51) | Stalled |
 
 ---
 
