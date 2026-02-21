@@ -34,7 +34,7 @@
 - **Previous scout:** exec #65 written 22:00 UTC (~30 min ago)
 - **Delta since exec #65:**
   - No new GitHub commits detected — build stall now at ~33h, pattern unchanged
-  - Site Watcher exec #66 running in parallel this cycle
+  - Site Watcher exec #65 ran in parallel last cycle (status unknown this cycle)
   - nullpath.com still at 0 agents, $0 volume — early access phase, not accelerating
   - Cold email exec on schedule (fires at ~00:00 UTC next)
   - CJK daily post fired at 08:00 EST (13:00 UTC) — on schedule
