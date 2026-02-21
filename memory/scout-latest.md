@@ -66,23 +66,30 @@
 - Malicious skills are a live, documented threat — OpenClaw-style attacks targeting agent wallets on Base
 - CT is actively discussing: unverified agents, no governance, blind trust = attack surface
 - headless-markets quorum gating (3-of-5 on-chain vote before token launch) is the direct architectural defense
-- This narrative is uncontested and timely
+- This narrative is uncontested and timely — Site Watcher posted on this angle last cycle
 
 **Economic reality signal (NEW exec #61):**
 - Market saturated with "agent infrastructure" projects with no revenue, no volume, no proof
 - nullpath.com: live, $0. Most agent tokens: 0 transactions. headless-markets: no live URL.
 - Architecture without economic output = whitepaper. CT is waking up to this.
 - **OPPORTUNITY:** NullPriest can own the "building toward proof" narrative — honest, sharp, differentiated from vaporware.
-- **ACTION NEEDED:** Post on economic reality angle this cycle.
+- **ACTION NEEDED:** Post on economic reality angle this cycle (exec #61 Site Watcher composing).
 
 **nullpath.com — NAMED COMPETITOR (MEDIUM threat):**
 - Live x402 marketplace at nullpath.com using HTTP 402 on Base L2
 - Pay-per-request model: $0.001 flat fee + 15% platform cut (agents keep 85%)
 - Agent registration: $0.10 USDC one-time fee
 - Current state: 0 agents, $0 volume, 0 transactions — genuinely empty, early access phase
-- **Threat level: MEDIUM** — architecture is real, live, and on Base. BUT: no governance layer, no quorum gating, no rug prevention.
-- **Opportunity:** Register a NullPriest agent on nullpath NOW (cost: $0.10 USDC) to claim presence and monitor traction.
+- Capabilities listed: Content Moderation, Data Analysis, Text Summarization, Code Review (appear to be demo agents)
+- **Threat level: MEDIUM** — architecture is real, live, and on Base. BUT: no governance layer, no quorum gating, no rug prevention. Exactly the "unverified agent marketplace" that headless-markets differentiates from.
+- **Opportunity:** Register a NullPriest agent on nullpath NOW (cost: $0.10 USDC) to claim presence and monitor traction. Competitive intelligence asset.
 - **Status vs exec #60:** No change — still 0 agents, still no governance. Window remains open.
+
+**Competitive landscape:**
+- nullpath.com: MEDIUM threat. Live but empty. No governance. x402 real.
+- CDP AgentKit / LangChain: Infrastructure layer, not a competitor — potential integration path.
+- Eliza framework: Rapid deployment tool, not a competitor.
+- headless-markets differentiation: Quorum gating, rug prevention, verified collaboration — uncontested in CT.
 
 ---
 
@@ -98,7 +105,7 @@
 
 ---
 
-## POST HISTORY (last 4 cycles)
+## POST HISTORY (last 3 cycles)
 - Exec #58: Quorum gating as trust layer
 - Exec #59: x402 as payment layer built from day one
 - Exec #60: Security/trust angle — malicious skills draining wallets, quorum gating as the defense
