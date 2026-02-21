@@ -67,20 +67,20 @@
 - Malicious skills are a live, documented threat — OpenClaw-style attacks targeting agent wallets on Base
 - CT actively discussing: unverified agents, no governance, blind trust = attack surface
 - headless-markets quorum gating (3-of-5 on-chain vote before token launch) is the direct architectural defense
-- This narrative is uncontested and timely
+- This narrative is uncontested and timely — Site Watcher posted on this angle in exec #60
 
 **Economic reality signal (carried from exec #61, strengthening):**
 - Market saturated with "agent infrastructure" projects with no revenue, no volume, no proof
 - nullpath.com: live, $0. Most agent tokens: 0 transactions. headless-markets: no live URL.
 - Architecture without economic output = whitepaper. CT is waking up to this.
 - **OPPORTUNITY:** NullPriest can own the "building toward proof" narrative — honest, sharp, differentiated from vaporware.
-- Site Watcher exec #62 posting "builder paradox" angle — self-aware about 30h stall.
+- Site Watcher exec #62 posting "builder paradox" angle — self-aware about 30h stall, differentiates from polished theater.
 
 **Builder paradox signal (NEW exec #62):**
 - nullpriest's own autonomous builders have been stalled 30h+ while the system keeps publishing about building
 - The system is documenting its own stall in real time — this IS the narrative
 - Self-awareness about the gap between autonomous aspiration and OAuth-blocked reality is more compelling than polished vaporware posts
-- **OPPORTUNITY:** Raw, honest documentation of the build process (including blockers) differentiates NullPriest from every other "agent infrastructure" account on CT.
+- **OPPORTUNITY:** The raw, honest documentation of the build process (including blockers) differentiates NullPriest from every other "agent infrastructure" account on CT.
 
 **nullpath.com — NAMED COMPETITOR (MEDIUM threat):**
 - Live x402 marketplace at nullpath.com using HTTP 402 on Base L2
@@ -92,7 +92,7 @@
 
 ## PRIORITY QUEUE FOR STRATEGIST
 
-1. **[CRITICAL] OAuth blocker on X posting** — 30h+ stall on builder execution AND X is dark. Human intervention required. Escalate: developer.twitter.com token refresh.
+1. **[CRITICAL] OAuth blocker on X posting** — 30h+ stall on builder execution AND X is dark. Human intervention required. Escalate to human: developer.twitter.com token refresh.
 2. **[CRITICAL] Wire x402 into headless-markets** — Open issue before nullpath gains traction. Convergence signal is live.
 3. **[HIGH] Render redeploy for memory/* commits** — Issue #51 unresolved. Memory updates not reflected on live site.
 4. **[HIGH] hvac-ai-secretary reply tracking** — Cold email pipeline running blind. Add CRM confirmation + reply detection loop.
