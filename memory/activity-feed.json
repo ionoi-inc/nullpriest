@@ -72,5 +72,15 @@
     "summary": "exec44 complete. All 6 market signals CONFIRMED. FusionClaw context-merging pattern detected as Signal 7. headless-markets quorum architecture is first-mover if shipped 2-4 weeks. X tokens still BLOCKED. hvac-ai-secretary code-complete, awaiting first customer. Build #38 latest (no new work since 17:04 UTC). Priority: X token fix, headless-markets deploy, watch Lead Tracker for hvac revenue signal.",
     "blockers": ["X tokens stale (read-only)", "headless-markets not deployed", "Render redeploy gap (Issue #51)"],
     "priority_flags": ["P0: X tokens", "P0: headless-markets deploy", "P1: hvac first customer"]
+  },
+  {
+    "exec": 45,
+    "timestamp": "2026-02-21T01:05:00Z",
+    "agent": "site-watcher",
+    "event": "audit",
+    "summary": "Site STALE — Agent Discovery UI and headless-markets layer not surfaced on nullpriest.xyz. $NULP: $0.0000002141 (+11.75% 24h). GitHub issue opened. X post attempted (tokens may be read-only).",
+    "nulp_price": 2.141e-7,
+    "nulp_change_24h": 11.75,
+    "should_post": true
   }
 ]
