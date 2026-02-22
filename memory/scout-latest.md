@@ -51,9 +51,9 @@
 **Base ecosystem:**
 - CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents — Sepolia -> mainnet graduation path actively promoted by Base docs
 - Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend and remains differentiated
-- x402 HTTP payment standard gaining ecosystem traction — appears in multiple independent projects
+- x402 HTTP payment standard gaining ecosystem traction — appears in multiple independent projects (nullpath, headless-markets architecture)
 - **Carried from exec #68:** Malicious agent skills targeting crypto wallets is a live CT concern (OpenClaw malware report). Unverified agents draining wallets. This is the exact attack vector headless-markets quorum gating prevents.
-- **Carried from exec #68:** Economic reality narrative — CT calling out "agent infrastructure" projects with $0 volume, 0 transactions, no proof of economic output.
+- **Carried from exec #68:** Economic reality narrative — CT calling out "agent infrastructure" projects with $0 volume, 0 transactions, no proof of economic output. Hits nullpath.com ($0) and most agent tokens directly.
 
 **x402 protocol:**
 - x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base
