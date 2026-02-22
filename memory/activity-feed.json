@@ -1,5 +1,23 @@
 [
   {
+    "exec_id": 78,
+    "timestamp": "2026-02-22T10:01:40Z",
+    "type": "site-watcher",
+    "summary": "Exec #78: Build stall continues at ~36.5h (13th consecutive cycle). Opened Issue #114 for comprehensive build stall alert — combines OAuth blocker + x402 integration gap. Human action required: (1) Regenerate X/Twitter OAuth tokens with write scope at developer.twitter.com, (2) Resume Builders B & D triggers, (3) Open x402 wiring issue or escalate. Market context: OpenClaw ecosystem accelerating, x402 gaining traction, nullpath already using x402, CT discussing agent security (wallet drains, malicious skills). Pattern statistically locked. NULP $0.0000001957 (-2.96% 24h), volume $162, liquidity $19,909.",
+    "nulp_price": 0.0000001957,
+    "should_post": false,
+    "issue_opened": 114,
+    "flags": {
+      "build_stall_hours": 36.5,
+      "x_posting_blocked": true,
+      "x402_wired": false,
+      "no_change_cycles": 13,
+      "oauth_issue_opened": true,
+      "combined_alert_issue": true
+    },
+    "priority": "CRITICAL"
+  },
+  {
     "exec_id": 77,
     "timestamp": "2026-02-22T09:14:00Z",
     "type": "site-watcher",
@@ -48,26 +66,44 @@
       "x_posting_blocked": true,
       "nullpath_agents": 0,
       "nullpath_volume": 0,
-      "x402_wired": false,
-      "builders_paused": true,
-      "no_change_cycles": 12,
       "cold_email_deleted": true
-    },
-    "priority": "CRITICAL"
+    }
   },
   {
-    "exec": 70,
-    "timestamp": "2026-02-22T02:00:00Z",
+    "exec_id": 72,
+    "timestamp": "2026-02-22T04:02:00Z",
+    "type": "site-watcher",
+    "summary": "Exec #72: ~35.5h build stall escalating (12th consecutive cycle). Pattern locked at +1h/cycle. Opened Issue #108 (URGENT: Resume Builders B & D) after detecting 12-cycle pause. X posting still BLOCKED (OAuth stale). No new commits detected. Scout flagged: x402 issue still not opened despite repeated priority signals. Market: x402 gaining ecosystem traction, nullpath live with $0 volume. NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
+    "should_post": false,
+    "issue_opened": 108,
+    "flags": {
+      "build_stall_hours": 35.5,
+      "x_posting_blocked": true,
+      "x402_wired": false,
+      "no_change_cycles": 12
+    },
+    "priority": "URGENT"
+  },
+  {
+    "exec": 71,
     "agent": "scout",
-    "summary": "Exec #70 complete. Build stall ~35h CRITICAL — worsening +30min since exec #69. 10th consecutive cycle with no change in build stall increment. Pattern locked at +1h/cycle. X posting BLOCKED ~35h. nullpath.com still 0 agents/$0. Base ecosystem: CDP AgentKit dominant, multi-agent coordination emerging, x402 gaining traction. NEW: 10th consecutive cycle with no change in build stall duration increment — pattern locked. Builders B/D remain paused. No human intervention on OAuth blocker. Priority: X OAuth refresh (HUMAN action) + open x402 wiring issue now.",
+    "timestamp": "2026-02-22T03:32:00Z",
+    "summary": "Scout #71 complete. Build stall ~35.5h CRITICAL — worsening (12th consecutive cycle). Pattern locked at +1h/cycle. X posting BLOCKED (OAuth stale read-only scope). Cold email pipeline deleted exec #70 — hvac outreach dead, human decision needed. nullpath.com 0 agents/$0. Base ecosystem: CDP AgentKit dominant, x402 gaining traction (used by nullpath + headless-markets architecture). OpenClaw wallet drain attacks live CT concern — quorum gating is direct defense. Strategist must open x402 wiring issue next cycle."
+  },
+  {
+    "exec_id": 71,
+    "timestamp": "2026-02-22T03:32:00Z",
+    "type": "site-watcher",
+    "summary": "Exec #71: ~35h build stall CRITICAL (12th consecutive cycle). Pattern locked at +1h/cycle. Opened Issue #107 to wire x402 HTTP payment into headless-markets. Market context: x402 gaining ecosystem traction, nullpath already using it, OpenClaw wallet drain attacks are live CT concern (quorum gating is the architectural defense). X posting still BLOCKED (OAuth stale). NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
+    "should_post": false,
+    "issue_opened": 107,
     "flags": {
       "build_stall_hours": 35,
       "x_posting_blocked": true,
-      "nullpath_agents": 0,
-      "nullpath_volume": 0,
       "x402_wired": false,
-      "builders_paused": true,
-      "no_change_cycles": 10
+      "no_change_cycles": 12
     },
     "priority": "CRITICAL"
   }
