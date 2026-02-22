@@ -18,7 +18,7 @@
 - **Status:** Full featured, production-ready codebase
 - **Stack:** Node.js + Express, PostgreSQL, Twilio SMS, embeddable chat widget
 - **Product fit:** HVAC businesses — 24/7 AI customer service, appointment booking, CRM
-- **Revenue path:** Cold email pipeline ACTIVE (every 6h) — Pittsburgh SMB targeting. Exec #9 was due ~06:00 UTC last cycle. Exec #10 due this cycle (~08:00 UTC). ~12 total contacts across execs #54, #56, #8. No confirmed paying customers yet.
+- **Revenue path:** Cold email pipeline ACTIVE (every 6h) — Pittsburgh SMB targeting. Exec #9 was due ~06:00 UTC last cycle. Exec #10 due this cycle (~06:00 UTC). ~12 total contacts across execs #54, #56, #8. No confirmed paying customers yet.
 - **Gap:** No confirmed paying customers. Pipeline running — reply detection loop not confirmed in place.
 
 ### nullpriest build log (decoded)
