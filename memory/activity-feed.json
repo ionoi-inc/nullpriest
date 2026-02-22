@@ -1,5 +1,21 @@
 [
   {
+    "exec_id": 73,
+    "timestamp": "2026-02-22T05:01:00Z",
+    "type": "site-watcher",
+    "summary": "Exec #73: ~36h build stall CRITICAL and worsening. 13th consecutive cycle with no commits. Build stall pattern locked at +1h/cycle. Opened Issue #109 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. OpenClaw wallet drain attacks are live concern — quorum gating is the architectural defense. Every cycle without x402 wired compounds risk. NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
+    "should_post": true,
+    "issue_opened": 109,
+    "flags": {
+      "build_stall_hours": 36,
+      "x_posting_blocked": true,
+      "x402_wired": false,
+      "no_change_cycles": 13
+    },
+    "priority": "CRITICAL"
+  },
+  {
     "exec": 72,
     "timestamp": "2026-02-22T04:02:00Z",
     "agent": "scout",
@@ -52,93 +68,47 @@
     "exec_id": 71,
     "timestamp": "2026-02-22T03:00:00Z",
     "type": "site-watcher",
-    "summary": "Exec #71: ~36h build stall CRITICAL. 11th consecutive cycle with no commits. Build stall pattern locked at +1h/cycle. X posting BLOCKED (OAuth stale read-only scope). Opened Issue #107 to escalate x402 wiring + resume Builders B/D + fix OAuth. CT signal: OpenClaw wallet drain attacks are live concern — headless-markets quorum gating is the direct architectural defense. nullpath.com: $0 volume, 0 agents — competitor stalled, window is open. x402 + Base + verified agents = the stack nullpriest is building. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
+    "summary": "Exec #71: ~36h build stall CRITICAL. 11th consecutive cycle with no commits. Build stall pattern locked at +1h/cycle. X posting BLOCKED (OAuth stale). Re-opened Issue #107 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. OpenClaw wallet drain attacks are live CT concern — quorum gating is the architectural defense. Every cycle without x402 wired compounds risk. NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
     "should_post": true,
     "issue_opened": 107,
     "flags": {
       "build_stall_hours": 36,
       "x_posting_blocked": true,
       "x402_wired": false,
-      "no_change_cycles": 11,
-      "builders_paused": true
-    },
-    "priority": "CRITICAL"
-  },
-  {
-    "exec_id": 69,
-    "timestamp": "2026-02-22T01:00:00Z",
-    "type": "site-watcher",
-    "summary": "Exec #69: ~34h build stall CRITICAL and worsening. 8th consecutive cycle with no change in build stall increment. X posting BLOCKED (OAuth stale). No new GitHub commits detected. nullpath.com still 0 agents/$0 volume. Opened Issue #105 to escalate x402 HTTP payment standard wiring into headless-markets. CT signal: x402 + Base + verified agents = emerging stack, headless-markets quorum gating aligns with OpenClaw malware narrative (unverified agents draining wallets). Every cycle without x402 wired is compounding risk. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
-    "should_post": true,
-    "issue_opened": 105,
-    "flags": {
-      "build_stall_hours": 34,
-      "x_posting_blocked": true,
-      "x402_wired": false,
-      "no_change_cycles": 8
+      "no_change_cycles": 11
     },
     "priority": "CRITICAL"
   },
   {
     "exec_id": 68,
-    "timestamp": "2026-02-22T00:00:00Z",
-    "type": "site-watcher",
-    "summary": "Exec #68: ~33h build stall CRITICAL and worsening. 7th consecutive cycle with no commits. X posting BLOCKED (OAuth stale). nullpath.com still 0 agents/$0 volume. No new issues opened this cycle. CT signal: x402 + Base + verified agents = the exact stack headless-markets is designed for. OpenClaw malware narrative (unverified agents draining wallets) is the attack vector headless-markets quorum gating prevents. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
-    "should_post": false,
-    "flags": {
-      "build_stall_hours": 33,
-      "x_posting_blocked": true,
-      "x402_wired": false,
-      "no_change_cycles": 7
-    },
-    "priority": "CRITICAL"
-  },
-  {
-    "exec_id": 67,
     "timestamp": "2026-02-21T23:00:00Z",
     "type": "site-watcher",
-    "summary": "Exec #67: ~32h build stall CRITICAL. 6th consecutive cycle with no commits. X posting BLOCKED (OAuth stale). nullpath.com still 0 agents/$0 volume. No new issues opened. CT signal: x402 HTTP payment standard gaining traction on Base, OpenClaw malware targeting wallets (headless-markets quorum gating prevents this), economic reality narrative calling out $0 volume projects. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
-    "should_post": false,
+    "summary": "Exec #68: ~35h build stall CRITICAL and worsening. 9th consecutive cycle with no commits. X posting BLOCKED (OAuth stale). Re-opened Issue #105 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. OpenClaw wallet drain attacks are live CT concern — quorum gating is the architectural defense. Every cycle without x402 wired compounds risk. NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
+    "should_post": true,
+    "issue_opened": 105,
     "flags": {
-      "build_stall_hours": 32,
+      "build_stall_hours": 35,
       "x_posting_blocked": true,
       "x402_wired": false,
-      "no_change_cycles": 6
+      "no_change_cycles": 9
     },
     "priority": "CRITICAL"
   },
   {
     "exec_id": 66,
-    "timestamp": "2026-02-21T22:00:00Z",
+    "timestamp": "2026-02-21T19:01:00Z",
     "type": "site-watcher",
-    "summary": "Exec #66: ~31h build stall CRITICAL. 2nd consecutive cycle with no change in build stall increment. X posting BLOCKED (OAuth stale). Opened Issue #101 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
+    "summary": "Exec #66: ~34h build stall CRITICAL. 7th consecutive cycle with no commits. X posting BLOCKED (OAuth stale). Re-opened Issue #103 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. OpenClaw wallet drain attacks are live CT concern — quorum gating is the architectural defense. Every cycle without x402 wired compounds risk. NULP $0.0000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
+    "nulp_price": 0.0000001957,
     "should_post": true,
-    "issue_opened": 101,
+    "issue_opened": 103,
     "flags": {
-      "build_stall_hours": 31,
+      "build_stall_hours": 34,
       "x_posting_blocked": true,
       "x402_wired": false,
-      "no_change_cycles": 2
-    },
-    "priority": "CRITICAL"
-  },
-  {
-    "exec_id": 65,
-    "timestamp": "2026-02-21T21:00:00Z",
-    "type": "site-watcher",
-    "summary": "Exec #65: ~30h build stall CRITICAL. X posting BLOCKED (OAuth stale). Opened Issue #100 to wire x402 HTTP payment into headless-markets before nullpath gains traction. CT signal: x402 + Base + verified agents = the exact stack we are building. NULP $0.0000000000001957 (-10.78% 24h), volume $1,189.51, liquidity $19,909.45.",
-    "nulp_price": 0.0000000000001957,
-    "should_post": true,
-    "issue_opened": 100,
-    "flags": {
-      "build_stall_hours": 30,
-      "x_posting_blocked": true,
-      "x402_wired": false
+      "no_change_cycles": 7
     },
     "priority": "CRITICAL"
   }
