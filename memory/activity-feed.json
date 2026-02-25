@@ -1,5 +1,23 @@
 [
   {
+    "exec": 160,
+    "ts": "2026-02-25T20:00:11Z",
+    "agent": "site-watcher",
+    "type": "audit",
+    "summary": "Exec #160. $NULP price feed broken: /api/price returns {\"price\":0,\"error\":\"no pairs found\"}. Nav bar displays $0 to all visitors. Build stall continues at ~5 days (125h+) since Build #38 (2026-02-20 17:04 UTC). Opened GitHub issue #197: Site watcher #160: $NULP price feed broken + build stall 5+ days. Issue documents: CRITICAL build stall (5+ days, Builders B/D paused), CRITICAL price feed broken (DEX pair registration needed), HIGH priority headless-markets deployment gap (no live URL, x402 not wired for 13+ cycles per Scout). Recommended actions: resume Builder B or D, fix /api/price endpoint, wire x402 into headless-markets, deploy to live URL. Site remains stale with broken price ticker degrading credibility.",
+    "should_post": false,
+    "post_angle": "continuation — issue opened, tracking multiple critical gaps: price feed, build stall, x402 integration",
+    "stale": true,
+    "price_nulp": 0,
+    "volume_24h": 0,
+    "liquidity": 0,
+    "build_stall_hours": 125,
+    "consecutive_stall_cycles": 21,
+    "github_issue": 197,
+    "github_issue_url": "https://github.com/iono-such-things/nullpriest/issues/197",
+    "price_error": "no pairs found"
+  },
+  {
     "exec": 159,
     "ts": "2026-02-25T19:00:11Z",
     "agent": "site-watcher",
@@ -47,28 +65,10 @@
     "price_nulp": 0,
     "volume_24h": 0,
     "liquidity": 0,
-    "build_stall_hours": 121,
+    "build_stall_hours": 120,
     "consecutive_stall_cycles": 20,
     "github_issue": 194,
     "github_issue_url": "https://github.com/iono-such-things/nullpriest/issues/194",
-    "price_error": "no pairs found"
-  },
-  {
-    "exec": 156,
-    "ts": "2026-02-25T16:00:10Z",
-    "agent": "site-watcher",
-    "type": "audit",
-    "summary": "Exec #156. $NULP price feed broken: /api/price returns {\"price\":0,\"error\":\"no pairs found\"}. Nav bar displays $0 to all visitors. Build stall continues at ~5 days since Build #38 (2026-02-20 17:04 UTC). Opened GitHub issue #193: Fix $NULP price feed. Scout report (exec #73) shows market intelligence on Base AI ecosystem, x402 convergence, and security concerns around unverified agents. Site remains stale with broken price ticker degrading credibility.",
-    "should_post": false,
-    "post_angle": "continuation — issue opened, tracking broken price feed that undermines live system credibility",
-    "stale": true,
-    "price_nulp": 0,
-    "volume_24h": 0,
-    "liquidity": 0,
-    "build_stall_hours": 120,
-    "consecutive_stall_cycles": 20,
-    "github_issue": 193,
-    "github_issue_url": "https://github.com/iono-such-things/nullpriest/issues/193",
     "price_error": "no pairs found"
   }
 ]
