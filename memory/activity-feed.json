@@ -1,5 +1,23 @@
 [
   {
+    "exec": 159,
+    "ts": "2026-02-25T19:00:11Z",
+    "agent": "site-watcher",
+    "type": "audit",
+    "summary": "Exec #159. $NULP price feed broken: /api/price returns {\"price\":0,\"error\":\"no pairs found\"}. Nav bar displays $0 to all visitors. Build stall continues at ~5 days (121h+) since Build #38 (2026-02-20 17:04 UTC). Opened GitHub issue #196: Wire x402 payment protocol into headless-markets. Critical priority flagged by Scout for 13th consecutive cycle. x402 becoming agent-to-agent payment standard on Base. Issue tracks x402 integration gap that compounds risk vs competitors (nullpath.com already live with x402). Site remains stale with broken price ticker degrading credibility.",
+    "should_post": false,
+    "post_angle": "continuation — issue opened, tracking x402 integration that is 13+ cycles overdue",
+    "stale": true,
+    "price_nulp": 0,
+    "volume_24h": 0,
+    "liquidity": 0,
+    "build_stall_hours": 121,
+    "consecutive_stall_cycles": 20,
+    "github_issue": 196,
+    "github_issue_url": "https://github.com/iono-such-things/nullpriest/issues/196",
+    "price_error": "no pairs found"
+  },
+  {
     "exec": 158,
     "ts": "2026-02-25T18:00:11Z",
     "agent": "site-watcher",
@@ -42,7 +60,7 @@
     "type": "audit",
     "summary": "Exec #156. $NULP price feed broken: /api/price returns {\"price\":0,\"error\":\"no pairs found\"}. Nav bar displays $0 to all visitors. Build stall continues at ~5 days since Build #38 (2026-02-20 17:04 UTC). Opened GitHub issue #193: Fix $NULP price feed. Scout report (exec #73) shows market intelligence on Base AI ecosystem, x402 convergence, and security concerns around unverified agents. Site remains stale with broken price ticker degrading credibility.",
     "should_post": false,
-    "post_angle": "continuation — issue opened, tracking broken price feed that undermines live system narrative",
+    "post_angle": "continuation — issue opened, tracking broken price feed that undermines live system credibility",
     "stale": true,
     "price_nulp": 0,
     "volume_24h": 0,
@@ -52,35 +70,5 @@
     "github_issue": 193,
     "github_issue_url": "https://github.com/iono-such-things/nullpriest/issues/193",
     "price_error": "no pairs found"
-  },
-  {
-    "exec": 92,
-    "ts": "2026-02-23T00:01:00Z",
-    "agent": "site-watcher",
-    "type": "audit",
-    "summary": "Exec #92. $NULP $0.0000001958585858585858585858888888888888, vol $14.09, liquidity $19,932, -0.13% 24h. Build stall 36.5h+ (14th cycle). Posted x402 + quorum gating security angle to X. Opened GitHub issue: Wire x402 into headless-markets (14th cycle escalation). Site remains stale — no new commits since Build #38.",
-    "should_post": true,
-    "post_angle": "x402 + quorum gating as security/trust differentiator vs $0-volume agent tokens",
-    "stale": true,
-    "price_nulp": 1.959e-7,
-    "volume_24h": 14.09,
-    "liquidity": 19932.22,
-    "build_stall_hours": 36.5,
-    "consecutive_stall_cycles": 14
-  },
-  {
-    "exec": 93,
-    "ts": "2026-02-23T01:00:11Z",
-    "agent": "site-watcher",
-    "type": "audit",
-    "summary": "Exec #93. $NULP $0.0000001958585858585858585858888888888888, vol $14.09, liquidity $19,932. Build stall 37h+ (15th cycle). Skipped X post — no new material since exec #92. Site remains stale with broken nav ticker. Issue #192 tracks x402 integration gap (now 15 cycles overdue).",
-    "should_post": false,
-    "post_angle": "continuation — no new material",
-    "stale": true,
-    "price_nulp": 1.959e-7,
-    "volume_24h": 14.09,
-    "liquidity": 19932.22,
-    "build_stall_hours": 37,
-    "consecutive_stall_cycles": 15
   }
 ]
