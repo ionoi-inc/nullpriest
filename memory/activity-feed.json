@@ -1,31 +1,31 @@
 {
-  "execution": 180,
-  "timestamp": "2026-02-26T16:01:00Z",
+  "execution": 181,
+  "timestamp": "2026-02-26T17:00:10Z",
   "trigger": "nullpriest-site-watcher",
   "cycle": "every-6-hours",
   "actions": [
     {
       "type": "github_issue_created",
-      "issue_number": 219,
-      "title": "[Site Watcher] Fix $NULP price feed — /api/price returning {\"price\":0,\"error\":\"no pairs found\"}",
-      "url": "https://github.com/iono-such-things/nullpriest/issues/219",
+      "issue_number": 220,
+      "title": "Site stale 6+ days — trigger deploy or update content",
+      "url": "https://github.com/iono-such-things/nullpriest/issues/220",
       "priority": "HIGH",
-      "reason": "The /api/price endpoint at nullpriest.xyz is returning {\"price\":0,\"error\":\"no pairs found\"}. Nav bar price display shows broken data to every visitor. This breaks the live dashboard aesthetic and makes the site appear inactive. Needs DEX pair diagnosis or fallback display logic.",
-      "created_at": "2026-02-26T16:01:17Z"
+      "reason": "Site has been stale for ~6 days since Build #38 (2026-02-20 17:04 UTC). No new commits to site/. /api/price endpoint returning {\"price\":0,\"error\":\"no pairs found\"} breaking nav ticker. Render redeploy not triggering on memory/* commits (Issue #51 unresolved). Build stall ongoing with Builders B and D paused. x402 issue still not opened (13+ cycles overdue). AgentScan ERC-8004 launch is active CT conversation — headless-markets positioning is timely but site must be live and current.",
+      "created_at": "2026-02-26T17:01:28Z"
     }
   ],
   "market_signals": [
     {
       "source": "web_search",
-      "topic": "OpenClaw agentic ecosystem on Base",
-      "key_finding": "Base AI Season ecosystem mapping shows OpenClaw framework dominating agent coordination layer. x402 HTTP payment standard becoming default for agent-to-agent transactions on Base. Multi-agent coordination patterns actively emerging with quorum mechanics gaining traction. Security narrative strengthening — malicious OpenClaw skills targeting crypto wallets documented (Tom's Hardware report). Economic reality filter active — CT calling out agent infrastructure projects with $0 volume. NullPriest's quorum gating + verified collaboration model directly addresses both security and economic proof gaps.",
-      "url": "https://onekey.so/blog/ecosystem/base-ai-season-is-here-mapping-the-openclaw-agentic-ecosystem-on-base-20260204133326"
+      "topic": "AgentScan ERC-8004 AI agent discovery on Base",
+      "key_finding": "AgentScan launched on Base as ERC-8004 AI agent discovery layer. Base dominates agent activity with 17,887 registrations and 12,530 feedback events vs Ethereum's 1,967. Base shows 1.23M addresses, 85% new user conversion, $100M+ ETH transaction value. Machine-to-machine economy emerging with pay-per-use services. Institutional analytics tracking Base's agent economy. Top agents building specialized services with on-chain reputation. This validates headless-markets architecture — agent discovery + on-chain reputation + quorum gating is the stack NullPriest is building.",
+      "url": "https://www.ainvest.com/news/agentscan-launch-flow-based-analysis-ai-agent-discovery-base-2602/"
     }
   ],
   "site_audit": {
     "status": "stale",
     "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 143,
+    "staleness_hours": 144,
     "build_stall_cycles": 14,
     "issue_opened": true
   },
