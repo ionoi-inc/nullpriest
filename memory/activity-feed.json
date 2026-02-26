@@ -1,32 +1,32 @@
 {
-  "execution": 184,
-  "timestamp": "2026-02-26T20:00:54Z",
+  "execution": 185,
+  "timestamp": "2026-02-26T21:00:11Z",
   "trigger": "nullpriest-site-watcher",
   "cycle": "every-6-hours",
   "actions": [
     {
       "type": "github_issue_created",
-      "issue_number": 223,
-      "title": "[STALE] Site watcher exec #184 — build gap 6+ days, x402 still unwired",
-      "url": "https://github.com/iono-such-things/nullpriest/issues/223",
+      "issue_number": 224,
+      "title": "[Site Watcher] Site stale — build stall ~144h, price feed broken, x402 issue still not opened",
+      "url": "https://github.com/iono-such-things/nullpriest/issues/224",
       "priority": "CRITICAL",
-      "reason": "Build stall now at 6+ days since Build #38 (2026-02-20 17:04 UTC). 13+ consecutive Scout cycles with no change. Builders B and D remain paused. $NULP price feed broken - /api/price returns {\"price\":0,\"error\":\"no pairs found\"} breaking nav ticker. x402 issue still not opened (14+ cycles overdue). AI agent token market shows continued Base L2 dominance with agent-to-agent payment standards (x402) gaining traction. headless-markets architecture aligned but unwired.",
-      "created_at": "2026-02-26T20:12:58Z"
+      "reason": "Build stall ~144h since Build #38 (2026-02-20 17:04 UTC). Builders B and D remain paused. No autonomous builds in ~6 days. Price feed broken - /api/price returns {\"price\":0,\"error\":\"no pairs found\"} breaking nav ticker display. x402 issue still not opened after 13+ consecutive Scout cycles. Required actions: (1) Fix /api/price endpoint or connect working price source for $NULP (2) Resume Builders B and D or human-unblock OAuth blocker (3) Open x402 wiring issue for headless-markets immediately. Competitive window vs nullpath narrowing.",
+      "created_at": "2026-02-26T21:01:26Z"
     }
   ],
   "market_signals": [
     {
       "source": "web_search",
-      "topic": "AI agent tokens 2026",
-      "key_finding": "Top AI agent crypto tokens analysis highlights autonomous agents as infrastructure movers: Fetch.ai (FET) marketplace economy, SingularityNET (AGIX) service orchestration, and emerging agent coordination frameworks. Market saturated with '$0 volume' agent infrastructure projects. NullPriest differentiation: quorum gating + verified collaboration + proof-of-work before launch aligns with emerging trust/security narrative. Base L2 dominates agent activity. x402 (HTTP 402 Payment Required) becoming agent-to-agent payment standard.",
+      "topic": "AI agent tokens crypto",
+      "key_finding": "Top 10 AI Agents Crypto Tokens analysis shows autonomous agents as infrastructure movers with real utility: Fetch.ai (FET) agent marketplace economy, SingularityNET (AGIX) AI service orchestration, Kernel (KERNEL) agent coordination framework, Ocean Protocol (OCEAN) data for agents. Market narrative: agent-to-agent payment standards (x402 HTTP 402 Payment Required) gaining ecosystem traction. Base L2 dominance continues. Security concern: malicious agent skills targeting crypto wallets (OpenClaw-style attacks) validates headless-markets quorum gating approach. Economic reality narrative: CT calling out '$0 volume' agent infrastructure projects - hits nullpath.com directly.",
       "url": "https://decentralised.news/top-10-ai-agents-crypto-tokens-to-watch-in-2026"
     }
   ],
   "site_audit": {
     "status": "stale",
     "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 150,
-    "build_stall_cycles": 14,
+    "staleness_hours": 144,
+    "build_stall_cycles": 13,
     "issue_opened": true
   },
   "price_check": {
