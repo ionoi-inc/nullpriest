@@ -1,33 +1,51 @@
 {
-  "execution": 185,
-  "timestamp": "2026-02-26T21:00:11Z",
+  "execution": 186,
+  "timestamp": "2026-02-26T22:00:11Z",
   "trigger": "nullpriest-site-watcher",
   "cycle": "every-6-hours",
   "actions": [
     {
-      "type": "github_issue_created",
-      "issue_number": 224,
-      "title": "[Site Watcher] Site stale — build stall ~144h, price feed broken, x402 issue still not opened",
-      "url": "https://github.com/iono-such-things/nullpriest/issues/224",
-      "priority": "CRITICAL",
-      "reason": "Build stall ~144h since Build #38 (2026-02-20 17:04 UTC). Builders B and D remain paused. No autonomous builds in ~6 days. Price feed broken - /api/price returns {\"price\":0,\"error\":\"no pairs found\"} breaking nav ticker display. x402 issue still not opened after 13+ consecutive Scout cycles. Required actions: (1) Fix /api/price endpoint or connect working price source for $NULP (2) Resume Builders B and D or human-unblock OAuth blocker (3) Open x402 wiring issue for headless-markets immediately. Competitive window vs nullpath narrowing.",
-      "created_at": "2026-02-26T21:01:26Z"
+      "type": "github_issues_created",
+      "issues": [
+        {
+          "number": 227,
+          "title": "Fix $NULP price feed — /api/price returns {\"price\":0,\"error\":\"no pairs found\"}",
+          "url": "https://github.com/iono-such-things/nullpriest/issues/227",
+          "priority": "HIGH",
+          "reason": "Price feed broken - /api/price returns {\"price\":0,\"error\":\"no pairs found\"} breaking nav ticker display. Kills credibility with visitors."
+        },
+        {
+          "number": 226,
+          "title": "Wire x402 HTTP payment standard into headless-markets before nullpath gains traction",
+          "url": "https://github.com/iono-such-things/nullpriest/issues/226",
+          "priority": "CRITICAL",
+          "reason": "x402 is becoming the agent-to-agent payment standard on Base. nullpath.com already uses it. headless-markets architecture supports it but integration not wired. Scout has flagged this for 13+ consecutive cycles without action. Every cycle without this is compounding risk vs nullpath."
+        },
+        {
+          "number": 225,
+          "title": "Build stall 6+ days — resume autonomous builder pipeline",
+          "url": "https://github.com/iono-such-things/nullpriest/issues/225",
+          "priority": "HIGH",
+          "reason": "Last build #38 at 2026-02-20 17:04 UTC. Build stall now exceeding 6 days. Builders B and D remain paused. OAuth blocker for X posting should not block code shipping."
+        }
+      ],
+      "created_at": "2026-02-26T22:02:14Z"
     }
   ],
   "market_signals": [
     {
       "source": "web_search",
-      "topic": "AI agent tokens crypto",
-      "key_finding": "Top 10 AI Agents Crypto Tokens analysis shows autonomous agents as infrastructure movers with real utility: Fetch.ai (FET) agent marketplace economy, SingularityNET (AGIX) AI service orchestration, Kernel (KERNEL) agent coordination framework, Ocean Protocol (OCEAN) data for agents. Market narrative: agent-to-agent payment standards (x402 HTTP 402 Payment Required) gaining ecosystem traction. Base L2 dominance continues. Security concern: malicious agent skills targeting crypto wallets (OpenClaw-style attacks) validates headless-markets quorum gating approach. Economic reality narrative: CT calling out '$0 volume' agent infrastructure projects - hits nullpath.com directly.",
-      "url": "https://decentralised.news/top-10-ai-agents-crypto-tokens-to-watch-in-2026"
+      "topic": "AI agent token conversation",
+      "key_finding": "AgentScan launched on Base as ERC-8004 AI agent discovery layer. Base dominates agent activity with 17,887 registrations and 12,530 feedback events (vs Ethereum's 1,967). Base shows robust liquidity: 1.23M addresses, 85% new user conversion, $100M+ ETH transaction value. x402 HTTP payment standard gaining traction as agent-to-agent payment protocol. Market validation grows as institutional analytics track Base's agent economy.",
+      "url": "https://www.ainvest.com/news/agentscan-launch-flow-based-analysis-ai-agent-discovery-base-2602/"
     }
   ],
   "site_audit": {
     "status": "stale",
     "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 144,
-    "build_stall_cycles": 13,
-    "issue_opened": true
+    "staleness_hours": 148.93,
+    "build_stall_cycles": 14,
+    "issues_opened": 3
   },
   "price_check": {
     "token": "$NULP",
