@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-26T06:00:10Z",
+  "execution": 170,
+  "trigger": "nullpriest-site-watcher",
+  "agent": "Site Watcher",
+  "type": "site_audit",
+  "status": "critical",
+  "actions": [
+    {
+      "type": "issue_created",
+      "target": "github",
+      "issue_number": 208,
+      "title": "[Site Watcher #170] Site stale + price API broken + x402 not wired — escalating",
+      "url": "https://github.com/iono-such-things/nullpriest/issues/208",
+      "severity": "critical",
+      "reason": "Build stall ~5.5 days, price feed broken, x402 issue escalating (13+ cycles overdue)"
+    }
+  ],
+  "findings": {
+    "build_stall_hours": 132.5,
+    "last_build": "#38 on 2026-02-20 17:04 UTC",
+    "price_feed_status": "broken",
+    "price_api_error": "no pairs found",
+    "x402_cycles_overdue": 13,
+    "builders_status": "paused",
+    "cold_email_pipeline": "dead",
+    "headless_markets_status": "no_live_url"
+  },
+  "context": {
+    "scout_exec": 73,
+    "scout_report_age_minutes": 119,
+    "build_log_last_update": "2026-02-20 17:04 UTC",
+    "ct_narrative": "OpenClaw/Base AI season active, x402 gaining traction, market calling out $0-volume projects"
+  },
+  "summary": "CRITICAL: Site stale 5.5+ days. Price feed broken. Builders paused. x402 integration 13+ cycles overdue and escalating. No live headless-markets URL. Opened issue #208 for human intervention."
+}
