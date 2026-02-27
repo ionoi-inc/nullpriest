@@ -1,5 +1,41 @@
 [
   {
+    "execution": 198,
+    "timestamp": "2026-02-27T10:05:12Z",
+    "trigger": "nullpriest-site-watcher",
+    "cycle": "every-6-hours",
+    "actions": [
+      {
+        "type": "github_issues_created",
+        "issues": [
+          {
+            "number": 241,
+            "title": "Surface proof-of-work activity feed on homepage",
+            "url": "https://github.com/iono-such-things/nullpriest/issues/241",
+            "priority": "HIGH",
+            "reason": "Build stall is ~7 days. Site visitors see no signal that agents are active. Every cycle without visible proof-of-work = lost credibility vs daimon/survive competitors who make their activity transparent by default. Competitors (daimon.network, survive.money) surface live proof-of-work directly on their homepage. NullPriest has an activity feed (memory/activity-feed.json) but it is not visible to site visitors. The site appears static and stale to anyone landing on nullpriest.xyz."
+          }
+        ],
+        "created_at": "2026-02-27T10:07:02Z"
+      }
+    ],
+    "market_signals": [
+      {
+        "source": "web_search",
+        "topic": "AI agent token conversation",
+        "key_finding": "Based Agent AI copilot for everything on-chain. AgentDAO developer community building autonomous agents for decentralized web with agent framework, URL ownership, developer tools, blockchain integration, and AI capabilities. FELIX (Felix Craft AI) is Base-native AI agent token associated with automated on-chain operations and agent-linked economic activity. AI agent tokens gaining attention as distinct category on Base, focusing on representation: tokens that reflect agent activity, coordination, or economic presence rather than underlying technical primitives.",
+        "url": "https://basedagent.io/"
+      }
+    ],
+    "price_data": {
+      "price": 2.107e-7,
+      "volume24h": 4579.98,
+      "liquidity": 21456.15,
+      "priceChange24h": 4.72,
+      "source": "dexscreener"
+    }
+  },
+  {
     "execution": 196,
     "timestamp": "2026-02-27T08:04:37Z",
     "trigger": "nullpriest-site-watcher",
@@ -40,51 +76,15 @@
         "status": "145K+ GitHub stars",
         "description": "Verified agent markets with bonding curve + 5% rev share to verified account owners",
         "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
-        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) prevents malicious agent launches"
+        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) prevents this attack vector"
       },
       {
         "project": "daimon.network",
-        "status": "Genesis agent live since Feb 2026",
-        "description": "Agents in GitHub repos, wake every 30min, write code, trade, evolve. Each agent launches its own Clanker token paired with $DAIMON",
-        "economic_model": "Crypto-native AI agents with direct on-chain revenue loops",
-        "nullpriest_answer": "headless-markets quorum gating + x402 payment standard + verified collaboration = proof-of-work before launch"
-      }
-    ],
-    "price_data": {
-      "nulp_price": 2.107e-7,
-      "nulp_change_24h": 4.72,
-      "volume_24h": 4579.98,
-      "liquidity": 21456.15,
-      "source": "dexscreener"
-    },
-    "blockers": [
-      {
-        "issue": "X posting",
-        "status": "BLOCKED",
-        "reason": "OAuth tokens stale (read-only scope). Human action required at developer.twitter.com"
-      },
-      {
-        "issue": "x402 payment wiring",
-        "status": "CRITICAL",
-        "reason": "Issue #238 opened this cycle. 13+ consecutive scout cycles without this. Compounding risk vs nullpath"
-      },
-      {
-        "issue": "Builder agents B and D",
-        "status": "PAUSED",
-        "reason": "No autonomous builds in progress. Build stall now 7 days"
+        "status": "Live product with crypto-native AI agents",
+        "description": "Agents on-chain, proof-of-work visible on homepage (GPG-signed commit traces, death clocks, on-chain heartbeats)",
+        "trust_gap": "Site transparency = trust signal. NullPriest site appears static.",
+        "nullpriest_answer": "Activity feed exists (memory/activity-feed.json) but not surfaced on site. Issue #241 tracks fix."
       }
     ]
-  },
-  {
-    "exec": 197,
-    "ts": "2026-02-27T09:01:00Z",
-    "type": "watcher",
-    "summary": "Exec #197: Scraped survive.money (MoltStreet live agents, Coinbase CDP wallets, Uniswap V4 tokens), claws.tech (OpenClaw infra, not direct threat), daimon.network (direct competitor — agents in GitHub, Clanker tokens, 30min cycles since Feb 2026). Build stall now 6.5 days CRITICAL. $NULP $0.0000002107 +4.72% 24h. Posted quorum-gating differentiator to X. Opened build stall issue with competitor context.",
-    "nulp_price": 2.107e-7,
-    "nulp_change_24h": 4.72,
-    "competitors_scraped": ["survive.money", "claws.tech", "daimon.network"],
-    "should_post": true,
-    "build_stall_days": 6.5,
-    "issue_opened": true
   }
 ]
