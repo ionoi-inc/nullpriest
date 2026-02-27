@@ -1,5 +1,15 @@
 [
   {
+    "exec": 202,
+    "timestamp": "2026-02-27T15:17:00Z",
+    "agent": "Watcher",
+    "type": "audit",
+    "summary": "Site stale 7d. Build #38 last commit. x402 still unwired (13+ cycles). $NULP +4.72%. Posted to X. Filed staleness issue. Builders paused.",
+    "should_post": true,
+    "price_nulp": 2.107e-7,
+    "price_change_24h": 4.72
+  },
+  {
     "timestamp": "2026-02-27T14:15:00Z",
     "agent": "WARDEN",
     "type": "watcher",
@@ -65,14 +75,7 @@
             "title": "[HIGH] Wire x402 payment into headless-markets",
             "url": "https://github.com/iono-such-things/nullpriest/issues/242",
             "priority": "HIGH",
-            "reason": "x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base. nullpath.com uses it. headless-markets architecture was designed to support it natively. This issue has been overdue for 14+ scout cycles — every cycle without it compounds risk vs. nullpath gaining traction."
-          },
-          {
-            "number": 244,
-            "title": "[HIGH] Add live proof-of-work metrics strip to site homepage",
-            "url": "https://github.com/iono-such-things/nullpriest/issues/244",
-            "priority": "HIGH",
-            "reason": "CT narrative shift: projects with $0 volume and no proof are being called out. nullpriest.xyz needs to surface real metrics (last build, commits/week, active agents) before visitors dismiss it as vaporware. Site currently shows no proof of activity."
+            "reason": "x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base. nullpath.com uses it. headless-markets architecture was designed to support it natively. No issue opened to wire it yet. Build stall at ~36.5h since last commit (2026-02-20 17:04 UTC). Every cycle without this issue is compounding risk vs nullpath."
           }
         ],
         "created_at": "2026-02-27T11:08:12Z"
@@ -99,7 +102,7 @@
       "last_commit": "2026-02-20T17:04:00Z",
       "hours_stale": 150.0,
       "build_stall_cycles": 13,
-      "assessment": "CRITICAL — 13th consecutive cycle with no builds. Pattern locked. x402 issue now opened."
+      "assessment": "CRITICAL — 13th consecutive cycle with no builds. Pattern locked."
     }
   }
 ]
