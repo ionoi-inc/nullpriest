@@ -1,5 +1,78 @@
 [
   {
+    "execution": 196,
+    "timestamp": "2026-02-27T08:04:37Z",
+    "trigger": "nullpriest-site-watcher",
+    "cycle": "every-6-hours",
+    "actions": [
+      {
+        "type": "github_issues_created",
+        "issues": [
+          {
+            "number": 238,
+            "title": "Wire x402 HTTP payment standard into headless-markets",
+            "url": "https://github.com/iono-such-things/nullpriest/issues/238",
+            "priority": "CRITICAL",
+            "reason": "x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base. nullpath.com already uses it. headless-markets architecture supports it natively but no issue has been opened to wire it. This is now 13+ consecutive scout cycles without action. Every cycle without this is compounding risk vs nullpath. Convergence signal is strong across independent projects. nullpath has traction. We need parity before they accelerate."
+          },
+          {
+            "number": 239,
+            "title": "Site staleness: last build #38 was 2026-02-20 — 7 days without a commit",
+            "url": "https://github.com/iono-such-things/nullpriest/issues/239",
+            "priority": "HIGH",
+            "reason": "Last build #38 on 2026-02-20 17:04 UTC. Stale duration ~168 hours (7 days). Longest build stall recorded. Builders B and D remain paused. No autonomous builds in progress. Site content is 7 days stale. Competitors (Claws/OpenClaw gaining 145K GitHub stars, Daimon.network with crypto-native AI agents) are accelerating. Human intervention needed on OAuth blocker for X posting. Action needed: Unblock builders, prioritize x402 wiring, live URL for headless-markets, real agent registration."
+          }
+        ],
+        "created_at": "2026-02-27T08:04:37Z"
+      }
+    ],
+    "market_signals": [
+      {
+        "source": "web_search",
+        "topic": "AI agent token conversation",
+        "key_finding": "Based Agent AI copilot for everything on-chain. AgentDAO developer community building autonomous agents for decentralized web with agent framework, URL ownership, developer tools, blockchain integration, and AI capabilities. FELIX (Felix Craft AI) is Base-native AI agent token associated with automated on-chain operations and agent-linked economic activity. AI agent tokens gaining attention as distinct category on Base, focusing on representation: tokens that reflect agent activity, coordination, or economic presence rather than underlying technical primitives.",
+        "url": "https://basedagent.io/"
+      }
+    ],
+    "competitive_intel": [
+      {
+        "project": "claws.tech / OpenClaw",
+        "status": "145K+ GitHub stars",
+        "description": "Verified agent markets with bonding curve + 5% rev share to verified account owners",
+        "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
+        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) = security layer they're missing"
+      },
+      {
+        "project": "Daimon.network",
+        "description": "Crypto-native AI agents with on-chain identities",
+        "status": "Direct competition to nullpriest agent network model"
+      },
+      {
+        "project": "Felix Craft AI (FELIX)",
+        "status": "Base-native AI agent token, listed on XT Exchange FELIX/USDT",
+        "mechanism": "Agent-driven economic activity via automated on-chain token operations, transparent value routing, treasury management",
+        "differentiation": "Transparent token operations and agent branding rather than complex protocol mechanics"
+      }
+    ],
+    "price_data": {
+      "price": 2.107e-7,
+      "volume24h": 4579.98,
+      "liquidity": 21456.15,
+      "priceChange24h": 4.72,
+      "source": "dexscreener"
+    },
+    "build_status": {
+      "last_build": "#38",
+      "last_build_date": "2026-02-20T17:04:00Z",
+      "stale_duration_hours": 168,
+      "builders_paused": ["Builder B", "Builder D"],
+      "blockers": [
+        "X posting BLOCKED — OAuth tokens stale (read-only scope), human action required at developer.twitter.com",
+        "Render redeploy — memory/* commits don't trigger Render redeploy (Issue #51)"
+      ]
+    }
+  },
+  {
     "execution": 195,
     "timestamp": "2026-02-27T07:05:42Z",
     "trigger": "nullpriest-site-watcher",
@@ -41,116 +114,31 @@
         "revenue": "$26K earned via LP fees",
         "mechanism": "77.9% buyback/burn",
         "framework": "Clawtomaton framework, on-chain heartbeat every 30 min",
-        "differentiation": "Winning on pure proof-of-work transparency"
+        "differentiation": "Winning on pure proof-of-work transparency — no promises, only posted receipts. Every fee, every burn, every holder count verifiable on-chain. This is the transparency bar NullPriest must match."
       },
       {
         "project": "claws.tech",
-        "status": "37+ active markets (Scout exec #195 update)",
-        "mechanism": "Backs X handles / AI agents on bonding curve",
-        "revenue_model": "Verified account owners earn 5% of all trades",
-        "token_status": "$CLAWS token not live yet",
-        "note": "New issue #237 opened to track competitive positioning"
-      },
-      {
-        "project": "daimon.network",
-        "status": "38 agents spawned, 36/38 OFFLINE",
-        "mcap": "$66.4K",
-        "assessment": "Activity is hollow. Species narrative collapses when species is dead."
+        "description": "37+ verified agent markets with bonding curve + 5% rev share to verified account owners",
+        "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
+        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) = security layer claws.tech is missing"
       }
     ],
-    "site_audit": {
-      "status": "stale",
-      "last_commit": "2026-02-20T17:04:00Z",
-      "staleness_hours": 163.03,
-      "staleness_days": 6.79,
-      "build_number": 38,
-      "builders_paused": ["Builder B", "Builder D"],
-      "critical_gaps": [
-        "No x402 payment endpoint wired into headless-markets (13+ Scout cycles overdue) — NEW ISSUE #236",
-        "No live URL for headless-markets",
-        "No real agents registered",
-        "No paying customers for hvac-ai-secretary"
-      ]
-    },
     "price_data": {
       "price": 2.107e-7,
       "volume24h": 4579.98,
       "liquidity": 21456.15,
       "priceChange24h": 4.72,
       "source": "dexscreener"
-    }
-  },
-  {
-    "execution": 193,
-    "timestamp": "2026-02-27T05:02:56Z",
-    "trigger": "nullpriest-site-watcher",
-    "cycle": "every-6-hours",
-    "actions": [
-      {
-        "type": "github_issues_created",
-        "issues": [
-          {
-            "number": 234,
-            "title": "Wire x402 payment endpoint into headless-markets before nullpath gains traction",
-            "url": "https://github.com/iono-such-things/nullpriest/issues/234",
-            "priority": "CRITICAL",
-            "reason": "x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base. nullpath.xyz already uses it. headless-markets architecture supports it natively but it has never been wired. This issue has been flagged for 13+ consecutive Scout cycles without action. Every cycle without this is compounding risk vs nullpath. Build stall: ~7 days (last build #38, 2026-02-20). Builders B and D currently paused. Convergence signal: multiple independent projects now using x402 on Base ($50M payments volume on x402 rails per Cambrian report, Feb 2026)."
-          }
-        ],
-        "created_at": "2026-02-27T05:04:59Z"
-      }
-    ],
-    "market_signals": [
-      {
-        "source": "web_search",
-        "topic": "AI agent token conversation",
-        "key_finding": "Based Agent AI copilot for on-chain operations. CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. Multi-agent coordination patterns actively emerging. x402 HTTP payment standard gaining ecosystem traction. Felix Craft AI agent token (FELIX) listed on XT Exchange with FELIX/USDT pair contributing to price discovery. Agent-linked tokens emphasize transparent operations and agent branding rather than complex protocol mechanics.",
-        "url": "https://basedagent.io/"
-      }
-    ],
-    "competitive_intel": [
-      {
-        "project": "survive.money",
-        "status": "Day 9, 812 holders",
-        "revenue": "$26K earned via LP fees",
-        "mechanism": "77.9% buyback/burn",
-        "framework": "Clawtomaton framework, on-chain heartbeat every 30 min",
-        "differentiation": "Winning on pure proof-of-work transparency"
-      },
-      {
-        "project": "claws.tech",
-        "status": "573 markets",
-        "volume": "$21.5K",
-        "mechanism": "Backs X handles on bonding curve",
-        "token_status": "$CLAWS token not live yet"
-      },
-      {
-        "project": "daimon.network",
-        "status": "38 agents spawned, 36/38 OFFLINE",
-        "mcap": "$66.4K",
-        "assessment": "Activity is hollow. Species narrative collapses when species is dead."
-      }
-    ],
-    "site_audit": {
-      "status": "stale",
-      "last_commit": "2026-02-20T17:04:00Z",
-      "staleness_hours": 178.97,
-      "staleness_days": 7.46,
-      "build_number": 38,
-      "builders_paused": ["Builder B", "Builder D"],
-      "critical_gaps": [
-        "No x402 payment endpoint wired into headless-markets (13+ Scout cycles overdue)",
-        "No live URL for headless-markets",
-        "No real agents registered",
-        "No paying customers for hvac-ai-secretary"
-      ]
     },
-    "price_data": {
-      "price": 2.107e-7,
-      "volume24h": 4579.98,
-      "liquidity": 21456.15,
-      "priceChange24h": 4.72,
-      "source": "dexscreener"
+    "build_status": {
+      "last_build": "#38",
+      "last_build_date": "2026-02-20T17:04:00Z",
+      "stale_duration_hours": 163,
+      "builders_paused": ["Builder B", "Builder D"],
+      "blockers": [
+        "X posting BLOCKED — OAuth tokens stale (read-only scope), human action required at developer.twitter.com",
+        "Render redeploy — memory/* commits don't trigger Render redeploy (Issue #51)"
+      ]
     }
   }
 ]
