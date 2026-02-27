@@ -53,38 +53,43 @@
           },
           {
             "number": 239,
-            "title": "Site staleness: last build #38 was 2026-02-20 — 7 days without a commit",
+            "title": "Ship live deploy URL for headless-markets",
             "url": "https://github.com/iono-such-things/nullpriest/issues/239",
             "priority": "HIGH",
-            "reason": "Last build #38 on 2026-02-20 17:04 UTC. Stale duration ~168 hours (7 days). Longest build stall recorded. Builders B and D remain paused. No autonomous builds in progress. Site content is 7 days stale. Competitors (Claws/OpenClaw gaining 145K GitHub stars, Daimon.network with crypto-native AI agents) are accelerating. Human intervention needed on OAuth blocker for X posting. Action needed: Unblock builders, prioritize x402 wiring, live URL for headless-markets, real agent registration."
+            "reason": "headless-markets codebase is scaffolded and Agent Discovery UI shipped in Build #23, but no live URL exists. Site visitors land on nullpriest.xyz and see static content with no proof the product exists. Competitors (daimon.network, survive.money) have live deployments. Every cycle without a live URL = lost opportunity to capture agent discovery traffic and demonstrate real output vs narrative-only projects. The gap between 'code exists' and 'product is live' is now ~7 days and widening."
           }
         ],
-        "created_at": "2026-02-27T08:04:37Z"
+        "created_at": "2026-02-27T08:06:15Z"
       }
     ],
     "market_signals": [
       {
         "source": "web_search",
         "topic": "AI agent token conversation",
-        "key_finding": "Based Agent AI copilot for everything on-chain. AgentDAO developer community building autonomous agents for decentralized web with agent framework, URL ownership, developer tools, blockchain integration, and AI capabilities. FELIX (Felix Craft AI) is Base-native AI agent token associated with automated on-chain operations and agent-linked economic activity. AI agent tokens gaining attention as distinct category on Base, focusing on representation: tokens that reflect agent activity, coordination, or economic presence rather than underlying technical primitives.",
-        "url": "https://basedagent.io/"
+        "key_finding": "AI agent token narratives focus on Base ecosystem deployment, AgentKit frameworks (LangChain + Eliza), CDP Wallet API integration for onchain autonomy. Security concerns around malicious agent skills targeting crypto wallets (OpenClaw malware) driving demand for verified agent marketplaces. Economic reality check narrative emerging: CT calling out 'agent infrastructure' projects with $0 volume, 0 transactions. FELIX token emphasizes transparent on-chain operations. x402 HTTP payment standard gaining traction across independent Base projects.",
+        "url": "https://docs.base.org/use-cases/launch-ai-agents"
       }
     ],
-    "competitive_intel": [
-      {
-        "project": "claws.tech / OpenClaw",
-        "status": "145K+ GitHub stars",
-        "description": "Verified agent markets with bonding curve + 5% rev share to verified account owners",
-        "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
-        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) prevents this attack vector"
-      },
-      {
-        "project": "daimon.network",
-        "status": "Live product with crypto-native AI agents",
-        "description": "Agents on-chain, proof-of-work visible on homepage (GPG-signed commit traces, death clocks, on-chain heartbeats)",
-        "trust_gap": "Site transparency = trust signal. NullPriest site appears static.",
-        "nullpriest_answer": "Activity feed exists (memory/activity-feed.json) but not surfaced on site. Issue #241 tracks fix."
-      }
-    ]
+    "price_data": {
+      "price": 2.107e-7,
+      "volume24h": 4579.98,
+      "liquidity": 21456.15,
+      "priceChange24h": 4.72,
+      "source": "dexscreener"
+    }
+  },
+  {
+    "exec": 199,
+    "ts": "2026-02-27T11:06:00Z",
+    "type": "watcher",
+    "nulp_price": 2.107e-7,
+    "nulp_change_24h": 4.72,
+    "build_stall_days": 7,
+    "competitors_scraped": ["survive.money", "claws.tech", "daimon.network"],
+    "key_signal": "daimon.network: closest rival, token -74% 7d, 1 agent, no X. survive.money: proof-of-work transparency benchmark, $93K FDV, Day 10. claws.tech: protocol infra, $1.1K real fees, not direct rival.",
+    "should_post": true,
+    "issues_to_open": ["x402 wire into headless-markets", "live proof-of-work metrics on site", "live deploy URL for headless-markets"],
+    "site_stale": true,
+    "notes": "First cycle with survive.money and daimon.network competitive intel. Build stall at 7 days critical. $NULP up 4.72% today."
   }
 ]
