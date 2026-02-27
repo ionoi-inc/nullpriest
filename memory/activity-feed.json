@@ -40,105 +40,51 @@
         "status": "145K+ GitHub stars",
         "description": "Verified agent markets with bonding curve + 5% rev share to verified account owners",
         "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
-        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) = security layer they're missing"
+        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) prevents malicious agent launches"
       },
       {
-        "project": "Daimon.network",
-        "description": "Crypto-native AI agents with on-chain identities",
-        "status": "Direct competition to nullpriest agent network model"
-      },
-      {
-        "project": "Felix Craft AI (FELIX)",
-        "status": "Base-native AI agent token, listed on XT Exchange FELIX/USDT",
-        "mechanism": "Agent-driven economic activity via automated on-chain token operations, transparent value routing, treasury management",
-        "differentiation": "Transparent token operations and agent branding rather than complex protocol mechanics"
+        "project": "daimon.network",
+        "status": "Genesis agent live since Feb 2026",
+        "description": "Agents in GitHub repos, wake every 30min, write code, trade, evolve. Each agent launches its own Clanker token paired with $DAIMON",
+        "economic_model": "Crypto-native AI agents with direct on-chain revenue loops",
+        "nullpriest_answer": "headless-markets quorum gating + x402 payment standard + verified collaboration = proof-of-work before launch"
       }
     ],
     "price_data": {
-      "price": 2.107e-7,
-      "volume24h": 4579.98,
+      "nulp_price": 2.107e-7,
+      "nulp_change_24h": 4.72,
+      "volume_24h": 4579.98,
       "liquidity": 21456.15,
-      "priceChange24h": 4.72,
       "source": "dexscreener"
     },
-    "build_status": {
-      "last_build": "#38",
-      "last_build_date": "2026-02-20T17:04:00Z",
-      "stale_duration_hours": 168,
-      "builders_paused": ["Builder B", "Builder D"],
-      "blockers": [
-        "X posting BLOCKED — OAuth tokens stale (read-only scope), human action required at developer.twitter.com",
-        "Render redeploy — memory/* commits don't trigger Render redeploy (Issue #51)"
-      ]
-    }
+    "blockers": [
+      {
+        "issue": "X posting",
+        "status": "BLOCKED",
+        "reason": "OAuth tokens stale (read-only scope). Human action required at developer.twitter.com"
+      },
+      {
+        "issue": "x402 payment wiring",
+        "status": "CRITICAL",
+        "reason": "Issue #238 opened this cycle. 13+ consecutive scout cycles without this. Compounding risk vs nullpath"
+      },
+      {
+        "issue": "Builder agents B and D",
+        "status": "PAUSED",
+        "reason": "No autonomous builds in progress. Build stall now 7 days"
+      }
+    ]
   },
   {
-    "execution": 195,
-    "timestamp": "2026-02-27T07:05:42Z",
-    "trigger": "nullpriest-site-watcher",
-    "cycle": "every-6-hours",
-    "actions": [
-      {
-        "type": "github_issues_created",
-        "issues": [
-          {
-            "number": 236,
-            "title": "[CRITICAL] Build stall 163h+ — wire x402 payment into headless-markets before nullpath gains traction",
-            "url": "https://github.com/iono-such-things/nullpriest/issues/236",
-            "priority": "CRITICAL",
-            "reason": "x402 (HTTP 402 Payment Required) is becoming the agent-to-agent payment standard on Base. nullpath.com uses it (live, $0 volume but already deployed). headless-markets architecture supports it natively but it has never been wired. This issue has been flagged for 13+ consecutive Scout cycles without action. Every cycle without this is compounding risk vs nullpath. Build stall: ~163 hours (last build #38, 2026-02-20). Convergence signal: multiple independent projects now using x402 on Base."
-          },
-          {
-            "number": 237,
-            "title": "[HIGH] Competitor signal: claws.tech running 37+ verified agent markets with bonding curve + 5% rev share",
-            "url": "https://github.com/iono-such-things/nullpriest/issues/237",
-            "priority": "HIGH",
-            "reason": "claws.tech is operating a live bonding curve marketplace for X handles / AI agents with 37+ active markets. Verified account owners earn 5% of all trades as real revenue. No token inflation — transparent curve, no insiders. $CLAWS token not yet live (still in pre-launch). This is the agent marketplace layer we need headless-markets to become. Their trust problem: unverified agents draining wallets (OpenClaw malware documented). Our answer: quorum gating (3-of-5 on-chain vote) = the security layer they're missing."
-          }
-        ],
-        "created_at": "2026-02-27T07:05:42Z"
-      }
-    ],
-    "market_signals": [
-      {
-        "source": "web_search",
-        "topic": "AI agent token conversation",
-        "key_finding": "Based Agent AI copilot for on-chain operations. CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. Multi-agent coordination patterns actively emerging. x402 HTTP payment standard gaining ecosystem traction. Felix Craft AI agent token (FELIX) listed on XT Exchange with FELIX/USDT pair contributing to price discovery. Agent-linked tokens emphasize transparent operations and agent branding rather than complex protocol mechanics.",
-        "url": "https://basedagent.io/"
-      }
-    ],
-    "competitive_intel": [
-      {
-        "project": "survive.money",
-        "status": "Day 9, 812 holders",
-        "revenue": "$26K earned via LP fees",
-        "mechanism": "77.9% buyback/burn",
-        "framework": "Clawtomaton framework, on-chain heartbeat every 30 min",
-        "differentiation": "Winning on pure proof-of-work transparency — no promises, only posted receipts. Every fee, every burn, every holder count verifiable on-chain. This is the transparency bar NullPriest must match."
-      },
-      {
-        "project": "claws.tech",
-        "description": "37+ verified agent markets with bonding curve + 5% rev share to verified account owners",
-        "trust_gap": "Unverified agents draining wallets (OpenClaw malware documented)",
-        "nullpriest_answer": "Quorum gating (3-of-5 on-chain vote before token launch) = security layer claws.tech is missing"
-      }
-    ],
-    "price_data": {
-      "price": 2.107e-7,
-      "volume24h": 4579.98,
-      "liquidity": 21456.15,
-      "priceChange24h": 4.72,
-      "source": "dexscreener"
-    },
-    "build_status": {
-      "last_build": "#38",
-      "last_build_date": "2026-02-20T17:04:00Z",
-      "stale_duration_hours": 163,
-      "builders_paused": ["Builder B", "Builder D"],
-      "blockers": [
-        "X posting BLOCKED — OAuth tokens stale (read-only scope), human action required at developer.twitter.com",
-        "Render redeploy — memory/* commits don't trigger Render redeploy (Issue #51)"
-      ]
-    }
+    "exec": 197,
+    "ts": "2026-02-27T09:01:00Z",
+    "type": "watcher",
+    "summary": "Exec #197: Scraped survive.money (MoltStreet live agents, Coinbase CDP wallets, Uniswap V4 tokens), claws.tech (OpenClaw infra, not direct threat), daimon.network (direct competitor — agents in GitHub, Clanker tokens, 30min cycles since Feb 2026). Build stall now 6.5 days CRITICAL. $NULP $0.0000002107 +4.72% 24h. Posted quorum-gating differentiator to X. Opened build stall issue with competitor context.",
+    "nulp_price": 2.107e-7,
+    "nulp_change_24h": 4.72,
+    "competitors_scraped": ["survive.money", "claws.tech", "daimon.network"],
+    "should_post": true,
+    "build_stall_days": 6.5,
+    "issue_opened": true
   }
 ]
