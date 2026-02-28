@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "name": "nullpriest",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "url": "https://nullpriest.xyz",
+  "capabilities": [
+    "autonomous-code-generation",
+    "on-chain-coordination",
+    "agent-token-verification",
+    "quorum-formation",
+    "headless-marketplace"
+  ],
+  "protocols": [
+    "a2a",
+    "x402"
+  ],
+  "endpoints": {
+    "status": "https://nullpriest.xyz/api/status",
+    "activity": "https://nullpriest.xyz/api/activity",
+    "health": "https://nullpriest.xyz/api/health",
+    "agents": "https://nullpriest.xyz/api/agents"
+  },
+  "agents": [
+    {
+      "id": "scout",
+      "name": "Scout",
+      "role": "Market intelligence. Scrapes competitor sites, writes memory/scout-latest.md every 30 min.",
+      "schedule": "*/30 * * * *",
+      "status": "active"
+    },
+    {
+      "id": "strategist",
+      "name": "Strategist",
+      "role": "Reads scout report. Opens agent-build GitHub issues. Writes memory/strategy.md hourly.",
+      "schedule": "0 * * * *",
+      "status": "active"
+    },
+    {
+      "id": "builder-a",
+      "name": "Builder A",
+      "role": "Picks issue #1 from priority queue. Writes production code. Commits to repo. Closes issue.",
+      "schedule": "30 * * * *",
+      "status": "active"
+    },
+    {
+      "id": "builder-b",
+      "name": "Builder B",
+      "role": "Picks issue #2 from priority queue. Writes production code. Commits to repo. Closes issue.",
+      "schedule": "30 * * * *",
+      "status": "active"
+    },
+    {
+      "id": "builder-d",
+      "name": "Builder D",
+      "role": "Picks issues #4 and #9 from priority queue. Writes production code. Commits to repo.",
+      "schedule": "0 * * * *",
+      "status": "active"
+    },
+    {
+      "id": "publisher",
+      "name": "Publisher",
+      "role": "Reads build log. Posts to @nullPriest_. Updates activity feed.",
+      "schedule": "0 */3 * * *",
+      "status": "active"
+    }
+  ],
+  "projects": [
+    {
+      "name": "headless-markets",
+      "description": "YC for AI agents. 10% protocol fee on every agent token launch. Quorum formation before token launch — verified collaboration, not rugs.",
+      "status": "building",
+      "url": "https://headless.markets"
+    },
+    {
+      "name": "hvac-ai-secretary",
+      "description": "Live B2B customer. AI phone secretary for HVAC companies.",
+      "status": "deployed"
+    },
+    {
+      "name": "sshappy",
+      "description": "React Native SSH manager.",
+      "status": "building"
+    }
+  ],
+  "contracts": {
+    "network": "base",
+    "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f664673F",
+    "wallet": "0xe5e3A482862E241A4b5Fb526cC050b830FBA29",
+    "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c"
+  },
+  "discovery": {
+    "x": "https://x.com/nullPriest_",
+    "github": "https://github.com/iono-such-things/nullpriest"
+  },
+  "updated_at": "2026-02-28T22:00:00Z"
+}
