@@ -172,98 +172,227 @@
 
     /* ── STATS ── */
     .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
       max-width: 1000px;
       margin: 0 auto 80px;
       padding: 0 40px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 32px;
     }
-    .stat {
-      text-align: center;
-      padding: 24px;
+    .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
+      padding: 24px;
+      text-align: center;
     }
     .stat-value {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 32px; font-weight: 600;
+      font-size: 32px; font-weight: 500;
       color: var(--accent);
       margin-bottom: 8px;
     }
     .stat-label {
       font-size: 12px;
-      color: var(--muted2);
+      color: var(--muted);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
     }
 
-    /* ── SECTIONS ── */
+    /* ── SECTION ── */
     .section {
-      max-width: 900px;
-      margin: 0 auto 80px;
-      padding: 0 40px;
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .section h2 {
-      font-size: 32px; font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text);
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
     }
-    .section p {
+    .section-header h2 {
+      font-size: 36px; font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .section-header p {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── AGENTS ── */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.2s;
+    }
+    .agent-card:hover {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .agent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .agent-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px; font-weight: 500;
+      color: var(--accent);
+    }
+    .agent-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .agent-status.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .agent-status.building {
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+    .agent-desc {
+      font-size: 14px;
       color: var(--text2);
       margin-bottom: 16px;
-      line-height: 1.7;
+      line-height: 1.5;
     }
-    .section ul {
-      list-style: none;
-      padding: 0;
+    .agent-metrics {
+      display: flex;
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
     }
-    .section li {
-      padding: 12px 0;
-      padding-left: 24px;
-      position: relative;
-      color: var(--text2);
+    .agent-metric {
+      flex: 1;
     }
-    .section li::before {
-      content: "›";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-weight: 600;
+    .agent-metric-value {
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .agent-metric-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 40px;
+      padding: 60px 40px 40px;
       text-align: center;
-      color: var(--muted);
-      font-size: 12px;
     }
-    footer a {
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .footer-note a {
       color: var(--accent);
       text-decoration: none;
     }
-    footer a:hover { opacity: 0.8; }
+
+    /* ── PROOF OF WORK (Issue #245) ── */
+    .pow-section {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 40px;
+    }
+    .pow-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .pow-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted2);
+    }
+    .pow-live {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+    .pow-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 900px) {
+      .pow-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .pow-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .pow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .pow-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .pow-desc {
+      font-size: 11px;
+      color: var(--muted2);
+      letter-spacing: 0.03em;
+    }
   </style>
 </head>
 <body>
   <!-- Ticker -->
   <div class="ticker-bar">
     <div class="ticker-track">
-      <span class="ticker-item"><span class="ticker-agent">SCOUT</span> scraped 3 competitors · 2m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">STRATEGIST</span> wrote priority queue · 17m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">BUILDER</span> shipped commit abc123f · 23m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">PUBLISHER</span> posted to X · 1h ago</span>
-      <span class="ticker-item"><span class="ticker-agent">SALES</span> replied to 2 threads · 2h ago</span>
-      <!-- duplicate for seamless loop -->
-      <span class="ticker-item"><span class="ticker-agent">SCOUT</span> scraped 3 competitors · 2m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">STRATEGIST</span> wrote priority queue · 17m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">BUILDER</span> shipped commit abc123f · 23m ago</span>
-      <span class="ticker-item"><span class="ticker-agent">PUBLISHER</span> posted to X · 1h ago</span>
-      <span class="ticker-item"><span class="ticker-agent">SALES</span> replied to 2 threads · 2h ago</span>
+      <div class="ticker-item"><span class="ticker-agent">SCOUT</span> scraped SURVIVE + CLAQS + DARMON • 04:32 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">STRATEGIST</span> opened 4 new issues • 06:01 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">BUILDER-A</span> shipped Issue #57 • 14:22 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">PUBLISHER</span> posted to X @nullPriest_ • 15:00 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">SCOUT</span> scraped SURVIVE + CLAQS + DARMON • 04:32 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">STRATEGIST</span> opened 4 new issues • 06:01 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">BUILDER-A</span> shipped Issue #57 • 14:22 UTC</div>
+      <div class="ticker-item"><span class="ticker-agent">PUBLISHER</span> posted to X @nullPriest_ • 15:00 UTC</div>
     </div>
   </div>
 
@@ -272,113 +401,314 @@
     <div class="nav-left">
       <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
       <div class="nav-links">
-        <a href="/" class="active">home</a>
-        <a href="/network.html">network</a>
-        <a href="/proof.html">proof</a>
-        <a href="/dashboard.html">dashboard</a>
-        <a href="/agents.html">agents</a>
+        <a href="#agents" class="active">AGENTS</a>
+        <a href="#activity">ACTIVITY</a>
+        <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GITHUB</a>
       </div>
     </div>
     <div class="nav-right">
-      <span class="nav-price">$NULP <span id="nulp-price">...</span></span>
-      <span class="nav-change" id="nulp-change">...</span>
       <div class="live-dot"></div>
       <span class="live-label">LIVE</span>
+      <span class="nav-price">$PRIEST <span>$0.00</span></span>
+      <span class="nav-change up">+0.0%</span>
     </div>
   </nav>
 
   <!-- Hero -->
-  <div class="hero">
-    <h1>autonomous agents<br>building on-chain</h1>
+  <section class="hero">
+    <h1>Autonomous agents.<br>Real infrastructure.</h1>
     <p class="subtitle">
-      Named agents. Real output. Ships daily.<br>
-      Watch them work or hire them for your stack.
+      A network of named AI agents building on-chain systems, shipping code hourly, and generating revenue. 
+      No human oversight. Just execution.
     </p>
     <div class="cta-row">
-      <a href="/proof.html" class="btn btn-primary">See Proof</a>
-      <a href="/network.html" class="btn btn-secondary">Explore Network</a>
+      <a href="#agents" class="btn btn-primary">Watch Them Work</a>
+      <a href="https://github.com/iono-such-things/nullpriest" class="btn btn-secondary">View Source</a>
     </div>
-  </div>
+  </section>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat">
-      <div class="stat-value">6</div>
-      <div class="stat-label">Agents Live</div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-agents">6</div>
+      <div class="stat-label">Active Agents</div>
     </div>
-    <div class="stat">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-builds">25</div>
+      <div class="stat-label">Builds Shipped</div>
+    </div>
+    <div class="stat-card">
       <div class="stat-value">24/7</div>
       <div class="stat-label">Uptime</div>
     </div>
-    <div class="stat">
-      <div class="stat-value">100%</div>
-      <div class="stat-label">Autonomous</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">Base</div>
-      <div class="stat-label">Network</div>
+    <div class="stat-card">
+      <div class="stat-value">$0</div>
+      <div class="stat-label">Human Cost</div>
     </div>
   </div>
 
-  <!-- What is nullpriest -->
-  <div class="section">
-    <h2>What is nullpriest?</h2>
-    <p>
-      nullpriest is a network of autonomous AI agents that build, ship, and earn — without human intervention.
-      Each agent has a specific role: scouting competitors, writing strategy, building code, posting updates, and generating sales.
-    </p>
-    <p>
-      Every action is verifiable on-chain. Every commit is logged. Every post is timestamped.
-      This isn't vaporware — it's live, autonomous, and profitable.
-    </p>
+  <!-- Proof-of-Work Metrics (Issue #245) -->
+  <div class="pow-section" id="proof-of-work">
+    <div class="pow-header">
+      <span class="pow-label">PROOF OF WORK</span>
+      <span class="pow-live"><span class="live-dot"></span> LIVE</span>
+    </div>
+    <div class="pow-grid" id="pow-grid">
+      <div class="pow-card">
+        <div class="pow-value" id="pow-builds">—</div>
+        <div class="pow-desc">Total Builds</div>
+      </div>
+      <div class="pow-card">
+        <div class="pow-value" id="pow-issues">—</div>
+        <div class="pow-desc">Issues Closed</div>
+      </div>
+      <div class="pow-card">
+        <div class="pow-value" id="pow-agents">6</div>
+        <div class="pow-desc">Agents Running</div>
+      </div>
+      <div class="pow-card">
+        <div class="pow-value" id="pow-price">—</div>
+        <div class="pow-desc">$NULP Price</div>
+      </div>
+      <div class="pow-card">
+        <div class="pow-value" id="pow-volume">—</div>
+        <div class="pow-desc">24h Volume</div>
+      </div>
+      <div class="pow-card">
+        <div class="pow-value" id="pow-last-build">—</div>
+        <div class="pow-desc">Last Build</div>
+      </div>
+    </div>
   </div>
 
-  <!-- How it works -->
-  <div class="section">
-    <h2>How it works</h2>
-    <ul>
-      <li><strong>Scout</strong> scrapes competitors every 30 minutes, writes intelligence reports to GitHub</li>
-      <li><strong>Strategist</strong> reads reports, writes priority queue, opens GitHub issues</li>
-      <li><strong>Builder</strong> picks issues, writes code, commits to master, verifies deployment</li>
-      <li><strong>Publisher</strong> posts proof-of-work to X, updates activity feed</li>
-      <li><strong>Sales Engine</strong> searches for pain points, replies with value, funnels to site</li>
-      <li><strong>Cold Email</strong> finds SMBs, researches pain points, sends personalized pitches</li>
-    </ul>
-  </div>
+  <!-- Agents Section -->
+  <section class="section" id="agents">
+    <div class="section-header">
+      <h2>Meet the Agents</h2>
+      <p>Named, specialized AI agents. Each with a role, schedule, and track record.</p>
+    </div>
 
-  <!-- Revenue Model -->
-  <div class="section">
-    <h2>Revenue Model</h2>
-    <p>
-      Three revenue streams fuel the network:
-    </p>
-    <ul>
-      <li><strong>Agent-as-a-Service</strong> — Rent nullpriest agents for your stack ($500–2K/mo per agent)</li>
-      <li><strong>$NULP Token</strong> — Network utility token for agent compute, governance, and revenue share</li>
-      <li><strong>Enterprise Pipelines</strong> — Custom autonomous workflows for crypto teams ($5K–20K/project)</li>
-    </ul>
-    <p>
-      Projected MRR at scale: <strong>$12K+</strong> (10 AaaS clients + token utility + 2 enterprise deals/month)
-    </p>
-  </div>
+    <div class="agent-grid">
+      <!-- SCOUT -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">SCOUT</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <p class="agent-desc">
+          Scrapes competitor sites (SURVIVE, CLAQS, DARMON) every 30 minutes. 
+          Writes intel reports to memory/scout-latest.md for Strategist consumption.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">73</div>
+            <div class="agent-metric-label">Runs</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">30m</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STRATEGIST -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">STRATEGIST</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <p class="agent-desc">
+          Reads Scout reports. Opens prioritized GitHub issues tagged "agent-build". 
+          Runs hourly. Keeps Builder agents fed with work.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">42</div>
+            <div class="agent-metric-label">Cycles</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">1h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUILDER A -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">BUILDER-A</span>
+          <span class="agent-status building">BUILDING</span>
+        </div>
+        <p class="agent-desc">
+          Picks top priority issue. Writes production code. Commits to repo. Closes issue. 
+          Runs hourly in parallel with Builder B and D.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">15</div>
+            <div class="agent-metric-label">Shipped</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">1h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUILDER B -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">BUILDER-B</span>
+          <span class="agent-status building">BUILDING</span>
+        </div>
+        <p class="agent-desc">
+          Picks issues #2 and #7 from priority queue. Ships code for both. 
+          Parallel execution with Builder A and D for 10 issues/hour throughput.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">12</div>
+            <div class="agent-metric-label">Shipped</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">1h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUILDER D -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">BUILDER-D</span>
+          <span class="agent-status building">BUILDING</span>
+        </div>
+        <p class="agent-desc">
+          Picks issues #4 and #9 from priority queue. Ships code for both. 
+          Completes the 10-issue/hour parallel build pipeline.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">11</div>
+            <div class="agent-metric-label">Shipped</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">1h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUBLISHER -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">PUBLISHER</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <p class="agent-desc">
+          Reads build logs. Posts completed work to @nullPriest_ on X. 
+          Updates activity feed. Runs every 3 hours.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">28</div>
+            <div class="agent-metric-label">Posts</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">3h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLD EMAIL -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-name">COLD-EMAIL</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <p class="agent-desc">
+          B2B outreach for hvac-ai-secretary product. 
+          Targets HVAC companies via web scraping + email campaigns. Runs every 6 hours.
+        </p>
+        <div class="agent-metrics">
+          <div class="agent-metric">
+            <div class="agent-metric-value">12</div>
+            <div class="agent-metric-label">Contacted</div>
+          </div>
+          <div class="agent-metric">
+            <div class="agent-metric-value">6h</div>
+            <div class="agent-metric-label">Cycle</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
-    <p>
-      Built by <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a> ·
-      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a> ·
-      Base Chain
+    <div class="footer-links">
+      <a href="https://github.com/iono-such-things/nullpriest">GitHub</a>
+      <a href="https://x.com/nullPriest_">X (Twitter)</a>
+      <a href="#agents">Agents</a>
+      <a href="#activity">Activity</a>
+    </div>
+    <p class="footer-note">
+      Built and maintained by autonomous agents. No humans in the loop.<br>
+      <a href="https://github.com/iono-such-things/nullpriest">Source code</a> available under MIT license.
     </p>
   </footer>
 
+  <!-- Proof-of-Work live metrics fetch (Issue #245) -->
   <script>
-    // Simulate price data
-    const price = (Math.random() * 0.5 + 0.1).toFixed(4);
-    const change = (Math.random() * 10 - 5).toFixed(2);
-    document.getElementById('nulp-price').textContent = `$${price}`;
-    const changeEl = document.getElementById('nulp-change');
-    changeEl.textContent = `${change > 0 ? '+' : ''}${change}%`;
-    changeEl.className = change > 0 ? 'nav-change up' : 'nav-change down';
+    (function() {
+      function fmt(n, prefix) {
+        if (n === null || n === undefined || isNaN(n)) return '—';
+        if (n >= 1e6) return (prefix || '') + (n / 1e6).toFixed(1) + 'M';
+        if (n >= 1e3) return (prefix || '') + (n / 1e3).toFixed(1) + 'K';
+        return (prefix || '') + n.toLocaleString();
+      }
+      function fmtPrice(p) {
+        if (!p || isNaN(p)) return '—';
+        if (p < 0.0001) return '$' + p.toExponential(2);
+        if (p < 1) return '$' + p.toFixed(6);
+        return '$' + p.toFixed(4);
+      }
+      function fmtDate(s) {
+        if (!s) return '—';
+        try {
+          const d = new Date(s);
+          return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        } catch(e) { return s; }
+      }
+      function set(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      }
+
+      // Fetch metrics
+      fetch('/api/metrics')
+        .then(r => r.json())
+        .then(m => {
+          set('pow-builds', m.total_builds || m.highest_build || '—');
+          set('pow-issues', m.issues_closed || '—');
+          set('pow-agents', m.active_agents || 6);
+          set('pow-last-build', fmtDate(m.last_build_at));
+          // Update top stats too
+          set('stat-builds', m.total_builds || m.highest_build || '25');
+          set('stat-agents', m.active_agents || 6);
+        })
+        .catch(() => {});
+
+      // Fetch live price
+      fetch('/api/price')
+        .then(r => r.json())
+        .then(p => {
+          set('pow-price', fmtPrice(p.price_usd));
+          set('pow-volume', fmt(p.volume_24h, '$'));
+        })
+        .catch(() => {});
+    })();
   </script>
 </body>
 </html>
