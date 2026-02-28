@@ -16,35 +16,35 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ██ Static site ████████████████████████████████████████████████████████████
+// ▊▊ Static site ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ██ Health check ███████████████████████████████████████████████████████████
+// ▊▊ Health check ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.2' });
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.3' });
 });
 
-// ██ Well-known agent discovery (Google A2A protocol) ████████████████████████
+// ▊▊ Well-known agent discovery (Google A2A protocol) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/.well-known/agent.json', (req, res) => {
   res.sendFile(path.join(__dirname, '.well-known', 'agent.json'));
 });
 
-// ██ Agent status endpoint ██████████████████████████████████████████████████
+// ▊▊ Agent status endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
     timestamp: new Date().toISOString(),
     cycle: {
-      scout:        { schedule: '*/30 * * * *',  description: 'Scrapes SURVIVE, CLAQS, DARMON. Writes memory/scout-latest.md' },
-      strategist:  { schedule: '0 * * * *',     description: 'Reads scout report. Opens agent-build GitHub issues.' },
-      builder:     { schedule: '0 * * * *',     description: 'Picks top issue. Writes code. Commits to repo. Closes issue.' },
-      builderB:    { schedule: '0 * * * *',     description: 'Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A.' },
-      builderD:    { schedule: '0 * * * *',     description: 'Picks issues #4 and #9. Writes code. Commits to repo. Runs in parallel with Builders A/B.' },
+      scout:        { schedule: '*/30 * * * *',     description: 'Scrapes SURVIVE, CLAQS, DARMON. Writes memory/scout-latest.md' },
+      strategist:  { schedule: '0 * * * *',       description: 'Reads scout report. Opens agent-build GitHub issues.' },
+      builder:     { schedule: '0 * * * *',       description: 'Picks top issue. Writes code. Commits to repo. Closes issue.' },
+      builderB:    { schedule: '0 * * * *',       description: 'Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A.' },
+      builderD:    { schedule: '0 * * * *',       description: 'Picks issues #4 and #9. Writes code. Commits to repo. Runs in parallel with Builders A/B.' },
       publisher:   { schedule: '0 */3 * * *',   description: 'Reads build log. Posts to @nullPriest_. Updates activity feed.' }
     },
     contracts: {
       token:  '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F',
-      wallet: '0xe5e3A482862E241A4b5Fb526cC050b830FBA29',
+      wallet: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29',
       pool:   '0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c'
     },
     projects: [
@@ -56,7 +56,7 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ██ Activity feed endpoint █████████████████████████████████████████████████
+// ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 // Reads memory/activity-feed.md from disk, parses into JSON array, caches 60s
 let activityCache = null;
 let activityCacheAt = 0;
@@ -102,7 +102,7 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ██ Activity feed JSON endpoint (Issue #48) ████████████████████████████████
+// ▊▊ Activity feed JSON endpoint (Issue #48) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 // Serves GET /memory/activity-feed.json — reads local memory/activity-feed.json or parses .md
 app.get('/memory/activity-feed.json', (req, res) => {
   try {
@@ -112,116 +112,176 @@ app.get('/memory/activity-feed.json', (req, res) => {
       const json = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
       return res.json(json);
     }
-    // Fall back to parsing .md
+    // Fallback: parse markdown
     const mdPath = path.join(__dirname, 'memory', 'activity-feed.md');
     if (!fs.existsSync(mdPath)) {
-      return res.status(404).json({ error: 'activity-feed not found' });
+      return res.status(404).json({ error: 'activity feed not found' });
     }
     const md = fs.readFileSync(mdPath, 'utf8');
     const entries = parseActivityFeed(md);
-    res.json({ entries, source: 'parsed_markdown' });
+    res.json({ entries, source: 'markdown-fallback', generated_at: new Date().toISOString() });
   } catch (err) {
     res.status(500).json({ error: 'failed to load activity feed', details: err.message });
   }
 });
 
-// ██ Memory proxy endpoints █████████████████████████████████████████████████
-// Proxies /memory/* requests to GitHub raw content (read-only, never cached locally)
+// ▊▊ Memory proxy endpoints ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// Proxies /memory/* requests to GitHub raw URLs
 app.get('/memory/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const url = `${GITHUB_RAW_BASE}/memory/${filename}`;
-  https.get(url, (ghRes) => {
-    if (ghRes.statusCode === 404) {
-      return res.status(404).json({ error: 'memory file not found', path: `/memory/${filename}` });
-    }
-    if (ghRes.statusCode !== 200) {
-      return res.status(ghRes.statusCode).json({ error: 'GitHub fetch failed', status: ghRes.statusCode });
-    }
-    res.setHeader('Content-Type', filename.endsWith('.json') ? 'application/json' : 'text/plain');
-    ghRes.pipe(res);
+  const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
+  https.get(url, (upstream) => {
+    res.writeHead(upstream.statusCode, upstream.headers);
+    upstream.pipe(res);
   }).on('error', (err) => {
-    res.status(500).json({ error: 'proxy request failed', details: err.message });
+    res.status(502).json({ error: 'upstream fetch failed', details: err.message });
   });
 });
 
-// ██ Agents API endpoint ████████████████████████████████████████████████████
-app.get('/api/agents', (req, res) => {
-  res.json({
-    agents: [
-      {
-        id: 'scout',
-        name: 'Scout',
-        role: 'Market intelligence. Scrapes competitor sites, writes memory/scout-latest.md every 30 min.',
-        schedule: '*/30 * * * *',
-        status: 'active',
-        last_run: null
-      },
-      {
-        id: 'strategist',
-        name: 'Strategist',
-        role: 'Reads scout report. Opens agent-build GitHub issues. Writes memory/strategy.md hourly.',
-        schedule: '0 * * * *',
-        status: 'active',
-        last_run: null
-      },
-      {
-        id: 'builder-a',
-        name: 'Builder A',
-        role: 'Picks issue #1 from priority queue. Writes production code. Commits to repo. Closes issue.',
-        schedule: '30 * * * *',
-        status: 'active',
-        last_run: null
-      },
-      {
-        id: 'builder-b',
-        name: 'Builder B',
-        role: 'Picks issue #2 from priority queue. Writes production code. Commits to repo. Closes issue.',
-        schedule: '30 * * * *',
-        status: 'active',
-        last_run: null
-      },
-      {
-        id: 'builder-d',
-        name: 'Builder D',
-        role: 'Picks issues #4 and #9 from priority queue. Writes production code. Commits to repo.',
-        schedule: '0 * * * *',
-        status: 'active',
-        last_run: null
-      },
-      {
-        id: 'publisher',
-        name: 'Publisher',
-        role: 'Reads build log. Posts to @nullPriest_. Updates activity feed.',
-        schedule: '0 */3 * * *',
-        status: 'active',
-        last_run: null
+// ▊▊ Token price endpoint (Issue #275) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// Fetches live price from GeckoTerminal (Base network, no API key required)
+// Token: 0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F
+let priceCache = null;
+let priceCacheAt = 0;
+const PRICE_CACHE_TTL_MS = 60_000; // 60s cache to avoid rate limits
+
+const TOKEN_ADDRESS = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F'.toLowerCase();
+const GECKOTERMINAL_URL = `https://api.geckoterminal.com/api/v2/networks/base/tokens/${TOKEN_ADDRESS}`;
+
+function fetchLivePrice() {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.geckoterminal.com',
+      path: `/api/v2/networks/base/tokens/${TOKEN_ADDRESS}`,
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'User-Agent': 'nullpriest/2.3' }
+    };
+    const req = https.request(options, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        try {
+          const data = JSON.parse(body);
+          const attrs = data?.data?.attributes;
+          if (!attrs) return reject(new Error('no token attributes in response'));
+          resolve({
+            token: attrs.symbol || 'NULP',
+            name: attrs.name || 'nullpriest',
+            price_usd: parseFloat(attrs.price_usd) || 0,
+            change_24h: parseFloat(attrs.price_percent_change?.['24h'] || attrs.fdv_usd ? null : 0),
+            volume_24h: parseFloat(attrs.volume_usd?.['24h']) || 0,
+            market_cap: parseFloat(attrs.market_cap_usd) || 0,
+            fdv: parseFloat(attrs.fdv_usd) || 0,
+            total_supply: attrs.total_supply || null,
+            last_updated: new Date().toISOString(),
+            source: 'geckoterminal'
+          });
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(5000, () => { req.destroy(); reject(new Error('price fetch timeout')); });
+    req.end();
+  });
+}
+
+app.get('/api/price', async (req, res) => {
+  const now = Date.now();
+  // Return cached price if fresh
+  if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
+    return res.json(priceCache);
+  }
+  try {
+    const livePrice = await fetchLivePrice();
+    priceCache = livePrice;
+    priceCacheAt = now;
+    res.json(livePrice);
+  } catch (err) {
+    // Fallback to last known cache or graceful degradation
+    if (priceCache) {
+      return res.json({ ...priceCache, stale: true, error: err.message });
+    }
+    res.status(503).json({
+      token: 'NULP',
+      price_usd: 0,
+      change_24h: 0,
+      volume_24h: 0,
+      market_cap: 0,
+      last_updated: new Date().toISOString(),
+      source: 'fallback',
+      error: err.message
+    });
+  }
+});
+
+// ▊▊ Proof-of-work metrics endpoint (Issue #245) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// Reads memory/build-log.md + activity-feed.md to compute real build metrics
+let metricsCache = null;
+let metricsCacheAt = 0;
+const METRICS_CACHE_TTL_MS = 120_000; // 2min cache
+
+function computeMetrics() {
+  const metrics = {
+    total_builds: 0,
+    last_build_at: null,
+    last_build_issue: null,
+    active_agents: 6,
+    agent_names: ['Scout', 'Strategist', 'Builder A', 'Builder B', 'Builder D', 'Publisher'],
+    issues_closed: 0,
+    files_committed: 0,
+    computed_at: new Date().toISOString(),
+    source: 'build-log'
+  };
+
+  try {
+    const buildLogPath = path.join(__dirname, 'memory', 'build-log.md');
+    if (fs.existsSync(buildLogPath)) {
+      const log = fs.readFileSync(buildLogPath, 'utf8');
+      // Count build entries (lines starting with ## Build #)
+      const buildMatches = log.match(/^## Build #(\d+)/gm) || [];
+      metrics.total_builds = buildMatches.length;
+
+      // Extract highest build number
+      const buildNums = buildMatches.map(m => parseInt(m.replace('## Build #', '')));
+      if (buildNums.length > 0) {
+        metrics.highest_build = Math.max(...buildNums);
       }
-    ],
-    updated_at: new Date().toISOString()
-  });
+
+      // Find last build timestamp
+      const tsMatch = log.match(/\*\*Timestamp:\*\*\s+([^\n]+)/);
+      if (tsMatch) metrics.last_build_at = tsMatch[1].trim();
+
+      // Count closed issues (lines with "CLOSED" or "closed issue")
+      const closedMatches = log.match(/closed issue|CLOSED|Issue #\d+ closed/gi) || [];
+      metrics.issues_closed = closedMatches.length;
+
+      // Count file commits (lines with "commit" + hex)
+      const commitMatches = log.match(/commit\s+[a-f0-9]{7,40}/gi) || [];
+      metrics.files_committed = commitMatches.length;
+    }
+  } catch (e) {
+    metrics.source = 'error: ' + e.message;
+  }
+
+  return metrics;
+}
+
+app.get('/api/metrics', (req, res) => {
+  const now = Date.now();
+  if (metricsCache && (now - metricsCacheAt < METRICS_CACHE_TTL_MS)) {
+    return res.json(metricsCache);
+  }
+  metricsCache = computeMetrics();
+  metricsCacheAt = now;
+  res.json(metricsCache);
 });
 
-// ██ Build log endpoint █████████████████████████████████████████████████████
-app.get('/memory/build-log.md', (req, res) => {
-  const url = `${GITHUB_RAW_BASE}/memory/build-log.md`;
-  https.get(url, (ghRes) => {
-    if (ghRes.statusCode === 404) {
-      return res.status(404).json({ error: 'build log not found' });
-    }
-    if (ghRes.statusCode !== 200) {
-      return res.status(ghRes.statusCode).json({ error: 'GitHub fetch failed', status: ghRes.statusCode });
-    }
-    res.setHeader('Content-Type', 'text/plain');
-    ghRes.pipe(res);
-  }).on('error', (err) => {
-    res.status(500).json({ error: 'proxy request failed', details: err.message });
-  });
+// ▊▊ Fallback to index.html for SPA routing ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
-// ██ Start server ███████████████████████████████████████████████████████████
 app.listen(PORT, () => {
-  console.log(`nullpriest v2.2 running on port ${PORT}`);
-  console.log(`Health: http://localhost:${PORT}/api/health`);
-  console.log(`Status: http://localhost:${PORT}/api/status`);
-  console.log(`Activity: http://localhost:${PORT}/api/activity`);
+  console.log(`nullpriest server running on port ${PORT}`);
 });
