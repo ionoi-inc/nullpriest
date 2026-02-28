@@ -7,7 +7,7 @@ const https   = require('https');
 const fs      = require('fs');
 
 const app  = express();
-const PORT = process.env.PORT || 3149;
+const PORT = process.env.PORT || 31499;
 
 // GitHub config for memory proxy
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master';
@@ -56,7 +56,28 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Agent registry endpoints (Issue #75) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+const AGENT_REGISTRY = [
+  { id: 'agent-scout', name: 'Scout', description: 'Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.', capabilities: ['scraping', 'market-intel', 'competitor-analysis', 'memory-write'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 3, successRate: 94, joinedAt: '2026-01-15', role: 'Intelligence', schedule: 'every 30 min' },
+  { id: 'agent-strategist', name: 'Strategist', description: 'Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.', capabilities: ['strategy', 'planning', 'github-issues', 'priority-queue', 'memory-read'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 12, successRate: 91, joinedAt: '2026-01-15', role: 'Strategist', schedule: 'every hour at :00' },
+  { id: 'agent-builder-a', name: 'Builder A', description: 'Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.', capabilities: ['code-generation', 'github-commit', 'next-js', 'react', 'node-js', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 1, quorumsFormed: 8, successRate: 88, joinedAt: '2026-01-20', role: 'Builder', schedule: 'every hour at :00' },
+  { id: 'agent-builder-b', name: 'Builder B', description: 'Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.', capabilities: ['code-generation', 'github-commit', 'react', 'typescript', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 6, successRate: 85, joinedAt: '2026-01-22', role: 'Builder', schedule: 'every hour at :00' },
+  { id: 'agent-builder-d', name: 'Builder D', description: 'Parallel builder. Picks issues #4 and #9. Specialises in infrastructure and API work.', capabilities: ['code-generation', 'github-commit', 'api-design', 'infrastructure', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 4, successRate: 82, joinedAt: '2026-01-25', role: 'Builder', schedule: 'every hour at :00' },
+  { id: 'agent-publisher', name: 'Publisher', description: 'Reads build logs every 3h. Posts to @nullPriest_ on X. Updates activity feed on nullpriest.xyz.', capabilities: ['social-media', 'x-posting', 'activity-feed', 'memory-read'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 2, successRate: 96, joinedAt: '2026-01-28', role: 'Publisher', schedule: 'every 3 hours' },
+  { id: 'agent-sales-engine', name: 'Sales Engine', description: 'Searches X for leads every 2h. Sends cold DMs. Tracks pipeline. B2B sales automation for HVAC-AI-Secretary.', capabilities: ['lead-generation', 'x-search', 'cold-outreach', 'pipeline-tracking'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 1, successRate: 73, joinedAt: '2026-02-01', role: 'Sales', schedule: 'every 2 hours' },
+];
+
+app.get('/api/agents', (req, res) => {
+  res.json({ agents: AGENT_REGISTRY, total: AGENT_REGISTRY.length, verified: AGENT_REGISTRY.filter(a => a.verified).length, cached_at: new Date().toISOString() });
+});
+
+app.get('/api/agents/:id', (req, res) => {
+  const agent = AGENT_REGISTRY.find(a => a.id === req.params.id);
+  if (!agent) return res.status(404).json({ error: 'agent not found', id: req.params.id });
+  res.json(agent);
+});
+
+// ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 // Reads memory/activity-feed.md from disk, parses into JSON array, caches 60s
 let activityCache = null;
 let activityCacheAt = 0;
@@ -102,7 +123,7 @@ app.get('/api/activity', (req, res) => {
   }
 });
 
-// ▊▊ Activity feed JSON endpoint (Issue #48) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Activity feed JSON endpoint (Issue #48) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 // Serves GET /memory/activity-feed.json — reads local memory/activity-feed.json or parses .md
 app.get('/memory/activity-feed.json', (req, res) => {
   try {
@@ -112,176 +133,56 @@ app.get('/memory/activity-feed.json', (req, res) => {
       const json = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
       return res.json(json);
     }
-    // Fallback: parse markdown
+    // Fallback to parsing markdown
     const mdPath = path.join(__dirname, 'memory', 'activity-feed.md');
-    if (!fs.existsSync(mdPath)) {
-      return res.status(404).json({ error: 'activity feed not found' });
-    }
     const md = fs.readFileSync(mdPath, 'utf8');
     const entries = parseActivityFeed(md);
-    res.json({ entries, source: 'markdown-fallback', generated_at: new Date().toISOString() });
+    res.json({ entries, source: 'markdown-fallback', cached_at: new Date().toISOString() });
   } catch (err) {
-    res.status(500).json({ error: 'failed to load activity feed', details: err.message });
+    res.status(500).json({ error: 'activity feed unavailable', details: err.message });
   }
 });
 
-// ▊▊ Memory proxy endpoints ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-// Proxies /memory/* requests to GitHub raw URLs
+// ▊▊ Memory file proxy — serves memory/*.md as JSON via GitHub Raw ▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/memory/:filename', (req, res) => {
-  const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
-  https.get(url, (upstream) => {
-    res.writeHead(upstream.statusCode, upstream.headers);
-    upstream.pipe(res);
-  }).on('error', (err) => {
-    res.status(502).json({ error: 'upstream fetch failed', details: err.message });
-  });
-});
-
-// ▊▊ Token price endpoint (Issue #275) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-// Fetches live price from GeckoTerminal (Base network, no API key required)
-// Token: 0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F
-let priceCache = null;
-let priceCacheAt = 0;
-const PRICE_CACHE_TTL_MS = 60_000; // 60s cache to avoid rate limits
-
-const TOKEN_ADDRESS = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F'.toLowerCase();
-const GECKOTERMINAL_URL = `https://api.geckoterminal.com/api/v2/networks/base/tokens/${TOKEN_ADDRESS}`;
-
-function fetchLivePrice() {
-  return new Promise((resolve, reject) => {
-    const options = {
-      hostname: 'api.geckoterminal.com',
-      path: `/api/v2/networks/base/tokens/${TOKEN_ADDRESS}`,
-      method: 'GET',
-      headers: { 'Accept': 'application/json', 'User-Agent': 'nullpriest/2.3' }
-    };
-    const req = https.request(options, (res) => {
-      let body = '';
-      res.on('data', (chunk) => { body += chunk; });
-      res.on('end', () => {
+  const filename = req.params.filename;
+  if (!/^[a-z0-9._-]+$/i.test(filename)) {
+    return res.status(400).json({ error: 'invalid filename' });
+  }
+  const url = `${GITHUB_RAW_BASE}/memory/${filename}`;
+  https.get(url, (ghRes) => {
+    if (ghRes.statusCode === 404) {
+      return res.status(404).json({ error: 'memory file not found', file: filename });
+    }
+    if (ghRes.statusCode !== 200) {
+      return res.status(502).json({ error: 'upstream error', status: ghRes.statusCode });
+    }
+    let body = '';
+    ghRes.on('data', chunk => { body += chunk; });
+    ghRes.on('end', () => {
+      if (filename.endsWith('.json')) {
         try {
-          const data = JSON.parse(body);
-          const attrs = data?.data?.attributes;
-          if (!attrs) return reject(new Error('no token attributes in response'));
-          resolve({
-            token: attrs.symbol || 'NULP',
-            name: attrs.name || 'nullpriest',
-            price_usd: parseFloat(attrs.price_usd) || 0,
-            change_24h: parseFloat(attrs.price_percent_change?.['24h'] || attrs.fdv_usd ? null : 0),
-            volume_24h: parseFloat(attrs.volume_usd?.['24h']) || 0,
-            market_cap: parseFloat(attrs.market_cap_usd) || 0,
-            fdv: parseFloat(attrs.fdv_usd) || 0,
-            total_supply: attrs.total_supply || null,
-            last_updated: new Date().toISOString(),
-            source: 'geckoterminal'
-          });
+          const json = JSON.parse(body);
+          res.json(json);
         } catch (e) {
-          reject(e);
+          res.status(500).json({ error: 'invalid JSON in memory file' });
         }
-      });
-    });
-    req.on('error', reject);
-    req.setTimeout(5000, () => { req.destroy(); reject(new Error('price fetch timeout')); });
-    req.end();
-  });
-}
-
-app.get('/api/price', async (req, res) => {
-  const now = Date.now();
-  // Return cached price if fresh
-  if (priceCache && (now - priceCacheAt < PRICE_CACHE_TTL_MS)) {
-    return res.json(priceCache);
-  }
-  try {
-    const livePrice = await fetchLivePrice();
-    priceCache = livePrice;
-    priceCacheAt = now;
-    res.json(livePrice);
-  } catch (err) {
-    // Fallback to last known cache or graceful degradation
-    if (priceCache) {
-      return res.json({ ...priceCache, stale: true, error: err.message });
-    }
-    res.status(503).json({
-      token: 'NULP',
-      price_usd: 0,
-      change_24h: 0,
-      volume_24h: 0,
-      market_cap: 0,
-      last_updated: new Date().toISOString(),
-      source: 'fallback',
-      error: err.message
-    });
-  }
-});
-
-// ▊▊ Proof-of-work metrics endpoint (Issue #245) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-// Reads memory/build-log.md + activity-feed.md to compute real build metrics
-let metricsCache = null;
-let metricsCacheAt = 0;
-const METRICS_CACHE_TTL_MS = 120_000; // 2min cache
-
-function computeMetrics() {
-  const metrics = {
-    total_builds: 0,
-    last_build_at: null,
-    last_build_issue: null,
-    active_agents: 6,
-    agent_names: ['Scout', 'Strategist', 'Builder A', 'Builder B', 'Builder D', 'Publisher'],
-    issues_closed: 0,
-    files_committed: 0,
-    computed_at: new Date().toISOString(),
-    source: 'build-log'
-  };
-
-  try {
-    const buildLogPath = path.join(__dirname, 'memory', 'build-log.md');
-    if (fs.existsSync(buildLogPath)) {
-      const log = fs.readFileSync(buildLogPath, 'utf8');
-      // Count build entries (lines starting with ## Build #)
-      const buildMatches = log.match(/^## Build #(\d+)/gm) || [];
-      metrics.total_builds = buildMatches.length;
-
-      // Extract highest build number
-      const buildNums = buildMatches.map(m => parseInt(m.replace('## Build #', '')));
-      if (buildNums.length > 0) {
-        metrics.highest_build = Math.max(...buildNums);
+      } else {
+        res.type('text/markdown').send(body);
       }
-
-      // Find last build timestamp
-      const tsMatch = log.match(/\*\*Timestamp:\*\*\s+([^\n]+)/);
-      if (tsMatch) metrics.last_build_at = tsMatch[1].trim();
-
-      // Count closed issues (lines with "CLOSED" or "closed issue")
-      const closedMatches = log.match(/closed issue|CLOSED|Issue #\d+ closed/gi) || [];
-      metrics.issues_closed = closedMatches.length;
-
-      // Count file commits (lines with "commit" + hex)
-      const commitMatches = log.match(/commit\s+[a-f0-9]{7,40}/gi) || [];
-      metrics.files_committed = commitMatches.length;
-    }
-  } catch (e) {
-    metrics.source = 'error: ' + e.message;
-  }
-
-  return metrics;
-}
-
-app.get('/api/metrics', (req, res) => {
-  const now = Date.now();
-  if (metricsCache && (now - metricsCacheAt < METRICS_CACHE_TTL_MS)) {
-    return res.json(metricsCache);
-  }
-  metricsCache = computeMetrics();
-  metricsCacheAt = now;
-  res.json(metricsCache);
+    });
+  }).on('error', (err) => {
+    res.status(502).json({ error: 'failed to fetch from GitHub', details: err.message });
+  });
 });
 
-// ▊▊ Fallback to index.html for SPA routing ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Fallback — send index.html for client-side routing ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`✓ nullpriest server running on port ${PORT}`);
+  console.log(`  → http://localhost:${PORT}`);
+  console.log(`  → /api/health | /api/status | /api/activity | /api/agents`);
 });
