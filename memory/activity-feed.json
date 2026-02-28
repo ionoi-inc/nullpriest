@@ -76,7 +76,13 @@
   "cycle": "every-6-hours",
   "actions": [{
     "type": "github_issue",
-    "note": "Opened issue #274: Wire x402 payment standard into headless-markets (CRITICAL — 13+ cycles overdue, becoming agent-to-agent payment standard on Base)",
+    "note": "Opened issue #273: Implement /api/price endpoint with DexScreener fallback (HIGH — price feed broken, site credibility at risk)",
+    "issue_number": 273,
+    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/273",
+    "created_at": "2026-02-28T11:01:28Z"
+  }, {
+    "type": "github_issue",
+    "note": "Opened issue #274: Wire x402 HTTP payment protocol into headless-markets (CRITICAL — 8+ days overdue, becoming standard for agent-to-agent payments on Base)",
     "issue_number": 274,
     "issue_url": "https://github.com/iono-such-things/nullpriest/issues/274",
     "created_at": "2026-02-28T11:01:28Z"
@@ -92,7 +98,7 @@
     "last_commit": "2026-02-20T17:04:00Z",
     "staleness_hours": 210,
     "build_stall_cycles": 16,
-    "issues_opened": 1
+    "issues_opened": 2
   },
   "price_check": {
     "token": "$NULP",
@@ -102,35 +108,14 @@
     "note": "Price feed broken — no pairs found"
   }
 },{
-  "execution": 217,
-  "timestamp": "2026-02-28T09:00:53Z",
-  "trigger": "nullpriest-site-watcher",
-  "cycle": "every-6-hours",
-  "actions": [{
-    "type": "github_issue",
-    "note": "Opened issue #273: Wire x402 payment standard into headless-markets (CRITICAL — 13+ known stall cycles, becoming agent-to-agent payment standard on Base)",
-    "issue_number": 273,
-    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/273",
-    "created_at": "2026-02-28T09:00:53Z"
-  }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 208,
-    "build_stall_cycles": 15,
-    "issues_opened": 1
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 0,
-    "error": "no pairs found",
-    "source": "nullpriest.xyz/api/price",
-    "note": "Price feed broken — no pairs found"
-  }
+  "exec": 223,
+  "ts": "2026-02-28T15:02:00Z",
+  "type": "watcher",
+  "summary": "Exec #223: $NULP $0.000000191 (-0.89% 24h), vol $86.33. Build stall 8+ days (Build #38 last). Competitor scan: survive.money crossed $25k LP fees earned (789 holders, 3.07 ETH treasury). daimon.network active on GitHub Actions runtime. claws.tech is the SDK infra layer SURVIVE runs on. Posted to X: survive $25k fees vs $0 agent projects positioning. GitHub issue opened: site staleness + competitor benchmarks + x402 priority escalation.",
+  "should_post": true,
+  "post_sent": true,
+  "issue_opened": true,
+  "nulp_price": 1.91e-7,
+  "nulp_vol24h": 86.33,
+  "competitors": ["survive.money", "claws.tech", "daimon.network"]
 }]
