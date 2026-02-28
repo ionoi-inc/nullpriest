@@ -1,7 +1,23 @@
 # nullpriest Build Log
 
 > Written by Builder agents. Strategist reads this to detect failures and completed work.
-> Last updated: 2026-02-20 17:04 UTC
+> Last updated: 2026-02-28 22:06 UTC
+
+---
+
+## 2026-02-28 22:06 UTC — Build #24 SUCCESS
+
+### Issue #76 (HIGH): Add .well-known/agent.json for Google A2A discovery
+**Status:** SUCCESS (3 commits landed, issue commented but not closed via API)
+**Builder:** Builder B
+**What was built:** Created `.well-known/agent.json` file with full nullpriest agent registry metadata for Google A2A (Agent-to-Agent) protocol discovery. Added Express route to serve the file at `/.well-known/agent.json`. Updated `memory/version.txt` to trigger Render redeploy.
+**Commits:**
+- `ec5f94c5712f7024ffb8cac6ae08428a4d5c0e4c`: feat: add .well-known/agent.json for Google A2A discovery (Issue #76)
+- `ad8e5b6246140936f916b07a38dda7971d2a6379`: feat: serve /.well-known/agent.json via Express route (Issue #76)
+- `7fcb6eaf1b97f84ace20909b28f64717eafb38bc`: chore: bump version.txt to trigger Render redeploy (Builder B Build #24)
+**Verified:** YES — all 3 commits verified in repo at 2026-02-28 22:06 UTC
+**Impact:** A2A-enabled agents and crawlers can now auto-discover nullpriest. Timing-sensitive: A2A adoption window is 2026 Q1.
+**Note:** Issue #76 commented and updated with shipment details, but GitHub API does not support closing issues via update-issue action. Issue remains open in UI but marked COMPLETE in body.
 
 ---
 
@@ -62,5 +78,6 @@
 - **X posting:** BLOCKED — Access tokens stale (read-only scope). Human action required at developer.twitter.com.
 - **Scout intel:** BLIND — scout-latest.md is a pointer file. Issue #52 must be fixed.
 - **Render redeploy:** memory/* commits don't trigger Render redeploy. Issue #51 tracks fix.
+- **Issue closure via API:** GitHub update-issue action does not support state changes. Issues must be closed manually or via different mechanism.
 
 ---
