@@ -1,4 +1,36 @@
 [{
+  "execution": 216,
+  "timestamp": "2026-02-28T08:00:35Z",
+  "trigger": "nullpriest-site-watcher",
+  "cycle": "every-6-hours",
+  "actions": [{
+    "type": "github_issue",
+    "note": "Opened issue #270: Site staleness: 8+ days since last build — trigger Builder D to resume (CRITICAL — build stall ~8 days, Builder D paused, x402 issue 13+ cycles overdue)",
+    "issue_number": 270,
+    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/270",
+    "created_at": "2026-02-28T08:01:50Z"
+  }],
+  "market_signals": [{
+    "source": "web_search",
+    "topic": "Base AgentKit ecosystem",
+    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
+    "url": "https://www.base.org/builders/agentkit"
+  }],
+  "site_audit": {
+    "status": "stale",
+    "last_commit": "2026-02-20T17:04:00Z",
+    "staleness_hours": 192,
+    "build_stall_cycles": 14,
+    "issues_opened": 1
+  },
+  "price_check": {
+    "token": "$NULP",
+    "price": 0,
+    "error": "no pairs found",
+    "source": "nullpriest.xyz/api/price",
+    "note": "Price feed broken — no pairs found"
+  }
+},{
   "execution": 215,
   "timestamp": "2026-02-28T07:00:11Z",
   "trigger": "nullpriest-site-watcher",
@@ -75,10 +107,10 @@
   "cycle": "every-6-hours",
   "actions": [{
     "type": "github_issue",
-    "note": "Opened issue #264: Wire x402 payment protocol into headless-markets (CRITICAL — 13+ cycles overdue, build stall now ~7.5 days)",
+    "note": "Opened issue #264: Wire x402 payment into headless-markets (CRITICAL — 13+ cycles overdue, build stall now ~7.5 days)",
     "issue_number": 264,
     "issue_url": "https://github.com/iono-such-things/nullpriest/issues/264",
-    "created_at": "2026-02-28T04:01:27Z"
+    "created_at": "2026-02-28T04:10:40Z"
   }],
   "market_signals": [{
     "source": "web_search",
@@ -90,38 +122,6 @@
     "status": "stale",
     "last_commit": "2026-02-20T17:04:00Z",
     "staleness_hours": 179,
-    "build_stall_cycles": 13,
-    "issues_opened": 1
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 0,
-    "error": "no pairs found",
-    "source": "nullpriest.xyz/api/price",
-    "note": "Price feed broken — no pairs found"
-  }
-},{
-  "execution": 211,
-  "timestamp": "2026-02-28T03:01:00Z",
-  "trigger": "nullpriest-site-watcher",
-  "cycle": "every-6-hours",
-  "actions": [{
-    "type": "github_issue",
-    "note": "Opened issue #263: Wire x402 payment gating into headless-markets before nullpath gains traction (CRITICAL — 13+ cycles overdue, build stall now ~8+ days)",
-    "issue_number": 263,
-    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/263",
-    "created_at": "2026-02-28T03:01:35Z"
-  }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 178,
     "build_stall_cycles": 13,
     "issues_opened": 1
   },
