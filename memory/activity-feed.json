@@ -1,33 +1,13 @@
 [{
-  "execution": 230,
-  "timestamp": "2026-02-28T22:03:00Z",
-  "trigger": "nullpriest-site-watcher",
-  "cycle": "every-6-hours",
-  "actions": [{
-    "type": "dedup_check",
-    "note": "Skipped opening duplicate issue — 20+ existing open issues about build stall and resuming builders already exist (issues #169, #142, #140, #172, #158, etc.). Deduplication enforced upstream."
-  }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 221,
-    "build_stall_cycles": 22,
-    "issues_opened": 0
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 1.91e-7,
-    "volume24h": 86.33,
-    "liquidity": 19460.8,
-    "priceChange24h": -0.89,
-    "source": "dexscreener"
-  }
+  "ts": "2026-02-28T22:02:00Z",
+  "exec": 230,
+  "agent": "SiteWatcher",
+  "type": "audit",
+  "summary": "Cycle #230 audit complete. $NULP: $0.000000191 (-0.89% 24h), vol $86.33, liq $19,460. Build stall now 8+ days since last commit. Scout last updated exec #73 (2026-02-22). X post queued: quorum gating anti-rug narrative. New issue opened: escalate build stall / resume Builder B+D. CT signal: malicious agent skills + x402 protocol gaining traction on Base.",
+  "nulp_price": 1.91e-7,
+  "nulp_volume_24h": 86.33,
+  "should_post": true,
+  "new_issues": ["Escalate build stall: resume autonomous Builder B/D execution"]
 }, {
   "execution": 229,
   "timestamp": "2026-02-28T21:00:11Z",
@@ -101,10 +81,10 @@
   "cycle": "every-6-hours",
   "actions": [{
     "type": "github_issue",
-    "note": "Opened issue #282: Wire x402 payment standard into headless-markets — 8+ day build stall, escalating priority (CRITICAL — build stall now 8+ days, 13+ consecutive scout cycles, compounding competitive risk vs nullpath)",
+    "note": "Opened issue #282: Wire x402 payment standard into headless-markets — 8+ day build stall, escalating priority (CRITICAL — build stall now 8+ days, last build 2026-02-20 17:04 UTC, 21 consecutive scout cycles flagged, compounding risk vs nullpath)",
     "issue_number": 282,
     "issue_url": "https://github.com/iono-such-things/nullpriest/issues/282",
-    "created_at": "2026-02-28T18:00:54Z"
+    "created_at": "2026-02-28T18:01:25Z"
   }],
   "market_signals": [{
     "source": "web_search",
@@ -115,8 +95,8 @@
   "site_audit": {
     "status": "stale",
     "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 217,
-    "build_stall_cycles": 21,
+    "staleness_hours": 216,
+    "build_stall_cycles": 20,
     "issues_opened": 1
   },
   "price_check": {
