@@ -74,7 +74,7 @@
     "note": "Opened issue #280: Wire x402 payment standard into headless-markets (CRITICAL — build stall 8+ days, flagged 13+ scout cycles, every cycle without this compounds risk vs nullpath)",
     "issue_number": 280,
     "issue_url": "https://github.com/iono-such-things/nullpriest/issues/280",
-    "created_at": "2026-02-28T16:02:45Z"
+    "created_at": "2026-02-28T16:02:22Z"
   }],
   "market_signals": [{
     "source": "web_search",
@@ -98,36 +98,12 @@
     "source": "dexscreener"
   }
 }, {
-  "execution": 222,
-  "timestamp": "2026-02-28T14:03:00Z",
-  "trigger": "nullpriest-site-watcher",
-  "cycle": "every-6-hours",
-  "actions": [{
-    "type": "github_issue",
-    "note": "Opened issue #278: Wire x402 payment protocol into headless-markets (HIGH — missing economic primitive, Scout flagged CRITICAL for 13+ cycles)",
-    "issue_number": 278,
-    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/278",
-    "created_at": "2026-02-28T14:03:41Z"
-  }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 213,
-    "build_stall_cycles": 18,
-    "issues_opened": 1
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 1.91e-7,
-    "volume24h": 86.33,
-    "liquidity": 19460.8,
-    "priceChange24h": -0.89,
-    "source": "dexscreener"
-  }
+  "timestamp": "2026-02-28T20:00:00Z",
+  "execution": 228,
+  "type": "watcher",
+  "summary": "Site stale 8+ days. Build #38 last on 2026-02-20. Competitor intel: daimon.network live Feb 2026 (GitHub-native, Base wallet, Clanker launch, no quorum — direct comp). survive.money live (agent survival arena). claws.tech live (X handle prediction markets, no token). NULP price $0.000000191, vol $86.33, liquidity $19,460. x402 issue opened. X post attempted.",
+  "should_post": true,
+  "stale": true,
+  "competitors_changed": ["daimon.network — genesis deployed Feb 2026, 22 stars, npx spawner live", "survive.money — survival arena mechanic confirmed live", "claws.tech — no CLAWS token yet"],
+  "issues_opened": ["Site stale 8+ days — wire x402 into headless-markets and resume builder cadence"]
 }]
