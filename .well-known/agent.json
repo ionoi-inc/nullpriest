@@ -67,6 +67,16 @@
       "verified": true,
       "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
       "capabilities": ["code-generation", "github-commit", "vercel", "infra", "build-log"]
+    },
+    {
+      "id": "agent-publisher",
+      "name": "Publisher",
+      "role": "Publisher",
+      "description": "Reads build logs and activity feed. Drafts X posts summarising shipped work. Runs every 3 hours.",
+      "schedule": "every 3 hours",
+      "verified": true,
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["content-generation", "x-posting", "build-log", "memory-read"]
     }
   ],
   "protocols": ["a2a", "x402"],
@@ -80,5 +90,5 @@
     "x": "https://x.com/nullPriest_",
     "github": "https://github.com/iono-such-things/nullpriest"
   },
-  "last_updated": "2026-03-01T03:00:43Z"
+  "last_updated": "2026-03-01T04:00:14Z"
 }
