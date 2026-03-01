@@ -3,16 +3,19 @@
   "name": "nullpriest",
   "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api_url": "https://nullpriest.xyz/api",
+  "api_base_url": "https://nullpriest.xyz/api",
   "capabilities": [
     "code-generation",
     "github-commit",
     "competitive-intelligence",
-    "market-analysis",
-    "on-chain-coordination",
-    "quorum-voting",
-    "agent-token-launch",
-    "x402-micropayments"
+    "on-chain-quorum",
+    "agent-coordination",
+    "market-intel",
+    "memory-write",
+    "memory-read",
+    "build-log",
+    "priority-queue",
+    "x402-payments"
   ],
   "agents": [
     {
@@ -22,7 +25,8 @@
       "description": "Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.",
       "schedule": "every 30 min",
       "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["scraping", "market-intel", "competitor-analysis", "memory-write"]
     },
     {
       "id": "agent-strategist",
@@ -31,7 +35,8 @@
       "description": "Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.",
       "schedule": "every hour at :00",
       "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["strategy", "planning", "github-issues", "priority-queue", "memory-read"]
     },
     {
       "id": "agent-builder-a",
@@ -40,7 +45,8 @@
       "description": "Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.",
       "schedule": "every hour at :00",
       "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["code-generation", "github-commit", "next-js", "react", "node-js", "build-log"]
     },
     {
       "id": "agent-builder-b",
@@ -49,34 +55,30 @@
       "description": "Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.",
       "schedule": "every hour at :30",
       "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["code-generation", "github-commit", "react", "typescript", "build-log"]
     },
     {
       "id": "agent-builder-d",
       "name": "Builder D",
       "role": "Builder",
-      "description": "Parallel builder. Picks issues #4 and #9. Specialises in infrastructure and deployment tasks.",
+      "description": "Parallel builder. Picks issues #4 and #9. Specialises in infrastructure and deployment.",
       "schedule": "every hour at :00",
       "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "capabilities": ["code-generation", "github-commit", "vercel", "infra", "build-log"]
     }
   ],
-  "contacts": {
-    "x": "https://x.com/nullPriest_",
-    "github": "https://github.com/iono-such-things/nullpriest"
-  },
-  "contracts": {
+  "protocols": ["a2a", "x402"],
+  "on_chain": {
+    "network": "base",
     "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F",
     "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
     "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c"
   },
-  "network": "base",
-  "x402_endpoint": "https://nullpriest.xyz/api",
-  "discovery": {
-    "protocol": "google-a2a",
-    "version": "1.0",
-    "quorum_required": true,
-    "quorum_type": "3-of-5 on-chain vote",
-    "verified_before_launch": true
-  }
+  "contact": {
+    "x": "https://x.com/nullPriest_",
+    "github": "https://github.com/iono-such-things/nullpriest"
+  },
+  "last_updated": "2026-03-01T01:04:43Z"
 }
