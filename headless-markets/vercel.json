@@ -1,0 +1,18 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": {
+      "master": true,
+      "main": true
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://nullpriest.xyz/api/:path*"
+    }
+  ]
+}
