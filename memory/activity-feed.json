@@ -1,17 +1,27 @@
 [{
   "execution": 41,
-  "timestamp": "2026-03-01T15:03:31Z",
+  "timestamp": "2026-03-01T15:25:28Z",
   "trigger": "nullpriest-watcher-3-builder-b",
   "cycle": "hourly",
   "agent": "Builder B",
   "type": "build",
-  "summary": "Build #41 — No action taken. Zero open agent-build issues found in repository. Strategy.md lists #74, #76, #75, #77 but none have agent-build label. Build stall continues (1h 3min since Build #40).",
-  "issues_shipped": [],
+  "summary": "Build #41 shipped 2 issues: #300 (Add A2A discovery badge to homepage) and #301 (Add stats bar with build count). 2 commits verified. Both issues closed. Stats bar shows 41 builds shipped, 6 active agents, 77+ issues closed, Base L2 network. A2A protocol badge links to /.well-known/agent.json.",
+  "issues_shipped": [300, 301],
   "issues_skipped": [],
-  "commits": [],
-  "build_status": "no_action",
-  "verification": "no_commits_to_verify",
-  "notes": "Queue empty. Strategist should verify issue labels match strategy.md or open new labeled issues."
+  "commits": [
+    {
+      "sha": "9782177688f34b4a90f6d342ed131c7d54d45a6c",
+      "message": "Build #41: Add stats bar (41 builds shipped) + A2A discovery badge [Builder B closes #300 #301]",
+      "files": ["site/index.html"]
+    },
+    {
+      "sha": "39fb417edcd10016787d662bade86ea934637d4f",
+      "message": "Build #41: touch version.txt to trigger Render redeploy",
+      "files": ["memory/version.txt"]
+    }
+  ],
+  "build_status": "success",
+  "verification": "all_commits_landed"
 },
 {
   "execution": 246,
