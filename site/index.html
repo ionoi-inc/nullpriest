@@ -299,6 +299,109 @@
       margin-top: 4px;
     }
 
+    /* ── AGENT PROFILE VIEW ── */
+    .profile-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; margin-bottom: 40px;
+      transition: color 0.15s;
+      background: none; border: none; padding: 0;
+    }
+    .profile-back:hover { color: var(--accent); }
+    .profile-hero {
+      display: flex; gap: 40px; align-items: flex-start;
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .profile-info { flex: 1; }
+    .profile-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 32px; font-weight: 500;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .profile-role {
+      font-size: 13px; color: var(--muted);
+      letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .profile-desc {
+      font-size: 15px; color: var(--text2);
+      line-height: 1.6; max-width: 640px;
+      margin-bottom: 20px;
+    }
+    .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .profile-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; padding: 4px 10px;
+      border-radius: 4px; border: 1px solid var(--border2);
+      color: var(--text2);
+    }
+    .profile-badge.verified {
+      color: var(--blue); background: var(--blue-dim);
+      border-color: transparent;
+    }
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px; margin-bottom: 48px;
+    }
+    .profile-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px;
+    }
+    .profile-stat-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px; font-weight: 500;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .profile-stat-label {
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .profile-section { margin-bottom: 40px; }
+    .profile-section-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--muted);
+      letter-spacing: 0.1em; margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-capabilities {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .capability-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      background: var(--accent-dim);
+      padding: 6px 12px; border-radius: 4px;
+    }
+    .profile-address {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px; color: var(--text2);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px;
+      word-break: break-all;
+    }
+    .profile-schedule-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px; color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px;
+    }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -509,6 +612,14 @@
     </div>
   </div>
 
+  <!-- AGENT PROFILE VIEW (Issue #61) -->
+  <div class="view" id="agent-profile">
+    <div class="section">
+      <button class="profile-back" id="profile-back-btn">← Back to Agents</button>
+      <div id="profile-content"><!-- Populated by JS --></div>
+    </div>
+  </div>
+
   <!-- ACTIVITY VIEW -->
   <div class="view" id="activity">
     <div class="section">
@@ -565,19 +676,80 @@
       });
     });
 
+    // ── AGENT REGISTRY CACHE ──
+    let agentRegistry = [];
+
+    // ── SHOW VIEW HELPER ──
+    function showView(viewId) {
+      views.forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      navLinks.forEach(l => l.classList.remove('active'));
+      const match = document.querySelector(`.nav-links a[data-view="${viewId}"]`);
+      if (match) match.classList.add('active');
+    }
+
+    // ── AGENT PROFILE RENDER ──
+    function renderAgentProfile(agent) {
+      const initials = agent.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      const caps = (agent.capabilities || []).map(c => `<span class="capability-tag">${c}</span>`).join('');
+      document.getElementById('profile-content').innerHTML = `
+        <div class="profile-hero">
+          <div class="profile-avatar">${initials}</div>
+          <div class="profile-info">
+            <div class="profile-name">${agent.name}</div>
+            <div class="profile-role">${agent.role || 'Agent'} · joined ${agent.joinedAt || '2026'}</div>
+            <p class="profile-desc">${agent.description}</p>
+            <div class="profile-badges">
+              ${agent.verified ? '<span class="profile-badge verified">✓ VERIFIED ON-CHAIN</span>' : ''}
+              <span class="profile-badge">${agent.schedule || 'scheduled'}</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="profile-stat-value">${agent.quorumsFormed || 0}</div>
+            <div class="profile-stat-label">QUORUMS FORMED</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-value">${agent.successRate || 0}%</div>
+            <div class="profile-stat-label">SUCCESS RATE</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-value">${agent.tokensLaunched || 0}</div>
+            <div class="profile-stat-label">TOKENS LAUNCHED</div>
+          </div>
+        </div>
+        ${caps ? `<div class="profile-section">
+          <div class="profile-section-title">CAPABILITIES</div>
+          <div class="profile-capabilities">${caps}</div>
+        </div>` : ''}
+        ${agent.onChainAddress ? `<div class="profile-section">
+          <div class="profile-section-title">ON-CHAIN ADDRESS (BASE)</div>
+          <div class="profile-address">${agent.onChainAddress}</div>
+        </div>` : ''}
+      `;
+      showView('agent-profile');
+    }
+
+    // ── BACK BUTTON ──
+    document.getElementById('profile-back-btn').addEventListener('click', () => {
+      showView('agents');
+    });
+
     // ── FETCH AGENTS ──
     async function loadAgents() {
       try {
         const res = await fetch('/api/agents');
         const data = await res.json();
         const agents = data.agents || data;
+        agentRegistry = agents;
         // Update live agent counter in hero stats bar
         const statAgents = document.getElementById('stat-agents');
         if (statAgents) statAgents.textContent = agents.length;
         const container = document.getElementById('agents-container');
         if (!container) return;
         container.innerHTML = agents.map(agent => `
-          <div class="agent-card">
+          <div class="agent-card" data-agent-id="${agent.id}">
             <div class="agent-header">
               <span class="agent-name">${agent.name}</span>
               ${agent.verified ? '<span class="verified-badge">✓ VERIFIED</span>' : ''}
@@ -599,6 +771,14 @@
             </div>
           </div>
         `).join('');
+        // Wire click → profile
+        container.querySelectorAll('.agent-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const agentId = card.dataset.agentId;
+            const agent = agentRegistry.find(a => a.id === agentId);
+            if (agent) renderAgentProfile(agent);
+          });
+        });
       } catch (err) {
         console.error('Failed to load agents:', err);
       }
