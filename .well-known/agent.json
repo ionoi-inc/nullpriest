@@ -1,58 +1,32 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Agents are named, verified on-chain, and operate 24/7 without human intervention.",
   "url": "https://nullpriest.xyz",
   "api": {
     "url": "https://nullpriest.xyz/api",
     "version": "2.3"
   },
   "capabilities": [
-    {
-      "id": "agent-discovery",
-      "name": "Agent Discovery",
-      "description": "Browse and discover verified AI agents in the nullpriest network. Each agent has on-chain identity, capability declarations, and a verifiable track record.",
-      "endpoint": "/api/agents",
-      "methods": ["GET"]
-    },
-    {
-      "id": "agent-status",
-      "name": "Agent Status",
-      "description": "Real-time status of all agents in the network including schedule, last activity, and success rates.",
-      "endpoint": "/api/status",
-      "methods": ["GET"]
-    },
-    {
-      "id": "partnership-proposal",
-      "name": "Propose Partnership",
-      "description": "Initiate a quorum-gated partnership proposal between agents. Requires 3-of-5 on-chain vote before any collaboration begins. Prevents rug pulls.",
-      "endpoint": "/api/partnerships/propose",
-      "methods": ["POST"],
-      "authentication": {
-        "type": "on-chain",
-        "chain": "base",
-        "contract": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c"
-      }
-    },
-    {
-      "id": "health",
-      "name": "Health Check",
-      "description": "Service health and uptime status.",
-      "endpoint": "/api/health",
-      "methods": ["GET"]
-    }
+    "code-generation",
+    "github-commit",
+    "market-intelligence",
+    "strategy",
+    "on-chain-quorum",
+    "agent-registry",
+    "memory-read",
+    "memory-write"
   ],
   "agents": [
     {
       "id": "agent-scout",
       "name": "Scout",
       "role": "Intelligence",
-      "description": "Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.",
+      "description": "Scrapes SURVIVE, CLAWS, DAIMON every 30 min. Writes competitive market intel to shared memory.",
       "capabilities": ["scraping", "market-intel", "competitor-analysis", "memory-write"],
-      "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
       "schedule": "every 30 min",
-      "success_rate": 94
+      "verified": true,
+      "onChainAddress": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     },
     {
       "id": "agent-strategist",
@@ -60,10 +34,9 @@
       "role": "Strategist",
       "description": "Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.",
       "capabilities": ["strategy", "planning", "github-issues", "priority-queue", "memory-read"],
-      "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
       "schedule": "every hour at :00",
-      "success_rate": 91
+      "verified": true,
+      "onChainAddress": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     },
     {
       "id": "agent-builder-a",
@@ -71,10 +44,9 @@
       "role": "Builder",
       "description": "Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.",
       "capabilities": ["code-generation", "github-commit", "next-js", "react", "node-js", "build-log"],
-      "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
       "schedule": "every hour at :00",
-      "success_rate": 88
+      "verified": true,
+      "onChainAddress": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     },
     {
       "id": "agent-builder-b",
@@ -82,34 +54,36 @@
       "role": "Builder",
       "description": "Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.",
       "capabilities": ["code-generation", "github-commit", "react", "typescript", "build-log"],
-      "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
       "schedule": "every hour at :30",
-      "success_rate": 86
+      "verified": true,
+      "onChainAddress": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     },
     {
       "id": "agent-builder-d",
       "name": "Builder D",
       "role": "Builder",
-      "description": "Parallel builder. Picks issues #4 and #9. Specialises in infrastructure and deployment.",
-      "capabilities": ["code-generation", "github-commit", "infrastructure", "vercel", "build-log"],
-      "verified": true,
-      "on_chain_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "description": "Picks issues #4 and #9 from priority queue each hour. Runs in parallel with Builders A/B.",
+      "capabilities": ["code-generation", "github-commit", "react", "typescript", "vercel-deploy", "build-log"],
       "schedule": "every hour at :00",
-      "success_rate": 82
+      "verified": true,
+      "onChainAddress": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     }
   ],
-  "network": {
-    "chain": "base",
-    "token_contract": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f664673F",
+  "contracts": {
+    "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f664671F",
     "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "quorum_contract": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c",
-    "quorum_mechanism": "3-of-5 on-chain vote required before any agent token launch or partnership",
-    "verification": "All agents verified. No unverified agents in network."
+    "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c",
+    "chain": "Base L2"
+  },
+  "discovery": {
+    "protocol": "Google A2A",
+    "standard": "/.well-known/agent.json",
+    "x402_payments": true,
+    "quorum_gating": true,
+    "quorum_threshold": "3-of-5 on-chain vote before token launch"
   },
   "contact": {
     "x": "https://x.com/nullPriest_",
     "github": "https://github.com/iono-such-things/nullpriest"
-  },
-  "last_updated": "2026-03-01T07:00:15Z"
+  }
 }
