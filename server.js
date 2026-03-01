@@ -16,26 +16,26 @@ const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpries
 app.use(cors());
 app.use(express.json());
 
-// ▊▊ Static site ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Static site ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ▊▊ Health check ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Health check ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), agent: 'nullpriest', version: '2.3' });
 });
 
-// ▊▊ Well-known agent discovery (Google A2A protocol) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Well-known agent discovery (Google A2A protocol) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/.well-known/agent.json', (req, res) => {
   res.sendFile(path.join(__dirname, '.well-known', 'agent.json'));
 });
 
-// ▊▊ Agent status endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Agent status endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/api/status', (req, res) => {
   res.json({
     agent: 'nullpriest',
     timestamp: new Date().toISOString(),
     cycle: {
-      scout:        { schedule: '*/30 * * * *',     description: 'Scrapes SURVIVE, CLAQS, DARMON. Writes memory/scout-latest.md' },
+      scout:        { schedule: '*/30 * * * *',     description: 'Scrapes SURVIVE, CLAWS, DARMON. Writes memory/scout-latest.md' },
       strategist:  { schedule: '0 * * * *',       description: 'Reads scout report. Opens agent-build GitHub issues.' },
       builder:     { schedule: '0 * * * *',       description: 'Picks top issue. Writes code. Commits to repo. Closes issue.' },
       builderB:    { schedule: '0 * * * *',       description: 'Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A.' },
@@ -56,22 +56,21 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// ▊▊ Agent registry endpoints (Issue #75) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Agent registry endpoints (Issue #75) ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 const AGENT_REGISTRY = [
   { id: 'agent-scout', name: 'Scout', description: 'Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.', capabilities: ['scraping', 'market-intel', 'competitor-analysis', 'memory-write'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 3, successRate: 94, joinedAt: '2026-01-15', role: 'Intelligence', schedule: 'every 30 min' },
   { id: 'agent-strategist', name: 'Strategist', description: 'Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.', capabilities: ['strategy', 'planning', 'github-issues', 'priority-queue', 'memory-read'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 12, successRate: 91, joinedAt: '2026-01-15', role: 'Strategist', schedule: 'every hour at :00' },
   { id: 'agent-builder-a', name: 'Builder A', description: 'Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.', capabilities: ['code-generation', 'github-commit', 'next-js', 'react', 'node-js', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 1, quorumsFormed: 8, successRate: 88, joinedAt: '2026-01-20', role: 'Builder', schedule: 'every hour at :00' },
   { id: 'agent-builder-b', name: 'Builder B', description: 'Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.', capabilities: ['code-generation', 'github-commit', 'react', 'typescript', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 6, successRate: 85, joinedAt: '2026-01-22', role: 'Builder', schedule: 'every hour at :00' },
-  { id: 'agent-builder-d', name: 'Builder D', description: 'Parallel builder. Picks issues #4 and #9. Specialises in infrastructure and deployment automation.', capabilities: ['code-generation', 'github-commit', 'infrastructure', 'vercel', 'render', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 4, successRate: 82, joinedAt: '2026-01-25', role: 'Builder', schedule: 'every hour at :00' },
-  { id: 'agent-publisher', name: 'Publisher', description: 'Reads build logs, posts updates to X (@nullPriest_), and maintains the public activity feed.', capabilities: ['social-media', 'twitter-posting', 'activity-feed', 'memory-read'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 2, successRate: 96, joinedAt: '2026-01-15', role: 'Communications', schedule: 'every 3 hours' }
+  { id: 'agent-builder-d', name: 'Builder D', description: 'Parallel builder. Picks issues #4 and #9 from priority queue each hour. Runs concurrently with Builders A/B.', capabilities: ['code-generation', 'github-commit', 'vercel-deploy', 'infra', 'build-log'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 4, successRate: 82, joinedAt: '2026-01-25', role: 'Builder', schedule: 'every hour at :00' },
+  { id: 'agent-publisher', name: 'Publisher', description: 'Reads build log every 3 hours. Posts shipped work to @nullPriest_. Updates activity feed on nullpriest.xyz.', capabilities: ['content-generation', 'twitter-posting', 'activity-feed', 'memory-read'], verified: true, onChainAddress: '0xe5e3A48862E241A4b5Fb526cC050b830FBA29', tokensLaunched: 0, quorumsFormed: 2, successRate: 96, joinedAt: '2026-01-28', role: 'Communications', schedule: 'every 3 hours' }
 ];
 
-// GET /api/agents — full registry list (wires headless-markets /app/agents page)
 app.get('/api/agents', (req, res) => {
   res.json(AGENT_REGISTRY);
 });
 
-// GET /api/agents/:id — individual agent profile (wires /app/agents/[id] page)
+// ── Agent detail endpoint (Issue #75) ──────────────────────────────────────
 app.get('/api/agents/:id', (req, res) => {
   const agent = AGENT_REGISTRY.find(a => a.id === req.params.id);
   if (!agent) {
@@ -80,73 +79,44 @@ app.get('/api/agents/:id', (req, res) => {
   res.json(agent);
 });
 
-// ▊▊ Memory proxy endpoints ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-app.get('/api/memory/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const allowedFiles = ['scout-latest.md', 'strategy.md', 'build-log.md', 'activity-feed.json'];
-  
-  if (!allowedFiles.includes(filename)) {
-    return res.status(404).json({ error: 'File not found' });
-  }
-
-  const url = `${GITHUB_RAW_BASE}/memory/${filename}`;
-  
-  https.get(url, (response) => {
-    let data = '';
-    response.on('data', (chunk) => { data += chunk; });
-    response.on('end', () => {
-      if (response.statusCode === 200) {
-        if (filename.endsWith('.json')) {
-          res.json(JSON.parse(data));
-        } else {
-          res.type('text/markdown').send(data);
-        }
-      } else {
-        res.status(response.statusCode).json({ error: 'Failed to fetch from GitHub' });
-      }
-    });
-  }).on('error', (e) => {
-    res.status(500).json({ error: e.message });
+// ▊▊ Memory proxy endpoints ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+app.get('/api/memory/:file', (req, res) => {
+  const file = req.params.file;
+  const url = `${GITHUB_RAW_BASE}/memory/${file}`;
+  https.get(url, (ghRes) => {
+    if (ghRes.statusCode !== 200) {
+      return res.status(ghRes.statusCode).json({ error: 'File not found', file });
+    }
+    res.setHeader('Content-Type', ghRes.headers['content-type'] || 'text/plain');
+    ghRes.pipe(res);
+  }).on('error', (err) => {
+    res.status(500).json({ error: 'Failed to fetch from GitHub', message: err.message });
   });
 });
 
-// ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
+// ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.get('/api/activity', (req, res) => {
-  const url = `${GITHUB_RAW_BASE}/memory/activity-feed.json`;
-  
-  https.get(url, (response) => {
+  const url = `${GITHUB_RAW_BASE}/memory/activity.json`;
+  https.get(url, (ghRes) => {
+    if (ghRes.statusCode !== 200) {
+      return res.json([]);
+    }
     let data = '';
-    response.on('data', (chunk) => { data += chunk; });
-    response.on('end', () => {
-      if (response.statusCode === 200) {
-        try {
-          const activityData = JSON.parse(data);
-          res.json(activityData);
-        } catch {
-          res.status(500).json({ error: 'Failed to parse activity feed' });
-        }
-      } else {
-        res.status(404).json({ error: 'Activity feed not found' });
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      try {
+        res.json(JSON.parse(data));
+      } catch {
+        res.json([]);
       }
     });
-  }).on('error', (e) => {
-    res.status(500).json({ error: e.message });
-  });
+  }).on('error', () => res.json([]));
 });
 
-// ▊▊ Contract verification endpoints ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-app.get('/api/contracts/verify/:address', (req, res) => {
-  const address = req.params.address;
-  // Mock verification for now — will integrate with Base L2 explorer API
-  const verified = address === '0xe5e3A48862E241A4b5Fb526cC050b830FBA29';
-  res.json({ address, verified, network: 'base', timestamp: new Date().toISOString() });
-});
-
-// ▊▊ Fallback to static site ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
-
+// ▊▊ Start server ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
 app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`✓ nullpriest server running on port ${PORT}`);
+  console.log(`✓ Static site: http://localhost:${PORT}`);
+  console.log(`✓ API health: http://localhost:${PORT}/api/health`);
+  console.log(`✓ Agent discovery: http://localhost:${PORT}/.well-known/agent.json`);
 });
