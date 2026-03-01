@@ -1,9 +1,8 @@
 {
-  "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous network of AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily. Quorum-gated token launches prevent rug pulls.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "version": "2.5",
+  "version": "2.4",
   "provider": {
     "organization": "nullpriest",
     "url": "https://nullpriest.xyz"
@@ -11,82 +10,69 @@
   "capabilities": {
     "streaming": false,
     "pushNotifications": false,
-    "stateTransitionHistory": false
+    "stateTransitionHistory": true
   },
   "authentication": {
     "schemes": ["none"]
   },
   "defaultInputModes": ["text/plain", "application/json"],
-  "defaultOutputModes": ["application/json", "text/plain"],
+  "defaultOutputModes": ["text/plain", "application/json"],
   "skills": [
     {
-      "id": "agent-scout",
-      "name": "Scout",
-      "description": "Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.",
-      "tags": ["scraping", "market-intel", "competitor-analysis", "memory-write"],
+      "id": "scout",
+      "name": "Scout — Competitive Intelligence",
+      "description": "Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory. Tracks competitor moves, token launches, and ecosystem signals.",
+      "tags": ["market-intel", "scraping", "competitor-analysis", "memory-write"],
       "examples": [
-        "What are competitors building this week?",
-        "Summarize latest market signals for on-chain AI agents"
+        "What are competitors shipping this week?",
+        "Summarize Base ecosystem agent launches",
+        "What is nullpath building?"
       ]
     },
     {
-      "id": "agent-strategist",
-      "name": "Strategist",
+      "id": "strategist",
+      "name": "Strategist — ORACLE",
       "description": "Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.",
       "tags": ["strategy", "planning", "github-issues", "priority-queue", "memory-read"],
       "examples": [
-        "What should Builder A work on this hour?",
-        "Open GitHub issues for top priority items"
+        "What should we build next?",
+        "Open issues for top market opportunities",
+        "Reprioritize build queue based on latest scout report"
       ]
     },
     {
-      "id": "agent-builder-a",
-      "name": "Builder A",
+      "id": "builder",
+      "name": "Builder A — Code Shipper",
       "description": "Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.",
       "tags": ["code-generation", "github-commit", "next-js", "react", "node-js", "build-log"],
       "examples": [
-        "Build and commit the agent profile page",
-        "Implement the /api/agents endpoint"
+        "Build the agent discovery UI",
+        "Wire /app/agents to real API endpoint",
+        "Ship the quorum voting flow"
       ]
     },
     {
-      "id": "agent-builder-b",
-      "name": "Builder B",
+      "id": "builder-b",
+      "name": "Builder B — Parallel Code Shipper",
       "description": "Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.",
       "tags": ["code-generation", "github-commit", "react", "typescript", "build-log"],
       "examples": [
-        "Build and commit the .well-known/agent.json discovery file",
-        "Implement agent card navigation links"
+        "Add .well-known/agent.json for A2A discovery",
+        "Add agent profile pages",
+        "Wire partnership CTA to quorum voting flow"
       ]
     },
     {
-      "id": "agent-builder-d",
-      "name": "Builder D",
+      "id": "builder-d",
+      "name": "Builder D — Parallel Code Shipper",
       "description": "Parallel builder. Picks issues #4 and #9 from priority queue each hour. Runs concurrently with Builders A/B.",
-      "tags": ["code-generation", "github-commit", "vercel-deploy", "next-js", "build-log"],
+      "tags": ["code-generation", "github-commit", "vercel", "deployment", "build-log"],
       "examples": [
-        "Deploy headless-markets to Vercel with auto-redeploy",
-        "Add /agents navigation link to headless-markets nav"
-      ]
-    },
-    {
-      "id": "agent-publisher",
-      "name": "Publisher",
-      "description": "Reads build logs. Posts to @nullPriest_. Updates activity feed.",
-      "tags": ["twitter", "publishing", "activity-feed", "build-log"],
-      "examples": [
-        "Post latest build summary to X",
-        "Update activity feed with completed work"
+        "Deploy headless-markets to Vercel",
+        "Add /agents navigation link",
+        "Touch memory/version.txt to trigger Render redeploy"
       ]
     }
   ],
-  "onChain": {
-    "network": "base",
-    "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f664677",
-    "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a007789e6439d62518e5c",
-    "quorumGating": true,
-    "quorumThreshold": "3-of-5",
-    "description": "Token launches require 3-of-5 on-chain quorum vote before execution — preventing rug pulls by design."
-  }
+  "supportsAuthenticatedExtendedCard": false
 }
