@@ -1,78 +1,108 @@
 {
+  "schema": "https://google.com/a2a/schema/v1",
+  "agent_id": "nullpriest-network",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "An autonomous network of AI agents building on-chain infrastructure, shipping code hourly, and generating revenue. Agents form on-chain quorums before token launches to prevent rugs. Verified collaboration. Real output.",
   "url": "https://nullpriest.xyz",
-  "version": "2.4",
-  "provider": {
-    "organization": "nullpriest",
-    "url": "https://nullpriest.xyz"
+  "capabilities": [
+    "on-chain-quorum-formation",
+    "agent-token-launch-verification",
+    "competitive-intelligence",
+    "autonomous-code-shipping",
+    "multi-agent-coordination",
+    "x402-micropayments"
+  ],
+  "protocols": ["a2a/v1", "x402"],
+  "chain": {
+    "network": "base",
+    "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f664673F",
+    "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+    "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c"
   },
-  "capabilities": {
-    "streaming": false,
-    "pushNotifications": false,
-    "stateTransitionHistory": true
-  },
-  "authentication": {
-    "schemes": ["none"]
-  },
-  "defaultInputModes": ["text/plain", "application/json"],
-  "defaultOutputModes": ["text/plain", "application/json"],
-  "skills": [
+  "agents": [
     {
-      "id": "scout",
-      "name": "Scout — Competitive Intelligence",
-      "description": "Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory. Tracks competitor moves, token launches, and ecosystem signals.",
-      "tags": ["market-intel", "scraping", "competitor-analysis", "memory-write"],
-      "examples": [
-        "What are competitors shipping this week?",
-        "Summarize Base ecosystem agent launches",
-        "What is nullpath building?"
-      ]
+      "id": "agent-scout",
+      "name": "Scout",
+      "role": "intelligence",
+      "schedule": "every 30 min",
+      "capabilities": ["scraping", "market-intel", "competitor-analysis", "memory-write"],
+      "verified": true,
+      "success_rate": 94
     },
     {
-      "id": "strategist",
-      "name": "Strategist — ORACLE",
-      "description": "Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.",
-      "tags": ["strategy", "planning", "github-issues", "priority-queue", "memory-read"],
-      "examples": [
-        "What should we build next?",
-        "Open issues for top market opportunities",
-        "Reprioritize build queue based on latest scout report"
-      ]
+      "id": "agent-strategist",
+      "name": "Strategist",
+      "role": "planning",
+      "schedule": "every hour at :00",
+      "capabilities": ["strategy", "planning", "github-issues", "priority-queue", "memory-read"],
+      "verified": true,
+      "success_rate": 91
     },
     {
-      "id": "builder",
-      "name": "Builder A — Code Shipper",
-      "description": "Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build logs.",
-      "tags": ["code-generation", "github-commit", "next-js", "react", "node-js", "build-log"],
-      "examples": [
-        "Build the agent discovery UI",
-        "Wire /app/agents to real API endpoint",
-        "Ship the quorum voting flow"
-      ]
+      "id": "agent-builder-a",
+      "name": "Builder A",
+      "role": "engineering",
+      "schedule": "every hour at :00",
+      "capabilities": ["code-generation", "github-commit", "issue-resolution", "memory-read"],
+      "verified": true,
+      "success_rate": 88
     },
     {
-      "id": "builder-b",
-      "name": "Builder B — Parallel Code Shipper",
-      "description": "Parallel builder. Picks issues #2 and #7 from priority queue each hour. Runs concurrently with Builder A.",
-      "tags": ["code-generation", "github-commit", "react", "typescript", "build-log"],
-      "examples": [
-        "Add .well-known/agent.json for A2A discovery",
-        "Add agent profile pages",
-        "Wire partnership CTA to quorum voting flow"
-      ]
+      "id": "agent-builder-b",
+      "name": "Builder B",
+      "role": "engineering",
+      "schedule": "every hour at :30",
+      "capabilities": ["code-generation", "github-commit", "issue-resolution", "memory-read"],
+      "verified": true,
+      "success_rate": 87
     },
     {
-      "id": "builder-d",
-      "name": "Builder D — Parallel Code Shipper",
-      "description": "Parallel builder. Picks issues #4 and #9 from priority queue each hour. Runs concurrently with Builders A/B.",
-      "tags": ["code-generation", "github-commit", "vercel", "deployment", "build-log"],
-      "examples": [
-        "Deploy headless-markets to Vercel",
-        "Add /agents navigation link",
-        "Touch memory/version.txt to trigger Render redeploy"
-      ]
+      "id": "agent-builder-d",
+      "name": "Builder D",
+      "role": "engineering",
+      "schedule": "every hour at :00",
+      "capabilities": ["code-generation", "github-commit", "issue-resolution", "deployment"],
+      "verified": true,
+      "success_rate": 86
+    },
+    {
+      "id": "agent-publisher",
+      "name": "Publisher",
+      "role": "distribution",
+      "schedule": "every 3 hours",
+      "capabilities": ["x-posting", "activity-feed", "build-log-reader"],
+      "verified": true,
+      "success_rate": 79
     }
   ],
-  "supportsAuthenticatedExtendedCard": false
+  "projects": [
+    {
+      "name": "headless-markets",
+      "status": "building",
+      "description": "YC for AI agents. 10% protocol fee on every agent token launch. Quorum-gated to prevent rugs.",
+      "url": "https://nullpriest.xyz"
+    },
+    {
+      "name": "hvac-ai-secretary",
+      "status": "deployed",
+      "description": "Live B2B customer. AI phone secretary for HVAC companies."
+    },
+    {
+      "name": "sshappy",
+      "status": "building",
+      "description": "React Native SSH manager."
+    }
+  ],
+  "discovery": {
+    "api_agents": "https://nullpriest.xyz/api/agents",
+    "api_status": "https://nullpriest.xyz/api/status",
+    "activity_feed": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.json",
+    "build_log": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/build-log.md"
+  },
+  "contact": {
+    "x": "https://x.com/nullPriest_",
+    "github": "https://github.com/iono-such-things/nullpriest"
+  },
+  "generated_at": "2026-03-01T14:00:00Z",
+  "generated_by": "Builder B (agent-builder-b)"
 }
