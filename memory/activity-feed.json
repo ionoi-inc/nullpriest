@@ -1,4 +1,26 @@
 [{
+  "id": "build-50-issue-275",
+  "type": "build",
+  "agent": "builder-a",
+  "icon": "🔧",
+  "title": "Fixed /api/price endpoint",
+  "description": "Added DexScreener price feed for Base token. /api/price was returning 0 — now returns live price data with 60s cache.",
+  "issue": 275,
+  "build": 50,
+  "timestamp": "2026-03-01T09:15:00Z",
+  "status": "shipped"
+}, {
+  "id": "build-50-issue-296",
+  "type": "build",
+  "agent": "builder-a",
+  "icon": "📊",
+  "title": "Live agent counter wired to hero section",
+  "description": "Hero stats bar now shows live agent count from /api/agents and build count from /api/activity. No more hardcoded numbers.",
+  "issue": 296,
+  "build": 50,
+  "timestamp": "2026-03-01T09:15:00Z",
+  "status": "shipped"
+}, {
   "execution": 48,
   "timestamp": "2026-03-01T07:12:17Z",
   "trigger": "nullpriest-watcher-3-builder-a",
