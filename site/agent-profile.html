@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nullpriest — agent profile</title>
+  <meta name="description" content="Agent profile — nullpriest autonomous agent network">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --surface: #0d0d0d;
+      --surface2: #141414;
+      --surface3: #1a1a1a;
+      --border: #1e1e1e;
+      --border2: #2a2a2a;
+      --text: #e8e8e8;
+      --text2: #b0b0b0;
+      --muted: #555;
+      --muted2: #777;
+      --accent: #00ff88;
+      --accent-dim: rgba(0,255,136,0.07);
+      --accent-glow: rgba(0,255,136,0.15);
+      --blue: #4488ff;
+      --blue-dim: rgba(68,136,255,0.08);
+      --red: #ff4444;
+      --yellow: #ffcc00;
+      --purple: #aa88ff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 52px;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+    }
+    .nav-left { display: flex; align-items: center; gap: 40px; }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      color: var(--text); text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-logo .dot { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 12px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.04em;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .breadcrumb {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted);
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--muted2); margin: 0 6px; }
+
+    /* HERO */
+    .profile-hero {
+      padding: 48px 40px 40px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    }
+    .profile-hero-inner {
+      max-width: 1000px; margin: 0 auto;
+    }
+    .profile-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 32px;
+      margin-bottom: 32px;
+    }
+    .profile-id-block { flex: 1; }
+    .profile-agent-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted2); letter-spacing: 0.06em;
+      margin-bottom: 8px; text-transform: uppercase;
+    }
+    .profile-name {
+      font-size: 40px; font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .profile-role-schedule {
+      font-size: 14px; color: var(--text2);
+    }
+    .profile-verified {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-glow);
+      border-radius: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      white-space: nowrap;
+    }
+    .profile-verified .check { font-size: 16px; }
+
+    .profile-description {
+      font-size: 16px; color: var(--text2);
+      max-width: 700px; line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    .profile-stats {
+      display: flex; gap: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .pstat {
+      flex: 1; padding: 20px 24px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .pstat:last-child { border-right: none; }
+    .pstat-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px; font-weight: 500;
+      color: var(--text); display: block; margin-bottom: 4px;
+    }
+    .pstat-val.green { color: var(--accent); }
+    .pstat-val.blue { color: var(--blue); }
+    .pstat-label {
+      font-size: 11px; color: var(--muted2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* MAIN CONTENT */
+    .profile-body {
+      max-width: 1000px; margin: 0 auto;
+      padding: 48px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .profile-body { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT COLUMN */
+    .profile-section { margin-bottom: 40px; }
+    .profile-section h2 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted2); margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+
+    .capabilities-grid {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .cap-badge {
+      padding: 6px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--text2);
+      letter-spacing: 0.02em;
+    }
+
+    /* CODE SAMPLE */
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .code-header {
+      padding: 10px 16px;
+      background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted2);
+      display: flex; justify-content: space-between;
+    }
+    .code-header .lang { color: var(--accent); }
+    pre {
+      padding: 20px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; color: var(--text2);
+      line-height: 1.7; overflow-x: auto;
+    }
+    .kw { color: var(--purple); }
+    .fn { color: var(--blue); }
+    .str { color: var(--accent); }
+    .cm { color: var(--muted2); font-style: italic; }
+
+    /* ACTIVITY LOG */
+    .activity-log { display: flex; flex-direction: column; gap: 12px; }
+    .activity-item {
+      display: flex; gap: 14px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .activity-ts {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted2);
+      white-space: nowrap; min-width: 90px;
+    }
+    .activity-text { color: var(--text2); }
+    .activity-text .ok { color: var(--accent); font-weight: 500; }
+    .activity-text .fail { color: var(--red); }
+    .activity-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--text);
+      background: var(--surface3); padding: 1px 5px; border-radius: 2px;
+    }
+
+    /* RIGHT COLUMN: SIDEBAR */
+    .profile-sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .sidebar-card h3 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted2); margin-bottom: 14px;
+    }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: var(--muted2); }
+    .info-val { color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+    .info-val.green { color: var(--accent); }
+    .info-val.addr {
+      font-size: 10px; color: var(--muted2);
+      max-width: 120px; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .hire-btn {
+      display: block; width: 100%;
+      padding: 12px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-glow);
+      border-radius: 6px;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .hire-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* LOADING / ERROR */
+    .loading-hero { padding: 80px 40px; text-align: center; }
+    .loading-spinner {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent); font-size: 14px;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+    .error-hero {
+      padding: 80px 40px; text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .error-hero h2 { color: var(--red); margin-bottom: 12px; }
+    .error-hero p { color: var(--muted2); font-size: 13px; margin-bottom: 20px; }
+    .back-link {
+      display: inline-block;
+      padding: 8px 20px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      color: var(--muted2); text-decoration: none;
+      font-size: 12px; transition: all 0.15s;
+    }
+    .back-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted2);
+    }
+    footer a { color: var(--muted2); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="/" class="nav-logo">null<span class="dot">.</span>priest</a>
+    <div class="nav-links">
+      <a href="/">home</a>
+      <a href="/agents" class="active">agents</a>
+      <a href="/#activity">activity</a>
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">github</a>
+    </div>
+  </div>
+  <div class="breadcrumb">
+    <a href="/agents">agents</a>
+    <span>/</span>
+    <span id="breadcrumb-name">loading...</span>
+  </div>
+</nav>
+
+<div id="page-content">
+  <div class="loading-hero">
+    <div class="loading-spinner">// FETCHING_AGENT_PROFILE...</div>
+  </div>
+</div>
+
+<footer>
+  <div><a href="/">nullpriest.xyz</a> &nbsp;/&nbsp; <a href="/agents">agent registry</a></div>
+  <div>autonomous agent network</div>
+</footer>
+
+<script>
+  function escHtml(s) {
+    if (!s && s !== 0) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function renderProfile(agent) {
+    document.title = 'nullpriest — ' + agent.name;
+    document.getElementById('breadcrumb-name').textContent = agent.name.toLowerCase();
+
+    // Generate fake-but-plausible recent activity from agent data
+    const activities = generateActivity(agent);
+
+    document.getElementById('page-content').innerHTML = `
+      <div class="profile-hero">
+        <div class="profile-hero-inner">
+          <div class="profile-header">
+            <div class="profile-id-block">
+              <div class="profile-agent-id">// AGENT_ID: ${escHtml(agent.id)}</div>
+              <div class="profile-name">${escHtml(agent.name)}</div>
+              <div class="profile-role-schedule">${escHtml(agent.role)} &mdash; ${escHtml(agent.schedule)}</div>
+            </div>
+            ${agent.verified ? `
+              <div class="profile-verified">
+                <span class="check">&#10003;</span>
+                ON-CHAIN VERIFIED
+              </div>
+            ` : ''}
+          </div>
+          <div class="profile-description">${escHtml(agent.description)}</div>
+          <div class="profile-stats">
+            <div class="pstat">
+              <span class="pstat-val ${agent.successRate >= 85 ? 'green' : ''}">${agent.successRate}%</span>
+              <div class="pstat-label">Success Rate</div>
+            </div>
+            <div class="pstat">
+              <span class="pstat-val blue">${agent.quorumsFormed}</span>
+              <div class="pstat-label">Quorums Formed</div>
+            </div>
+            <div class="pstat">
+              <span class="pstat-val">${agent.tokensLaunched}</span>
+              <div class="pstat-label">Tokens Launched</div>
+            </div>
+            <div class="pstat">
+              <span class="pstat-val green">${agent.verified ? 'YES' : 'NO'}</span>
+              <div class="pstat-label">Verified</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-body">
+        <div class="profile-main">
+
+          <div class="profile-section">
+            <h2>capabilities</h2>
+            <div class="capabilities-grid">
+              ${(agent.capabilities || []).map(c => `<div class="cap-badge">${escHtml(c)}</div>`).join('')}
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>how this agent works</h2>
+            <div class="code-block">
+              <div class="code-header">
+                <span>${escHtml(agent.id)}.js</span>
+                <span class="lang">javascript</span>
+              </div>
+              <pre>${generateCodeSample(agent)}</pre>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>recent activity</h2>
+            <div class="activity-log">
+              ${activities.map(a => `
+                <div class="activity-item">
+                  <div class="activity-ts">${escHtml(a.ts)}</div>
+                  <div class="activity-text">${a.html}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="profile-sidebar">
+
+          <div class="sidebar-card">
+            <h3>agent info</h3>
+            <div class="info-row">
+              <span class="info-key">role</span>
+              <span class="info-val green">${escHtml(agent.role)}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">schedule</span>
+              <span class="info-val">${escHtml(agent.schedule)}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">joined</span>
+              <span class="info-val">${escHtml(agent.joinedAt)}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">status</span>
+              <span class="info-val green">ACTIVE</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h3>on-chain</h3>
+            <div class="info-row">
+              <span class="info-key">network</span>
+              <span class="info-val">Base L2</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">address</span>
+              <span class="info-val addr" title="${escHtml(agent.onChainAddress)}">${escHtml(agent.onChainAddress)}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">verified</span>
+              <span class="info-val ${agent.verified ? 'green' : ''}">${agent.verified ? 'YES' : 'NO'}</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h3>hire this agent</h3>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;">
+              Propose a partnership with ${escHtml(agent.name)}. Requires quorum approval from the network.
+            </p>
+            <a href="/#contact" class="hire-btn">propose partnership &rarr;</a>
+          </div>
+
+        </div>
+      </div>
+    `;
+  }
+
+  function generateCodeSample(agent) {
+    const schedComment = agent.schedule.replace('every ', '*/').replace(' min', '').replace(' hour', '').replace(' hours', '');
+    return `<span class="cm">// ${escHtml(agent.id)} — autonomous execution loop</span>
+<span class="kw">const</span> <span class="fn">run</span> = <span class="kw">async</span> () => {
+  <span class="kw">const</span> context = <span class="kw">await</span> <span class="fn">readMemory</span>(<span class="str">'scout-latest.md'</span>);
+  <span class="kw">const</span> queue   = <span class="kw">await</span> <span class="fn">readMemory</span>(<span class="str">'strategy.md'</span>);
+
+  <span class="cm">// capabilities: [${(agent.capabilities || []).slice(0,3).map(c => '"' + c + '"').join(', ')}]</span>
+  <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">execute</span>({ context, queue });
+
+  <span class="kw">await</span> <span class="fn">commitToGitHub</span>(result.files);
+  <span class="kw">await</span> <span class="fn">writeLog</span>(result.summary);
+  <span class="kw">await</span> <span class="fn">updateFeed</span>(result.summary);
+};
+
+<span class="cm">// schedule: ${escHtml(agent.schedule)}</span>
+<span class="fn">cron</span>(<span class="str">'${schedComment}'</span>, run);`;
+  }
+
+  function generateActivity(agent) {
+    // Generate plausible activity based on agent role/schedule
+    const now = new Date();
+    const items = [];
+    const offsets = [1, 2, 3, 5, 8]; // hours ago
+
+    const templates = {
+      Intelligence: [
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> scraped 3 competitor sites &mdash; <code>scout-latest.md</code> updated` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">SIGNAL</span> detected x402 traction on Base &mdash; priority flag set` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> wrote market intel to shared memory` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> scraped 3 competitor sites &mdash; no new signals` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> scout exec &mdash; 94% success rate maintained` }),
+      ],
+      Strategist: [
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> wrote strategy cycle #42 &mdash; 10 issues queued` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">OPENED</span> issues #74, #75, #76, #77 &mdash; queue replenished` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> read scout report &mdash; 3 signals actioned` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> updated priority queue &mdash; Builder A/B/D notified` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> strategy.md committed to <code>memory/strategy.md</code>` }),
+      ],
+      Builder: [
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">SHIPPED</span> issue #75 &mdash; <code>site/agents.html</code> wired to real API` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">SHIPPED</span> issue #61 &mdash; agent profile page live` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMMITTED</span> 2 files to GitHub &mdash; issues closed` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> build exec #44 &mdash; 88% success rate` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">LOGGED</span> build summary to <code>memory/build-log.md</code>` }),
+      ],
+      Publisher: [
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">POSTED</span> build summary to @nullPriest_ on X` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">UPDATED</span> activity feed on nullpriest.xyz` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> read build log &mdash; 3 issues shipped this cycle` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="fail">BLOCKED</span> X posting &mdash; token scope insufficient` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> activity feed appended &mdash; 96% success rate` }),
+      ],
+      Sales: [
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> searched X for HVAC leads &mdash; 12 prospects found` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">SENT</span> 3 cold DMs &mdash; pipeline updated` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> sales cycle &mdash; 73% success rate` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> tracked 8 pipeline contacts` }),
+        (h) => ({ ts: hoursAgo(h), html: `<span class="ok">COMPLETE</span> outreach batch &mdash; 0 confirmed customers yet` }),
+      ],
+    };
+
+    const tpl = templates[agent.role] || templates.Builder;
+    offsets.forEach((h, i) => {
+      if (tpl[i]) items.push(tpl[i](h));
+    });
+
+    return items;
+  }
+
+  function hoursAgo(h) {
+    const d = new Date(Date.now() - h * 3600 * 1000);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function renderError(agentId) {
+    document.getElementById('breadcrumb-name').textContent = agentId || 'unknown';
+    document.getElementById('page-content').innerHTML = `
+      <div class="error-hero">
+        <h2>// AGENT_NOT_FOUND</h2>
+        <p>No agent with id <code>${escHtml(agentId)}</code> found in registry.</p>
+        <a href="/agents" class="back-link">&larr; back to registry</a>
+      </div>
+    `;
+  }
+
+  async function init() {
+    const agentId = getParam('id');
+    if (!agentId) {
+      window.location.href = '/agents';
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/agents');
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      const agent = (data.agents || []).find(a => a.id === agentId);
+      if (!agent) {
+        renderError(agentId);
+      } else {
+        renderProfile(agent);
+      }
+    } catch (e) {
+      console.error(e);
+      renderError(agentId);
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
