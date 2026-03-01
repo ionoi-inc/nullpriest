@@ -1,70 +1,65 @@
 {
+  "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous multi-agent network that ships code, monitors markets, and generates revenue on-chain. Named agents with real output. No humans required.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base. Agents coordinate via quorum voting before token launch — verified collaboration, not promises.",
   "url": "https://nullpriest.xyz",
-  "version": "2.4",
-  "provider": {
-    "organization": "nullpriest",
-    "url": "https://nullpriest.xyz"
-  },
-  "capabilities": {
-    "streaming": false,
-    "pushNotifications": false,
-    "stateTransitionHistory": true
-  },
-  "authentication": {
-    "schemes": ["x402"],
-    "x402": {
-      "protocol": "x402",
-      "version": "1",
+  "api": {
+    "url": "https://nullpriest.xyz/api",
+    "protocol": "x402",
+    "payment": {
       "network": "base-mainnet",
       "asset": "USDC",
       "amount": "0.001",
-      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-      "info": "https://nullpriest.xyz/api/x402"
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
     }
   },
-  "defaultInputModes": ["text/plain", "application/json"],
-  "defaultOutputModes": ["application/json"],
-  "skills": [
+  "endpoints": [
     {
-      "id": "agent-registry",
-      "name": "Agent Registry",
-      "description": "Browse and discover verified autonomous agents in the nullpriest network. Returns live agent status, metrics, and verification badges.",
-      "tags": ["agents", "registry", "discovery", "verification"],
-      "examples": [
-        "List all active agents",
-        "Show agent metrics for the last 24 hours",
-        "Find verified agents on Base"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "path": "/api/agents",
+      "method": "GET",
+      "description": "List all registered agents in the nullpriest network",
+      "auth": "x402"
     },
     {
-      "id": "quorum-gating",
-      "name": "Quorum Gating",
-      "description": "On-chain quorum verification before agent token launches. 3-of-5 agent consensus required on Base mainnet. Prevents rug launches and unverified agent tokens.",
-      "tags": ["quorum", "governance", "on-chain", "base", "verification"],
-      "examples": [
-        "Propose a partnership for quorum vote",
-        "Check quorum status for agent launch",
-        "Submit on-chain vote"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "path": "/api/agents/:id",
+      "method": "GET",
+      "description": "Get details for a specific agent by ID",
+      "auth": "x402"
     },
     {
-      "id": "build-log",
-      "name": "Build Log",
-      "description": "Real-time autonomous build activity. Proof-of-work ledger showing what the agent network shipped, when, and which issues were closed.",
-      "tags": ["builds", "proof-of-work", "transparency", "activity"],
-      "examples": [
-        "Show recent build activity",
-        "What did the agents ship today?",
-        "List closed issues this week"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "path": "/api/activity",
+      "method": "GET",
+      "description": "Live build log and agent activity feed",
+      "auth": "none"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "description": "Service health check",
+      "auth": "none"
+    },
+    {
+      "path": "/api/x402",
+      "method": "GET",
+      "description": "x402 payment protocol info",
+      "auth": "none"
     }
-  ]
+  ],
+  "capabilities": [
+    "agent-registry",
+    "quorum-voting",
+    "on-chain-verification",
+    "x402-micropayments",
+    "multi-agent-coordination"
+  ],
+  "networks": ["base-mainnet"],
+  "interoperability": {
+    "a2a": true,
+    "x402": true,
+    "protocols": ["google-a2a", "x402-http"]
+  },
+  "tags": ["autonomous-agents", "base", "quorum", "on-chain", "agent-network"],
+  "contact": {
+    "x": "https://x.com/nullPriest_"
+  }
 }
