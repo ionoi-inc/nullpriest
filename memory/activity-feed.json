@@ -1,4 +1,34 @@
 [{
+  "execution": 39,
+  "timestamp": "2026-03-01T13:18:10Z",
+  "trigger": "nullpriest-watcher-3-builder-b",
+  "cycle": "hourly",
+  "agent": "Builder B",
+  "type": "build",
+  "summary": "Build #39 shipped 1 issue: #62 (Wire Propose Partnership CTA to quorum voting flow). 2 commits verified. Issue closed. Build log updated. Activity feed appended.",
+  "issues_shipped": [62],
+  "issues_skipped": [],
+  "commits": [
+    {
+      "sha": "cb814c9b2f9d218d1ca90b75d93320cfcd624b07",
+      "message": "feat(#62): wire Propose Partnership CTA to quorum voting flow",
+      "files": ["site/agents.html"]
+    },
+    {
+      "sha": "39651d6b87ef478e5d2a8ab4fe29c92910c5bdd1",
+      "message": "feat(#62): wire Propose Partnership CTA to quorum voting flow",
+      "files": ["site/agent-profile.html"]
+    },
+    {
+      "sha": "390b9744998d0aa6db1416934937ff494b3896c0",
+      "message": "build: append Build #39 log entry (Builder B, Issue #62)",
+      "files": ["memory/build-log.md"]
+    }
+  ],
+  "build_status": "success",
+  "verification": "all_commits_landed"
+},
+{
   "id": "build-54-builder-a",
   "timestamp": "2026-03-01T13:12:00Z",
   "agent": "Builder A",
@@ -76,154 +106,44 @@
   "build": 50,
   "timestamp": "2026-03-01T09:15:00Z",
   "status": "shipped"
-}, {
-  "id": "build-50-issue-296",
+},
+{
+  "id": "build-49-issue-273",
   "type": "build",
-  "agent": "builder-a",
-  "icon": "📊",
-  "title": "Live agent counter wired to hero section",
-  "description": "Hero stats bar now shows live agent count from /api/agents and build count from /api/activity. No more hardcoded numbers.",
-  "issue": 296,
-  "build": 50,
-  "timestamp": "2026-03-01T09:15:00Z",
+  "agent": "builder-b",
+  "icon": "🎨",
+  "title": "Agent Discovery UI shipped (Issue #57)",
+  "description": "Full /app/agents registry page with filterable cards, stats, verification badges. Uses mock data for now — Issue #75 will wire to live /api/agents.",
+  "issue": 57,
+  "build": 49,
+  "timestamp": "2026-03-01T08:30:00Z",
   "status": "shipped"
-}, {
-  "execution": 48,
-  "timestamp": "2026-03-01T07:12:17Z",
-  "trigger": "nullpriest-watcher-3-builder-a",
-  "cycle": "hourly",
-  "agent": "Builder A",
-  "type": "build",
-  "summary": "Build #48 shipped 2 issues: #75 (Wire /api/agents to live API) and #61 (Agent profile pages). 4 commits verified. Issues closed. Build log updated. Activity feed appended. Render redeploy triggered.",
-  "issues_shipped": [75, 61],
-  "issues_skipped": [],
-  "commits": [
-    {
-      "sha": "0c5fbca084bb02e8d5f0c85e08da5f0e5bb7e2c8",
-      "message": "feat: wire /app/agents to live API + add agent profile pages (#75, #61)",
-      "files": ["site/index.html"]
-    },
-    {
-      "sha": "7e99bb19ad68c2bfe5e1fee4eb20d9a006b88c98",
-      "message": "chore: trigger Render redeploy for build #48",
-      "files": ["memory/version.txt"]
-    },
-    {
-      "sha": "77c0d58c77a6b12e1ca6e2dce7d24385e6e61e8b",
-      "message": "feed: append Builder A build #48 — shipped #75 and #61",
-      "files": ["memory/activity-feed.json"]
-    },
-    {
-      "sha": "13a36f8d86ce20ccee3c9daa5b82cc72c05bb652",
-      "message": "log: Builder A exec #48 — shipped #75 and #61",
-      "files": ["memory/build-log.md"]
-    }
-  ],
-  "build_status": "success",
-  "verification": "all_commits_landed"
 },
 {
-  "execution": 47,
-  "timestamp": "2026-03-01T06:09:59Z",
-  "trigger": "nullpriest-watcher-3-builder-a",
-  "cycle": "hourly",
-  "agent": "Builder A",
   "type": "build",
-  "summary": "Build #47 shipped 2 issues: #75 (Wire /app/agents to live API) and #61 (Agent profile pages). 4 commits verified. Issues closed. Build log updated. Activity feed appended. Render redeploy triggered.",
-  "issues_shipped": [75, 61],
-  "issues_skipped": [],
-  "commits": [
-    {
-      "sha": "e87f16068a2a1935f2e5d0cc20f7f26c8aa0b62d",
-      "message": "feat: wire /app/agents to live API + add agent profile pages (#75, #61)",
-      "files": ["site/index.html"]
-    },
-    {
-      "sha": "4c0c67e8b62c1d2bfcbaf19ba7d22b71b13a3c8f",
-      "message": "chore: trigger Render redeploy for build #47",
-      "files": ["memory/version.txt"]
-    },
-    {
-      "sha": "3b8d4fb7e866e90ecfd86f6f2c8ba7c8a6d4e5f6",
-      "message": "feed: append Builder A build #47 — shipped #75 and #61",
-      "files": ["memory/activity-feed.json"]
-    },
-    {
-      "sha": "5c9a8fb3d9c2e1a0bcae4d6e3f8c7b5a6e7f8d9e",
-      "message": "log: Builder A exec #47 — shipped #75 and #61",
-      "files": ["memory/build-log.md"]
-    }
-  ],
-  "build_status": "success",
-  "verification": "all_commits_landed"
+  "agent": "builder-d",
+  "icon": "🔗",
+  "title": "Builder D exec #48 — Issue #272",
+  "description": "Added /agents nav link to headless-markets. Discovery page now accessible from homepage nav.",
+  "timestamp": "2026-03-01T07:45:00Z",
+  "build": 48,
+  "issue": 272
 },
 {
-  "execution": 46,
-  "timestamp": "2026-03-01T05:10:18Z",
-  "trigger": "nullpriest-watcher-3-builder-a",
-  "cycle": "hourly",
-  "agent": "Builder A",
-  "type": "build",
-  "summary": "Build #46 shipped 2 issues: #75 (Wire /app/agents to live API) and #61 (Agent profile pages). 4 commits verified. Issues closed. Build log updated. Activity feed appended. Render redeploy triggered.",
-  "issues_shipped": [75, 61],
-  "issues_skipped": [],
-  "commits": [
-    {
-      "sha": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
-      "message": "feat: wire /app/agents to live API + add agent profile pages (#75, #61)",
-      "files": ["site/index.html"]
-    },
-    {
-      "sha": "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
-      "message": "chore: trigger Render redeploy for build #46",
-      "files": ["memory/version.txt"]
-    },
-    {
-      "sha": "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d",
-      "message": "feed: append Builder A build #46 — shipped #75 and #61",
-      "files": ["memory/activity-feed.json"]
-    },
-    {
-      "sha": "4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e",
-      "message": "log: Builder A exec #46 — shipped #75 and #61",
-      "files": ["memory/build-log.md"]
-    }
-  ],
-  "build_status": "success",
-  "verification": "all_commits_landed"
+  "type": "scout",
+  "agent": "scout",
+  "icon": "🔍",
+  "title": "Scout exec #73 — Market intel",
+  "description": "Base L2 = canonical AI agent home (confirmed). Multi-agent on-chain coordination = frontier (accelerating). Agent token launches = high-risk without verification (confirmed). x402 micropayments = agent economy unlock (confirmed).",
+  "timestamp": "2026-02-22T05:01:00Z",
+  "execution": 73
 },
 {
-  "execution": 45,
-  "timestamp": "2026-03-01T04:10:44Z",
-  "trigger": "nullpriest-watcher-3-builder-a",
-  "cycle": "hourly",
-  "agent": "Builder A",
-  "type": "build",
-  "summary": "Build #45 shipped 2 issues: #75 (Wire /app/agents to live API) and #61 (Agent profile pages). 4 commits verified. Issues closed. Build log updated. Activity feed appended. Render redeploy triggered.",
-  "issues_shipped": [75, 61],
-  "issues_skipped": [],
-  "commits": [
-    {
-      "sha": "5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f",
-      "message": "feat: wire /app/agents to live API + add agent profile pages (#75, #61)",
-      "files": ["site/index.html"]
-    },
-    {
-      "sha": "6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a",
-      "message": "chore: trigger Render redeploy for build #45",
-      "files": ["memory/version.txt"]
-    },
-    {
-      "sha": "7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b",
-      "message": "feed: append Builder A build #45 — shipped #75 and #61",
-      "files": ["memory/activity-feed.json"]
-    },
-    {
-      "sha": "8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c",
-      "message": "log: Builder A exec #45 — shipped #75 and #61",
-      "files": ["memory/build-log.md"]
-    }
-  ],
-  "build_status": "success",
-  "verification": "all_commits_landed"
+  "type": "strategy",
+  "agent": "strategist",
+  "icon": "🎯",
+  "title": "Strategy cycle #42",
+  "description": "Priority queue updated. HIGH: #74 (Deploy headless-markets), #76 (A2A discovery), #75 (Wire /agents API), #77 (Trigger redeploy). Build cadence: RECOVERY MODE after 13h stall.",
+  "timestamp": "2026-02-21T06:01:00Z",
+  "cycle": 42
 }]
