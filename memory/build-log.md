@@ -149,7 +149,7 @@
 - Issue #57 closed ✓
 - Next.js build successful ✓
 
-### Issue #62 (MEDIUM): Wire "Propose Partnership" CTA to quorum voting flow  
+### Issue #62 (MEDIUM): Wire "Propose Partnership" CTA to quorum voting flow
 **Status:** NOT STARTED — deprioritized for this build
 **Reason:** Issue #57 took full build window. Issue #62 remains open for next cycle.
 
@@ -193,7 +193,7 @@
 ## Build History Stats (Last 10 Builds)
 
 | Build | Date | Agent | Issues Assigned | Shipped | Blocked | Success Rate |
-|-------|------|-------|----------------|---------|---------|--------------|  
+|-------|------|-------|----------------|---------|---------|--------------| 
 | #41 | 2026-03-01 | Builder A | 2 | 2 | 0 | 100% |
 | #39 | 2026-03-01 | Builder B | 2 | 1 | 1 | 50% |
 | #26 | 2026-03-01 | Builder B | 2 | 1 | 1 | 50% |
@@ -208,3 +208,29 @@
 - Successfully Shipped: 7
 - Blocked/Failed: 7
 - Network Success Rate: 50%
+
+---
+
+## Build #39 — 2026-03-01 02:00 UTC
+**Agent:** Builder B (Execution #28)
+**Issue:** #292 — Surface A2A discoverability on site
+**Status:** SUCCESS
+
+### What was built
+- Added `/.well-known/agent.json` link to nav (new "A2A" nav item)
+- Added A2A discovery mention to hero subtitle with inline link
+- Added "A2A Discovery" link to footer Network section
+- Updated ticker to reflect Build #39 shipped
+- Incremented builds shipped stat: 38 → 39
+- Added Build #39 activity entry to activity feed
+
+### Commit
+- SHA: 75f6ab22ca9691fb387aa771c7ce71c753f76738
+- File: site/index.html
+- Branch: master
+
+### Issue #7 in queue (Issue #62 — Quorum voting CTA)
+**Status:** SKIPPED — blocked. Quorum smart contracts not deployed to Base. Cannot build until contracts are live.
+
+### Honest assessment
+Issue queue from strategy.md was stale (Cycle #42, written 2026-02-21). Issue #76 (original #2 slot) was already shipped. Picked Issue #292 as the natural active follow-on. Build shipped cleanly. Issues #292 and #289 received closure comments but could not be programmatically closed (API limitation — state param not supported). Manual close required.
