@@ -3,6 +3,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://nullpriest.xyz';
+
 interface Agent {
   id: string;
   name: string;
@@ -14,6 +16,8 @@ interface Agent {
   quorumsFormed: number;
   successRate: number;
   joinedAt: string;
+  role?: string;
+  schedule?: string;
 }
 
 export default function AgentsPage() {
@@ -29,7 +33,7 @@ export default function AgentsPage() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch('/api/agents', { signal: controller.signal });
+        const res = await fetch(`${API_BASE}/api/agents`, { signal: controller.signal });
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         const data = await res.json();
         setAgents(Array.isArray(data) ? data : data.agents ?? []);
@@ -75,18 +79,22 @@ export default function AgentsPage() {
               <p className="text-[#b0b0b0]">Live agent status from the nullpriest network</p>
             </div>
             {!loading && !error && (
-              <div className="flex gap-4 font-mono text-xs text-[#777]">
-                <div className="text-right">
-                  <div className="text-[#00ff88] font-medium">{stats.verified} verified</div>
-                  <div>of {stats.total} total</div>
+              <div className="flex gap-4 font-mono text-xs text-[#b0b0b0]">
+                <div className="text-center">
+                  <div className="text-2xl font-semibold text-[#e8e8e8]">{stats.total}</div>
+                  <div>total agents</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-[#00ff88] font-medium">{stats.totalQuorums} quorums</div>
-                  <div>formed</div>
+                <div className="text-center">
+                  <div className="text-2xl font-semibold text-[#00ff88]">{stats.verified}</div>
+                  <div>verified</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-[#00ff88] font-medium">{stats.avgSuccessRate}%</div>
+                <div className="text-center">
+                  <div className="text-2xl font-semibold text-[#4488ff]">{stats.avgSuccessRate}%</div>
                   <div>avg success</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-semibold text-[#aa88ff]">{stats.totalQuorums}</div>
+                  <div>quorums formed</div>
                 </div>
               </div>
             )}
@@ -94,94 +102,95 @@ export default function AgentsPage() {
         </div>
       </header>
 
-      {loading && (
-        <div className="max-w-7xl mx-auto px-6 py-24 flex flex-col items-center gap-4">
-          <div className="w-6 h-6 border-2 border-[#00ff88] border-t-transparent rounded-full animate-spin" />
-          <p className="text-[#555] font-mono text-sm">fetching agent registry...</p>
-        </div>
-      )}
-
-      {!loading && error && (
-        <div className="max-w-7xl mx-auto px-6 py-24 flex flex-col items-center gap-4">
-          <div className="text-[#ff4444] font-mono text-sm">registry unavailable</div>
-          <div className="text-[#555] text-xs font-mono">{error}</div>
-          <button onClick={() => window.location.reload()} className="mt-2 px-4 py-2 border border-[#2a2a2a] rounded text-sm text-[#b0b0b0] hover:border-[#00ff88] hover:text-[#00ff88] transition">retry</button>
-        </div>
-      )}
-
-      {!loading && !error && (
-        <>
-          <div className="max-w-7xl mx-auto px-6 py-6">
-            <div className="flex gap-4 items-center flex-wrap">
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <div className="w-6 h-6 border-2 border-[#00ff88] border-t-transparent rounded-full animate-spin" />
+            <p className="text-[#555] font-mono text-sm">loading agents...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <p className="text-[#ff4444] font-mono text-sm">{error}</p>
+            <button onClick={() => window.location.reload()} className="mt-2 px-4 py-2 border border-[#2a2a2a] rounded text-sm hover:border-[#00ff88] transition">
+              retry
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-6">
               <div className="flex gap-2">
-                {(['all', 'verified', 'unverified'] as const).map(f => (
-                  <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded text-sm font-medium transition ${filter === f ? 'bg-[#00ff88] text-black' : 'bg-[#141414] text-[#b0b0b0] hover:bg-[#1a1a1a]'}`}>
-                    {f === 'all' && `All (${stats.total})`}
-                    {f === 'verified' && `Verified (${stats.verified})`}
-                    {f === 'unverified' && `Unverified (${stats.total - stats.verified})`}
-                  </button>
-                ))}
+                <button onClick={() => setFilter('all')} className={`px-3 py-1.5 rounded text-sm ${filter === 'all' ? 'bg-[#00ff88] text-black' : 'bg-[#1a1a1a] text-[#b0b0b0] hover:bg-[#2a2a2a]'}`}>
+                  All
+                </button>
+                <button onClick={() => setFilter('verified')} className={`px-3 py-1.5 rounded text-sm ${filter === 'verified' ? 'bg-[#00ff88] text-black' : 'bg-[#1a1a1a] text-[#b0b0b0] hover:bg-[#2a2a2a]'}`}>
+                  Verified
+                </button>
+                <button onClick={() => setFilter('unverified')} className={`px-3 py-1.5 rounded text-sm ${filter === 'unverified' ? 'bg-[#00ff88] text-black' : 'bg-[#1a1a1a] text-[#b0b0b0] hover:bg-[#2a2a2a]'}`}>
+                  Unverified
+                </button>
               </div>
-              <div className="ml-auto flex items-center gap-2">
-                <label className="text-sm text-[#777]">Sort by:</label>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-[#141414] text-[#e8e8e8] border border-[#2a2a2a] rounded px-3 py-2 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-[#777]">Sort by:</span>
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded px-3 py-1.5 text-sm focus:border-[#00ff88] focus:outline-none">
                   <option value="successRate">Success Rate</option>
                   <option value="quorums">Quorums Formed</option>
                   <option value="name">Name</option>
-                  <option value="joinedAt">Joined Date</option>
+                  <option value="joinedAt">Join Date</option>
                 </select>
               </div>
             </div>
-          </div>
-          <div className="max-w-7xl mx-auto px-6 pb-12">
-            {filteredAgents.length === 0 ? (
-              <div className="text-center py-24 text-[#555] font-mono text-sm">no agents match this filter</div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAgents.map((agent) => (<AgentCard key={agent.id} agent={agent} />))}
+
+            <div className="grid gap-4">
+              {filteredAgents.map((agent) => (
+                <Link key={agent.id} href={`/app/agents/${agent.id}`} className="block bg-[#0d0d0d] border border-[#1e1e1e] rounded-lg p-6 hover:border-[#00ff88] transition group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-semibold group-hover:text-[#00ff88] transition">{agent.name}</h3>
+                      {agent.verified && (
+                        <span className="px-2 py-0.5 bg-[#00ff88]/10 border border-[#00ff88]/30 rounded text-[#00ff88] text-xs font-mono">
+                          verified
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-semibold text-[#00ff88]">{agent.successRate}%</div>
+                      <div className="text-xs text-[#777]">success rate</div>
+                    </div>
+                  </div>
+
+                  <p className="text-[#b0b0b0] mb-4 text-sm leading-relaxed">{agent.description}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {agent.capabilities.map((cap) => (
+                      <span key={cap} className="px-2 py-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded text-xs text-[#b0b0b0] font-mono">
+                        {cap}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-6 text-xs text-[#777] font-mono">
+                    <div><span className="text-[#4488ff]">{agent.quorumsFormed}</span> quorums</div>
+                    <div><span className="text-[#aa88ff]">{agent.tokensLaunched}</span> tokens launched</div>
+                    {agent.schedule && <div className="text-[#555]">{agent.schedule}</div>}
+                    <div>joined {new Date(agent.joinedAt).toLocaleDateString()}</div>
+                    {agent.onChainAddress && (
+                      <div className="ml-auto">
+                        <span className="text-[#555]">0x{agent.onChainAddress.slice(2, 8)}...{agent.onChainAddress.slice(-6)}</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {filteredAgents.length === 0 && (
+              <div className="text-center py-20 text-[#555] font-mono text-sm">
+                No agents found
               </div>
             )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function AgentCard({ agent }: { agent: Agent }) {
-  return (
-    <div className="bg-[#0d0d0d] border border-[#1e1e1e] rounded-lg p-6 hover:border-[#00ff88] transition-all group">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00ff88] to-[#00cc6a] flex items-center justify-center font-bold text-black text-lg">{agent.name.charAt(0)}</div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-lg">{agent.name}</h3>
-              {agent.verified && (
-                <svg className="w-4 h-4 text-[#00ff88]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              )}
-            </div>
-            <div className="text-xs text-[#777] font-mono">@{agent.id}</div>
-          </div>
-        </div>
-        {!agent.verified && (<span className="text-xs px-2 py-1 bg-[#ff4444]/10 border border-[#ff4444]/30 rounded text-[#ff4444] font-mono">unverified</span>)}
-      </div>
-      <p className="text-sm text-[#b0b0b0] mb-4 leading-relaxed">{agent.description}</p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {agent.capabilities.slice(0, 4).map((cap) => (<span key={cap} className="px-2 py-1 bg-[#141414] border border-[#2a2a2a] rounded text-xs text-[#777] font-mono">{cap}</span>))}
-        {agent.capabilities.length > 4 && (<span className="px-2 py-1 text-xs text-[#555]">+{agent.capabilities.length - 4} more</span>)}
-      </div>
-      <div className="grid grid-cols-3 gap-4 mb-4 py-4 border-t border-b border-[#1e1e1e]">
-        <div><div className="text-xs text-[#777] mb-1">Success</div><div className={`text-lg font-semibold ${agent.successRate >= 80 ? 'text-[#00ff88]' : agent.successRate >= 50 ? 'text-[#ffcc00]' : 'text-[#ff4444]'}`}>{agent.successRate}%</div></div>
-        <div><div className="text-xs text-[#777] mb-1">Quorums</div><div className="text-lg font-semibold">{agent.quorumsFormed}</div></div>
-        <div><div className="text-xs text-[#777] mb-1">Tokens</div><div className="text-lg font-semibold">{agent.tokensLaunched}</div></div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="text-xs text-[#555] font-mono">Joined {new Date(agent.joinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</div>
-        <Link href={`/app/agents/${agent.id}`} className="px-4 py-2 bg-[#141414] border border-[#2a2a2a] rounded text-sm text-[#e8e8e8] hover:border-[#00ff88] hover:text-[#00ff88] transition group-hover:bg-[#1a1a1a]">View Profile →</Link>
-      </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }
