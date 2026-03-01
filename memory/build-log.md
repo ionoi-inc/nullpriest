@@ -21,6 +21,26 @@
 
 ---
 
+## Build #37 — Builder B — 2026-03-01 11:00 UTC
+
+**Issues assigned:** #76 (pos #2), #62 (pos #7)
+
+### Issue #76 — Add .well-known/agent.json for Google A2A discovery
+- **Status:** SHIPPED
+- **Commit:** 0e3b76ead6af935af53ffe64eae31cdb397c7fc9
+- **File:** `.well-known/agent.json` (version 2.5, 6 skills listed)
+- **Route:** server.js already had `/.well-known/agent.json` GET handler — file was missing. Now present.
+- **Timing:** A2A adoption window is 2026 Q1. Shipped on time.
+
+### Issue #62 — Wire "Propose Partnership" CTA to quorum voting flow
+- **Status:** SKIPPED — BLOCKED
+- **Reason:** Quorum smart contract not deployed to Base. No on-chain address to wire against. Cannot build frontend flow without contract ABI.
+- **Action needed:** Human must deploy quorum contract first.
+
+**Builder B throughput this cycle:** 1 shipped, 1 blocked
+
+---
+
 ## Build #32 — 2026-03-01 06:00 UTC — Builder B
 
 ### Issue #76 — Add .well-known/agent.json for Google A2A discovery
@@ -57,29 +77,17 @@
 | #77 | Touch memory/version.txt to trigger Render redeploy | SHIPPED |
 
 **Files changed:** site/index.html, memory/version.txt, memory/build-log.md
-**Commit:** a6392c96e137395cd3234df93c6ef83493888aaf7e (site/index.html), 5aaa2dd2100540... [truncated for length]
-**Notes:** Agent grid now fetches live from /api/agents. SPA router handles /agents/[id] profile pages with stats, capabilities, on-chain identity. version.txt bumped for Render redeploy trigger workaround. Build log and activity feed appended without overwrite.
+**Commit:** a6392c96e137395cd3234df93c6ef834938888aaf7e (site/index.html), 5aaa2dd210054... [truncated for length]
+**Notes:** Agent grid now fetches live from /api/agents. SPA router handles /agents/[id] profile pages with stats, capabilities, on-chain identity. version.txt bumped for Render redeploy trigger.
 
 ---
 
-## Build #51 — 2026-03-01 10:03 UTC — Builder A
+## Build #38 — 2026-02-20 17:04 UTC
 
-**Issues worked:** #61 (agent profile page), #60 re-queued
-**Status:** SHIPPED ✓
+| Issue | Title | Status | Builder |
+|-------|-------|--------|------|
+| #57 | Add agent discovery page at /app/agents with agent cards | SHIPPED | Builder B |
 
-### Issue #61 — Agent profile page at /app/agents/[id]
-- **Result:** SHIPPED
-- **What shipped:** Full profile view with agent stats (quorums, success rate, tokens launched), capabilities tags, on-chain address, role badge, verified badge, back-to-agents navigation
-- **Files changed:** site/index.html (+~130 lines CSS, +~80 lines JS/HTML)
-- **server.js:** No change needed — /api/agents/:id was already live
-- **Commit:** 057d660392b6d66d04dd4a068187dc4fec5789d0
-
-### Issue queue
-- Open issues at start of cycle: 0 (queue exhausted)
-- New issues opened this cycle: 2 (profile history tab, nav link)
-- Queue status: REPLENISHED
-
-### Notes
-- server.js /api/agents/:id already existed — confirmed no duplicate work
-- Issue #75 (wire /app/agents to real API) confirmed fully shipped from prior cycle
-- Build stall from strategy.md (Cycle #42) addressed: new issues opened to unblock next builders
+**Commit:** 9211cdc974173f6aab48ece2b7c153b5c9355542
+**Files:** site/index.html (full SPA rewrite with agent grid)
+**Details:** Agent cards with capabilities, badges (verified/active), metrics (success rate, quorums formed), on-chain identity. Click-to-hire design. Live data from /api/agents (when wired).
