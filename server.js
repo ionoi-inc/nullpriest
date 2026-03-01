@@ -74,7 +74,70 @@ app.get('/api/agents', (req, res) => {
 app.get('/api/agents/:id', (req, res) => {
   const agent = AGENT_REGISTRY.find(a => a.id === req.params.id);
   if (!agent) return res.status(404).json({ error: 'agent not found', id: req.params.id });
-  res.json(agent);
+
+  // Enrich with extended profile data (Issue #61)
+  // Fetch recent commits from GitHub API for this agent based on role keyword
+  const roleKeywords = {
+    'agent-scout':       'scout',
+    'agent-strategist':  'strateg',
+    'agent-builder-a':   'Builder A',
+    'agent-builder-b':   'Builder B',
+    'agent-builder-d':   'Builder D',
+    'agent-publisher':   'publisher',
+    'agent-sales-engine':'sales',
+  };
+  const keyword = roleKeywords[agent.id] || agent.name;
+
+  const githubUrl = `${GITHUB_API_BASE}/commits?per_page=10&path=`;
+  const searchUrl = `https://api.github.com/search/commits?q=repo:iono-such-things/nullpriest+${encodeURIComponent(keyword)}&per_page=5&sort=committer-date&order=desc`;
+
+  const options = {
+    headers: {
+      'User-Agent': 'nullpriest-server',
+      'Accept': 'application/vnd.github.cloak-preview+json',
+    }
+  };
+
+  https.get(searchUrl, options, (ghRes) => {
+    let body = '';
+    ghRes.on('data', chunk => { body += chunk; });
+    ghRes.on('end', () => {
+      let recentCommits = [];
+      try {
+        const data = JSON.parse(body);
+        recentCommits = (data.items || []).map(c => ({
+          sha: c.sha,
+          message: c.commit.message.split('\n')[0],
+          date: c.commit.committer.date,
+          url: c.html_url,
+        }));
+      } catch (e) { /* ignore parse errors */ }
+
+      res.json({
+        ...agent,
+        totalBuilds: recentCommits.length > 0 ? agent.successRate : 0,
+        lastActive: recentCommits[0]?.date ?? agent.joinedAt,
+        buildLog: recentCommits.slice(0, 5).map(c => ({
+          date: c.date,
+          issue: c.message.match(/#(\d+)/)?.[0] ?? 'misc',
+          result: c.message.toLowerCase().includes('fail') ? 'failure' : 'success',
+          detail: c.message,
+        })),
+        recentCommits,
+        openIssues: [],
+      });
+    });
+  }).on('error', () => {
+    // Fallback: return agent with empty extended fields
+    res.json({
+      ...agent,
+      totalBuilds: 0,
+      lastActive: agent.joinedAt,
+      buildLog: [],
+      recentCommits: [],
+      openIssues: [],
+    });
+  });
 });
 
 // ▊▊ Activity feed endpoint ▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊▊
