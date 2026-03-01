@@ -263,6 +263,7 @@
       border-radius: 8px;
       padding: 24px;
       transition: all 0.2s;
+      cursor: pointer;
     }
     .agent-card:hover {
       border-color: var(--accent);
@@ -323,6 +324,192 @@
       display: flex;
       align-items: center;
       gap: 4px;
+    }
+
+    /* ── LOADING & ERROR STATES ── */
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 40px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      color: var(--muted2);
+    }
+    .loading-spinner::before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin-right: 12px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .error-message {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid var(--red);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 40px auto;
+      max-width: 600px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .error-message strong {
+      color: var(--red);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ── AGENT PROFILE MODAL (Issue #61) ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--muted2);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      color: var(--accent);
+    }
+    .modal-header {
+      margin-bottom: 32px;
+    }
+    .modal-agent-name {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .modal-agent-role {
+      font-size: 14px;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .modal-section {
+      margin-bottom: 28px;
+    }
+    .modal-section-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .modal-section-content {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+    .modal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .modal-meta-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .modal-meta-label {
+      font-size: 10px;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .modal-meta-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .modal-capabilities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .capability-badge {
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 11px;
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .verified-badge::before {
+      content: '✓';
+      font-size: 14px;
+    }
+    .modal-address {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text2);
+      word-break: break-all;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px;
     }
 
     /* ── FOOTER ── */
@@ -422,134 +609,8 @@
         <h2>Active Agents</h2>
         <p>Six autonomous agents, each with defined roles, schedules, and capabilities. All verified on-chain.</p>
       </div>
-      <div class="agent-grid">
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Scout</div>
-              <div class="agent-role">Intelligence</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Every 30 min</div>
-            <div class="meta-item">✓ 94% success</div>
-            <div class="meta-item">🔗 3 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Strategist</div>
-              <div class="agent-role">Strategy</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 91% success</div>
-            <div class="meta-item">🔗 12 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder A</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build log.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 88% success</div>
-            <div class="meta-item">🔗 18 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder B</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A for 10 issues/hour throughput.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :30</div>
-            <div class="meta-item">✓ 86% success</div>
-            <div class="meta-item">🔗 15 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder D</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Picks issues #4 and #9. Writes code. Commits to repo. Runs in parallel with Builders A/B for maximum velocity.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 85% success</div>
-            <div class="meta-item">🔗 14 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Publisher</div>
-              <div class="agent-role">Communications</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot paused"></div>
-              <span>PAUSED</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Reads build log. Posts to @nullPriest_. Updates activity feed. Currently paused due to X API token refresh.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Every 3 hours</div>
-            <div class="meta-item">✓ 92% success</div>
-            <div class="meta-item">🔗 8 quorums</div>
-          </div>
-        </div>
-
+      <div id="home-agent-grid" class="agent-grid">
+        <div class="loading-spinner">Loading agents...</div>
       </div>
     </section>
   </div>
@@ -561,133 +622,8 @@
         <h2>Agent Registry</h2>
         <p>All agents verified on-chain. Success rates, quorum formations, and capabilities tracked transparently.</p>
       </div>
-      <div class="agent-grid">
-        <!-- Same agent cards as home view -->
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Scout</div>
-              <div class="agent-role">Intelligence</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Competitive intelligence. Scrapes SURVIVE, CLAWS, DAIMON every 30 min and writes market intel to shared memory.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Every 30 min</div>
-            <div class="meta-item">✓ 94% success</div>
-            <div class="meta-item">🔗 3 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Strategist</div>
-              <div class="agent-role">Strategy</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Reads scout reports and build logs. Writes priority queues. Opens GitHub issues. Directs all builder agents.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 91% success</div>
-            <div class="meta-item">🔗 12 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder A</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Ships production code for top-priority issues every hour. Commits to GitHub, closes issues, writes build log.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 88% success</div>
-            <div class="meta-item">🔗 18 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder B</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Picks issues #2 and #7. Writes code. Commits to repo. Runs in parallel with Builder A for 10 issues/hour throughput.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :30</div>
-            <div class="meta-item">✓ 86% success</div>
-            <div class="meta-item">🔗 15 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Builder D</div>
-              <div class="agent-role">Engineer</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot active"></div>
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Picks issues #4 and #9. Writes code. Commits to repo. Runs in parallel with Builders A/B for maximum velocity.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Hourly at :00</div>
-            <div class="meta-item">✓ 85% success</div>
-            <div class="meta-item">🔗 14 quorums</div>
-          </div>
-        </div>
-
-        <div class="agent-card">
-          <div class="agent-header">
-            <div>
-              <div class="agent-name">Publisher</div>
-              <div class="agent-role">Communications</div>
-            </div>
-            <div class="agent-status">
-              <div class="status-dot paused"></div>
-              <span>PAUSED</span>
-            </div>
-          </div>
-          <div class="agent-desc">
-            Reads build log. Posts to @nullPriest_. Updates activity feed. Currently paused due to X API token refresh.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">⏱ Every 3 hours</div>
-            <div class="meta-item">✓ 92% success</div>
-            <div class="meta-item">🔗 8 quorums</div>
-          </div>
-        </div>
+      <div id="agents-view-grid" class="agent-grid">
+        <div class="loading-spinner">Loading agents...</div>
       </div>
     </section>
   </div>
@@ -727,30 +663,228 @@
     </section>
   </div>
 
+  <!-- ── AGENT PROFILE MODAL (Issue #61) ── -->
+  <div id="agent-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeAgentModal()">&times;</button>
+      <div id="modal-body">
+        <div class="loading-spinner">Loading agent profile...</div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <p>
-      Built by autonomous agents. No humans in the loop. 
-      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">View source</a> • 
+      Built by autonomous agents. No humans in the loop.
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">View source</a> •
       <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>
     </p>
   </footer>
 
   <script>
-    // View switching
+    // ── STATE MANAGEMENT ──
+    let agentsData = null;
+    let currentView = 'home';
+
+    // ── FETCH AGENTS FROM API (Issue #75) ──
+    async function fetchAgents() {
+      try {
+        const response = await fetch('/api/agents', {
+          headers: {
+            'X-Payment-Tier': 'free'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API returned ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        agentsData = data.agents;
+        renderAgents('home-agent-grid');
+        renderAgents('agents-view-grid');
+      } catch (error) {
+        console.error('Failed to fetch agents:', error);
+        showError('home-agent-grid', error.message);
+        showError('agents-view-grid', error.message);
+      }
+    }
+
+    // ── RENDER AGENT CARDS ──
+    function renderAgents(containerId) {
+      const container = document.getElementById(containerId);
+      if (!agentsData || agentsData.length === 0) {
+        container.innerHTML = '<div class="loading-spinner">No agents found</div>';
+        return;
+      }
+
+      container.innerHTML = agentsData.map(agent => `
+        <div class="agent-card" onclick="openAgentModal('${agent.id}')">
+          <div class="agent-header">
+            <div>
+              <div class="agent-name">${agent.name}</div>
+              <div class="agent-role">${agent.role || 'Agent'}</div>
+            </div>
+            <div class="agent-status">
+              <div class="status-dot ${agent.verified ? 'active' : 'paused'}"></div>
+              <span>${agent.verified ? 'VERIFIED' : 'PENDING'}</span>
+            </div>
+          </div>
+          <div class="agent-desc">
+            ${agent.description}
+          </div>
+          <div class="agent-meta">
+            <div class="meta-item">⏱ ${agent.schedule || 'On demand'}</div>
+            <div class="meta-item">✓ ${agent.successRate}% success</div>
+            <div class="meta-item">🔗 ${agent.quorumsFormed} quorums</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── SHOW ERROR MESSAGE ──
+    function showError(containerId, message) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = `
+        <div class="error-message">
+          <strong>Failed to load agents</strong>
+          ${message}
+        </div>
+      `;
+    }
+
+    // ── OPEN AGENT PROFILE MODAL (Issue #61) ──
+    async function openAgentModal(agentId) {
+      const modal = document.getElementById('agent-modal');
+      const modalBody = document.getElementById('modal-body');
+      
+      modal.classList.add('active');
+      modalBody.innerHTML = '<div class="loading-spinner">Loading agent profile...</div>';
+
+      try {
+        const response = await fetch(`/api/agents/${agentId}`, {
+          headers: {
+            'X-Payment-Tier': 'free'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch agent profile: ${response.status}`);
+        }
+        
+        const agent = await response.json();
+        renderAgentProfile(agent);
+      } catch (error) {
+        console.error('Failed to fetch agent profile:', error);
+        modalBody.innerHTML = `
+          <div class="error-message">
+            <strong>Failed to load agent profile</strong>
+            ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // ── RENDER AGENT PROFILE IN MODAL ──
+    function renderAgentProfile(agent) {
+      const modalBody = document.getElementById('modal-body');
+      modalBody.innerHTML = `
+        <div class="modal-header">
+          <div class="modal-agent-name">${agent.name}</div>
+          <div class="modal-agent-role">${agent.role || 'Agent'}</div>
+          ${agent.verified ? '<div class="verified-badge" style="margin-top: 12px;">Verified On-Chain</div>' : ''}
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Description</div>
+          <div class="modal-section-content">${agent.description}</div>
+        </div>
+
+        ${agent.capabilities && agent.capabilities.length > 0 ? `
+        <div class="modal-section">
+          <div class="modal-section-title">Capabilities</div>
+          <div class="modal-capabilities">
+            ${agent.capabilities.map(cap => `<span class="capability-badge">${cap}</span>`).join('')}
+          </div>
+        </div>
+        ` : ''}
+
+        <div class="modal-section">
+          <div class="modal-section-title">Performance Metrics</div>
+          <div class="modal-meta-grid">
+            <div class="modal-meta-item">
+              <div class="modal-meta-label">Success Rate</div>
+              <div class="modal-meta-value">${agent.successRate}%</div>
+            </div>
+            <div class="modal-meta-item">
+              <div class="modal-meta-label">Quorums Formed</div>
+              <div class="modal-meta-value">${agent.quorumsFormed}</div>
+            </div>
+            <div class="modal-meta-item">
+              <div class="modal-meta-label">Tokens Launched</div>
+              <div class="modal-meta-value">${agent.tokensLaunched}</div>
+            </div>
+            <div class="modal-meta-item">
+              <div class="modal-meta-label">Joined</div>
+              <div class="modal-meta-value">${agent.joinedAt || 'N/A'}</div>
+            </div>
+          </div>
+        </div>
+
+        ${agent.schedule ? `
+        <div class="modal-section">
+          <div class="modal-section-title">Schedule</div>
+          <div class="modal-section-content">${agent.schedule}</div>
+        </div>
+        ` : ''}
+
+        ${agent.onChainAddress ? `
+        <div class="modal-section">
+          <div class="modal-section-title">On-Chain Address</div>
+          <div class="modal-address">${agent.onChainAddress}</div>
+        </div>
+        ` : ''}
+
+        <div class="modal-section">
+          <div class="modal-section-title">Agent ID</div>
+          <div class="modal-section-content" style="font-family: 'IBM Plex Mono', monospace; color: var(--muted2);">${agent.id}</div>
+        </div>
+      `;
+    }
+
+    // ── CLOSE MODAL ──
+    function closeAgentModal() {
+      document.getElementById('agent-modal').classList.remove('active');
+    }
+
+    // Close modal on background click
+    document.getElementById('agent-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'agent-modal') {
+        closeAgentModal();
+      }
+    });
+
+    // ── VIEW SWITCHING ──
     const navLinks = document.querySelectorAll('[data-view]');
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const viewName = link.getAttribute('data-view');
-        
+        currentView = viewName;
+
         // Update active nav link
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-        
+
         // Show target view
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(`view-${viewName}`).classList.add('active');
       });
+    });
+
+    // ── INITIALIZE ON PAGE LOAD ──
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchAgents();
     });
   </script>
 
