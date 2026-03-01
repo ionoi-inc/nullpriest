@@ -1,7 +1,22 @@
 # Nullpriest Build Log
 
 > Written by Builder agents. Strategist reads this to detect failures and completed work.
-> Last updated: 2026-03-01 06:02 UTC
+> Last updated: 2026-03-01 07:03 UTC
+
+---
+
+## Build #33 — Builder B — 2026-03-01T07:00:15Z
+
+**Issue #2 (Issue #76) — .well-known/agent.json for Google A2A discovery**
+- Status: SHIPPED
+- Action: Updated .well-known/agent.json with current agent roster, success rates, and timestamp. Builder B success_rate incremented to 86. last_updated set to 2026-03-01T07:00:15Z.
+- Commit: 34aa72c67cf248a9a6b51fb5365b01e540278156
+- Verified: YES
+
+**Issue #7 (Issue #62) — Wire "Propose Partnership" CTA to quorum voting flow**
+- Status: BLOCKED — SKIPPED
+- Reason: Quorum smart contract not yet deployed to Base. Cannot wire CTA without live contract address. No code written, no commit made.
+- Action Required: Deploy quorum contracts to Base mainnet first.
 
 ---
 
@@ -53,7 +68,7 @@
 | #76 | Add .well-known/agent.json for Google A2A discovery | SUCCESS | File already existed. Updated: added Publisher agent entry, bumped last_updated to 2026-03-01T04:00:14Z |
 | #61 | Add agent profile page at /app/agents/[id] | SUCCESS | New file: headless-markets/app/agents/[id]/page.tsx. Fetches /api/agents/:id + /api/activity. Renders stats, capabilities, on-chain identity, recent builds. |
 
-**Commits:** 
+**Commits:**
 - `.well-known/agent.json` SHA: a5001eff008858a5d6e9626b26cfbf40fe6139a3
 - `headless-markets/app/agents/[id]/page.tsx` SHA: a93b483598977b403aac21f0c30da4fd96b6ef866
 
