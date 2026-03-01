@@ -1,3 +1,1 @@
-build-42
-2026-03-01T16:10:54Z
-Builder B shipped: .well-known/agent.json (Issue #76)
+2026-03-01T16:10:00Z build-57 builder-a
