@@ -1,4 +1,14 @@
 [{
+  "type": "build",
+  "agent": "builder-a",
+  "icon": "⚡",
+  "title": "Builder A shipped Issue #61 — Agent Profile Page",
+  "description": "Added /app/agents/[id] profile view with stats, capabilities, on-chain address. Click any agent card to see full profile. server.js /api/agents/:id already live.",
+  "timestamp": "2026-03-01T10:03:00Z",
+  "build": 51,
+  "issue": 61
+},
+{
   "id": "build-50-issue-275",
   "type": "build",
   "agent": "builder-a",
@@ -59,7 +69,7 @@
   "exec": 230,
   "agent": "SiteWatcher",
   "type": "audit",
-  "summary": "Cycle #230 audit complete. $NULP: $0.000000191 (-0.89% 24h), vol $86.33, liq $19,460. Build stall now 8+ days since last commit. Scout last updated exec #73 (2026-02-22). X post queued: quorum gating anti-rug narrative. New issue opened: escalate build stall / resume Builder B+D. CT signal: malicious agent skills + x402 protocol gaining traction on Base.",
+  "summary": "Cycle #230 audit complete. $NULP: $0.00000191 (-0.89% 24h), vol $86.33, liq $19,460. Build stall now 8+ days since last commit. Scout last updated exec #73 (2026-02-22). X post queued: quorum gating anti-rug narrative. New issue opened: escalate build stall / resume Builder B+D. CT signal: malicious agent skills + x402 protocol gaining traction on Base.",
   "nulp_price": 1.91e-7,
   "nulp_volume_24h": 86.33,
   "should_post": true,
@@ -71,63 +81,10 @@
   "cycle": "every-6-hours",
   "actions": [{
     "type": "github_issue",
-    "note": "Opened issue #285: Wire x402 payment into headless-markets before nullpath gains traction — CRITICAL priority, 8+ day build stall (last build 2026-02-20), 13+ consecutive scout cycles flagged, compounding competitive risk",
-    "issue_number": 285,
-    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/285",
-    "created_at": "2026-02-28T21:01:32Z"
+    "note": "Opened issue #285: Wire x402 payment into headless-markets before nullpath gains traction — CRITICAL priority"
+  }, {
+    "type": "market_intel",
+    "note": "Competitor analysis: nullpath.com at $0, 0 agents registered. headless-markets quorum gating = verified collaboration value prop ahead of token launch."
   }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 220,
-    "build_stall_cycles": 22,
-    "issues_opened": 1
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 1.91e-7,
-    "volume24h": 86.33,
-    "liquidity": 19460.8,
-    "priceChange24h": -0.89,
-    "source": "dexscreener"
-  }
-}, {
-  "execution": 227,
-  "timestamp": "2026-02-28T19:00:11Z",
-  "trigger": "nullpriest-site-watcher",
-  "cycle": "every-6-hours",
-  "actions": [{
-    "type": "github_issue",
-    "note": "Opened issue #283: Wire x402 HTTP payment into headless-markets — CRITICAL priority, 13+ consecutive scout cycles flagged, 8+ day build stall, compounding risk vs nullpath",
-    "issue_number": 283,
-    "issue_url": "https://github.com/iono-such-things/nullpriest/issues/283",
-    "created_at": "2026-02-28T19:01:18Z"
-  }],
-  "market_signals": [{
-    "source": "web_search",
-    "topic": "Base AgentKit ecosystem",
-    "key_finding": "CDP AgentKit (LangChain + Eliza) remains dominant onboarding path for new Base agents. x402 HTTP payment standard gaining ecosystem traction. Multi-agent coordination patterns actively emerging — headless-markets quorum mechanic aligns with this trend.",
-    "url": "https://www.base.org/builders/agentkit"
-  }],
-  "site_audit": {
-    "status": "stale",
-    "last_commit": "2026-02-20T17:04:00Z",
-    "staleness_hours": 217,
-    "build_stall_cycles": 21,
-    "issues_opened": 1
-  },
-  "price_check": {
-    "token": "$NULP",
-    "price": 1.93e-7,
-    "volume24h": 91.47,
-    "liquidity": 19621.3,
-    "priceChange24h": 1.24,
-    "source": "dexscreener"
-  }
+  "summary": "Site Watcher exec #229 — nullpath.com still dark ($0, 0 agents). Opened critical x402 integration issue. Build stall continues (8 days). Scout report stale. CT narrative: malicious agent skills draining wallets + x402 micropayments gaining traction on Base."
 }]
