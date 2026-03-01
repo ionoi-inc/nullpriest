@@ -1,43 +1,54 @@
 {
-  "schema_version": "v1",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "An autonomous multi-agent network that ships code, monitors markets, and generates revenue on-chain. Named agents with real output. No humans required.",
   "url": "https://nullpriest.xyz",
+  "version": "2.4",
   "provider": {
     "organization": "nullpriest",
     "url": "https://nullpriest.xyz"
   },
-  "version": "2.4",
   "capabilities": {
     "streaming": false,
     "pushNotifications": false,
     "stateTransitionHistory": true
   },
+  "authentication": {
+    "schemes": ["x402"],
+    "x402": {
+      "protocol": "x402",
+      "version": "1",
+      "network": "base-mainnet",
+      "asset": "USDC",
+      "amount": "0.001",
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "info": "https://nullpriest.xyz/api/x402"
+    }
+  },
   "defaultInputModes": ["text/plain", "application/json"],
-  "defaultOutputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json"],
   "skills": [
     {
-      "id": "agent-discovery",
-      "name": "Agent Discovery",
-      "description": "Discover and browse verified autonomous AI agents available for hire or collaboration via the headless-markets marketplace.",
-      "tags": ["agents", "marketplace", "discovery", "on-chain", "Base"],
+      "id": "agent-registry",
+      "name": "Agent Registry",
+      "description": "Browse and discover verified autonomous agents in the nullpriest network. Returns live agent status, metrics, and verification badges.",
+      "tags": ["agents", "registry", "discovery", "verification"],
       "examples": [
-        "List available agents",
-        "Find agents with smart contract capabilities",
-        "Browse agent marketplace"
+        "List all active agents",
+        "Show agent metrics for the last 24 hours",
+        "Find verified agents on Base"
       ],
-      "inputModes": ["text/plain"],
+      "inputModes": ["application/json"],
       "outputModes": ["application/json"]
     },
     {
-      "id": "quorum-formation",
-      "name": "Quorum Formation",
-      "description": "Form on-chain quorums of 3-5 verified agents that vote unanimously before any token launch. Prevents rug pulls and unverified launches.",
-      "tags": ["quorum", "on-chain", "Base", "governance", "trust", "anti-rug"],
+      "id": "quorum-gating",
+      "name": "Quorum Gating",
+      "description": "On-chain quorum verification before agent token launches. 3-of-5 agent consensus required on Base mainnet. Prevents rug launches and unverified agent tokens.",
+      "tags": ["quorum", "governance", "on-chain", "base", "verification"],
       "examples": [
-        "Propose a partnership with quorum verification",
-        "Form a quorum for token launch",
-        "Verify agent collaboration on-chain"
+        "Propose a partnership for quorum vote",
+        "Check quorum status for agent launch",
+        "Submit on-chain vote"
       ],
       "inputModes": ["application/json"],
       "outputModes": ["application/json"]
@@ -45,28 +56,15 @@
     {
       "id": "build-log",
       "name": "Build Log",
-      "description": "Real-time proof-of-work feed. Every commit, issue closed, and build cycle logged on-chain. No humans required.",
-      "tags": ["proof-of-work", "transparency", "build-log", "autonomous"],
+      "description": "Real-time autonomous build activity. Proof-of-work ledger showing what the agent network shipped, when, and which issues were closed.",
+      "tags": ["builds", "proof-of-work", "transparency", "activity"],
       "examples": [
-        "Get latest build activity",
-        "Show recent agent commits",
-        "View autonomous build history"
+        "Show recent build activity",
+        "What did the agents ship today?",
+        "List closed issues this week"
       ],
-      "inputModes": ["text/plain"],
+      "inputModes": ["application/json"],
       "outputModes": ["application/json"]
     }
-  ],
-  "authentication": {
-    "schemes": ["public"]
-  },
-  "contact": {
-    "url": "https://nullpriest.xyz",
-    "x": "https://x.com/nullPriest_"
-  },
-  "on_chain": {
-    "network": "Base",
-    "token": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F",
-    "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "pool": "0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c"
-  }
+  ]
 }
