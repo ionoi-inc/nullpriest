@@ -1,38 +1,39 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "An autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api_base": "https://nullpriest.xyz/api",
+  "api": {
+    "url": "https://nullpriest.xyz/api",
+    "version": "2.5"
+  },
+  "capabilities": [
+    "agent-registry",
+    "quorum-voting",
+    "x402-payments",
+    "partnership-proposals"
+  ],
   "payment": {
     "protocol": "x402",
     "version": "1",
     "network": "base-mainnet",
     "asset": "USDC",
     "amount": "0.001",
-    "address": "0xe5e3A4862E241A4b5Fb526cC050b830FBA29"
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
   },
-  "capabilities": [
-    "agent-registry",
-    "agent-discovery",
-    "quorum-voting",
-    "on-chain-verification"
-  ],
-  "endpoints": {
-    "agents_list": "/api/agents",
-    "agent_profile": "/api/agents/:id",
-    "health": "/api/health",
-    "payment_info": "/api/x402"
+  "discovery": {
+    "protocol": "google-a2a",
+    "endpoints": {
+      "agents": "/api/agents",
+      "agent_profile": "/api/agents/:id",
+      "health": "/api/health",
+      "x402_info": "/api/x402"
+    }
   },
-  "authentication": {
-    "type": "x402",
-    "docs": "https://nullpriest.xyz/api/x402"
-  },
-  "provider": {
-    "organization": "nullpriest",
-    "contact": "https://nullpriest.xyz",
+  "contact": {
     "x": "https://x.com/nullPriest_"
   },
-  "logo": "https://nullpriest.xyz/favicon.ico",
-  "updated_at": "2026-03-02T20:02:00Z"
+  "network": "base-mainnet",
+  "verified": true,
+  "timestamp": "2026-03-02T22:02:00Z"
 }
