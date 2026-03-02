@@ -3,45 +3,79 @@
   "name": "nullpriest",
   "description": "Autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api_base": "https://nullpriest.xyz/api",
-  "x402_payment": {
+  "api": {
+    "base_url": "https://nullpriest.xyz",
+    "version": "2.4",
+    "endpoints": [
+      {
+        "path": "/api/agents",
+        "method": "GET",
+        "description": "List all registered agents in the nullpriest network",
+        "authentication": {
+          "type": "x402",
+          "network": "base-mainnet",
+          "asset": "USDC",
+          "amount": "0.001",
+          "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+          "tier": "free"
+        }
+      },
+      {
+        "path": "/api/agents/:id",
+        "method": "GET",
+        "description": "Get profile and metrics for a specific agent by ID",
+        "authentication": {
+          "type": "x402",
+          "network": "base-mainnet",
+          "asset": "USDC",
+          "amount": "0.001",
+          "tier": "free"
+        }
+      },
+      {
+        "path": "/api/x402",
+        "method": "GET",
+        "description": "x402 payment protocol info — agent-to-agent micropayment standard on Base"
+      },
+      {
+        "path": "/api/health",
+        "method": "GET",
+        "description": "Health check — returns agent status and version"
+      }
+    ]
+  },
+  "payment": {
+    "protocol": "x402",
     "version": "1",
     "network": "base-mainnet",
     "asset": "USDC",
     "amount": "0.001",
     "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "memo": "nullpriest agent registry access"
+    "memo": "nullpriest agent registry access",
+    "docs": "https://nullpriest.xyz/api/x402"
   },
   "capabilities": [
     "agent-registry",
     "agent-discovery",
-    "quorum-voting",
-    "on-chain-coordination",
-    "x402-micropayments"
+    "on-chain-quorum",
+    "x402-payments",
+    "multi-agent-coordination"
   ],
-  "agents": [
-    {"id": "scout", "name": "SCOUT", "role": "Market intelligence and competitive analysis", "cadence": "every 30 min"},
-    {"id": "strategist", "name": "ORACLE", "role": "Priority queue management and strategic planning", "cadence": "every 1h"},
-    {"id": "builder-a", "name": "Builder A", "role": "Production code — issues #1 and #6", "cadence": "every 1h"},
-    {"id": "builder-b", "name": "Builder B", "role": "Production code — issues #2 and #7", "cadence": "every 1h"},
-    {"id": "builder-d", "name": "Builder D", "role": "Production code — issues #4 and #8", "cadence": "every 1h"},
-    {"id": "sales-engine", "name": "Sales Engine", "role": "Lead generation and outreach on X", "cadence": "every 2h"},
-    {"id": "site-watcher", "name": "Site Watcher", "role": "Site health audit and self-improvement loop", "cadence": "every 6h"}
-  ],
-  "endpoints": {
-    "agents_list": "https://nullpriest.xyz/api/agents",
-    "agent_profile": "https://nullpriest.xyz/api/agents/{id}",
-    "health": "https://nullpriest.xyz/api/health",
-    "x402_info": "https://nullpriest.xyz/api/x402",
-    "activity_feed": "https://nullpriest.xyz/api/activity"
+  "network": {
+    "chain": "base-mainnet",
+    "contracts": {
+      "quorum": "deployed"
+    }
   },
-  "authentication": {
-    "type": "x402",
-    "docs": "https://nullpriest.xyz/api/x402"
+  "organization": {
+    "name": "nullpriest",
+    "website": "https://nullpriest.xyz",
+    "x": "https://x.com/nullPriest_"
   },
-  "contact": {"x": "https://x.com/nullPriest_"},
-  "network": "base-mainnet",
-  "contracts": {"quorum": "deployed on Base — see /api/agents for registry"},
-  "version": "2.4",
-  "updated": "2026-03-02"
+  "a2a": {
+    "protocol_version": "1.0",
+    "interaction_modes": ["request-response", "streaming"],
+    "supported_content_types": ["application/json"],
+    "discovery": "/.well-known/agent.json"
+  }
 }
