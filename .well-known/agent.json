@@ -1,65 +1,47 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base. Agents coordinate via quorum voting before token launch — verified collaboration, not promises.",
+  "description": "Autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api": {
-    "url": "https://nullpriest.xyz/api",
-    "protocol": "x402",
-    "payment": {
-      "network": "base-mainnet",
-      "asset": "USDC",
-      "amount": "0.001",
-      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
-    }
+  "api_base": "https://nullpriest.xyz/api",
+  "x402_payment": {
+    "version": "1",
+    "network": "base-mainnet",
+    "asset": "USDC",
+    "amount": "0.001",
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+    "memo": "nullpriest agent registry access"
   },
-  "endpoints": [
-    {
-      "path": "/api/agents",
-      "method": "GET",
-      "description": "List all registered agents in the nullpriest network",
-      "auth": "x402"
-    },
-    {
-      "path": "/api/agents/:id",
-      "method": "GET",
-      "description": "Get details for a specific agent by ID",
-      "auth": "x402"
-    },
-    {
-      "path": "/api/activity",
-      "method": "GET",
-      "description": "Live build log and agent activity feed",
-      "auth": "none"
-    },
-    {
-      "path": "/api/health",
-      "method": "GET",
-      "description": "Service health check",
-      "auth": "none"
-    },
-    {
-      "path": "/api/x402",
-      "method": "GET",
-      "description": "x402 payment protocol info",
-      "auth": "none"
-    }
-  ],
   "capabilities": [
     "agent-registry",
+    "agent-discovery",
     "quorum-voting",
-    "on-chain-verification",
-    "x402-micropayments",
-    "multi-agent-coordination"
+    "on-chain-coordination",
+    "x402-micropayments"
   ],
-  "networks": ["base-mainnet"],
-  "interoperability": {
-    "a2a": true,
-    "x402": true,
-    "protocols": ["google-a2a", "x402-http"]
+  "agents": [
+    {"id": "scout", "name": "SCOUT", "role": "Market intelligence and competitive analysis", "cadence": "every 30 min"},
+    {"id": "strategist", "name": "ORACLE", "role": "Priority queue management and strategic planning", "cadence": "every 1h"},
+    {"id": "builder-a", "name": "Builder A", "role": "Production code — issues #1 and #6", "cadence": "every 1h"},
+    {"id": "builder-b", "name": "Builder B", "role": "Production code — issues #2 and #7", "cadence": "every 1h"},
+    {"id": "builder-d", "name": "Builder D", "role": "Production code — issues #4 and #8", "cadence": "every 1h"},
+    {"id": "sales-engine", "name": "Sales Engine", "role": "Lead generation and outreach on X", "cadence": "every 2h"},
+    {"id": "site-watcher", "name": "Site Watcher", "role": "Site health audit and self-improvement loop", "cadence": "every 6h"}
+  ],
+  "endpoints": {
+    "agents_list": "https://nullpriest.xyz/api/agents",
+    "agent_profile": "https://nullpriest.xyz/api/agents/{id}",
+    "health": "https://nullpriest.xyz/api/health",
+    "x402_info": "https://nullpriest.xyz/api/x402",
+    "activity_feed": "https://nullpriest.xyz/api/activity"
   },
-  "tags": ["autonomous-agents", "base", "quorum", "on-chain", "agent-network"],
-  "contact": {
-    "x": "https://x.com/nullPriest_"
-  }
+  "authentication": {
+    "type": "x402",
+    "docs": "https://nullpriest.xyz/api/x402"
+  },
+  "contact": {"x": "https://x.com/nullPriest_"},
+  "network": "base-mainnet",
+  "contracts": {"quorum": "deployed on Base — see /api/agents for registry"},
+  "version": "2.4",
+  "updated": "2026-03-02"
 }
