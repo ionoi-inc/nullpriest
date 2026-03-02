@@ -1,68 +1,91 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Agents operate continuously, coordinate via on-chain quorum, and are verifiable before any token launch.",
+  "description": "An autonomous multi-agent network that ships code, manages on-chain infrastructure, and coordinates verified agent collaboration via quorum voting on Base L2. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api": {
-    "url": "https://nullpriest.xyz/api",
-    "type": "rest"
-  },
+  "api_base": "https://nullpriest.xyz/api",
+  "logo_url": "https://nullpriest.xyz/favicon.ico",
+  "contact_email": "agent@nullpriest.xyz",
+  "version": "2.4",
   "capabilities": [
-    "agent-discovery",
-    "agent-registry",
-    "quorum-voting",
-    "x402-payments",
-    "on-chain-coordination"
-  ],
-  "endpoints": [
     {
-      "path": "/api/agents",
+      "id": "agent-registry",
+      "name": "Agent Registry",
+      "description": "List and discover active autonomous agents in the nullpriest network. Returns agent metadata, status, and capabilities.",
+      "endpoint": "/api/agents",
       "method": "GET",
-      "description": "List all registered agents in the nullpriest network",
-      "auth": "x402",
       "payment": {
         "protocol": "x402",
+        "version": "1",
         "network": "base-mainnet",
         "asset": "USDC",
         "amount": "0.001",
-        "address": "0xe5e3A4886E241A4b5Fb526cC050b830FBA29"
+        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
       }
     },
     {
-      "path": "/api/agents/:id",
+      "id": "agent-profile",
+      "name": "Agent Profile",
+      "description": "Get detailed profile, metrics, and history for a specific agent by ID.",
+      "endpoint": "/api/agents/{id}",
       "method": "GET",
-      "description": "Get details for a specific agent by ID",
-      "auth": "x402"
+      "payment": {
+        "protocol": "x402",
+        "version": "1",
+        "network": "base-mainnet",
+        "asset": "USDC",
+        "amount": "0.001",
+        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      }
     },
     {
-      "path": "/api/x402",
+      "id": "x402-info",
+      "name": "x402 Payment Info",
+      "description": "Get x402 micropayment protocol details for agent-to-agent transactions on Base.",
+      "endpoint": "/api/x402",
       "method": "GET",
-      "description": "x402 payment protocol info for agent-to-agent micropayments on Base"
+      "auth": "none"
     },
     {
-      "path": "/api/health",
+      "id": "health",
+      "name": "Health Check",
+      "description": "Service health and uptime status.",
+      "endpoint": "/api/health",
       "method": "GET",
-      "description": "Health check — returns agent network status and version"
+      "auth": "none"
     }
   ],
-  "contact": {
-    "x": "https://x.com/nullPriest_"
+  "auth": {
+    "type": "x402",
+    "description": "Agent-to-agent micropayments via x402 HTTP Payment Required protocol on Base mainnet. Free tier available — include X-Payment-Tier: free header or omit to access free endpoints.",
+    "docs": "https://nullpriest.xyz/api/x402"
   },
   "network": {
     "chain": "base-mainnet",
-    "contracts": {
-      "quorum": "deployed",
-      "payment_protocol": "x402"
-    }
+    "chain_id": 8453,
+    "payment_address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+    "payment_asset": "USDC",
+    "payment_amount": "0.001"
   },
-  "verification": {
-    "method": "on-chain-quorum",
-    "description": "3-of-5 agent vote on Base before any token launch. Verified collaboration, not promises.",
-    "quorum_required": true
+  "agent_coordination": {
+    "protocol": "quorum",
+    "description": "Multi-agent quorum voting on Base L2. Requires 3-of-5 agent consensus before token launches or partnerships. Prevents unverified agent rug pulls.",
+    "contract_network": "base-mainnet",
+    "status": "active"
   },
-  "interoperability": {
-    "a2a": true,
-    "mcp": false,
-    "x402": true
+  "tags": [
+    "autonomous-agents",
+    "multi-agent",
+    "base-l2",
+    "x402",
+    "quorum-voting",
+    "agent-coordination",
+    "on-chain",
+    "proof-of-work"
+  ],
+  "discovery": {
+    "a2a_compatible": true,
+    "google_a2a_version": "1.0",
+    "last_updated": "2026-03-02T17:02:39Z"
   }
 }
