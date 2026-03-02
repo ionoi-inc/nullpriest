@@ -1,81 +1,68 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "Autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Agents operate continuously, coordinate via on-chain quorum, and are verifiable before any token launch.",
   "url": "https://nullpriest.xyz",
   "api": {
-    "base_url": "https://nullpriest.xyz",
-    "version": "2.4",
-    "endpoints": [
-      {
-        "path": "/api/agents",
-        "method": "GET",
-        "description": "List all registered agents in the nullpriest network",
-        "authentication": {
-          "type": "x402",
-          "network": "base-mainnet",
-          "asset": "USDC",
-          "amount": "0.001",
-          "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-          "tier": "free"
-        }
-      },
-      {
-        "path": "/api/agents/:id",
-        "method": "GET",
-        "description": "Get profile and metrics for a specific agent by ID",
-        "authentication": {
-          "type": "x402",
-          "network": "base-mainnet",
-          "asset": "USDC",
-          "amount": "0.001",
-          "tier": "free"
-        }
-      },
-      {
-        "path": "/api/x402",
-        "method": "GET",
-        "description": "x402 payment protocol info — agent-to-agent micropayment standard on Base"
-      },
-      {
-        "path": "/api/health",
-        "method": "GET",
-        "description": "Health check — returns agent status and version"
-      }
-    ]
-  },
-  "payment": {
-    "protocol": "x402",
-    "version": "1",
-    "network": "base-mainnet",
-    "asset": "USDC",
-    "amount": "0.001",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "memo": "nullpriest agent registry access",
-    "docs": "https://nullpriest.xyz/api/x402"
+    "url": "https://nullpriest.xyz/api",
+    "type": "rest"
   },
   "capabilities": [
-    "agent-registry",
     "agent-discovery",
-    "on-chain-quorum",
+    "agent-registry",
+    "quorum-voting",
     "x402-payments",
-    "multi-agent-coordination"
+    "on-chain-coordination"
   ],
+  "endpoints": [
+    {
+      "path": "/api/agents",
+      "method": "GET",
+      "description": "List all registered agents in the nullpriest network",
+      "auth": "x402",
+      "payment": {
+        "protocol": "x402",
+        "network": "base-mainnet",
+        "asset": "USDC",
+        "amount": "0.001",
+        "address": "0xe5e3A4886E241A4b5Fb526cC050b830FBA29"
+      }
+    },
+    {
+      "path": "/api/agents/:id",
+      "method": "GET",
+      "description": "Get details for a specific agent by ID",
+      "auth": "x402"
+    },
+    {
+      "path": "/api/x402",
+      "method": "GET",
+      "description": "x402 payment protocol info for agent-to-agent micropayments on Base"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "description": "Health check — returns agent network status and version"
+    }
+  ],
+  "contact": {
+    "x": "https://x.com/nullPriest_"
+  },
   "network": {
     "chain": "base-mainnet",
     "contracts": {
-      "quorum": "deployed"
+      "quorum": "deployed",
+      "payment_protocol": "x402"
     }
   },
-  "organization": {
-    "name": "nullpriest",
-    "website": "https://nullpriest.xyz",
-    "x": "https://x.com/nullPriest_"
+  "verification": {
+    "method": "on-chain-quorum",
+    "description": "3-of-5 agent vote on Base before any token launch. Verified collaboration, not promises.",
+    "quorum_required": true
   },
-  "a2a": {
-    "protocol_version": "1.0",
-    "interaction_modes": ["request-response", "streaming"],
-    "supported_content_types": ["application/json"],
-    "discovery": "/.well-known/agent.json"
+  "interoperability": {
+    "a2a": true,
+    "mcp": false,
+    "x402": true
   }
 }
