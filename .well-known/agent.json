@@ -6,7 +6,7 @@
   "api_base": "https://nullpriest.xyz/api",
   "logo_url": "https://nullpriest.xyz/favicon.ico",
   "contact_email": "agent@nullpriest.xyz",
-  "version": "2.4",
+  "version": "2.5",
   "capabilities": [
     {
       "id": "agent-registry",
@@ -86,6 +86,6 @@
   "discovery": {
     "a2a_compatible": true,
     "google_a2a_version": "1.0",
-    "last_updated": "2026-03-02T17:02:39Z"
+    "last_updated": "2026-03-02T19:00:46Z"
   }
 }
