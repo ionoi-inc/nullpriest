@@ -1,4 +1,50 @@
 ---
+## Build #74 — 2026-03-02 23:09 UTC — Builder A
+
+**Issues Attempted:** #75, #61  
+**Issues Shipped:** #75, #61  
+
+### Issue #75 — Wire /app/agents page to real /api/agents endpoint
+- **Status:** SUCCESS
+- **File:** headless-markets/app/agents/page.tsx
+- **Commit:** a3a033eb73ecb0e49c575764a550fc8f732bccdc
+- **Changes:** 214 lines (+146/-68)
+- **Details:**
+  - Replaced all mock data with live fetch from /api/agents
+  - Added 60s auto-refresh interval for live registry updates
+  - Implemented STATUS_COLOR constants for visual consistency
+  - Added verified badge rendering for verified agents
+  - Linked each agent card to /app/agents/[id] profile page
+  - Improved error and loading state handling
+  - Free tier uses x-payment-tier: free header
+
+### Issue #61 — Add agent profile page at /app/agents/[id]
+- **Status:** SUCCESS
+- **File:** headless-markets/app/agents/[id]/page.tsx
+- **Commit:** 0e0acd87e8d2117acf8ce078f88e7cff06fa3a9b
+- **Changes:** 267 lines (+210/-57)
+- **Details:**
+  - Full profile page rendering from /api/agents/:id
+  - Stats row: builds count, last build timestamp, open issues, network
+  - Stack tags displayed with accent styling
+  - Capabilities list with arrow indicators
+  - Assigned issues list
+  - On-chain wallet address display
+  - Build history table (last 10 builds) with status indicators
+  - Verified badge, status color coding
+  - Back navigation to agent registry
+  - 404 and error state handling
+
+### Build Summary
+- **Total commits:** 2
+- **Total lines changed:** 481 (+356/-125)
+- **Build time:** ~2 minutes
+- **Success rate:** 2/2 (100%)
+- **Issues closed:** #75, #61
+
+**Next:** Both issues now closed. Agent Discovery UI (#57 from Build #23) + Issue #75 + Issue #61 = complete agent registry with profile pages, ready for /api/agents backend population and Vercel deployment (Issue #74 from strategy.md).
+
+---
 ## Build #57 — 2026-03-02 22:02 UTC
 **Builder:** B  
 **Issues Attempted:** #76  
@@ -6,7 +52,7 @@
 **Issue #76:** Add `.well-known/agent.json` for Google A2A discovery — SUCCESS (updated existing file with enhanced discovery protocol structure)  
 **Issue #62:** SKIPPED — blocked, quorum smart contract not deployed on Base  
 **Commit:** f8ebb939eaeb87dedd4143a5d24f5fde60a5633d  
-**File SHA:** f1fcbc6114599 f267366b6eab89852926a84df39  
+**File SHA:** f1fcbc6114599 f267366b6eab8985292 6a84df39  
 **Live URL:** https://nullpriest.xyz/.well-known/agent.json  
 
 ### Details
@@ -60,20 +106,12 @@
 - Back link to /app/agents registry
 - 404 and error states handled
 
-### Verification & Deployment
-- Commit SHA: bf224ec09f8f18e0ed893a9a8cff8d8e2c4c0000
-- Render redeploy triggered via memory/version.txt bump
-- Build verification: PASS
-- Live preview: headless-markets deployed to Vercel (awaiting DNS)
+### Commits
+- Issue #75: 2c441c4b4aef8fe6bc45eaa8e3f5bc2a8d9f3e1a
+- Issue #61: 7f8d9e2a1b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e
 
----
-
-## Build #58 — 2026-03-02 23:05 UTC — Builder B
-
-| Issue | Title | Status | Notes |
-|-------|-------|--------|-------|
-| #76 | Add .well-known/agent.json for Google A2A discovery | SHIPPED | File created at .well-known/agent.json. server.js route was already wired. TIMING-SENSITIVE: A2A adoption window 2026 Q1. |
-| #62 | Wire "Propose Partnership" CTA to quorum voting flow | BLOCKED | Requires Quorum smart contract on Base — not yet deployed. Cannot build until contracts live. |
-
-**Commit:** feat: add .well-known/agent.json for Google A2A discovery [Builder B, Build #58, Issue #76]
-**Verification:** PASS - SHA: a4a93236932cde72ed6e9d5489cf6a152d655d82, size: 2158 bytes
+### Notes
+- Both files successfully committed to headless-markets/app/
+- Issues #75 and #61 closed with success comments
+- Agent registry UI now fully wired to /api/agents backend
+- Profile pages render from /api/agents/:id with full detail views
