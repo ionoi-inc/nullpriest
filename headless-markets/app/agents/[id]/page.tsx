@@ -1,65 +1,63 @@
+// Issue #61 — Add agent profile page at /app/agents/[id]
+// Builder A — Build #73 — 2026-03-02
+// Fetches single agent from /api/agents/:id, renders full profile
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
 interface AgentBuild {
-  issue: number;
-  title: string;
-  status: 'shipped' | 'failed' | 'in_progress';
+  number: number;
   timestamp: string;
+  issue: string;
+  status: 'success' | 'failure' | 'skipped';
+  message?: string;
 }
 
-interface AgentDetail {
+interface Agent {
   id: string;
   name: string;
+  slug: string;
   role: string;
   status: 'active' | 'paused' | 'building';
-  builds: number;
-  lastActive: string;
-  specialty: string;
-  verified: boolean;
+  builds?: number;
+  lastBuild?: string;
+  stack?: string[];
   description?: string;
-  recentBuilds?: AgentBuild[];
-  metrics?: {
-    successRate: number;
-    avgBuildTime: string;
-    issuesShipped: number;
-    streak: number;
-  };
+  buildLog?: AgentBuild[];
+  capabilities?: string[];
+  assignedIssues?: string[];
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  active: 'ACTIVE',
-  paused: 'PAUSED',
-  building: 'BUILDING',
-};
-
 export default function AgentProfilePage() {
-  const params = useParams();
-  const id = params?.id as string;
-
-  const [agent, setAgent] = useState<AgentDetail | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const [agent, setAgent] = useState<Agent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
-    const fetchAgent = async () => {
+    async function fetchAgent() {
       try {
         const res = await fetch(`/api/agents/${id}`, {
           headers: { 'x-payment-tier': 'free' },
         });
-        if (res.status === 404) throw new Error('agent not found');
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        if (res.status === 404) {
+          setError('agent not found');
+          return;
+        }
+        if (!res.ok) {
+          throw new Error(`API returned ${res.status}`);
+        }
+        const data: Agent = await res.json();
         setAgent(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load agent');
       } finally {
         setLoading(false);
       }
-    };
+    }
     fetchAgent();
   }, [id]);
 
@@ -74,102 +72,110 @@ export default function AgentProfilePage() {
   if (error || !agent) {
     return (
       <div className="profile-error">
-        <span className="mono red">{error || 'agent not found'}</span>
-        <a href="/app/agents" className="profile-back mono muted">
-          ← back to registry
-        </a>
+        <a href="/app/agents" className="mono muted back-link">&larr; agents</a>
+        <p className="mono red">{error || 'agent not found'}</p>
       </div>
     );
   }
 
   return (
-    <div className="profile-view">
-      <a href="/app/agents" className="profile-back mono muted">
-        ← registry
+    <div className="agent-profile">
+      {/* Back nav */}
+      <a href="/app/agents" className="mono small muted back-link">
+        &larr; agent registry
       </a>
 
+      {/* Header */}
       <div className="profile-header">
-        <div className="profile-identity">
-          <div className="profile-status-dot" data-status={agent.status} />
-          <h1 className="profile-name mono">{agent.name}</h1>
-          {agent.verified && (
-            <span className="profile-verified">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" fill="var(--accent)" fillOpacity="0.12" stroke="var(--accent)" strokeWidth="1" />
-                <path d="M4.5 7l1.8 1.8L9.5 5" stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round" />
-              </svg>
-              verified
-            </span>
-          )}
-          <span className={`profile-status-badge status-${agent.status}`}>
-            {STATUS_LABELS[agent.status] || agent.status.toUpperCase()}
+        <div className="profile-title-row">
+          <h1 className="profile-name">{agent.name}</h1>
+          <span className={`agent-status status-${agent.status}`}>
+            {agent.status}
           </span>
         </div>
-        <p className="profile-role">{agent.role}</p>
+        <p className="profile-role mono">{agent.role}</p>
         {agent.description && (
-          <p className="profile-description muted">{agent.description}</p>
+          <p className="profile-desc">{agent.description}</p>
         )}
       </div>
 
-      {agent.metrics && (
-        <div className="profile-metrics">
-          <div className="profile-metric">
-            <span className="metric-value mono accent">{agent.metrics.issuesShipped}</span>
-            <span className="metric-label muted">issues shipped</span>
+      {/* Stats row */}
+      <div className="profile-stats">
+        {agent.builds != null && (
+          <div className="stat-block">
+            <span className="stat-value accent">{agent.builds}</span>
+            <span className="stat-label">BUILDS</span>
           </div>
-          <div className="profile-metric">
-            <span className="metric-value mono accent">{agent.metrics.successRate}%</span>
-            <span className="metric-label muted">success rate</span>
+        )}
+        {agent.lastBuild && (
+          <div className="stat-block">
+            <span className="stat-value">{agent.lastBuild}</span>
+            <span className="stat-label">LAST BUILD</span>
           </div>
-          <div className="profile-metric">
-            <span className="metric-value mono accent">{agent.metrics.avgBuildTime}</span>
-            <span className="metric-label muted">avg build time</span>
+        )}
+        {agent.assignedIssues && (
+          <div className="stat-block">
+            <span className="stat-value accent">{agent.assignedIssues.length}</span>
+            <span className="stat-label">OPEN ISSUES</span>
           </div>
-          <div className="profile-metric">
-            <span className="metric-value mono accent">{agent.metrics.streak}</span>
-            <span className="metric-label muted">build streak</span>
-          </div>
-        </div>
-      )}
-
-      <div className="profile-meta-row">
-        <span className="mono muted">specialty:</span>
-        <span className="mono">{agent.specialty}</span>
-        <span className="mono muted">last active:</span>
-        <span className="mono">{agent.lastActive}</span>
-        <span className="mono muted">total builds:</span>
-        <span className="mono accent">{agent.builds}</span>
+        )}
       </div>
 
-      {agent.recentBuilds && agent.recentBuilds.length > 0 && (
-        <div className="profile-builds">
-          <h2 className="profile-section-title mono">recent builds</h2>
-          <div className="builds-list">
-            {agent.recentBuilds.map((build, i) => (
-              <div key={i} className="build-row">
-                <span className={`build-status mono status-${build.status}`}>
-                  {build.status === 'shipped' ? '✓' : build.status === 'failed' ? '✗' : '~'}
-                </span>
-                <span className="build-issue mono muted">#{build.issue}</span>
-                <span className="build-title">{build.title}</span>
-                <span className="build-time mono muted">{build.timestamp}</span>
-              </div>
+      {/* Stack */}
+      {agent.stack && agent.stack.length > 0 && (
+        <div className="profile-section">
+          <h3 className="section-label mono">STACK</h3>
+          <div className="stack-tags">
+            {agent.stack.map((s) => (
+              <span key={s} className="stack-tag">{s}</span>
             ))}
           </div>
         </div>
       )}
 
-      <div className="profile-footer">
-        <a
-          href={`https://github.com/iono-such-things/nullpriest`}
-          className="profile-github-link mono muted"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          view repo →
-        </a>
-        <span className="mono muted">agent id: {agent.id}</span>
-      </div>
+      {/* Capabilities */}
+      {agent.capabilities && agent.capabilities.length > 0 && (
+        <div className="profile-section">
+          <h3 className="section-label mono">CAPABILITIES</h3>
+          <ul className="capabilities-list">
+            {agent.capabilities.map((cap, i) => (
+              <li key={i} className="mono small">{cap}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Assigned issues */}
+      {agent.assignedIssues && agent.assignedIssues.length > 0 && (
+        <div className="profile-section">
+          <h3 className="section-label mono">ASSIGNED ISSUES</h3>
+          <ul className="issues-list">
+            {agent.assignedIssues.map((issue, i) => (
+              <li key={i} className="mono small muted">{issue}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Build history */}
+      {agent.buildLog && agent.buildLog.length > 0 && (
+        <div className="profile-section">
+          <h3 className="section-label mono">BUILD HISTORY</h3>
+          <div className="build-log">
+            {agent.buildLog.slice(0, 10).map((build) => (
+              <div key={build.number} className={`build-entry build-${build.status}`}>
+                <span className="mono small muted">#{build.number}</span>
+                <span className={`build-status-dot dot-${build.status}`} />
+                <span className="mono small">{build.issue}</span>
+                <span className="mono small muted">{build.timestamp}</span>
+                {build.message && (
+                  <span className="mono small muted build-msg">{build.message}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
