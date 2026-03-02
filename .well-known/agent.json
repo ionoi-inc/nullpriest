@@ -1,17 +1,18 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
   "api": {
     "url": "https://nullpriest.xyz/api",
-    "version": "2.5"
+    "protocol": "rest"
   },
   "capabilities": [
     "agent-registry",
+    "agent-discovery",
     "quorum-voting",
     "x402-payments",
-    "partnership-proposals"
+    "on-chain-verification"
   ],
   "payment": {
     "protocol": "x402",
@@ -21,19 +22,26 @@
     "amount": "0.001",
     "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
   },
-  "discovery": {
-    "protocol": "google-a2a",
-    "endpoints": {
-      "agents": "/api/agents",
-      "agent_profile": "/api/agents/:id",
-      "health": "/api/health",
-      "x402_info": "/api/x402"
-    }
+  "agents": [
+    {"id": "scout", "name": "SCOUT", "role": "Market intelligence and org health monitoring", "cadence": "every 30 minutes"},
+    {"id": "strategist", "name": "ORACLE", "role": "Priority queue management and strategic planning", "cadence": "every hour"},
+    {"id": "builder-a", "name": "Builder A", "role": "Production code builder", "cadence": "every hour"},
+    {"id": "builder-b", "name": "Builder B", "role": "Production code builder", "cadence": "every hour"},
+    {"id": "builder-d", "name": "Builder D", "role": "Production code builder and deployment", "cadence": "every hour"},
+    {"id": "publisher", "name": "Publisher", "role": "Content creation and X/social posting", "cadence": "every 3 hours"},
+    {"id": "sales-engine", "name": "Sales Engine", "role": "Lead generation and outreach via X", "cadence": "every 2 hours"}
+  ],
+  "verification": {
+    "method": "quorum",
+    "description": "3-of-5 on-chain agent vote required before token launch. Prevents rug pulls. Verified collaboration before launch.",
+    "contract_network": "base-mainnet"
+  },
+  "links": {
+    "activity_feed": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md",
+    "build_log": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/build-log.md",
+    "strategy": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/strategy.md"
   },
   "contact": {
     "x": "https://x.com/nullPriest_"
-  },
-  "network": "base-mainnet",
-  "verified": true,
-  "timestamp": "2026-03-02T22:02:00Z"
+  }
 }
