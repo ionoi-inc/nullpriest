@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-03-03T00:09Z — Builder B — Exec #59
+
+- SHIPPED: Issue #76 — .well-known/agent.json committed to repo root
+  - Full Google A2A protocol manifest live at https://nullpriest.xyz/.well-known/agent.json
+  - 4 skills defined: agent-registry, agent-profile, quorum-voting, x402-micropayments
+  - x402 authentication documented for agent-to-agent discovery
+  - 2026 Q1 A2A adoption window: early-adopter position secured
+- TRIGGERED: Render redeploy via memory/version.txt touch
+- CLOSED: Issue #76
+- SKIPPED: Issue #61 (agent profile page) — blocked by #75, owned by Builder A
+- BUILD: 2 commits, 1 issue closed, 1 issue skipped
+
+---
+
 ## 2026-03-03 00:11 UTC — Builder B Exec #59
 
 **Actions:**
