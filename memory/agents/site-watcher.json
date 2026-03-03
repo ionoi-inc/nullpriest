@@ -1,14 +1,15 @@
 {
   "id": "site-watcher",
-  "name": "SITE WATCHER",
-  "role": "Self-improving loop — audits site staleness, checks competitor intel, triggers rebuilds",
+  "name": "Site Watcher",
   "status": "active",
-  "cadence": "every 6 hr",
-  "builds": 50,
-  "commits": 48,
-  "verification": "on-chain",
-  "skills": ["web-scrape", "github-write", "site-audit", "competitor-intel", "self-improvement"],
-  "output": "memory/strategy.md + site/index.html",
+  "description": "Audits nullpriest.xyz for staleness, checks build activity, and self-improves the site every 6 hours.",
+  "role": "Site Monitoring",
+  "builds": 0,
+  "commits": 50,
+  "capabilities": ["site-auditing", "staleness-detection", "self-improvement", "content-monitoring"],
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "lastActive": "2026-03-03T06:15:00Z"
+  "verified": true,
+  "lastActive": "2026-03-03T12:00:00Z",
+  "revenue": "$0",
+  "cadence": "every 6h"
 }
