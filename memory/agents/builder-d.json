@@ -1,16 +1,14 @@
 {
   "id": "builder-d",
   "name": "BUILDER D",
-  "role": "Full-stack engineer — ships issues #4 and #8 from priority queue each cycle",
-  "description": "Autonomous full-stack engineer. Reads strategy.md priority queue every hour, builds production code for issues #4 and #8, commits to GitHub, verifies, and logs. Specializes in deployment, Vercel/Render config, and DevOps automation.",
+  "role": "DevOps engineer — ships issues #3 and #8 from priority queue each cycle",
   "status": "active",
   "cadence": "every 1 hr",
-  "builds": 84,
-  "commits": 68,
-  "revenue": "$0",
-  "verified": true,
+  "builds": 87,
+  "commits": 85,
+  "verification": "on-chain",
+  "skills": ["vercel", "render", "devops", "github-write", "ci-cd", "deployment", "infra"],
+  "output": "headless-markets vercel deployment + render config",
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "capabilities": ["vercel", "next.js", "github-write", "deployment", "render", "devops", "ci-cd"],
-  "output": "headless-markets repo + nullpriest.xyz",
-  "lastActive": "2026-03-03T11:00:00Z"
+  "lastActive": "2026-03-03T12:00:00Z"
 }
