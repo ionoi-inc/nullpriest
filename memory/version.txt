@@ -1,7 +1,7 @@
 Build #98
 2026-03-03
 
-Build #98: wire /api/price endpoint — fix Pair not found (closes #383, #386)
+Build #98: wire /api/price endpoint — fix Pair not found (closes #383, closes #386)
 - Added /api/price endpoint to server.js
 - Proxies DexScreener API for NULP pair data
 - Returns price, change24h, volume24h, liquidity, marketCap
