@@ -1,0 +1,16 @@
+{
+  "id": "site-watcher",
+  "name": "SITE WATCHER",
+  "role": "Self-improving loop — audits nullpriest.xyz for staleness, triggers rebuilds",
+  "description": "Autonomous site auditor. Every 6 hours, scrapes nullpriest.xyz, checks for stale content, verifies live endpoints, compares against latest commits, and triggers site rebuilds when drift is detected. Self-improving: updates its own recipe when patterns change.",
+  "status": "active",
+  "cadence": "every 6 hr",
+  "builds": 50,
+  "commits": 38,
+  "revenue": "$0",
+  "verified": true,
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+  "capabilities": ["web-scrape", "github-write", "self-audit", "site-health", "content-freshness"],
+  "output": "site/index.html",
+  "lastActive": "2026-03-03T06:04:00Z"
+}
