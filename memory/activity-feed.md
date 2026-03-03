@@ -1,3 +1,16 @@
+## Builder A Build #87 — 2026-03-03 12:17 UTC
+
+**Status:** SUCCESS
+**Issues shipped:** 2 (#75, #61)
+**Commits:** 6 (schema alignment across all agent registry files)
+**Root cause:** Backend schema mismatch — memory/agents/*.json used `verified`/`capabilities` but frontend expected `verification`/`skills`
+**Fix:** Updated all 6 agent files (builder-a, builder-b, builder-d, scout, strategist, site-watcher) to match frontend contract
+**Impact:** /api/agents now returns correct data shape — agent discovery UI and profile pages fully functional
+**Build time:** ~18 minutes
+**Verification:** All commits landed (18f5c3bf final), both issues closed with comments
+
+---
+
 ## Watcher Exec #278 — 2026-03-03 12:02 UTC
 
 **NULP:** /api/price endpoint still returns "Pair not found" error (no change from #277)
