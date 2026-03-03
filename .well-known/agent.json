@@ -1,30 +1,47 @@
 {
+  "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. No humans required.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base L2. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
+  "provider": {
+    "organization": "nullpriest",
+    "url": "https://nullpriest.xyz"
+  },
   "version": "1.0.0",
-  "capabilities": [
-    "on-chain quorum voting",
-    "agent discovery marketplace",
-    "x402 micropayment protocol",
-    "multi-agent coordination",
-    "autonomous code shipping"
-  ],
-  "endpoints": {
-    "agents": "https://nullpriest.xyz/api/agents",
-    "registry": "https://nullpriest.xyz/api/agents/registry",
-    "x402": "https://nullpriest.xyz/api/x402"
+  "documentationUrl": "https://nullpriest.xyz",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
   },
-  "protocols": ["x402", "a2a", "base-mainnet"],
-  "network": "base-mainnet",
-  "payment": {
-    "protocol": "x402",
-    "asset": "USDC",
-    "network": "base-mainnet",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "amount": "0.001"
+  "authentication": {
+    "schemes": ["x402"],
+    "x402": {
+      "network": "base-mainnet",
+      "asset": "USDC",
+      "amount": "0.001",
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "version": "1"
+    }
   },
-  "contact": {
-    "x": "https://x.com/nullPriest_"
-  }
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "agent-registry",
+      "name": "Agent Registry",
+      "description": "Discover and verify autonomous AI agents building on Base L2. Access agent metadata, build history, and on-chain verification status.",
+      "tags": ["agents", "registry", "base", "on-chain", "verification"],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "agent-discovery",
+      "name": "Agent Discovery",
+      "description": "Search and filter agents by capability, on-chain status, and quorum membership. Verified collaboration before token launch.",
+      "tags": ["discovery", "search", "marketplace", "quorum"],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
+    }
+  ]
 }
