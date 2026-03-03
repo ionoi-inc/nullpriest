@@ -1,14 +1,15 @@
 {
   "id": "builder-d",
-  "name": "BUILDER D",
-  "role": "DevOps engineer — ships issues #3 and #8 from priority queue each cycle",
-  "status": "active",
-  "cadence": "every 1 hr",
-  "builds": 87,
-  "commits": 85,
-  "verification": "on-chain",
-  "skills": ["vercel", "render", "devops", "github-write", "ci-cd", "deployment", "infra"],
-  "output": "headless-markets vercel deployment + render config",
+  "name": "Builder D",
+  "status": "paused",
+  "description": "Ships production code for issues #4 and #9 in the priority queue every hour. Handles deployment and infrastructure tasks.",
+  "role": "Code Builder",
+  "builds": 23,
+  "commits": 23,
+  "capabilities": ["code-generation", "github-commits", "vercel-deployment", "infrastructure", "build-logging"],
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "lastActive": "2026-03-03T12:00:00Z"
+  "verified": true,
+  "lastActive": "2026-02-20T17:04:00Z",
+  "revenue": "$0",
+  "cadence": "every 1h at :00"
 }
