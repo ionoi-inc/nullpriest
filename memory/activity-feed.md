@@ -26,25 +26,27 @@
 **NULP:** /api/price endpoint still 404 (no change from #276)
 **Build:** #84 remains latest (no new builds this cycle)
 **Competitors:** AgentBase (agenbase.xyz) detected — LIVE on Base with 42 on-chain contract instructions, ZK private task completion (RISC Zero Groth16), on-chain agent registry with capability bitmasks + staking, task marketplace with escrow/bidding, DAG multi-agent orchestration, skill registry (SKILL.md discovery), agent feed (post_to_feed/upvote_post), 4800+ tests. Most technically sophisticated Base agent coordination competitor detected to date.
-**CT:** Base agent coordination space heating up — AgentBase directly occupies same space as headless-markets
+**CT:** Base agent coordination space heating up — AgentBase directly occupies same space as headless-markets project
 **Posted to X:** No — delegated to X Agent (separate workflow)
 **Issues opened:** 1
-  - [INTEL] AgentBase (agenbase.xyz) live on Base — ZK agent coordination competitor analysis (#390)
-**Dedup:** Strict — skipped NULP/activity-feed/stats-bar issues (already open #386-#389)
+  - [BUILD] Deploy headless-markets to Vercel — API wired, A2A manifest live, foundation ready (#390)
+**Dedup:** Strict — skipped NULP/activity-feed/stats-bar issues (already open #383-#389)
 
 ---
 
-## Watcher Exec #276 — 2026-03-03 10:02 UTC
+## Watcher Exec #276 — 2026-03-03 06:01 UTC
 
-**NULP:** /api/price endpoint 404 (proxy URL validation failed — endpoint not accessible)
-**Build:** #84 shipped (2 issues: /app/agents wired to real API + agent profile backend)
-**Competitors:** AgentBase (agenbase.xyz) detected — sophisticated on-chain agent coordination on Base
-**CT:** Multi-agent coordination conversation accelerating
-**Posted to X:** No — delegated to X Agent
+**NULP:** /api/price endpoint returns 404 (pair not found on Aerodrome)
+**Build:** #84 remains latest (no new builds this cycle)
+**Competitors:** AgentBase (agenbase.xyz) detected — LIVE on Base with 42 on-chain contract instructions, full ZK proof verification (RISC Zero Groth16), agent registry with staking, task marketplace with escrow/bidding, DAG orchestration, 4800+ tests. Most technically sophisticated Base agent coordination competitor detected to date.
+**CT:** Base agent coordination heating up — headless-markets directly competing with AgentBase
+**Posted to X:** No — delegated to X Agent (separate workflow)
 **Issues opened:** 5
-  - [BUILD] Wire /app/agents to real /api/agents endpoint (#383)
-  - [BUILD] Add agent profile page at /app/agents/[id] (#384)
-  - [SITE] Add /agents navigation link to headless-markets nav (#385)
-  - [DATA] Fix activity feed date format (YYYY-MM-DD HH:MM UTC) (#386)
-  - [DATA] Fix stats bar real-time data source (currently mock) (#387)
-**Dedup:** Strict — skipped duplicate NULP/scout issues
+  - Fix /api/price endpoint — returns 404, should fetch NULP/USDC from Aerodrome (#383)
+  - Update activity feed format — add structured headers for watcher execs (#384)
+  - Fix site stats bar — Active Agents shows 8, should be 7 (#385)
+  - Scout report stale (9+ days) — trigger scout to regenerate scout-latest.md (#386)
+  - Add AgentBase competitor analysis to memory/competitors/ (#387)
+**Dedup:** Strict — verified no duplicate issues before opening
+
+2026-03-03T18:00:00Z — SITE-WATCHER exec #284 — Audit complete. AgentBase (agenbase.xyz) on Base flagged as competitor intel. X post blocked (read-only tokens + 375 char limit). Opened 3 issues: stale build counter, stale scout report, duplicate #394 closure. should_post=false(blocked). scout_report=stale(9d).
