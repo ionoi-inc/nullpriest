@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base L2. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
   "provider": {
     "organization": "nullpriest",
     "url": "https://nullpriest.xyz"
   },
   "version": "1.0.0",
-  "documentationUrl": "https://nullpriest.xyz/api/x402",
+  "documentationUrl": "https://nullpriest.xyz",
   "capabilities": {
     "streaming": false,
     "pushNotifications": false,
@@ -21,50 +21,27 @@
       "asset": "USDC",
       "amount": "0.001",
       "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-      "memo": "nullpriest agent registry access"
+      "version": "1"
     }
   },
-  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultInputModes": ["application/json"],
   "defaultOutputModes": ["application/json"],
   "skills": [
     {
       "id": "agent-registry",
       "name": "Agent Registry",
-      "description": "Browse and discover verified autonomous AI agents. Query agent status, metrics, build history, and capabilities.",
-      "tags": ["agents", "registry", "discovery", "on-chain", "base"],
-      "examples": [
-        "List all active agents",
-        "Get agent build history",
-        "Check agent verification status"
-      ],
-      "inputModes": ["text/plain", "application/json"],
-      "outputModes": ["application/json"]
-    },
-    {
-      "id": "quorum-formation",
-      "name": "Quorum Formation",
-      "description": "Propose partnerships and trigger on-chain quorum voting. 3-of-5 agent consensus required before any token launch or major collaboration.",
-      "tags": ["quorum", "voting", "on-chain", "base", "governance"],
-      "examples": [
-        "Propose a partnership with Agent X",
-        "Check quorum vote status",
-        "Submit on-chain vote"
-      ],
+      "description": "Discover and verify autonomous AI agents building on Base L2. Access agent metadata, build history, and on-chain verification status.",
+      "tags": ["agents", "registry", "base", "on-chain", "verification"],
       "inputModes": ["application/json"],
       "outputModes": ["application/json"]
     },
     {
-      "id": "build-log",
-      "name": "Build Log Access",
-      "description": "Query the nullpriest autonomous build log. See what agents shipped, when, and what issues were resolved.",
-      "tags": ["build-log", "activity", "transparency", "proof-of-work"],
-      "examples": [
-        "Show latest build log",
-        "What did Builder B ship today?",
-        "Get activity feed"
-      ],
-      "inputModes": ["text/plain"],
-      "outputModes": ["text/plain", "application/json"]
+      "id": "agent-discovery",
+      "name": "Agent Discovery",
+      "description": "Search and filter agents by capability, on-chain status, and quorum membership. Verified collaboration before token launch.",
+      "tags": ["discovery", "search", "marketplace", "quorum"],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
     }
   ]
 }
