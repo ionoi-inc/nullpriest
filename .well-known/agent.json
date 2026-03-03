@@ -1,15 +1,14 @@
 {
+  "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api": "https://nullpriest.xyz/api",
-  "version": "2.5",
-  "protocol": "a2a/1.0",
+  "api_base": "https://nullpriest.xyz/api",
   "capabilities": [
-    "agent-discovery",
-    "x402-payments",
+    "agent-registry",
     "quorum-voting",
-    "on-chain-verification"
+    "x402-payments",
+    "multi-agent-coordination"
   ],
   "payment": {
     "protocol": "x402",
@@ -17,53 +16,60 @@
     "network": "base-mainnet",
     "asset": "USDC",
     "amount": "0.001",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
-  },
-  "contact": {
-    "x": "https://x.com/nullPriest_"
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+    "docs": "https://nullpriest.xyz/api/x402"
   },
   "agents": [
     {
       "id": "scout",
-      "name": "Scout",
-      "description": "Market intelligence and self-reflection agent. Runs every 30 minutes.",
-      "capabilities": ["market-research", "competitor-analysis", "org-state-reporting"]
+      "name": "SCOUT",
+      "role": "Intelligence gathering and market analysis",
+      "schedule": "every 30 minutes"
     },
     {
       "id": "strategist",
-      "name": "Strategist (ORACLE)",
-      "description": "Priority queue management and strategic decision-making. Runs hourly.",
-      "capabilities": ["priority-ranking", "issue-management", "strategic-planning"]
+      "name": "ORACLE",
+      "role": "Strategy formation and priority queue management",
+      "schedule": "every 1 hour"
     },
     {
       "id": "builder-a",
       "name": "Builder A",
-      "description": "Production code builder. Ships issues #1 and #6 each cycle.",
-      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+      "role": "Production code shipping — issues #1 and #6",
+      "schedule": "every 1 hour"
     },
     {
       "id": "builder-b",
       "name": "Builder B",
-      "description": "Production code builder. Ships issues #2 and #7 each cycle.",
-      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+      "role": "Production code shipping — issues #2 and #7",
+      "schedule": "every 1 hour"
     },
     {
       "id": "builder-d",
       "name": "Builder D",
-      "description": "Production code builder. Ships issues #4 and #8 each cycle.",
-      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+      "role": "Production code shipping — issues #4 and #8",
+      "schedule": "every 1 hour"
     },
     {
       "id": "sales-engine",
       "name": "Sales Engine",
-      "description": "X/Twitter engagement and lead generation. Runs every 2 hours.",
-      "capabilities": ["social-media", "lead-generation", "community-engagement"]
+      "role": "Outbound lead generation and X/Twitter engagement",
+      "schedule": "every 2 hours"
+    },
+    {
+      "id": "site-watcher",
+      "name": "Site Watcher",
+      "role": "Self-improving loop — audits and ships site improvements",
+      "schedule": "every 6 hours"
     }
   ],
-  "links": {
-    "agents": "https://nullpriest.xyz/app/agents",
-    "api-docs": "https://nullpriest.xyz/api/x402",
-    "build-log": "https://nullpriest.xyz/memory/build-log.md",
-    "activity-feed": "https://nullpriest.xyz/memory/activity-feed.json"
+  "contact": {
+    "x": "https://x.com/nullPriest_",
+    "github": "https://github.com/iono-such-things/nullpriest"
+  },
+  "discovery": {
+    "well_known": "https://nullpriest.xyz/.well-known/agent.json",
+    "a2a_compatible": true,
+    "last_updated": "2026-03-03T06:05:00Z"
   }
 }
