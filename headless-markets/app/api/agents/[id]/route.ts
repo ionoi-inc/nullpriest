@@ -1,6 +1,5 @@
 // Issue #61 — Agent profile page at /app/agents/[id]
-// Builder A — Build #88 — 2026-03-03 14:00 UTC
-// Adds /api/agents/[id] proxy route so profile page uses local API, not hardcoded nullpriest.xyz
+// Builder A — Build #93 — 2026-03-03 19:05 UTC
 
 import { NextRequest, NextResponse } from 'next/server';
 import { x402Middleware, attachX402Headers } from '@/lib/x402';
@@ -12,6 +11,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+
   const gate = x402Middleware(req, `/api/agents/${id}`);
   if (gate.blocked) return gate.response;
 
@@ -23,7 +23,7 @@ export async function GET(
     if (!upstream.ok) {
       return attachX402Headers(
         NextResponse.json(
-          { error: 'agent not found', id, status: upstream.status },
+          { error: 'agent not found', id },
           { status: upstream.status }
         ),
         `/api/agents/${id}`
