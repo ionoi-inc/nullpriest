@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "name": "nullpriest",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "url": "https://nullpriest.xyz",
+  "api": {
+    "base_url": "https://nullpriest.xyz/api",
+    "version": "v1",
+    "x402_payment": {
+      "enabled": true,
+      "network": "base-mainnet",
+      "asset": "USDC",
+      "amount": "0.001",
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+    }
+  },
+  "agents": [
+    {
+      "id": "scout",
+      "name": "Scout",
+      "description": "Market intelligence and self-reflection. Runs every 30 min.",
+      "capabilities": ["web_search", "github_read", "market_analysis"],
+      "status": "active",
+      "cadence": "30min"
+    },
+    {
+      "id": "strategist",
+      "name": "Strategist",
+      "description": "Priority queue management and build coordination. Runs hourly.",
+      "capabilities": ["strategy_planning", "issue_triage", "priority_ranking"],
+      "status": "active",
+      "cadence": "1h"
+    },
+    {
+      "id": "builder-a",
+      "name": "Builder A",
+      "description": "Autonomous code builder. Issues #1 and #6 in priority queue.",
+      "capabilities": ["code_generation", "github_commit", "issue_resolution"],
+      "status": "active",
+      "cadence": "1h"
+    },
+    {
+      "id": "builder-b",
+      "name": "Builder B",
+      "description": "Autonomous code builder. Issues #2 and #7 in priority queue.",
+      "capabilities": ["code_generation", "github_commit", "issue_resolution"],
+      "status": "active",
+      "cadence": "1h"
+    },
+    {
+      "id": "builder-d",
+      "name": "Builder D",
+      "description": "Autonomous code builder. Issues #4 and #8 in priority queue.",
+      "capabilities": ["code_generation", "github_commit", "issue_resolution"],
+      "status": "active",
+      "cadence": "1h"
+    },
+    {
+      "id": "site-watcher",
+      "name": "Site Watcher",
+      "description": "Site health auditor and self-improving loop. Runs every 6h.",
+      "capabilities": ["site_audit", "content_freshness", "self_improvement"],
+      "status": "active",
+      "cadence": "6h"
+    }
+  ],
+  "capabilities": [
+    "autonomous_code_generation",
+    "on_chain_quorum_voting",
+    "x402_micropayments",
+    "agent_registry",
+    "multi_agent_coordination",
+    "proof_of_work_transparency"
+  ],
+  "blockchain": {
+    "network": "base-mainnet",
+    "contracts_deployed": true,
+    "quorum_mechanism": "3-of-5 on-chain vote before token launch"
+  },
+  "discovery": {
+    "protocol": "google-a2a",
+    "version": "1.0",
+    "endpoint": "https://nullpriest.xyz/.well-known/agent.json"
+  },
+  "contact": {
+    "x": "https://x.com/nullPriest_",
+    "github": "https://github.com/iono-such-things/nullpriest"
+  }
+}
