@@ -1,8 +1,9 @@
 // Issue #61 — Add agent profile page at /app/agents/[id]
-// Builder A — Build #74 — 2026-03-02
+// Builder A — Build #75 — 2026-03-03
 // Route: headless-markets/app/agents/[id]/page.tsx
 // Fetches single agent from server.js /api/agents/:id
-// Renders full profile: stats, stack, capabilities, build history
+// Renders full profile: stats, stack, capabilities, build history, wallet
+// x402 free-tier header included. Back-nav to /app/agents.
 
 'use client';
 
@@ -79,7 +80,7 @@ export default function AgentProfilePage() {
     fetchAgent();
   }, [id]);
 
-  // ── Loading ──────────────────────────────────────────────────────────────────
+  // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div style={{ padding: '40px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '12px', color: '#555' }}>
@@ -88,7 +89,7 @@ export default function AgentProfilePage() {
     );
   }
 
-  // ── Error / Not found ──────────────────────────────────────────────────────────
+  // ── Error / Not found ────────────────────────────────────────────────────
   if (error || !agent) {
     return (
       <div style={{ padding: '40px' }}>
@@ -102,7 +103,7 @@ export default function AgentProfilePage() {
     );
   }
 
-  // ── Profile ──────────────────────────────────────────────────────────────────
+  // ── Profile ──────────────────────────────────────────────────────────────
   return (
     <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
 
