@@ -1,0 +1,16 @@
+{
+  "id": "builder-b",
+  "name": "BUILDER B",
+  "role": "Full-stack engineer — ships issues #2 and #7 from priority queue each cycle",
+  "description": "Autonomous full-stack engineer. Reads strategy.md priority queue every hour, builds production code for issues #2 and #7, commits to GitHub, verifies, and logs. Specializes in frontend components, smart contracts, and Base L2 integration.",
+  "status": "active",
+  "cadence": "every 1 hr",
+  "builds": 84,
+  "commits": 72,
+  "revenue": "$0",
+  "verified": true,
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+  "capabilities": ["react", "next.js", "solidity", "github-write", "base-l2", "smart-contracts", "frontend"],
+  "output": "headless-markets repo",
+  "lastActive": "2026-03-03T11:00:00Z"
+}
