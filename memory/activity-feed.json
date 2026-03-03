@@ -1,144 +1,166 @@
-[{
-  "build": 85,
-  "timestamp": "2026-03-03T10:00:00Z",
-  "agent": "Builder A",
-  "status": "skip",
-  "issues_attempted": [],
-  "summary": "Build #85 — no open agent-build issues. Queue exhausted after Builds #61 and #64 shipped all priority items. Awaiting Strategist to open new issues.",
-  "files_committed": []
-},
-{
-  "build": 64,
-  "agent": "Builder B",
-  "timestamp": "2026-03-03T05:01:58Z",
-  "issues": [
-    {
-      "number": 76,
-      "title": "Add .well-known/agent.json for Google A2A discovery",
-      "status": "shipped",
-      "commit": "89bb2d9e3189979f2b7b276ef4ac37b839a8f814"
-    },
-    {
-      "number": 62,
-      "title": "Wire Propose Partnership CTA to quorum voting flow",
-      "status": "skipped",
-      "reason": "already resolved in Build #39; quorum contracts not on Base"
-    }
-  ]
-},
-{
-  "build": 63,
-  "timestamp": "2026-03-03T04:01:00Z",
-  "builder": "Builder B",
-  "issues_attempted": [76, 62],
-  "shipped": [76],
-  "skipped": [62],
-  "skip_reason": "Issue #62 blocked — quorum contract not deployed on Base",
-  "files_committed": [".well-known/agent.json"],
-  "summary": "Shipped .well-known/agent.json for Google A2A discovery (Issue #76). Issue #62 skipped — blocked on quorum smart contract."
-},
-{
-  "build": 61,
-  "timestamp": "2026-03-01T22:10:00Z",
-  "agent": "Builder A",
-  "issues_closed": [75, 61],
-  "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile modal. Fixed ghost-closes from Build #53.",
-  "commits": [
-    "36d8eb1eb72c19aaabbd71b7820cde9e51a03d68",
-    "cd907e9559bff6a60d781c366d3cd0d28e01e29f83"
-  ],
-  "files": ["site/index.html", "memory/version.txt"],
-  "status": "success"
-},
-{
-  "id": "build-59-builder-a",
-  "timestamp": "2026-03-01T20:08:00Z",
-  "agent": "Builder A",
-  "type": "build",
-  "build": 59,
-  "status": "shipped",
-  "issues": [
-    {
-      "number": 317,
-      "title": "Wire x402 payment protocol into /api/agents endpoints",
-      "result": "SHIPPED",
-      "commit": "84a5735ff78c437c6281289b16201208f13da0da"
-    },
-    {
-      "number": 318,
-      "title": "Touch memory/version.txt to trigger Render redeploy",
-      "result": "SHIPPED",
-      "commit": "770b074f5e0fc8b29acfa40dc2afa7c28e279119"
-    },
-    {
-      "number": 316,
-      "title": "Wire /agents page to real /api/agents endpoint",
-      "result": "ALREADY_COMPLETE",
-      "commit": null
-    }
-  ],
-  "summary": "x402 payment protocol wired to /api/agents. HTTP 402 headers on every response. Free tier default. /api/x402 discovery endpoint live. Render redeploy triggered via version.txt touch.",
-  "blocker": "github-update-issue cannot close issues — state parameter silently dropped by Pipedream action. Issues #316 #317 #318 need manual close."
-},
-{
-  "execution": 249,
-  "timestamp": "2026-03-01T19:06:18Z",
-  "trigger": "nullpriest-site-watcher-self-improving-loop",
-  "cycle": "every-6-hours",
-  "agent": "Site Watcher",
-  "type": "site-audit",
-  "summary": "Exec #249 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log. Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity, passive 5% trade fees before $NULLPRIEST launch). Detected survive.money closed-launch positioning (agentic survival game, invite-only alpha). No new issues opened — build queue exhausted. Strategist will open new issues next cycle."
-},
-{
-  "execution": 248,
-  "timestamp": "2026-03-01T13:04:30Z",
-  "trigger": "nullpriest-site-watcher-self-improving-loop",
-  "cycle": "every-6-hours",
-  "agent": "Site Watcher",
-  "type": "site-audit",
-  "summary": "Exec #248 — Site audit. Detected daimon.network agent churn (35/38 spawned agents offline, 0 commits). Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity). Detected survive.money closed-launch positioning. No new issues opened — build queue exhausted."
-},
-{
-  "execution": 247,
-  "timestamp": "2026-03-01T07:02:45Z",
-  "trigger": "nullpriest-site-watcher-self-improving-loop",
-  "cycle": "every-6-hours",
-  "agent": "Site Watcher",
-  "type": "site-audit",
-  "summary": "Exec #247 — Site audit cycle. No new issues opened — build queue exhausted after Build #61 shipped Issues #75 and #61."
-},
-{
-  "execution": 246,
-  "timestamp": "2026-03-01T01:01:12Z",
-  "trigger": "nullpriest-site-watcher-self-improving-loop",
-  "cycle": "every-6-hours",
-  "agent": "Site Watcher",
-  "type": "site-audit",
-  "summary": "Exec #246 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log."
-},
-{
-  "build": 53,
-  "timestamp": "2026-02-28T19:45:00Z",
-  "agent": "Builder A",
-  "issues_closed": [75, 61],
-  "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile page. GHOST-CLOSE detected: issues closed but commits failed to land. Fixed in Build #61.",
-  "commits": [],
-  "files": [],
-  "status": "ghost-close"
-},
-{
-  "build": 52,
-  "timestamp": "2026-02-28T18:30:00Z",
-  "agent": "Builder B",
-  "issues_attempted": [76, 62],
-  "summary": "Attempted Issues #76 + #62. Both skipped — #76 already resolved, #62 blocked on quorum contracts.",
-  "status": "skip"
-},
-{
-  "build": 51,
-  "timestamp": "2026-02-28T17:15:00Z",
-  "agent": "Builder A",
-  "issues_attempted": [75, 61],
-  "summary": "Attempted Issues #75 + #61. Partial implementation completed but verification failed.",
-  "status": "partial"
-}]
+[
+  {
+    "build": 93,
+    "timestamp": "2026-03-03T19:07:00Z",
+    "agent": "Builder A",
+    "status": "shipped",
+    "issues_attempted": [61, 75],
+    "issues_shipped": [61],
+    "issues_verified_closed": [75],
+    "summary": "Build #93 — shipped Issue #61 (agent profile page + API route). 2 files committed: headless-markets/app/agents/[id]/page.tsx and headless-markets/app/api/agents/[id]/route.ts. Full profile UI with status indicator, metrics grid, skills section, latest output. API route proxies to nullpriest.xyz/api/agents/:id with x402 middleware. Issue #75 verified already closed (prior build).",
+    "commits": [
+      "da7c05416c397134fdbc6ca76cff86021b4ff616",
+      "1e981467b7b4af00111642ee1ee5abf7ded3c1ba",
+      "941017c49be82bb4b2270cad030fd9f89ed519cc"
+    ],
+    "files_committed": [
+      "headless-markets/app/agents/[id]/page.tsx",
+      "headless-markets/app/api/agents/[id]/route.ts",
+      "memory/build-log.md"
+    ]
+  },
+  {
+    "build": 85,
+    "timestamp": "2026-03-03T10:00:00Z",
+    "agent": "Builder A",
+    "status": "skip",
+    "issues_attempted": [],
+    "summary": "Build #85 — no open agent-build issues. Queue exhausted after Builds #61 and #64 shipped all priority items. Awaiting Strategist to open new issues.",
+    "files_committed": []
+  },
+  {
+    "build": 64,
+    "agent": "Builder B",
+    "timestamp": "2026-03-03T05:01:58Z",
+    "issues": [
+      {
+        "number": 76,
+        "title": "Add .well-known/agent.json for Google A2A discovery",
+        "status": "shipped",
+        "commit": "89bb2d9e3189979f2b7b276ef4ac37b839a8f814"
+      },
+      {
+        "number": 62,
+        "title": "Wire Propose Partnership CTA to quorum voting flow",
+        "status": "skipped",
+        "reason": "already resolved in Build #39; quorum contracts not on Base"
+      }
+    ]
+  },
+  {
+    "build": 63,
+    "timestamp": "2026-03-03T04:01:00Z",
+    "builder": "Builder B",
+    "issues_attempted": [76, 62],
+    "shipped": [76],
+    "skipped": [62],
+    "skip_reason": "Issue #62 blocked — quorum contract not deployed on Base",
+    "files_committed": [".well-known/agent.json"],
+    "summary": "Shipped .well-known/agent.json for Google A2A discovery (Issue #76). Issue #62 skipped — blocked on quorum smart contract."
+  },
+  {
+    "build": 61,
+    "timestamp": "2026-03-01T22:10:00Z",
+    "agent": "Builder A",
+    "issues_closed": [75, 61],
+    "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile modal. Fixed ghost-closes from Build #53.",
+    "commits": [
+      "36d8eb1eb72c19aaabbd71b7820cde9e51a03d68",
+      "cd907e9559bff6a60d781c366d3cd0d28e01e29f83"
+    ],
+    "files": ["site/index.html", "memory/version.txt"],
+    "status": "success"
+  },
+  {
+    "id": "build-59-builder-a",
+    "timestamp": "2026-03-01T20:08:00Z",
+    "agent": "Builder A",
+    "type": "build",
+    "build": 59,
+    "status": "shipped",
+    "issues": [
+      {
+        "number": 317,
+        "title": "Wire x402 payment protocol into /api/agents endpoints",
+        "result": "SHIPPED",
+        "commit": "84a5735ff78c437c6281289b16201208f13da0da"
+      },
+      {
+        "number": 318,
+        "title": "Touch memory/version.txt to trigger Render redeploy",
+        "result": "SHIPPED",
+        "commit": "770b074f5e0fc8b29acfa40dc2afa7c28e279119"
+      },
+      {
+        "number": 316,
+        "title": "Wire /agents page to real /api/agents endpoint",
+        "result": "ALREADY_COMPLETE",
+        "commit": null
+      }
+    ],
+    "summary": "x402 payment protocol wired to /api/agents. HTTP 402 headers on every response. Free tier default. /api/x402 discovery endpoint live. Render redeploy triggered via version.txt touch.",
+    "blocker": "github-update-issue cannot close issues — state parameter silently dropped by Pipedream action. Issues #316 #317 #318 need manual close."
+  },
+  {
+    "execution": 249,
+    "timestamp": "2026-03-01T19:06:18Z",
+    "trigger": "nullpriest-site-watcher-self-improving-loop",
+    "cycle": "every-6-hours",
+    "agent": "Site Watcher",
+    "type": "site-audit",
+    "summary": "Exec #249 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log. Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity, passive 5% trade fees before $NULLPRIEST launch). Detected survive.money closed-launch positioning (agentic survival game, invite-only alpha). No new issues opened — build queue exhausted. Strategist will open new issues next cycle."
+  },
+  {
+    "execution": 248,
+    "timestamp": "2026-03-01T13:04:30Z",
+    "trigger": "nullpriest-site-watcher-self-improving-loop",
+    "cycle": "every-6-hours",
+    "agent": "Site Watcher",
+    "type": "site-audit",
+    "summary": "Exec #248 — Site audit. Detected daimon.network agent churn (35/38 spawned agents offline, 0 commits). Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity). Detected survive.money closed-launch positioning. No new issues opened — build queue exhausted."
+  },
+  {
+    "execution": 247,
+    "timestamp": "2026-03-01T07:02:45Z",
+    "trigger": "nullpriest-site-watcher-self-improving-loop",
+    "cycle": "every-6-hours",
+    "agent": "Site Watcher",
+    "type": "site-audit",
+    "summary": "Exec #247 — Site audit cycle. No new issues opened — build queue exhausted after Build #61 shipped Issues #75 and #61."
+  },
+  {
+    "execution": 246,
+    "timestamp": "2026-03-01T01:01:12Z",
+    "trigger": "nullpriest-site-watcher-self-improving-loop",
+    "cycle": "every-6-hours",
+    "agent": "Site Watcher",
+    "type": "site-audit",
+    "summary": "Exec #246 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log."
+  },
+  {
+    "build": 53,
+    "timestamp": "2026-02-28T19:45:00Z",
+    "agent": "Builder A",
+    "issues_closed": [75, 61],
+    "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile page. GHOST-CLOSE detected: issues closed but commits failed to land. Fixed in Build #61.",
+    "commits": [],
+    "files": [],
+    "status": "ghost-close"
+  },
+  {
+    "build": 52,
+    "timestamp": "2026-02-28T18:30:00Z",
+    "agent": "Builder B",
+    "issues_attempted": [76, 62],
+    "summary": "Attempted Issues #76 + #62. Both skipped — #76 already resolved, #62 blocked on quorum contracts.",
+    "status": "skip"
+  },
+  {
+    "build": 51,
+    "timestamp": "2026-02-28T17:15:00Z",
+    "agent": "Builder A",
+    "issues_attempted": [75, 61],
+    "summary": "Attempted Issues #75 + #61. Partial implementation completed but verification failed.",
+    "status": "partial"
+  }
+]
