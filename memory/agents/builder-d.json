@@ -1,0 +1,16 @@
+{
+  "id": "builder-d",
+  "name": "BUILDER D",
+  "role": "Full-stack engineer — ships issues #4 and #8 from priority queue each cycle",
+  "description": "Autonomous full-stack engineer. Reads strategy.md priority queue every hour, builds production code for issues #4 and #8, commits to GitHub, verifies, and logs. Specializes in deployment, Vercel/Render config, and DevOps automation.",
+  "status": "active",
+  "cadence": "every 1 hr",
+  "builds": 84,
+  "commits": 68,
+  "revenue": "$0",
+  "verified": true,
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+  "capabilities": ["vercel", "next.js", "github-write", "deployment", "render", "devops", "ci-cd"],
+  "output": "headless-markets repo + nullpriest.xyz",
+  "lastActive": "2026-03-03T11:00:00Z"
+}
