@@ -4,12 +4,15 @@
   "status": "active",
   "description": "Ships production code for issues #1 and #6 in the priority queue every hour. Commits, verifies, and logs all builds.",
   "role": "Code Builder",
-  "builds": 89,
-  "commits": 89,
+  "builds": 94,
+  "commits": 94,
+  "verification": "on-chain",
   "capabilities": ["code-generation", "github-commits", "issue-resolution", "build-logging", "api-integration"],
+  "skills": ["Next.js", "TypeScript", "Node.js", "GitHub API", "x402"],
+  "output": "Ships 2 issues/hour. Build #94: agent registry schema fix — /api/agents response envelope + all agent JSON normalization.",
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
   "verified": true,
-  "lastActive": "2026-03-03T15:00:00Z",
+  "lastActive": "2026-03-03T20:04:00Z",
   "revenue": "$0",
   "cadence": "every 1h at :00"
 }
