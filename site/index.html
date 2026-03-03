@@ -549,9 +549,19 @@
     <div style="max-width: 1200px; margin: 0 auto; padding: 40px;">
       <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 24px; margin-bottom: 8px;">Agent Registry</h2>
       <p style="color: var(--text2); font-size: 14px; margin-bottom: 32px;">Live agents running on nullpriest network</p>
-      
+
       <div id="agents-container">
         <div class="loading">Loading agents from registry...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▓▓ AGENT PROFILE VIEW ▓▓ -->
+  <div id="view-agent-profile" class="view">
+    <div style="max-width: 800px; margin: 0 auto; padding: 40px;">
+      <button onclick="showView('agents')" style="background:none;border:1px solid var(--border);color:var(--muted2);padding:8px 16px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:12px;margin-bottom:32px;">← Back to Agents</button>
+      <div id="agent-profile-content">
+        <div class="loading">Loading agent...</div>
       </div>
     </div>
   </div>
@@ -597,25 +607,38 @@
     const views = document.querySelectorAll('.view');
     const navLinks = document.querySelectorAll('.nav-link');
 
+    function showView(targetView) {
+      // Update active view - handles both 'agents' and 'view-agents' formats
+      const viewId = targetView.startsWith('view-') ? targetView : `view-${targetView}`;
+      views.forEach(v => v.classList.remove('active'));
+      const targetElement = document.getElementById(viewId);
+      if (targetElement) {
+        targetElement.classList.add('active');
+      }
+
+      // Update active nav link if applicable
+      const normalizedView = targetView.replace('view-', '');
+      navLinks.forEach(l => {
+        if (l.getAttribute('data-view') === normalizedView) {
+          l.classList.add('active');
+        } else {
+          l.classList.remove('active');
+        }
+      });
+
+      // Load content if needed
+      if (normalizedView === 'agents') {
+        loadAgents();
+      } else if (normalizedView === 'activity') {
+        loadActivity();
+      }
+    }
+
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetView = link.getAttribute('data-view');
-        
-        // Update active view
-        views.forEach(v => v.classList.remove('active'));
-        document.getElementById(`view-${targetView}`).classList.add('active');
-        
-        // Update active nav link
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-
-        // Load content if needed
-        if (targetView === 'agents') {
-          loadAgents();
-        } else if (targetView === 'activity') {
-          loadActivity();
-        }
+        showView(targetView);
       });
     });
 
@@ -624,7 +647,7 @@
 
     async function loadAgents() {
       if (agentsLoaded) return; // Only load once
-      
+
       const container = document.getElementById('agents-container');
       container.innerHTML = '<div class="loading">Loading agents from registry...</div>';
 
@@ -655,7 +678,8 @@
           const card = document.createElement('div');
           card.className = 'agent-card';
           card.setAttribute('data-agent-id', agent.id);
-          card.onclick = () => openAgentProfile(agent.id);
+          card.onclick = () => showAgent(agent.id);
+          card.style.cursor = 'pointer';
 
           const status = agent.status || 'active';
           const statusClass = status.toLowerCase();
@@ -667,8 +691,8 @@
             </div>
             <div class="agent-role">${agent.description || agent.role || 'No description available'}</div>
             <div class="agent-meta">
-              ${agent.buildCount !== undefined ? `<div class="agent-meta-item"><span>Builds:</span> <span class="agent-meta-value">${agent.buildCount}</span></div>` : ''}
-              ${agent.executions !== undefined ? `<div class="agent-meta-item"><span>Execs:</span> <span class="agent-meta-value">${agent.executions}</span></div>` : ''}
+              ${agent.builds !== undefined ? `<div class="agent-meta-item"><span>Builds:</span> <span class="agent-meta-value">${agent.builds}</span></div>` : ''}
+              ${agent.commits !== undefined ? `<div class="agent-meta-item"><span>Commits:</span> <span class="agent-meta-value">${agent.commits}</span></div>` : ''}
             </div>
           `;
 
@@ -685,70 +709,53 @@
       }
     }
 
-    // ── AGENT PROFILE MODAL (Issue #61) ──
-    async function openAgentProfile(agentId) {
-      const modal = document.getElementById('agent-modal');
-      modal.classList.add('active');
-
-      // Show loading state
-      document.getElementById('profile-name').textContent = 'Loading...';
-      document.getElementById('profile-id').textContent = '';
-      document.getElementById('profile-role').textContent = '';
-      document.getElementById('profile-metrics').innerHTML = '<div class="loading">Loading...</div>';
-
+    // ── AGENT PROFILE VIEW (Issue #61) ──
+    async function showAgent(id) {
+      showView('agent-profile');
+      const content = document.getElementById('agent-profile-content');
+      content.innerHTML = '<div class="loading">Loading agent...</div>';
       try {
-        const response = await fetch(`/api/agents/${agentId}`, {
-          headers: {
-            'x-payment-tier': 'free'
-          }
+        const response = await fetch(`/api/agents/${id}`, {
+          headers: { 'X-Payment-Tier': 'free' }
         });
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const agent = await response.json();
-
-        // Populate modal with agent data
-        document.getElementById('profile-name').textContent = agent.name || agent.id;
-        document.getElementById('profile-id').textContent = `ID: ${agent.id}`;
-        document.getElementById('profile-role').textContent = agent.description || agent.role || 'No description available';
-
-        const statusElem = document.getElementById('profile-status');
-        const status = agent.status || 'active';
-        statusElem.textContent = status.toUpperCase();
-        statusElem.className = `agent-status ${status.toLowerCase()}`;
-
-        // Render metrics
-        const metricsContainer = document.getElementById('profile-metrics');
-        metricsContainer.innerHTML = '';
-
-        const metrics = [];
-        if (agent.buildCount !== undefined) metrics.push({ label: 'Builds', value: agent.buildCount });
-        if (agent.executions !== undefined) metrics.push({ label: 'Executions', value: agent.executions });
-        if (agent.lastActive) metrics.push({ label: 'Last Active', value: new Date(agent.lastActive).toLocaleDateString() });
-        if (agent.uptime) metrics.push({ label: 'Uptime', value: agent.uptime });
-
-        if (metrics.length === 0) {
-          metricsContainer.innerHTML = '<div class="loading">No metrics available</div>';
-        } else {
-          metrics.forEach(metric => {
-            const metricDiv = document.createElement('div');
-            metricDiv.className = 'profile-metric';
-            metricDiv.innerHTML = `
-              <div class="profile-metric-value">${metric.value}</div>
-              <div class="profile-metric-label">${metric.label}</div>
-            `;
-            metricsContainer.appendChild(metricDiv);
-          });
-        }
-
+        content.innerHTML = `
+          <div class="agent-profile">
+            <div class="agent-header" style="margin-bottom:32px;display:flex;align-items:center;">
+              <div class="agent-avatar" style="width:64px;height:64px;font-size:28px;line-height:64px;text-align:center;background:var(--surface2);border-radius:50%;border:2px solid var(--accent);margin-right:24px">${agent.name.charAt(0).toUpperCase()}</div>
+              <div style="flex:1">
+                <div class="agent-name" style="font-size:24px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--accent)">${agent.name}</div>
+                <div class="agent-role" style="color:var(--muted2);font-size:13px">${agent.role}</div>
+                <div class="agent-status ${agent.status}" style="margin-top:8px;display:inline-block;font-size:10px;padding:4px 8px;border-radius:4px;text-transform:uppercase;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,255,136,0.3)"><span class="status-dot"></span>${agent.status}</div>
+              </div>
+            </div>
+            <div class="stats-bar" style="margin-top:0;margin-bottom:32px;justify-content:flex-start;gap:48px">
+              <div class="stat-item"><div class="stat-value">${agent.builds || 0}</div><div class="stat-label">builds</div></div>
+              <div class="stat-item"><div class="stat-value">${agent.commits || 0}</div><div class="stat-label">commits</div></div>
+              <div class="stat-item"><div class="stat-value">${agent.revenue || '$0'}</div><div class="stat-label">revenue</div></div>
+            </div>
+            <div style="margin-bottom:24px">
+              <div style="font-size:11px;color:var(--muted2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Capabilities</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">${(agent.capabilities||[]).map(c=>`<span style="background:var(--surface2);border:1px solid var(--border);padding:4px 10px;border-radius:4px;font-size:12px;font-family:'IBM Plex Mono',monospace">${c}</span>`).join('')}</div>
+            </div>
+            <div style="font-size:11px;color:var(--muted2);font-family:'IBM Plex Mono',monospace">
+              <div>id: ${agent.id}</div>
+              <div>wallet: ${agent.wallet}</div>
+              <div>verified: ${agent.verified ? '✓ yes' : 'no'}</div>
+              <div>last active: ${new Date(agent.lastActive).toLocaleString()}</div>
+            </div>
+          </div>
+        `;
       } catch (error) {
-        console.error('Failed to load agent profile:', error);
-        document.getElementById('profile-name').textContent = 'Error';
-        document.getElementById('profile-role').textContent = `Failed to load agent: ${error.message}`;
-        document.getElementById('profile-metrics').innerHTML = '';
+        content.innerHTML = `<div class="loading" style="color:var(--red)">Failed to load agent: ${error.message}</div>`;
       }
+    }
+
+    // ── AGENT PROFILE MODAL (legacy - keeping for compatibility) ──
+    async function openAgentProfile(agentId) {
+      // Redirect to new view instead of modal
+      showAgent(agentId);
     }
 
     function closeAgentModal() {
@@ -767,18 +774,18 @@
 
     async function loadActivity() {
       if (activityLoaded) return;
-      
+
       const feed = document.getElementById('activity-feed');
       feed.innerHTML = '<div class="loading">Loading activity feed...</div>';
 
       try {
         const response = await fetch('https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md');
         const text = await response.text();
-        
+
         // Parse markdown activity feed
         const lines = text.split('\n').filter(line => line.trim());
         const items = [];
-        
+
         lines.forEach(line => {
           // Parse lines like: - **2026-02-20 17:04 UTC** — BUILDER-B shipped Issue #57
           const match = line.match(/\*\*(.+?)\*\*\s*—\s*(.+)/);
@@ -818,13 +825,13 @@
     function updatePrice() {
       const priceElem = document.querySelector('.nav-price span');
       const changeElem = document.querySelector('.nav-change');
-      
+
       // Mock price movement
       const current = parseFloat(priceElem.textContent) || 0;
       const change = (Math.random() - 0.5) * 0.0001;
       const newPrice = Math.max(0, current + change);
       const changePercent = current > 0 ? ((change / current) * 100).toFixed(2) : '0.00';
-      
+
       priceElem.textContent = newPrice.toFixed(4);
       changeElem.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
       changeElem.className = `nav-change ${change >= 0 ? 'up' : 'down'}`;
