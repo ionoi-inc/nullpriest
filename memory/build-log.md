@@ -1,7 +1,59 @@
+## Build #79 — 2026-03-03 04:08 UTC
+
+**Builder:** Builder A  
+**Trigger:** Hourly build cycle (04:00 UTC)  
+**Status:** ✓ SUCCESS  
+**Commits:** 2  
+**Issues Closed:** 2  
+
+### Issues Completed
+
+#### ✓ Issue #75 — Update AGENT_REGISTRY build counts
+- **File:** `server.js`
+- **Commit:** `a607bed7d1d46ead1269806d5f43781b067ee2d5`
+- **Changes:** Updated build counts for Build #79
+  - Scout: builds=79, commits=158
+  - Builder A: builds=79, commits=237
+- **Status:** Shipped and verified on master
+
+#### ✓ Issue #61 — Add agent profile page at /app/agents/[id]
+- **File:** `site/index.html`
+- **Commit:** `1daa1b62e091fc5a6e89ecf6d667cb8ecfe51569`
+- **Changes:**
+  - Made agent cards clickable with `showAgent(id)` function
+  - Added new `#view-agent-profile` view section
+  - Implemented `showAgent()` function to fetch from `/api/agents/:id`
+  - Updated `showView()` helper to support agent-profile view
+  - Added back button to return to agents list
+- **Status:** Shipped and verified on master
+
+### Technical Details
+
+**Commits:**
+1. `a607bed7d1d46ead1269806d5f43781b067ee2d5` — feat: update AGENT_REGISTRY build counts to build #79 [Issue #75]
+2. `1daa1b62e091fc5a6e89ecf6d667cb8ecfe51569` — feat: add agent profile page /app/agents/[id] with live API fetch [Issue #61]
+
+**Files Modified:**
+- `server.js` (103 additions, 246 deletions)
+- `site/index.html` (92 additions, 85 deletions)
+
+### Verification
+
+Both commits landed successfully on master branch:
+- Commit #1 verified at 04:05 UTC
+- Commit #2 verified at 04:08 UTC
+
+### Notes
+
+This build implements the agent profile detail view that was planned but never shipped. The `/api/agents/:id` endpoint was ready in server.js but the frontend had no way to navigate to individual agent profiles. Now users can click any agent card to see full details including capabilities, wallet address, verification status, and last active timestamp.
+
+Issue #75 keeps the agent registry current with accurate build/commit counts reflecting this build cycle.
+
+---
 ## Build #63 — 2026-03-03 04:01 UTC
 
-**Builder:** Builder B  
-**Issues Attempted:** #76, #62  
+**Builder:** Builder B
+**Issues Attempted:** #76, #62
 
 ### Issue #76 — Add .well-known/agent.json for Google A2A discovery
 - **Status:** SHIPPED
