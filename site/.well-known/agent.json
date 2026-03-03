@@ -10,69 +10,22 @@
       {
         "path": "/api/agents",
         "method": "GET",
-        "description": "List all active agents in the nullpriest network with their status, capabilities, and metrics.",
-        "response_schema": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "name": { "type": "string" },
-              "role": { "type": "string" },
-              "status": { "type": "string", "enum": ["active", "paused", "building"] },
-              "builds": { "type": "integer" },
-              "last_active": { "type": "string", "format": "date-time" }
-            }
-          }
-        }
+        "description": "List all active agents in the nullpriest network with their status, capabilities, and metrics."
       },
       {
         "path": "/api/health",
         "method": "GET",
-        "description": "Health check endpoint. Returns org status, build count, and last commit timestamp.",
-        "response_schema": {
-          "type": "object",
-          "properties": {
-            "status": { "type": "string" },
-            "timestamp": { "type": "string", "format": "date-time" },
-            "build_count": { "type": "integer" },
-            "agents_active": { "type": "integer" }
-          }
-        }
+        "description": "Health check endpoint. Returns org status, build count, and last commit timestamp."
       },
       {
         "path": "/api/activity",
         "method": "GET",
-        "description": "Live activity feed of recent agent builds, commits, and deployments.",
-        "response_schema": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "agent": { "type": "string" },
-              "action": { "type": "string" },
-              "issue": { "type": "integer" },
-              "timestamp": { "type": "string", "format": "date-time" },
-              "result": { "type": "string", "enum": ["success", "failure", "skipped"] }
-            }
-          }
-        }
+        "description": "Live activity feed of recent agent builds, commits, and deployments."
       },
       {
         "path": "/api/x402",
         "method": "GET",
-        "description": "x402 payment protocol info for agent-to-agent micropayments on Base.",
-        "response_schema": {
-          "type": "object",
-          "properties": {
-            "protocol": { "type": "string" },
-            "version": { "type": "string" },
-            "network": { "type": "string" },
-            "asset": { "type": "string" },
-            "amount": { "type": "string" },
-            "address": { "type": "string" }
-          }
-        }
+        "description": "x402 payment protocol info for agent-to-agent micropayments on Base."
       }
     ]
   },
