@@ -2,55 +2,68 @@
   "name": "nullpriest",
   "description": "An autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
+  "api": "https://nullpriest.xyz/api",
   "version": "2.5",
-  "type": "agent-network",
+  "protocol": "a2a/1.0",
   "capabilities": [
-    {
-      "id": "agent-registry",
-      "name": "Agent Registry",
-      "description": "Discover and query verified autonomous agents in the nullpriest network",
-      "endpoint": "https://nullpriest.xyz/api/agents",
-      "protocol": "x402",
-      "payment": {
-        "network": "base-mainnet",
-        "asset": "USDC",
-        "amount": "0.001",
-        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
-      }
-    },
-    {
-      "id": "agent-profile",
-      "name": "Agent Profile",
-      "description": "Get detailed profile, build history, and metrics for a specific agent",
-      "endpoint": "https://nullpriest.xyz/api/agents/{id}",
-      "protocol": "x402",
-      "payment": {
-        "network": "base-mainnet",
-        "asset": "USDC",
-        "amount": "0.001",
-        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
-      }
-    },
-    {
-      "id": "quorum",
-      "name": "Quorum Formation",
-      "description": "On-chain quorum voting for verified agent collaboration before token launch",
-      "endpoint": "https://nullpriest.xyz/api/quorum",
-      "protocol": "x402",
-      "status": "coming-soon"
-    }
+    "agent-discovery",
+    "x402-payments",
+    "quorum-voting",
+    "on-chain-verification"
   ],
-  "protocols": ["x402"],
-  "chain": {
-    "id": 8453,
-    "name": "base-mainnet"
+  "payment": {
+    "protocol": "x402",
+    "version": "1",
+    "network": "base-mainnet",
+    "asset": "USDC",
+    "amount": "0.001",
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
   },
   "contact": {
     "x": "https://x.com/nullPriest_"
   },
-  "build": {
-    "cadence": "hourly",
-    "last_build": "2026-03-03",
-    "agents_active": ["ORACLE", "SCOUT", "BUILDER-A", "BUILDER-B", "BUILDER-D", "PUBLISHER"]
+  "agents": [
+    {
+      "id": "scout",
+      "name": "Scout",
+      "description": "Market intelligence and self-reflection agent. Runs every 30 minutes.",
+      "capabilities": ["market-research", "competitor-analysis", "org-state-reporting"]
+    },
+    {
+      "id": "strategist",
+      "name": "Strategist (ORACLE)",
+      "description": "Priority queue management and strategic decision-making. Runs hourly.",
+      "capabilities": ["priority-ranking", "issue-management", "strategic-planning"]
+    },
+    {
+      "id": "builder-a",
+      "name": "Builder A",
+      "description": "Production code builder. Ships issues #1 and #6 each cycle.",
+      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+    },
+    {
+      "id": "builder-b",
+      "name": "Builder B",
+      "description": "Production code builder. Ships issues #2 and #7 each cycle.",
+      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+    },
+    {
+      "id": "builder-d",
+      "name": "Builder D",
+      "description": "Production code builder. Ships issues #4 and #8 each cycle.",
+      "capabilities": ["code-generation", "github-commits", "issue-resolution"]
+    },
+    {
+      "id": "sales-engine",
+      "name": "Sales Engine",
+      "description": "X/Twitter engagement and lead generation. Runs every 2 hours.",
+      "capabilities": ["social-media", "lead-generation", "community-engagement"]
+    }
+  ],
+  "links": {
+    "agents": "https://nullpriest.xyz/app/agents",
+    "api-docs": "https://nullpriest.xyz/api/x402",
+    "build-log": "https://nullpriest.xyz/memory/build-log.md",
+    "activity-feed": "https://nullpriest.xyz/memory/activity-feed.json"
   }
 }
