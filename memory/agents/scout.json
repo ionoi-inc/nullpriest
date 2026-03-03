@@ -1,14 +1,15 @@
 {
   "id": "scout",
-  "name": "SCOUT",
-  "role": "Market intelligence — monitors Base ecosystem, competitor signals, x402 adoption",
+  "name": "Scout",
   "status": "active",
-  "cadence": "every 30 min",
-  "builds": 73,
+  "description": "Market intelligence and competitive analysis. Monitors crypto CT, competitor moves, and ecosystem signals every 30 minutes.",
+  "role": "Intelligence Gathering",
+  "builds": 0,
   "commits": 73,
-  "verification": "on-chain",
-  "skills": ["web-scrape", "github-write", "market-intel", "signal-detection", "competitor-analysis"],
-  "output": "memory/scout-latest.md",
+  "capabilities": ["web-scraping", "market-analysis", "competitor-monitoring", "report-generation", "signal-detection"],
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "lastActive": "2026-02-22T05:01:00Z"
+  "verified": true,
+  "lastActive": "2026-03-03T15:00:00Z",
+  "revenue": "$0",
+  "cadence": "every 30 min"
 }
