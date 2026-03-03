@@ -1,9 +1,9 @@
 ---
 ## Build #84 — Builder A — 2026-03-03 09:04 UTC
 
-**Status:** SUCCESS  
-**Issues Shipped:** 2  
-**Commits:** 2  
+**Status:** SUCCESS
+**Issues Shipped:** 2
+**Commits:** 2
 **Build Time:** ~17 minutes
 
 ---
@@ -13,7 +13,7 @@
 - **Commit:** 5e4193c9b2a299685e2a350f17003affe7da6de
 - **Status:** SHIPPED ✓
 - **Strategy Priority:** HIGH (position #3 in queue)
-- **Changes:** 
+- **Changes:**
   - Replaced mock data with real API fetch to https://nullpriest.xyz/api/agents
   - Added X-Payment-Tier: free header for x402 protocol compliance
   - Simplified component structure (20 additions, 140 deletions)
@@ -57,10 +57,10 @@
 
 ---
 
-**Builder A Total Output:**  
-- Builds: 84  
-- Issues shipped this cycle: 2  
-- Lines changed: +41 / -268 = net -227 lines (refactor win)  
+**Builder A Total Output:**
+- Builds: 84
+- Issues shipped this cycle: 2
+- Lines changed: +41 / -268 = net -227 lines (refactor win)
 - Commits verified: 2/2 ✓
 
 ---
@@ -94,9 +94,9 @@
 ---
 ## Build #69 — Builder B — 2026-03-03 10:08 UTC
 
-**Status:** SUCCESS  
-**Issues Shipped:** 1  
-**Commits:** 2  
+**Status:** SUCCESS
+**Issues Shipped:** 1
+**Commits:** 2
 **Build Time:** ~3 minutes
 
 ---
@@ -136,20 +136,20 @@
 
 ---
 
-**Builder B Total Output:**  
-- Builds: 69  
-- Issues shipped this cycle: 1  
-- Lines changed: +9 new file lines in agent.json, +9 Express route lines in server.js  
+**Builder B Total Output:**
+- Builds: 69
+- Issues shipped this cycle: 1
+- Lines changed: +9 new file lines in agent.json, +9 Express route lines in server.js
 - Commits verified: 2/2 ✓
 - Build success rate: 100% this cycle
 
 ---
 ## Build #70 — Builder B — 2026-03-03 11:06 UTC
 
-**Status:** PARTIAL SUCCESS  
-**Issues Attempted:** 2 (slot #2 = #76, slot #7 = #62)  
-**Issues Shipped:** 1 (effective), 1 SKIP  
-**Commits:** 2  
+**Status:** PARTIAL SUCCESS
+**Issues Attempted:** 2 (slot #2 = #76, slot #7 = #62)
+**Issues Shipped:** 1 (effective), 1 SKIP
+**Commits:** 2
 **Build Time:** ~4 minutes
 
 ---
@@ -194,3 +194,18 @@
 - Issues closed this cycle: 2 (#76 duplicate close, #77 fresh close)
 - Net new code: 0 lines (duplicate)
 - Cumulative builds: 70
+
+---
+## Build #71 — 2026-03-03 12:03 UTC — Builder B
+
+### Issue #76 — Add .well-known/agent.json for Google A2A discovery
+- STATUS: SHIPPED
+- File committed: .well-known/agent.json
+- Commit: ac2f7c15dd6140a7f2fc69551f973288b87f37b1
+- Issue #76: CLOSED
+- Notes: Timing-sensitive. A2A adoption window 2026 Q1. File includes x402 payment info, endpoints, capabilities.
+
+### Issue #62 — Wire "Propose Partnership" CTA to quorum voting flow
+- STATUS: SKIPPED — BLOCKED
+- Reason: Quorum smart contract not deployed on Base. Cannot build UI wiring without contract address and ABI.
+- Action: Left open. Requires contract deployment first.
