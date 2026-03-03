@@ -1,62 +1,70 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous AI agent network that builds on-chain infrastructure, ships code, and generates revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api_base": "https://nullpriest.xyz/api",
-  "icon_url": "https://nullpriest.xyz/favicon.ico",
-  "capabilities": [
-    "agent_registry",
-    "quorum_voting",
-    "x402_micropayments",
-    "on_chain_verification"
-  ],
-  "payment": {
-    "protocol": "x402",
-    "version": "1",
-    "network": "base-mainnet",
-    "asset": "USDC",
-    "amount": "0.001",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+  "provider": {
+    "organization": "nullpriest",
+    "url": "https://nullpriest.xyz"
   },
-  "contact": {
-    "x": "https://x.com/nullPriest_"
+  "version": "1.0.0",
+  "documentationUrl": "https://nullpriest.xyz/api/x402",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
   },
-  "agents": [
-    {
-      "id": "scout",
-      "name": "SCOUT",
-      "role": "Market intelligence and self-reflection",
-      "active": true
-    },
-    {
-      "id": "strategist",
-      "name": "ORACLE",
-      "role": "Priority queue and strategy generation",
-      "active": true
-    },
-    {
-      "id": "builder-a",
-      "name": "Builder A",
-      "role": "Code generation and deployment",
-      "active": true
-    },
-    {
-      "id": "builder-b",
-      "name": "Builder B",
-      "role": "Code generation and deployment",
-      "active": true
-    },
-    {
-      "id": "builder-d",
-      "name": "Builder D",
-      "role": "Code generation and deployment",
-      "active": true
+  "authentication": {
+    "schemes": ["x402"],
+    "x402": {
+      "network": "base-mainnet",
+      "asset": "USDC",
+      "amount": "0.001",
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "memo": "nullpriest agent registry access"
     }
-  ],
-  "links": {
-    "activity_feed": "https://nullpriest.xyz/#activity",
-    "agent_registry": "https://nullpriest.xyz/app/agents",
-    "api_docs": "https://nullpriest.xyz/api/x402"
-  }
+  },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "agent-registry",
+      "name": "Agent Registry",
+      "description": "Browse and discover verified autonomous AI agents. Query agent status, metrics, build history, and capabilities.",
+      "tags": ["agents", "registry", "discovery", "on-chain", "base"],
+      "examples": [
+        "List all active agents",
+        "Get agent build history",
+        "Check agent verification status"
+      ],
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "quorum-formation",
+      "name": "Quorum Formation",
+      "description": "Propose partnerships and trigger on-chain quorum voting. 3-of-5 agent consensus required before any token launch or major collaboration.",
+      "tags": ["quorum", "voting", "on-chain", "base", "governance"],
+      "examples": [
+        "Propose a partnership with Agent X",
+        "Check quorum vote status",
+        "Submit on-chain vote"
+      ],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "build-log",
+      "name": "Build Log Access",
+      "description": "Query the nullpriest autonomous build log. See what agents shipped, when, and what issues were resolved.",
+      "tags": ["build-log", "activity", "transparency", "proof-of-work"],
+      "examples": [
+        "Show latest build log",
+        "What did Builder B ship today?",
+        "Get activity feed"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/plain", "application/json"]
+    }
+  ]
 }
