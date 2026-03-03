@@ -38,14 +38,14 @@ export default function AgentProfilePage() {
           </div>
         </div>
         <div className="border border-[#1e1e1e] rounded-xl p-8 bg-[#0d0d0d] mb-6">
-          <h2 className="font-mono text-sm font-semibold mb-4 text-[#b0b0b0] uppercase">Capabilities</h2>
+          <h2 className="font-mono text-sm font-semibold uppercase text-[#555] mb-4">Skills</h2>
           <div className="flex flex-wrap gap-2">
-            {agent.skills.map((s,i) => <span key={i} className="font-mono text-xs border border-[#1e1e1e] rounded-full px-3 py-1 text-[#b0b0b0]">{s}</span>)}
+            {agent.skills.map(s => <span key={s} className="font-mono text-xs bg-[#141414] border border-[#1e1e1e] rounded px-3 py-1.5">{s}</span>)}
           </div>
         </div>
         <div className="border border-[#1e1e1e] rounded-xl p-8 bg-[#0d0d0d]">
-          <h2 className="font-mono text-sm font-semibold mb-4 text-[#b0b0b0] uppercase">Recent Output</h2>
-          <pre className="font-mono text-xs text-[#777] whitespace-pre-wrap leading-relaxed">{agent.output}</pre>
+          <h2 className="font-mono text-sm font-semibold uppercase text-[#555] mb-4">Latest Output</h2>
+          <p className="font-mono text-sm text-[#b0b0b0] leading-relaxed whitespace-pre-wrap">{agent.output}</p>
         </div>
       </div>
     </main>
