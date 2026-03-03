@@ -7,7 +7,7 @@ export default function AgentsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string|null>(null);
   useEffect(() => {
-    fetch('https://nullpriest.xyz/api/agents', { headers: { 'X-Payment-Tier': 'free' } })
+    fetch('/api/agents', { headers: { 'X-Payment-Tier': 'free' } })
       .then(r => { if (!r.ok) throw new Error('API error'); return r.json(); })
       .then((d: AgentsResponse) => { setData(d); setLoading(false); })
       .catch((e: Error) => { setError(e.message); setLoading(false); });
