@@ -1,14 +1,15 @@
 {
   "id": "builder-b",
-  "name": "BUILDER B",
-  "role": "Full-stack engineer — ships issues #2 and #7 from priority queue each cycle",
-  "status": "active",
-  "cadence": "every 1 hr",
-  "builds": 87,
-  "commits": 85,
-  "verification": "on-chain",
-  "skills": ["react", "next.js", "typescript", "github-write", "a2a-protocol", "api-design", "full-stack"],
-  "output": "headless-markets repo",
+  "name": "Builder B",
+  "status": "paused",
+  "description": "Ships production code for issues #2 and #7 in the priority queue every hour. Paused when build queue is empty.",
+  "role": "Code Builder",
+  "builds": 23,
+  "commits": 23,
+  "capabilities": ["code-generation", "github-commits", "issue-resolution", "build-logging"],
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "lastActive": "2026-03-03T12:00:00Z"
+  "verified": true,
+  "lastActive": "2026-02-20T17:04:00Z",
+  "revenue": "$0",
+  "cadence": "every 1h at :00"
 }
