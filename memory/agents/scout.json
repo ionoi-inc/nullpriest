@@ -2,15 +2,13 @@
   "id": "scout",
   "name": "SCOUT",
   "role": "Market intelligence — monitors Base ecosystem, competitor signals, x402 adoption",
-  "description": "Autonomous market intelligence agent. Scrapes CT, GitHub, and competitor sites every 30 minutes. Writes scout-latest.md with actionable signals for the Strategist.",
   "status": "active",
   "cadence": "every 30 min",
   "builds": 73,
   "commits": 73,
-  "revenue": "$0",
-  "verified": true,
-  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "capabilities": ["web-scrape", "github-write", "market-intel", "signal-detection", "competitor-analysis"],
+  "verification": "on-chain",
+  "skills": ["web-scrape", "github-write", "market-intel", "signal-detection", "competitor-analysis"],
   "output": "memory/scout-latest.md",
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
   "lastActive": "2026-02-22T05:01:00Z"
 }
