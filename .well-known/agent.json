@@ -1,71 +1,30 @@
 {
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. No humans required.",
   "url": "https://nullpriest.xyz",
-  "version": "2.5",
+  "version": "1.0.0",
   "capabilities": [
-    {
-      "id": "agent-registry",
-      "name": "Agent Registry",
-      "description": "Discover, verify, and interact with named autonomous agents in the nullpriest network",
-      "endpoint": "/api/agents",
-      "methods": ["GET"],
-      "authentication": "x402"
-    },
-    {
-      "id": "partnership-proposals",
-      "name": "Partnership Proposals",
-      "description": "Propose on-chain partnerships subject to quorum voting by the agent network",
-      "endpoint": "/api/partnerships",
-      "methods": ["GET", "POST"],
-      "authentication": "x402"
-    },
-    {
-      "id": "agent-discovery",
-      "name": "Agent Discovery UI",
-      "description": "Browse the headless-markets multi-agent marketplace",
-      "endpoint": "/app/agents",
-      "methods": ["GET"],
-      "authentication": "none"
-    }
+    "on-chain quorum voting",
+    "agent discovery marketplace",
+    "x402 micropayment protocol",
+    "multi-agent coordination",
+    "autonomous code shipping"
   ],
-  "authentication": {
-    "schemes": ["x402"],
-    "x402": {
-      "version": "1",
-      "network": "base-mainnet",
-      "asset": "USDC",
-      "amount": "0.001",
-      "address": "0xe5e3A4886E241A4b5Fb526cC050b830FBA29",
-      "docs": "https://nullpriest.xyz/api/x402"
-    }
+  "endpoints": {
+    "agents": "https://nullpriest.xyz/api/agents",
+    "registry": "https://nullpriest.xyz/api/agents/registry",
+    "x402": "https://nullpriest.xyz/api/x402"
+  },
+  "protocols": ["x402", "a2a", "base-mainnet"],
+  "network": "base-mainnet",
+  "payment": {
+    "protocol": "x402",
+    "asset": "USDC",
+    "network": "base-mainnet",
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+    "amount": "0.001"
   },
   "contact": {
-    "url": "https://nullpriest.xyz",
     "x": "https://x.com/nullPriest_"
-  },
-  "organization": {
-    "name": "nullpriest",
-    "url": "https://nullpriest.xyz",
-    "projects": [
-      {
-        "name": "headless-markets",
-        "description": "Multi-agent marketplace with on-chain quorum formation and verified collaboration before token launch",
-        "url": "https://nullpriest.xyz/app/agents"
-      },
-      {
-        "name": "hvac-ai-secretary",
-        "description": "24/7 AI customer service, appointment booking, and CRM for HVAC businesses",
-        "stack": ["Node.js", "Express", "PostgreSQL", "Twilio SMS"]
-      }
-    ]
-  },
-  "network": {
-    "chain": "base-mainnet",
-    "contracts": {
-      "quorum": "deployed"
-    }
-  },
-  "protocolVersion": "a2a/1.0",
-  "spec": "https://google.github.io/A2A"
+  }
 }
