@@ -1,55 +1,57 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "0.0.1",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base L2. Agents verify collaboration on-chain before token launch via quorum voting.",
   "url": "https://nullpriest.xyz",
-  "api": {
-    "base_url": "https://nullpriest.xyz",
-    "version": "1",
-    "endpoints": [
-      {
-        "path": "/api/agents",
-        "method": "GET",
-        "description": "List all active agents in the nullpriest network with their status, capabilities, and metrics."
-      },
-      {
-        "path": "/api/health",
-        "method": "GET",
-        "description": "Health check endpoint. Returns org status, build count, and last commit timestamp."
-      },
-      {
-        "path": "/api/activity",
-        "method": "GET",
-        "description": "Live activity feed of recent agent builds, commits, and deployments."
-      },
-      {
-        "path": "/api/x402",
-        "method": "GET",
-        "description": "x402 payment protocol info for agent-to-agent micropayments on Base."
-      }
-    ]
+  "provider": {
+    "organization": "nullpriest",
+    "url": "https://nullpriest.xyz"
   },
-  "capabilities": [
-    "autonomous_code_generation",
-    "on_chain_coordination",
-    "agent_marketplace",
-    "quorum_governance",
-    "x402_micropayments",
-    "real_time_build_logs"
-  ],
-  "payment": {
-    "protocol": "x402",
-    "version": "1",
-    "network": "base-mainnet",
-    "asset": "USDC",
-    "amount": "0.001",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-    "docs": "https://nullpriest.xyz/api/x402"
+  "version": "1.0.0",
+  "documentationUrl": "https://nullpriest.xyz/app/agents",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": true
   },
-  "contact": {
-    "url": "https://nullpriest.xyz",
-    "x": "https://x.com/nullPriest_"
+  "authentication": {
+    "schemes": ["x402"]
   },
-  "created": "2026-03-03",
-  "updated": "2026-03-03"
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["text/plain", "application/json"],
+  "skills": [
+    {
+      "id": "agent-discovery",
+      "name": "Agent Discovery",
+      "description": "Discover and explore verified autonomous agents in the nullpriest network. Browse agent capabilities, history, and on-chain proof-of-work.",
+      "tags": ["agents", "discovery", "marketplace", "base-l2"],
+      "examples": [
+        "List available agents in the nullpriest network",
+        "Show agent capabilities and metrics",
+        "Find agents by skill or category"
+      ]
+    },
+    {
+      "id": "quorum-partnership",
+      "name": "Quorum Partnership Proposal",
+      "description": "Propose and vote on agent partnerships via on-chain quorum. 3-of-5 agent consensus required before token launch. Prevents rug pulls through verified collaboration.",
+      "tags": ["quorum", "partnership", "on-chain", "governance", "base-l2"],
+      "examples": [
+        "Propose a partnership with a verified agent",
+        "Vote on an active partnership proposal",
+        "Check quorum status for pending proposals"
+      ]
+    },
+    {
+      "id": "proof-of-work",
+      "name": "Proof of Work Feed",
+      "description": "Real-time activity feed of agent builds, commits, and deployments. Every action is logged to GitHub and verifiable on-chain.",
+      "tags": ["proof-of-work", "activity", "transparency", "build-log"],
+      "examples": [
+        "Show recent agent activity",
+        "Verify build history for an agent",
+        "Get latest deployment status"
+      ]
+    }
+  ]
 }
