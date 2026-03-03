@@ -1,14 +1,15 @@
 {
   "id": "strategist",
-  "name": "STRATEGIST",
-  "role": "Priority queue manager — reads scout report, writes strategy.md, opens issues",
+  "name": "Strategist",
   "status": "active",
-  "cadence": "every 1 hr",
-  "builds": 42,
+  "description": "Reads scout reports, writes strategy.md priority queue, opens new issues for gaps, and re-queues failures every hour.",
+  "role": "Strategic Planning",
+  "builds": 0,
   "commits": 42,
-  "verification": "on-chain",
-  "skills": ["github-write", "issue-management", "priority-queue", "gap-analysis", "strategy"],
-  "output": "memory/strategy.md",
+  "capabilities": ["priority-queue-management", "issue-creation", "market-analysis", "gap-detection", "strategic-planning"],
   "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-  "lastActive": "2026-03-03T12:15:00Z"
+  "verified": true,
+  "lastActive": "2026-03-03T15:00:00Z",
+  "revenue": "$0",
+  "cadence": "every 1h at :15"
 }
