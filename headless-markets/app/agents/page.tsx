@@ -1,10 +1,3 @@
-// Issue #75 — Wire /app/agents page to real /api/agents endpoint
-// Builder A — Build #75 — 2026-03-03
-// Route: headless-markets/app/agents/page.tsx
-// Fetches live agent registry from server.js /api/agents
-// Replaces all mock data. Links each card to /app/agents/[id] profile page.
-// Auto-refreshes every 60s. x402 free-tier header included.
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -12,14 +5,14 @@ import { useEffect, useState } from 'react';
 interface Agent {
   id: string;
   name: string;
-  slug: string;
   role: string;
-  status: 'active' | 'paused' | 'building';
-  builds?: number;
-  lastBuild?: string;
-  stack?: string[];
-  description?: string;
-  verified?: boolean;
+  status: 'active' | 'paused' | 'offline';
+  cadence: string;
+  builds: number;
+  commits: number;
+  verification: string;
+  skills: string[];
+  output: string;
 }
 
 interface AgentsResponse {
@@ -28,180 +21,144 @@ interface AgentsResponse {
   timestamp: string;
 }
 
-const STATUS_COLOR: Record<string, string> = {
-  active: '#00ff88',
-  building: '#ffcc00',
-  paused: '#555',
-};
-
 export default function AgentsPage() {
-  const [agents, setAgents] = useState<Agent[]>([]);
+  const [data, setData] = useState<AgentsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [timestamp, setTimestamp] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchAgents() {
-      try {
-        const res = await fetch('/api/agents', {
-          headers: { 'x-payment-tier': 'free' },
-        });
-        if (!res.ok) throw new Error(`API ${res.status}`);
-        const data: AgentsResponse = await res.json();
-        setAgents(data.agents ?? []);
-        setTimestamp(data.timestamp);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'fetch failed');
-      } finally {
+    fetch('https://nullpriest.xyz/api/agents', {
+      headers: { 'X-Payment-Tier': 'free' },
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error(`API error ${r.status}`);
+        return r.json();
+      })
+      .then((d: AgentsResponse) => {
+        setData(d);
         setLoading(false);
-      }
-    }
-    fetchAgents();
-    // Refresh every 60s — registry updates as builders commit
-    const interval = setInterval(fetchAgents, 60_000);
-    return () => clearInterval(interval);
+      })
+      .catch((e: Error) => {
+        setError(e.message);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#080808] text-[#e8e8e8] flex items-center justify-center">
+        <p className="font-mono text-sm text-[#555]">fetching agents...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-[#080808] text-[#e8e8e8] flex items-center justify-center">
+        <p className="font-mono text-sm text-[#ff4444]">error: {error}</p>
+      </main>
+    );
+  }
+
+  const agents = data?.agents ?? [];
+
   return (
-    <section style={{ padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', marginBottom: '32px' }}>
-        <h2 style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '18px', fontWeight: 500, color: '#e8e8e8', margin: 0 }}>
-          Agent Registry
-        </h2>
-        {!loading && !error && (
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '11px', color: '#555' }}>
-            {agents.length} agents &middot; live
-            {timestamp && ` · ${new Date(timestamp).toLocaleTimeString()}`}
-          </span>
-        )}
+    <main className="min-h-screen bg-[#080808] text-[#e8e8e8]">
+      <div className="max-w-5xl mx-auto px-6 pt-16 pb-8">
+        <h1 className="font-mono text-2xl font-semibold tracking-tight mb-2">
+          agent registry
+        </h1>
+        <p className="text-[#b0b0b0] text-sm">
+          {agents.length} active agents — verified on-chain — updated{' '}
+          {data?.timestamp ? new Date(data.timestamp).toLocaleString() : '—'}
+        </p>
       </div>
 
-      {/* Loading */}
-      {loading && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '12px', color: '#555' }}>
-          fetching agent registry...
-        </p>
-      )}
-
-      {/* Error */}
-      {error && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '12px', color: '#ff4444' }}>
-          error: {error}
-        </p>
-      )}
-
-      {/* Grid */}
-      {!loading && !error && (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '16px',
-        }}>
+      <div className="max-w-5xl mx-auto px-6 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {agents.map((agent) => (
             <a
               key={agent.id}
               href={`/app/agents/${agent.id}`}
-              style={{
-                display: 'block',
-                background: '#0d0d0d',
-                border: '1px solid #1e1e1e',
-                borderRadius: '6px',
-                padding: '20px',
-                textDecoration: 'none',
-                transition: 'border-color 0.15s',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#2a2a2a')}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#1e1e1e')}
+              className="block border border-[#1e1e1e] rounded-lg p-5 bg-[#0d0d0d] hover:border-[#00ff88] hover:bg-[rgba(0,255,136,0.03)] transition-all duration-150"
             >
-              {/* Name + status */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <span style={{
-                  fontFamily: 'IBM Plex Mono, monospace',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  color: '#e8e8e8',
-                }}>
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                    agent.status === 'active'
+                      ? 'bg-[#00ff88] shadow-[0_0_6px_#00ff88]'
+                      : agent.status === 'paused'
+                      ? 'bg-[#ffcc00]'
+                      : 'bg-[#555]'
+                  }`}
+                />
+                <span className="font-mono text-sm font-medium text-[#e8e8e8]">
                   {agent.name}
-                  {agent.verified && (
-                    <span style={{ color: '#4488ff', marginLeft: '6px', fontSize: '10px' }}>✓</span>
-                  )}
                 </span>
-                <span style={{
-                  fontFamily: 'IBM Plex Mono, monospace',
-                  fontSize: '10px',
-                  color: STATUS_COLOR[agent.status] ?? '#555',
-                  letterSpacing: '0.05em',
-                }}>
-                  {agent.status}
-                </span>
+                {agent.verification === 'on-chain' && (
+                  <span className="ml-auto text-[10px] font-mono text-[#4488ff] border border-[rgba(68,136,255,0.3)] rounded px-1.5 py-0.5">
+                    verified
+                  </span>
+                )}
               </div>
 
-              {/* Role */}
-              <p style={{
-                fontFamily: 'IBM Plex Mono, monospace',
-                fontSize: '11px',
-                color: '#777',
-                margin: '0 0 10px 0',
-              }}>
-                {agent.role}
-              </p>
+              <p className="text-[#777] text-xs mb-3">{agent.role}</p>
 
-              {/* Description */}
-              {agent.description && (
-                <p style={{
-                  fontSize: '12px',
-                  color: '#b0b0b0',
-                  margin: '0 0 12px 0',
-                  lineHeight: '1.5',
-                }}>
-                  {agent.description}
-                </p>
-              )}
-
-              {/* Meta row */}
-              <div style={{
-                display: 'flex',
-                gap: '12px',
-                fontFamily: 'IBM Plex Mono, monospace',
-                fontSize: '10px',
-                color: '#555',
-                marginBottom: agent.stack?.length ? '12px' : '0',
-              }}>
-                {agent.builds != null && <span>{agent.builds} builds</span>}
-                {agent.lastBuild && <span>last: {agent.lastBuild}</span>}
-              </div>
-
-              {/* Stack tags */}
-              {agent.stack && agent.stack.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {agent.stack.slice(0, 4).map((s) => (
-                    <span key={s} style={{
-                      fontFamily: 'IBM Plex Mono, monospace',
-                      fontSize: '10px',
-                      color: '#00ff88',
-                      background: 'rgba(0,255,136,0.07)',
-                      border: '1px solid rgba(0,255,136,0.15)',
-                      borderRadius: '3px',
-                      padding: '2px 6px',
-                    }}>
-                      {s}
-                    </span>
-                  ))}
+              <div className="flex gap-4 mb-3">
+                <div className="text-center">
+                  <div className="font-mono text-base font-semibold text-[#00ff88]">
+                    {agent.builds}
+                  </div>
+                  <div className="text-[10px] text-[#555] uppercase tracking-wide">
+                    builds
+                  </div>
                 </div>
-              )}
+                <div className="text-center">
+                  <div className="font-mono text-base font-semibold text-[#00ff88]">
+                    {agent.commits}
+                  </div>
+                  <div className="text-[10px] text-[#555] uppercase tracking-wide">
+                    commits
+                  </div>
+                </div>
+                <div className="text-center ml-auto">
+                  <div className="font-mono text-xs text-[#b0b0b0]">
+                    {agent.cadence}
+                  </div>
+                  <div className="text-[10px] text-[#555] uppercase tracking-wide">
+                    cadence
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-1">
+                {agent.skills.slice(0, 3).map((skill) => (
+                  <span
+                    key={skill}
+                    className="text-[10px] font-mono text-[#555] border border-[#1e1e1e] rounded px-1.5 py-0.5"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {agent.skills.length > 3 && (
+                  <span className="text-[10px] font-mono text-[#444] px-1">
+                    +{agent.skills.length - 3}
+                  </span>
+                )}
+              </div>
             </a>
           ))}
         </div>
-      )}
 
-      {/* Empty state */}
-      {!loading && !error && agents.length === 0 && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '12px', color: '#555' }}>
-          no agents registered yet
-        </p>
-      )}
-    </section>
+        <div className="mt-8 flex items-center gap-2 text-[#555] font-mono text-xs">
+          <span>powered by</span>
+          <a href="/api/x402" className="text-[#4488ff] hover:text-[#6699ff] transition-colors">
+            x402
+          </a>
+          <span>·</span>
+          <span>free tier · base-mainnet</span>
+        </div>
+      </div>
+    </main>
   );
 }
