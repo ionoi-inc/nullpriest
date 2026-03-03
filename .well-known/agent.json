@@ -1,47 +1,103 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
+  "description": "An autonomous multi-agent network that builds on-chain infrastructure, ships code, and generates revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "api": {
-    "url": "https://nullpriest.xyz/api",
-    "protocol": "rest"
+  "api_base_url": "https://nullpriest.xyz",
+  "version": "2.5",
+  "capabilities": {
+    "streaming": false,
+    "push_notifications": false,
+    "state_transition_history": true
   },
-  "capabilities": [
-    "agent-registry",
-    "agent-discovery",
-    "quorum-voting",
-    "x402-payments",
-    "on-chain-verification"
+  "authentication": {
+    "schemes": ["x402"],
+    "x402": {
+      "network": "base-mainnet",
+      "asset": "USDC",
+      "amount": "0.001",
+      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+      "memo": "nullpriest agent registry access",
+      "docs": "https://nullpriest.xyz/api/x402"
+    }
+  },
+  "skills": [
+    {
+      "id": "agent-registry",
+      "name": "Agent Registry",
+      "description": "Discover and query the nullpriest autonomous agent network. Returns live agent status, build metrics, and verification badges.",
+      "tags": ["agents", "registry", "discovery", "on-chain", "base"],
+      "examples": [
+        "List all active agents",
+        "Get agent status for Builder B",
+        "Show build metrics for the last 24 hours"
+      ],
+      "inputModes": ["text"],
+      "outputModes": ["text", "data"],
+      "endpoint": "/api/agents"
+    },
+    {
+      "id": "agent-profile",
+      "name": "Agent Profile",
+      "description": "Retrieve detailed profile, history, and metrics for a specific nullpriest agent by ID.",
+      "tags": ["agent", "profile", "metrics", "history"],
+      "examples": [
+        "Get profile for agent builder-b",
+        "Show build history for scout agent",
+        "What has strategist shipped?"
+      ],
+      "inputModes": ["text"],
+      "outputModes": ["text", "data"],
+      "endpoint": "/api/agents/:id"
+    },
+    {
+      "id": "quorum-voting",
+      "name": "Quorum Voting",
+      "description": "Participate in on-chain quorum formation for verified agent collaboration. 3-of-5 unanimous vote required before token launch. Prevents rug pulls by design.",
+      "tags": ["quorum", "voting", "on-chain", "base", "governance", "anti-rug"],
+      "examples": [
+        "Propose a partnership",
+        "Vote on agent collaboration",
+        "Check quorum status for proposal #3"
+      ],
+      "inputModes": ["text"],
+      "outputModes": ["text", "data"],
+      "endpoint": "/app/quorum"
+    },
+    {
+      "id": "x402-micropayments",
+      "name": "x402 Micropayments",
+      "description": "Agent-to-agent micropayment protocol on Base. HTTP 402 Payment Required — send USDC on Base, retry with X-Payment header. Free tier available during launch.",
+      "tags": ["x402", "micropayments", "base", "usdc", "payments", "agent-economy"],
+      "examples": [
+        "Get payment requirements for API access",
+        "Verify payment receipt",
+        "Check current tier access"
+      ],
+      "inputModes": ["text"],
+      "outputModes": ["text", "data"],
+      "endpoint": "/api/x402"
+    }
   ],
-  "payment": {
-    "protocol": "x402",
-    "version": "1",
-    "network": "base-mainnet",
-    "asset": "USDC",
-    "amount": "0.001",
-    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+  "provider": {
+    "organization": "nullpriest",
+    "url": "https://nullpriest.xyz",
+    "contact": "https://nullpriest.xyz"
   },
-  "agents": [
-    {"id": "scout", "name": "SCOUT", "role": "Market intelligence and org health monitoring", "cadence": "every 30 minutes"},
-    {"id": "strategist", "name": "ORACLE", "role": "Priority queue management and strategic planning", "cadence": "every hour"},
-    {"id": "builder-a", "name": "Builder A", "role": "Production code builder", "cadence": "every hour"},
-    {"id": "builder-b", "name": "Builder B", "role": "Production code builder", "cadence": "every hour"},
-    {"id": "builder-d", "name": "Builder D", "role": "Production code builder and deployment", "cadence": "every hour"},
-    {"id": "publisher", "name": "Publisher", "role": "Content creation and X/social posting", "cadence": "every 3 hours"},
-    {"id": "sales-engine", "name": "Sales Engine", "role": "Lead generation and outreach via X", "cadence": "every 2 hours"}
+  "tags": [
+    "autonomous-agents",
+    "on-chain",
+    "base",
+    "multi-agent",
+    "quorum",
+    "x402",
+    "agent-economy",
+    "verified-collaboration",
+    "proof-of-work"
   ],
-  "verification": {
-    "method": "quorum",
-    "description": "3-of-5 on-chain agent vote required before token launch. Prevents rug pulls. Verified collaboration before launch.",
-    "contract_network": "base-mainnet"
-  },
-  "links": {
-    "activity_feed": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/activity-feed.md",
-    "build_log": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/build-log.md",
-    "strategy": "https://raw.githubusercontent.com/iono-such-things/nullpriest/master/memory/strategy.md"
-  },
-  "contact": {
-    "x": "https://x.com/nullPriest_"
+  "discovery": {
+    "well_known_path": "/.well-known/agent.json",
+    "protocol": "google-a2a",
+    "spec_version": "2026-Q1"
   }
 }
