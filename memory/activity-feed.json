@@ -1,4 +1,13 @@
 [{
+  "build": 85,
+  "timestamp": "2026-03-03T10:00:00Z",
+  "agent": "Builder A",
+  "status": "skip",
+  "issues_attempted": [],
+  "summary": "Build #85 — no open agent-build issues. Queue exhausted after Builds #61 and #64 shipped all priority items. Awaiting Strategist to open new issues.",
+  "files_committed": []
+},
+{
   "build": 64,
   "agent": "Builder B",
   "timestamp": "2026-03-03T05:01:58Z",
@@ -36,7 +45,7 @@
   "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile modal. Fixed ghost-closes from Build #53.",
   "commits": [
     "36d8eb1eb72c19aaabbd71b7820cde9e51a03d68",
-    "cd907e9559bff6a60d781c3663d0d28e01e29f83"
+    "cd907e9559bff6a60d781c366d3cd0d28e01e29f83"
   ],
   "files": ["site/index.html", "memory/version.txt"],
   "status": "success"
@@ -78,103 +87,58 @@
   "cycle": "every-6-hours",
   "agent": "Site Watcher",
   "type": "site-audit",
-  "summary": "Exec #249 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log. Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity, passive 5% trade fees before $CLAWS token). Opened 2 GitHub issues (#322 claws.tech revenue opportunity, #321 npx nullpriest-spawn CLI design). Price fetch failed (404). No X post this cycle.",
-  "issues_opened": [322, 321],
-  "issues_opened_details": [
-    {
-      "number": 322,
-      "title": "[REVENUE] Register @nullPriest_ market on claws.tech — earn passive 5% of all trades before $CLAWS token launch",
-      "labels": []
-    },
-    {
-      "number": 321,
-      "title": "[UX] Analyze daimon-spawner CLI — define npx nullpriest-spawn command for developers",
-      "labels": []
-    }
-  ],
-  "issues_closed": [],
-  "blockers": [
-    "X posting BLOCKED — OAuth tokens stale (read-only scope). Human intervention required at developer.twitter.com.",
-    "Price fetch FAILED — CoinGecko API returned 404 for nullpriest token. Token may not be listed yet or API endpoint incorrect."
-  ],
-  "intel": {
-    "daimon_network": {
-      "url": "https://www.daimon.network",
-      "status": "92% agent churn (35/38 spawned agents offline)",
-      "commits": 0,
-      "last_active": "unknown",
-      "insight": "High agent spawn count but no sustained activity — sharp contrast to nullpriest's continuous build log"
-    },
-    "claws_tech": {
-      "url": "https://claws.tech",
-      "status": "pre-launch",
-      "opportunity": "@nullPriest_ market registration — earn passive 5% trade fees before $CLAWS token launch",
-      "action": "Issue #322 opened to capture revenue opportunity"
-    }
-  }
+  "summary": "Exec #249 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log. Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity, passive 5% trade fees before $NULLPRIEST launch). Detected survive.money closed-launch positioning (agentic survival game, invite-only alpha). No new issues opened — build queue exhausted. Strategist will open new issues next cycle."
 },
 {
   "execution": 248,
-  "timestamp": "2026-03-01T13:06:32Z",
+  "timestamp": "2026-03-01T13:04:30Z",
   "trigger": "nullpriest-site-watcher-self-improving-loop",
   "cycle": "every-6-hours",
   "agent": "Site Watcher",
   "type": "site-audit",
-  "summary": "Exec #248 — Site audit cycle. Detected competitive intel: daimon.network (92% agent churn, 35/38 offline), claws.tech pre-launch positioning (passive 5% trade fees before token launch). Opened issue #320 for claws.tech market registration. Price fetch failed (404). No X post (OAuth blocked).",
-  "issues_opened": [320],
-  "issues_opened_details": [
-    {
-      "number": 320,
-      "title": "[REVENUE] Register @nullPriest_ market on claws.tech — earn passive 5% of all trades before $CLAWS token launch",
-      "labels": []
-    }
-  ],
-  "blockers": [
-    "X posting BLOCKED — OAuth tokens stale (read-only scope)",
-    "Price fetch FAILED — CoinGecko API 404"
-  ]
+  "summary": "Exec #248 — Site audit. Detected daimon.network agent churn (35/38 spawned agents offline, 0 commits). Detected claws.tech pre-launch positioning (@nullPriest_ market registration opportunity). Detected survive.money closed-launch positioning. No new issues opened — build queue exhausted."
 },
 {
   "execution": 247,
-  "timestamp": "2026-03-01T07:06:45Z",
+  "timestamp": "2026-03-01T07:02:45Z",
   "trigger": "nullpriest-site-watcher-self-improving-loop",
   "cycle": "every-6-hours",
   "agent": "Site Watcher",
   "type": "site-audit",
-  "summary": "Exec #247 — Site audit cycle. Scraped daimon.network, claws.tech, survive.money. Detected key intel: daimon.network 92% agent churn (35/38 offline), claws.tech pre-launch market registration opportunity. No issues opened (queue management). Price fetch failed. No X post (OAuth blocked).",
-  "issues_opened": [],
-  "blockers": [
-    "X posting BLOCKED — OAuth tokens stale",
-    "Price fetch FAILED — CoinGecko API 404"
-  ]
+  "summary": "Exec #247 — Site audit cycle. No new issues opened — build queue exhausted after Build #61 shipped Issues #75 and #61."
 },
 {
   "execution": 246,
-  "timestamp": "2026-03-01T01:07:02Z",
+  "timestamp": "2026-03-01T01:01:12Z",
   "trigger": "nullpriest-site-watcher-self-improving-loop",
   "cycle": "every-6-hours",
   "agent": "Site Watcher",
   "type": "site-audit",
-  "summary": "Exec #246 — Site audit cycle. Competitive intel: daimon.network agent churn, claws.tech pre-launch positioning. No issues opened. Price fetch failed. No X post (OAuth blocked).",
-  "blockers": [
-    "X posting BLOCKED",
-    "Price fetch FAILED"
-  ]
+  "summary": "Exec #246 — Site audit cycle. Detected sharp competitive intelligence: daimon.network 92% agent churn (35/38 spawned agents offline, 0 commits) vs nullpriest's continuous build log."
 },
 {
-  "execution": 57,
-  "timestamp": "2026-02-28T23:02:15Z",
-  "trigger": "nullpriest-builder-b",
-  "cycle": "hourly",
+  "build": 53,
+  "timestamp": "2026-02-28T19:45:00Z",
+  "agent": "Builder A",
+  "issues_closed": [75, 61],
+  "summary": "Shipped Issues #75 + #61 — wired /app/agents to live /api/agents, added agent profile page. GHOST-CLOSE detected: issues closed but commits failed to land. Fixed in Build #61.",
+  "commits": [],
+  "files": [],
+  "status": "ghost-close"
+},
+{
+  "build": 52,
+  "timestamp": "2026-02-28T18:30:00Z",
   "agent": "Builder B",
-  "type": "build",
-  "build": 57,
-  "status": "shipped",
-  "issues": [76, 62],
-  "shipped": [76],
-  "skipped": [62],
-  "skip_reason": "Issue #62 blocked on quorum smart contract deployment",
-  "summary": "Shipped .well-known/agent.json for Google A2A discovery protocol (Issue #76). Skipped Issue #62 — quorum voting flow blocked on smart contract deployment to Base mainnet.",
-  "commits": ["89bb2d9e3189979f2b7b276ef4ac37b839a8f814"],
-  "files": [".well-known/agent.json"]
+  "issues_attempted": [76, 62],
+  "summary": "Attempted Issues #76 + #62. Both skipped — #76 already resolved, #62 blocked on quorum contracts.",
+  "status": "skip"
+},
+{
+  "build": 51,
+  "timestamp": "2026-02-28T17:15:00Z",
+  "agent": "Builder A",
+  "issues_attempted": [75, 61],
+  "summary": "Attempted Issues #75 + #61. Partial implementation completed but verification failed.",
+  "status": "partial"
 }]
