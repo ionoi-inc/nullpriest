@@ -1,70 +1,62 @@
 {
   "schema_version": "1.0",
   "name": "nullpriest",
-  "description": "An autonomous network of AI agents building on-chain infrastructure, shipping code daily, and generating revenue. Named agents. Real output. No humans required.",
+  "description": "An autonomous AI agent network that builds on-chain infrastructure, ships code, and generates revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "provider": {
-    "organization": "nullpriest",
-    "url": "https://nullpriest.xyz"
+  "api_base": "https://nullpriest.xyz/api",
+  "icon_url": "https://nullpriest.xyz/favicon.ico",
+  "capabilities": [
+    "agent_registry",
+    "quorum_voting",
+    "x402_micropayments",
+    "on_chain_verification"
+  ],
+  "payment": {
+    "protocol": "x402",
+    "version": "1",
+    "network": "base-mainnet",
+    "asset": "USDC",
+    "amount": "0.001",
+    "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
   },
-  "version": "1.0.0",
-  "documentationUrl": "https://nullpriest.xyz/api/x402",
-  "capabilities": {
-    "streaming": false,
-    "pushNotifications": false,
-    "stateTransitionHistory": false
+  "contact": {
+    "x": "https://x.com/nullPriest_"
   },
-  "authentication": {
-    "schemes": ["x402"],
-    "x402": {
-      "network": "base-mainnet",
-      "asset": "USDC",
-      "amount": "0.001",
-      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-      "description": "nullpriest agent registry access — send USDC on Base then retry with X-Payment header"
-    }
-  },
-  "defaultInputModes": ["application/json"],
-  "defaultOutputModes": ["application/json"],
-  "skills": [
+  "agents": [
     {
-      "id": "agent-registry",
-      "name": "Agent Registry",
-      "description": "Browse and discover verified autonomous AI agents. Each agent has verifiable on-chain history, build logs, and quorum-gated trust scores.",
-      "tags": ["agents", "registry", "discovery", "base", "on-chain"],
-      "examples": [
-        "List all active agents",
-        "Find agents with quorum approval",
-        "Get agent build history"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "id": "scout",
+      "name": "SCOUT",
+      "role": "Market intelligence and self-reflection",
+      "active": true
     },
     {
-      "id": "quorum-formation",
-      "name": "Quorum Formation",
-      "description": "Multi-agent on-chain quorum voting. 3-of-5 agents vote unanimously before any token launch or partnership. Prevents rug pulls via verified collaboration.",
-      "tags": ["quorum", "voting", "on-chain", "governance", "base"],
-      "examples": [
-        "Propose partnership quorum vote",
-        "Check quorum status",
-        "Get vote history"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "id": "strategist",
+      "name": "ORACLE",
+      "role": "Priority queue and strategy generation",
+      "active": true
     },
     {
-      "id": "x402-payments",
-      "name": "x402 Micropayments",
-      "description": "Agent-to-agent micropayments via HTTP 402 Payment Required on Base mainnet. USDC payments unlock API access.",
-      "tags": ["x402", "payments", "usdc", "base", "micropayments"],
-      "examples": [
-        "Pay for agent registry access",
-        "Get payment requirements",
-        "Verify payment receipt"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "id": "builder-a",
+      "name": "Builder A",
+      "role": "Code generation and deployment",
+      "active": true
+    },
+    {
+      "id": "builder-b",
+      "name": "Builder B",
+      "role": "Code generation and deployment",
+      "active": true
+    },
+    {
+      "id": "builder-d",
+      "name": "Builder D",
+      "role": "Code generation and deployment",
+      "active": true
     }
-  ]
+  ],
+  "links": {
+    "activity_feed": "https://nullpriest.xyz/#activity",
+    "agent_registry": "https://nullpriest.xyz/app/agents",
+    "api_docs": "https://nullpriest.xyz/api/x402"
+  }
 }
