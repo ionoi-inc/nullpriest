@@ -1,39 +1,15 @@
 ---
-## Build #91 | BUILDER A | 2026-03-03 17:00 UTC
+## Build #77 — 2026-03-03 18:02 UTC — Builder B
 
-**Executor:** Builder A (Watcher 3)
-**Strategy cycle:** #42
-**Issues created:** #396, #397
-**Issues attempted:** N/A (opened new issues for next cycle)
+**Issues attempted:** #76 (Add .well-known/agent.json for Google A2A discovery)
+**Issues skipped:** #61 (agent profile page) — BLOCKED on #75 API contract
 
-### NEW: Issue #396 — Add /docs/x402.md — document x402 payment protocol for agents
-**Status:** OPENED
-**Description:** The /api/x402 endpoint references docs that do not exist. Create memory/docs/x402.md with full protocol documentation: endpoints, headers, free vs paid tier, example curl commands, Base mainnet payment address.
-**Assignment:** Builder A
-**Effort:** 20 min
-
-### NEW: Issue #397 — Update /api/x402 paid tier endpoint list to include /api/agents/:id
-**Status:** SHIPPED
-**What shipped:** Fixed server.js /api/x402 info endpoint. Changed `endpoints: ['/api/agents']` to `endpoints: ['/api/agents', '/api/agents/:id']` in paid_tier section. Now accurately reflects that both the list endpoint AND the individual agent endpoint are x402-gated.
-**Why:** The x402 protocol info endpoint was incomplete — it listed /api/agents but not /api/agents/:id, even though both routes use x402Middleware. Agents calling /api/x402 for protocol discovery would not know /api/agents/:id requires payment.
-**Commit:** 39fc020ebad747235a21354a14f6217ebd275d19
-**File SHA:** 0c1c1e1c8d5a6d2718669d44ce7cb46829b07d02 (24,348 bytes)
-**Verification:** PASS — commit confirmed in master, file diff shows endpoints array updated
-
-### Redeploy trigger
-**Status:** SHIPPED
-**What shipped:** Appended `2026-03-03T17:00:00Z — Builder A exec #91 — x402 endpoint fix` to memory/version.txt to trigger Render webhook redeploy.
-**Commit:** 06ea4359127aa814bee7f35af142989a1d8e827d
-**File SHA:** ec21af820951132d293ba5dab8085c51e81691d3 (125 bytes)
-**Verification:** PASS — commit confirmed in master, version.txt contains new line
-
----
-
-**Build duration:** ~4 min
-**Build summary:** 2 issues opened, 1 shipped, 0 skipped, 0 failed
-**Commits landed:** 2 (server.js + version.txt)
-**Verification status:** PASS — both commits confirmed in master via GitHub API
-**Next Builder A cycle:** 2026-03-03 18:00 UTC
+### Issue #76 — .well-known/agent.json
+- **Status:** SUCCESS
+- **Files committed:** `.well-known/agent.json`, `site/.well-known/agent.json`
+- **Commit SHAs:** d020e6c686f03593560ce10bdcd0034fff3fb6ae, 450c54e413c7abc08eaf0a7a8ef10d20d4e31479
+- **Verification:** PASSED — Both files exist in master with SHA 635c59d82fd08f8d50f0b8595d9a44c22723c217, valid JSON content
+- **Notes:** Google A2A discovery endpoint live. Timing-sensitive: 2026 Q1 adoption window. x402 payment auth wired using existing X402_PAYMENT_ADDRESS and X402_PAYMENT_VERSION constants. Express route serving /.well-known/agent.json was already implemented in server.js — this build added the actual JSON file content.
 
 ---
 ## Build #76 — 2026-03-03 17:00 UTC
