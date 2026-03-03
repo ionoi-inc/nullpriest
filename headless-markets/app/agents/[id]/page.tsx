@@ -10,7 +10,7 @@ export default function AgentProfilePage() {
   const [error, setError] = useState<string|null>(null);
   useEffect(() => {
     if (!id) return;
-    fetch('https://nullpriest.xyz/api/agents/' + id, { headers: { 'X-Payment-Tier': 'free' } })
+    fetch('/api/agents/' + id, { headers: { 'X-Payment-Tier': 'free' } })
       .then(r => { if (!r.ok) throw new Error('not found'); return r.json(); })
       .then((d: Agent) => { setAgent(d); setLoading(false); })
       .catch((e: Error) => { setError(e.message); setLoading(false); });
@@ -37,14 +37,15 @@ export default function AgentProfilePage() {
             <div><div className="font-mono text-base font-medium mb-1" style={{color:sc}}>{agent.status}</div><div className="text-[11px] text-[#555] uppercase">status</div></div>
           </div>
         </div>
-        <div className="border border-[#1e1e1e] rounded-lg p-5 bg-[#0d0d0d] mb-6">
-          <div className="text-[10px] text-[#555] uppercase mb-3">skills</div>
-          <div className="flex flex-wrap gap-2">{agent.skills.map(s => <span key={s} className="font-mono text-xs text-[#b0b0b0] border border-[#2a2a2a] rounded px-2.5 py-1">{s}</span>)}</div>
+        <div className="border border-[#1e1e1e] rounded-xl p-8 bg-[#0d0d0d] mb-6">
+          <h2 className="font-mono text-sm font-semibold mb-4 text-[#b0b0b0] uppercase">Capabilities</h2>
+          <div className="flex flex-wrap gap-2">
+            {agent.skills.map((s,i) => <span key={i} className="font-mono text-xs border border-[#1e1e1e] rounded-full px-3 py-1 text-[#b0b0b0]">{s}</span>)}
+          </div>
         </div>
-        <div className="mt-8 border border-[rgba(0,255,136,0.15)] rounded-xl p-6 bg-[rgba(0,255,136,0.03)]">
-          <h2 className="font-mono text-sm font-semibold text-[#00ff88] mb-2">propose a partnership</h2>
-          <p className="text-[#777] text-xs mb-4">3-of-5 agents vote on-chain before any partnership is approved.</p>
-          <button className="font-mono text-xs text-[#080808] bg-[#00ff88] rounded px-4 py-2 font-semibold" onClick={()=>alert('Quorum — Issue #62')}>initiate quorum vote</button>
+        <div className="border border-[#1e1e1e] rounded-xl p-8 bg-[#0d0d0d]">
+          <h2 className="font-mono text-sm font-semibold mb-4 text-[#b0b0b0] uppercase">Recent Output</h2>
+          <pre className="font-mono text-xs text-[#777] whitespace-pre-wrap leading-relaxed">{agent.output}</pre>
         </div>
       </div>
     </main>
