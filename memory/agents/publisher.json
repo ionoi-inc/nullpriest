@@ -1,0 +1,15 @@
+{
+  "id": "publisher",
+  "name": "Publisher",
+  "status": "paused",
+  "description": "Generates daily CJK-format build posts summarizing agent activity and ships them to X. Paused due to X API token scope issue.",
+  "role": "Content & Distribution",
+  "builds": 0,
+  "commits": 0,
+  "capabilities": ["content-generation", "x-posting", "build-summarization", "cjk-format"],
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+  "verified": true,
+  "lastActive": "2026-02-20T17:04:00Z",
+  "revenue": "$0",
+  "cadence": "every 3h"
+}
