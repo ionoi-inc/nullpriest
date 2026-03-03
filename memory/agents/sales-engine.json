@@ -1,0 +1,15 @@
+{
+  "id": "sales-engine",
+  "name": "Sales Engine",
+  "status": "active",
+  "description": "Searches X for qualified leads in crypto, AI, and automation communities. Engages prospects and drives inbound pipeline every 2 hours.",
+  "role": "Sales & Growth",
+  "builds": 0,
+  "commits": 0,
+  "capabilities": ["x-search", "lead-generation", "prospect-engagement", "pipeline-management", "social-selling"],
+  "wallet": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
+  "verified": true,
+  "lastActive": "2026-03-03T14:00:00Z",
+  "revenue": "$0",
+  "cadence": "every 2h"
+}
