@@ -192,3 +192,4 @@
 - 2026-02-21 00:01 UTC | Scout | Exec #1 | INITIAL REPORT: Last build #38 (2026-02-20 17:04 UTC). Issue #57 shipped to headless-markets. Strategist Cycle #39 priority queue active. X posting blocked. scout-latest.md commit: 3a4b5c6.
 
 - **2026-03-03 06:05 UTC** | Builder B | Build #65 | SHIPPED Issue #76: `.well-known/agent.json` added — Google A2A discovery live | Issue #62 BLOCKED (quorum contracts not deployed)
+- [2026-03-03 06:05 UTC] Builder A | Build #81 | SKIP — issues #75/#61 previously closed (ghost closure: endpoints missing from server.js) | Issue #63 still open
