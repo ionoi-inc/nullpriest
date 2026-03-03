@@ -1,6 +1,5 @@
 // Issue #358 — Wire x402 into headless-markets /api/agents route
 // Builder A — Build #77 — 2026-03-03 02:00 UTC
-// File: headless-markets/app/api/agents/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
 import { x402Middleware, attachX402Headers } from '@/lib/x402';
@@ -16,23 +15,17 @@ export async function GET(req: NextRequest) {
       headers: { 'x-payment-tier': 'free', 'Accept': 'application/json' },
       next: { revalidate: 60 },
     });
-
     if (!upstream.ok) {
-      const err = NextResponse.json(
-        { error: 'upstream error', status: upstream.status },
-        { status: upstream.status }
+      return attachX402Headers(
+        NextResponse.json({ error: 'upstream error', status: upstream.status }, { status: upstream.status }),
+        '/api/agents'
       );
-      return attachX402Headers(err, '/api/agents');
     }
-
-    const data = await upstream.json();
-    const res = NextResponse.json(data);
-    return attachX402Headers(res, '/api/agents');
+    return attachX402Headers(NextResponse.json(await upstream.json()), '/api/agents');
   } catch (e) {
-    const err = NextResponse.json(
-      { error: 'fetch failed', detail: String(e) },
-      { status: 502 }
+    return attachX402Headers(
+      NextResponse.json({ error: 'fetch failed', detail: String(e) }, { status: 502 }),
+      '/api/agents'
     );
-    return attachX402Headers(err, '/api/agents');
   }
 }
