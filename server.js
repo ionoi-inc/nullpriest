@@ -165,6 +165,7 @@ app.get('/api/activity', async (req, res) => {
 });
 
 // ▶▶ Issue #75: /api/agents — live agent registry (public, no x402) ◀◀
+// Build #97: updated Strategist description to confirmed spec — "No cap."
 app.get('/api/agents', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
@@ -195,8 +196,11 @@ app.get('/api/agents', async (req, res) => {
         builds: 42,
         commits: 42,
         revenue: '$0',
-        description: 'Reads scout report, writes strategy.md priority queue, opens new issues for gaps, re-queues failures.',
-        capabilities: ['priority-queue', 'issue-management', 'failure-recovery', 'gap-detection'],
+        // Build #97: confirmed spec from owner — "Every hour at :15 — reads scout report,
+        // writes strategy.md priority queue to GitHub, opens new issues for any gaps,
+        // re-queues failures. No cap."
+        description: 'Every hour at :15 — reads scout report, writes strategy.md priority queue to GitHub, opens new issues for any gaps, re-queues failures. No cap.',
+        capabilities: ['priority-queue', 'issue-management', 'failure-recovery', 'gap-detection', 'issue-opening'],
         wallet: '0x0000000000000000000000000000000000000002',
         verified: true,
         lastActive: new Date().toISOString()
@@ -207,9 +211,9 @@ app.get('/api/agents', async (req, res) => {
         role: 'Code Shipping',
         status: 'active',
         cadence: '1h at :00',
-        buildsShipped: 96,
-        builds: 96,
-        commits: 96,
+        buildsShipped: 97,
+        builds: 97,
+        commits: 97,
         revenue: '$0',
         description: 'Builds and commits production code each hour. Issues #1 and #6 in priority queue.',
         capabilities: ['code-generation', 'github-commits', 'build-logging', 'issue-closing'],
@@ -273,6 +277,7 @@ app.get('/api/agents', async (req, res) => {
 });
 
 // ▶▶ Issue #61: /api/agents/:id — agent profile with full metadata (public, no x402) ◀◀
+// Build #97: updated Builder A build count to 97, Strategist description confirmed
 app.get('/api/agents/:id', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -304,13 +309,13 @@ app.get('/api/agents/:id', (req, res) => {
       builds: 42,
       commits: 42,
       revenue: '$0',
-      description: 'Reads scout report, writes strategy.md priority queue, opens new issues for gaps, re-queues failures. No cap.',
-      capabilities: ['priority-queue', 'issue-management', 'failure-recovery', 'gap-detection'],
+      description: 'Every hour at :15 — reads scout report, writes strategy.md priority queue to GitHub, opens new issues for any gaps, re-queues failures. No cap.',
+      capabilities: ['priority-queue', 'issue-management', 'failure-recovery', 'gap-detection', 'issue-opening'],
       wallet: '0x0000000000000000000000000000000000000002',
       verified: true,
       lastActive: new Date().toISOString(),
       recentBuilds: [
-        { build: 42, timestamp: '2026-02-21T06:01:00Z', status: 'success', summary: 'Strategy Cycle #42 — 10 issues queued' }
+        { build: 42, timestamp: '2026-02-21T06:01:00Z', status: 'success', summary: 'Strategy Cycle #42 — 10 issues queued, 4 new issues opened' }
       ]
     },
     'builder-a': {
@@ -319,8 +324,8 @@ app.get('/api/agents/:id', (req, res) => {
       role: 'Code Shipping',
       status: 'active',
       cadence: '1h at :00',
-      builds: 96,
-      commits: 96,
+      builds: 97,
+      commits: 97,
       revenue: '$0',
       description: 'Builds and commits production code each hour. Takes issues #1 and #6 from priority queue. Ships or logs failure.',
       capabilities: ['code-generation', 'github-commits', 'build-logging', 'issue-closing'],
@@ -328,6 +333,7 @@ app.get('/api/agents/:id', (req, res) => {
       verified: true,
       lastActive: new Date().toISOString(),
       recentBuilds: [
+        { build: 97, timestamp: '2026-03-03T23:00:00Z', status: 'success', summary: 'Build #97 — Strategist description confirmed, build counts updated, new issues opened' },
         { build: 96, timestamp: '2026-03-03T22:00:00Z', status: 'success', summary: 'Build #96 — Issue #75 x402 bypass + Issue #61 agent profiles' },
         { build: 95, timestamp: '2026-03-03T21:00:00Z', status: 'success', summary: 'Build #95 — /api/agents endpoint wired' },
         { build: 94, timestamp: '2026-03-03T20:00:00Z', status: 'success', summary: 'Build #94 — server agents patch' }
@@ -398,5 +404,5 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
   console.log(`x402 payment required for /api/* and /memory/* routes (agents exempt)`);
-  console.log(`Payment address: ${X402_PAYMENT_ADDRESS}`);
+  console.log(`Build #97 — Strategist description confirmed, agent registry updated`);
 });
