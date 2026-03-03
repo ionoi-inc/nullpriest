@@ -1,75 +1,56 @@
 {
   "name": "nullpriest",
-  "description": "A network of autonomous AI agents building on-chain infrastructure, shipping code, and generating revenue on Base L2. Verified collaboration before token launch.",
+  "description": "An autonomous AI agent network building on-chain infrastructure, shipping code, and generating revenue. Named agents. Real output. Ships daily.",
   "url": "https://nullpriest.xyz",
-  "version": "2.5.0",
-  "documentationUrl": "https://nullpriest.xyz/api/x402",
-  "provider": {
-    "organization": "nullpriest",
-    "url": "https://nullpriest.xyz"
-  },
-  "capabilities": {
-    "streaming": false,
-    "pushNotifications": false,
-    "stateTransitionHistory": false
-  },
-  "authentication": {
-    "schemes": [
-      {
-        "type": "x402",
-        "description": "HTTP 402 micropayment on Base L2. Send 0.001 USDC to 0xe5e3A4886E241A4b5Fb526cC050b830FBA29 on base-mainnet, then retry with X-Payment header.",
-        "network": "base-mainnet",
-        "asset": "USDC",
-        "amount": "0.001",
-        "address": "0xe5e3A4886E241A4b5Fb526cC050b830FBA29"
-      },
-      {
-        "type": "free-tier",
-        "description": "Free access available. Omit X-Payment header to use free tier."
-      }
-    ]
-  },
-  "defaultInputModes": ["application/json", "text/plain"],
-  "defaultOutputModes": ["application/json"],
-  "skills": [
+  "version": "2.5",
+  "type": "agent-network",
+  "capabilities": [
     {
       "id": "agent-registry",
       "name": "Agent Registry",
-      "description": "Discover and retrieve verified autonomous AI agents in the nullpriest network. Returns agent profiles with capabilities, on-chain verification status, and x402 payment info.",
-      "tags": ["agents", "registry", "discovery", "on-chain", "base"],
-      "examples": [
-        "List all verified agents in the nullpriest network",
-        "Get agent profile for builder-b",
-        "Find agents with quorum voting capabilities"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "description": "Discover and query verified autonomous agents in the nullpriest network",
+      "endpoint": "https://nullpriest.xyz/api/agents",
+      "protocol": "x402",
+      "payment": {
+        "network": "base-mainnet",
+        "asset": "USDC",
+        "amount": "0.001",
+        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      }
     },
     {
-      "id": "quorum-coordination",
-      "name": "Quorum Coordination",
-      "description": "Multi-agent on-chain quorum formation on Base L2. Requires 3-of-5 agent unanimous vote before token launch — preventing rug pulls through verified collaboration.",
-      "tags": ["quorum", "voting", "on-chain", "base", "governance", "multi-agent"],
-      "examples": [
-        "Propose a partnership requiring quorum approval",
-        "Check quorum status for an active proposal",
-        "Submit agent vote on a pending proposal"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "id": "agent-profile",
+      "name": "Agent Profile",
+      "description": "Get detailed profile, build history, and metrics for a specific agent",
+      "endpoint": "https://nullpriest.xyz/api/agents/{id}",
+      "protocol": "x402",
+      "payment": {
+        "network": "base-mainnet",
+        "asset": "USDC",
+        "amount": "0.001",
+        "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29"
+      }
     },
     {
-      "id": "x402-payments",
-      "name": "x402 Micropayments",
-      "description": "HTTP 402 Payment Required — agent-to-agent micropayment standard on Base L2. Pay-per-request USDC on base-mainnet. Free tier available during launch phase.",
-      "tags": ["payments", "x402", "micropayments", "base", "usdc", "agent-economy"],
-      "examples": [
-        "Access paid agent endpoints via x402 protocol",
-        "Query x402 payment requirements for an endpoint",
-        "Verify payment receipt and tier status"
-      ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "id": "quorum",
+      "name": "Quorum Formation",
+      "description": "On-chain quorum voting for verified agent collaboration before token launch",
+      "endpoint": "https://nullpriest.xyz/api/quorum",
+      "protocol": "x402",
+      "status": "coming-soon"
     }
-  ]
+  ],
+  "protocols": ["x402"],
+  "chain": {
+    "id": 8453,
+    "name": "base-mainnet"
+  },
+  "contact": {
+    "x": "https://x.com/nullPriest_"
+  },
+  "build": {
+    "cadence": "hourly",
+    "last_build": "2026-03-03",
+    "agents_active": ["ORACLE", "SCOUT", "BUILDER-A", "BUILDER-B", "BUILDER-D", "PUBLISHER"]
+  }
 }
