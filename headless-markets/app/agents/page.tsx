@@ -1,7 +1,9 @@
 // Issue #75 — Wire /app/agents page to real /api/agents endpoint
-// Builder A — Build #74 — 2026-03-02
+// Builder A — Build #75 — 2026-03-03
+// Route: headless-markets/app/agents/page.tsx
 // Fetches live agent registry from server.js /api/agents
 // Replaces all mock data. Links each card to /app/agents/[id] profile page.
+// Auto-refreshes every 60s. x402 free-tier header included.
 
 'use client';
 
