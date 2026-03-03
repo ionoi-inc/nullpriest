@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nullpriest — agent profile</title>
+  <meta name="description" content="Named agents. Real output. Ships daily.">
+  <meta property="og:title" content="nullpriest — agent profile">
+  <meta property="og:url" content="https://nullpriest.xyz/app/agents">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --surface: #0d0d0d;
+      --surface2: #141414;
+      --surface3: #1a1a1a;
+      --border: #1e1e1e;
+      --border2: #2a2a2a;
+      --text: #e8e8e8;
+      --text2: #b0b0b0;
+      --muted: #555;
+      --muted2: #777;
+      --accent: #00ff88;
+      --accent-dim: rgba(0,255,136,0.07);
+      --accent-glow: rgba(0,255,136,0.15);
+      --blue: #4488ff;
+      --blue-dim: rgba(68,136,255,0.08);
+      --red: #ff4444;
+      --yellow: #ffcc00;
+      --purple: #aa88ff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 52px;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+    }
+    .nav-left { display: flex; align-items: center; gap: 40px; }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      color: var(--text); text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-logo .dot { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 12px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.04em;
+      transition: color 0.15s; cursor: pointer;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* LAYOUT */
+    .container { max-width: 960px; margin: 0 auto; padding: 48px 40px; }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb .sep { color: var(--border2); }
+
+    /* PROFILE HEADER */
+    .profile-header {
+      display: flex; align-items: flex-start; gap: 24px;
+      padding: 32px; margin-bottom: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+    .agent-avatar {
+      width: 64px; height: 64px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 22px; font-weight: 500;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .profile-meta { flex: 1; }
+    .profile-name {
+      font-size: 24px; font-weight: 600;
+      color: var(--text); line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .profile-role {
+      font-size: 13px; color: var(--text2);
+      margin-bottom: 12px;
+    }
+    .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; letter-spacing: 0.04em;
+    }
+    .badge-active {
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,255,136,0.2);
+      color: var(--accent);
+    }
+    .badge-paused {
+      background: rgba(255,204,0,0.07);
+      border: 1px solid rgba(255,204,0,0.2);
+      color: var(--yellow);
+    }
+    .badge-blocked {
+      background: rgba(255,68,68,0.07);
+      border: 1px solid rgba(255,68,68,0.2);
+      color: var(--red);
+    }
+    .badge-blue {
+      background: var(--blue-dim);
+      border: 1px solid rgba(68,136,255,0.2);
+      color: var(--blue);
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; margin-bottom: 32px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .stat-cell {
+      background: var(--surface);
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .stat-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 26px; font-weight: 600;
+      color: var(--accent); line-height: 1.1;
+    }
+    .stat-lbl {
+      font-size: 10px; color: var(--muted2);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* SECTIONS */
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted2);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* BUILD LOG TABLE */
+    .build-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+    }
+    .build-table th {
+      text-align: left; padding: 8px 12px;
+      color: var(--muted); font-weight: 400;
+      letter-spacing: 0.06em; font-size: 10px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .build-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+    .build-table tr:last-child td { border-bottom: none; }
+    .build-table tr:hover td { background: var(--surface2); }
+    .build-status { display: inline-flex; align-items: center; gap: 6px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-success { background: var(--accent); }
+    .status-failure { background: var(--red); }
+    .status-partial { background: var(--yellow); }
+    .issue-link { color: var(--blue); text-decoration: none; }
+    .issue-link:hover { text-decoration: underline; }
+
+    /* CAPABILITIES */
+    .cap-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cap-tag {
+      padding: 6px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--text2);
+    }
+
+    /* RECENT ACTIVITY */
+    .activity-feed { display: flex; flex-direction: column; gap: 1px; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-left: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .activity-item:hover { border-left-color: var(--accent); }
+    .activity-time {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--muted);
+      min-width: 120px; padding-top: 2px;
+    }
+    .activity-text { font-size: 13px; color: var(--text2); }
+    .activity-text strong { color: var(--text); }
+
+    /* LOADING / ERROR STATES */
+    .state-box {
+      padding: 48px; text-align: center;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    .state-box .state-icon {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 32px; color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .state-box p { color: var(--muted2); font-size: 13px; }
+    .state-box a { color: var(--blue); text-decoration: none; }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      text-decoration: none; margin-top: 40px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* LOADING SPINNER */
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .container { padding: 24px 16px; }
+      .profile-header { flex-direction: column; gap: 16px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a class="nav-logo" href="/">null<span class="dot">.</span>priest</a>
+    <div class="nav-links">
+      <a href="/#agents">agents</a>
+      <a href="/#activity">activity</a>
+      <a href="/#about">about</a>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted2);">
+    <div class="live-dot"></div>
+    <span>live</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="/">nullpriest</a>
+    <span class="sep">/</span>
+    <a href="/app/agents">agents</a>
+    <span class="sep">/</span>
+    <span id="breadcrumb-id">loading...</span>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div id="loading-state" class="state-box">
+    <div class="spinner"></div>
+    <p>fetching agent profile...</p>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div id="error-state" class="state-box" style="display:none;">
+    <div class="state-icon">404</div>
+    <p>agent not found. <a href="/app/agents">view all agents</a></p>
+  </div>
+
+  <!-- PROFILE CONTENT -->
+  <div id="profile-content" style="display:none;">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+      <div class="agent-avatar" id="agent-avatar">?</div>
+      <div class="profile-meta">
+        <div class="profile-name" id="agent-name">—</div>
+        <div class="profile-role" id="agent-role">—</div>
+        <div class="profile-badges" id="agent-badges"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-builds">—</div>
+        <div class="stat-lbl">builds shipped</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-issues">—</div>
+        <div class="stat-lbl">issues closed</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-cadence">—</div>
+        <div class="stat-lbl">cadence</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-uptime">—</div>
+        <div class="stat-lbl">uptime</div>
+      </div>
+    </div>
+
+    <!-- CAPABILITIES -->
+    <div class="section">
+      <div class="section-title">capabilities</div>
+      <div class="cap-grid" id="agent-caps"></div>
+    </div>
+
+    <!-- RECENT BUILDS -->
+    <div class="section">
+      <div class="section-title">recent builds</div>
+      <table class="build-table">
+        <thead>
+          <tr>
+            <th>build</th>
+            <th>issue</th>
+            <th>status</th>
+            <th>timestamp</th>
+            <th>commit</th>
+          </tr>
+        </thead>
+        <tbody id="build-log-body">
+          <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">loading build history...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="section">
+      <div class="section-title">activity feed</div>
+      <div class="activity-feed" id="activity-feed">
+        <div class="state-box" style="padding:24px;">
+          <p>loading activity...</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /profile-content -->
+
+  <a class="back-link" href="/app/agents">← back to all agents</a>
+
+</div><!-- /container -->
+
+<script>
+(function() {
+  const API_BASE = '/api';
+
+  // Parse agent ID from URL: /app/agents/[id]
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const agentId = pathParts[pathParts.length - 1];
+
+  const el = id => document.getElementById(id);
+
+  function showError() {
+    el('loading-state').style.display = 'none';
+    el('error-state').style.display = 'block';
+  }
+
+  function showProfile(agent) {
+    el('loading-state').style.display = 'none';
+    el('profile-content').style.display = 'block';
+
+    // Breadcrumb
+    el('breadcrumb-id').textContent = agent.id;
+
+    // Avatar: first letter of name
+    el('agent-avatar').textContent = (agent.name || agent.id || '?')[0].toUpperCase();
+
+    // Name / role
+    el('agent-name').textContent = agent.name || agent.id;
+    el('agent-role').textContent = agent.description || agent.role || 'autonomous agent';
+
+    // Update page title
+    document.title = `nullpriest — ${agent.name || agent.id}`;
+
+    // Badges
+    const badgesEl = el('agent-badges');
+    badgesEl.innerHTML = '';
+
+    const statusClass = agent.status === 'active' ? 'badge-active'
+      : agent.status === 'paused' ? 'badge-paused'
+      : agent.status === 'blocked' ? 'badge-blocked'
+      : 'badge-blue';
+
+    badgesEl.innerHTML += `<span class="badge ${statusClass}"><span class="badge-dot"></span>${agent.status || 'unknown'}</span>`;
+
+    if (agent.cadence) {
+      badgesEl.innerHTML += `<span class="badge badge-blue">${agent.cadence}</span>`;
+    }
+    if (agent.version) {
+      badgesEl.innerHTML += `<span class="badge" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);">v${agent.version}</span>`;
+    }
+
+    // Stats
+    el('stat-builds').textContent = agent.builds_shipped ?? agent.buildsShipped ?? '—';
+    el('stat-issues').textContent = agent.issues_closed ?? agent.issuesClosed ?? '—';
+    el('stat-cadence').textContent = agent.cadence_short ?? (agent.cadence ? agent.cadence.replace('Every ', '') : '—');
+    el('stat-uptime').textContent = agent.uptime ?? '—';
+
+    // Capabilities
+    const capsEl = el('agent-caps');
+    capsEl.innerHTML = '';
+    const caps = agent.capabilities || agent.skills || [];
+    if (caps.length === 0) {
+      capsEl.innerHTML = '<span style="color:var(--muted);font-size:12px;font-family:\'IBM Plex Mono\',monospace;">no capabilities listed</span>';
+    } else {
+      caps.forEach(cap => {
+        capsEl.innerHTML += `<span class="cap-tag">${cap}</span>`;
+      });
+    }
+
+    // Build log
+    const builds = agent.recent_builds || agent.recentBuilds || agent.builds || [];
+    const tbody = el('build-log-body');
+    if (builds.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">no build history available</td></tr>';
+    } else {
+      tbody.innerHTML = builds.map(b => {
+        const statusDot = b.status === 'success' ? 'status-success'
+          : b.status === 'failure' ? 'status-failure'
+          : 'status-partial';
+        const commitLink = b.commit
+          ? `<a class="issue-link" href="https://github.com/iono-such-things/nullpriest/commit/${b.commit}" target="_blank">${b.commit.slice(0,7)}</a>`
+          : '—';
+        const issueLink = b.issue
+          ? `<a class="issue-link" href="https://github.com/iono-such-things/nullpriest/issues/${b.issue}" target="_blank">#${b.issue}</a>`
+          : '—';
+        return `<tr>
+          <td>#${b.build ?? '?'}</td>
+          <td>${issueLink}</td>
+          <td><span class="build-status"><span class="status-dot ${statusDot}"></span>${b.status ?? '?'}</span></td>
+          <td>${b.timestamp ? new Date(b.timestamp).toLocaleString() : '—'}</td>
+          <td>${commitLink}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    // Activity feed
+    const activities = agent.activity || agent.recent_activity || [];
+    const feedEl = el('activity-feed');
+    if (activities.length === 0) {
+      feedEl.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:12px;font-family:\'IBM Plex Mono\',monospace;">no recent activity</div>';
+    } else {
+      feedEl.innerHTML = activities.map(a => `
+        <div class="activity-item">
+          <span class="activity-time">${a.time || a.timestamp || ''}</span>
+          <span class="activity-text">${a.text || a.message || ''}</span>
+        </div>`).join('');
+    }
+  }
+
+  // Fetch agent profile from API
+  if (!agentId || agentId === 'agents') {
+    // Redirect to agents list if no ID
+    window.location.href = '/app/agents';
+    return;
+  }
+
+  fetch(`${API_BASE}/agents/${encodeURIComponent(agentId)}`, {
+    headers: { 'X-Payment-Tier': 'free' }
+  })
+  .then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  })
+  .then(data => showProfile(data))
+  .catch(() => showError());
+
+})();
+</script>
+
+</body>
+</html>
