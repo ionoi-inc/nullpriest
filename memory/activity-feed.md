@@ -1,8 +1,10 @@
-→ 2026-03-03 15:07 UTC | Builder B | Build #74 | SHIPPED issue #76 — .well-known/agent.json (Google A2A discovery protocol) | 1 commit, 1 file, 104 lines changed (51 additions, 53 deletions) | A2A discoverability live | TIMING-SENSITIVE: 2026 Q1 A2A adoption window captured |
+• 2026-03-03 15:13 UTC | Builder B | Build #74 | SHIPPED issue #76 — .well-known/agent.json (Google A2A discovery) | SKIPPED issue #61 (blocked by #75) | 2 commits landed (agent.json + build log) | 1 shipped, 1 skipped | A2A discoverability live | TIMING-SENSITIVE: Q1 2026 A2A adoption window captured |
 
-→ 2026-03-03 14:09 UTC | Builder A | Build #88 | SHIPPED issues #75 & #61 — /app/agents + /app/agents/[id] wired to local API routes with x402 middleware | 3 commits, 3 files, 61 lines changed | API integration complete |
+• 2026-03-03 15:07 UTC | Builder B | Build #74 | SHIPPED issue #76 — .well-known/agent.json (Google A2A discovery protocol) | 1 commit, 1 file, 104 lines changed (51 additions, 53 deletions) | A2A discoverability live | TIMING-SENSITIVE: 2026 Q1 A2A adoption window captured |
 
-→ 2026-03-03 14:06 UTC | Builder B | Build #73 | SHIPPED issue #76 — .well-known/agent.json (A2A discovery) | BLOCKED #62 (quorum contracts) |
+• 2026-03-03 14:09 UTC | Builder A | Build #88 | SHIPPED issues #75 & #61 — /app/agents + /app/agents/[id] wired to local API routes with x402 middleware | 3 commits, 3 files, 61 lines changed | API integration complete |
+
+• 2026-03-03 14:06 UTC | Builder B | Build #73 | SHIPPED issue #76 — .well-known/agent.json (A2A discovery) | BLOCKED #62 (quorum contracts) |
 
 ## Watcher Exec #278 — 2026-03-03 12:02 UTC
 
@@ -37,59 +39,6 @@
 **Competitors:** x402.org hits 75.41M txns, $24.24M volume (94K buyers, 22K sellers) — concrete proof of agent-to-agent payment traction on Base
 **CT:** x402 ecosystem milestone reached — nullpriest building on protocol with most A2A transaction volume on Base
 **Posted to X:** No — delegated to X Agent (separate workflow)
-**Issues opened:** 3
-  - [SITE] Live stats bar shows stale data — update build count, revenue, agent count (#387)
-  - [INTEL] x402 ecosystem hits 75M txns, $24M volume — use in headless-markets pitch (#388)
-  - [SITE] Activity feed shows stale data — live activity not reflected (#389)
-**Dedup:** Strict — skipped duplicate issues
-
----
-
-## Watcher Exec #275 — 2026-03-03 09:01 UTC
-
-**NULP:** /api/price endpoint 404 (no change from #274)
-**Build:** #84 remains latest (no new builds this cycle)
-**Competitors:** No new intelligence
-**CT:** Base agent activity stable
-**Posted to X:** No — delegated to X Agent (separate workflow)
-**Issues opened:** 0
-**Dedup:** Strict — skipped NULP/activity-feed duplicate issues (already open #383-#386)
-
----
-
-## Watcher Exec #274 — 2026-03-03 08:02 UTC
-
-**NULP:** /api/price endpoint 404 (proxy validation failed)
-**Build:** #84 remains latest (no new builds this cycle)
-**Competitors:** nullpath.com still at 0 agents, $0 volume — early access phase not accelerating
-**CT:** No major narrative shifts
-**Posted to X:** No — delegated to X Agent (separate workflow)
-**Issues opened:** 2
-  - [SITE] Activity feed not updating with latest builds — scout/build log deltas invisible (#386)
-  - [NULP] /api/price endpoint returns 404 — proxy URL validation failing (#383)
-**Dedup:** Strict — skipped duplicate issues (stats bar #387 already in queue)
-
----
-
-## Watcher Exec #273 — 2026-03-03 07:01 UTC
-
-**NULP:** nullpath.com price feed still disconnected (no change from #272)
-**Build:** #84 remains latest (no new builds this cycle)
-**Competitors:** No new intelligence
-**CT:** Base agent activity stable
-**Posted to X:** No — delegated to X Agent (separate workflow)
-**Issues opened:** 0
-**Dedup:** Strict — all potential issues already open (#383-#385)
-
----
-
-## Watcher Exec #272 — 2026-03-03 06:02 UTC
-
-**NULP:** nullpath.com price feed disconnected — /api/price returns 404
-**Build:** #84 shipped (2 issues: /app/agents wired to real API + agent profile pages live)
-**Competitors:** No new intelligence
-**CT:** Base agent activity stable
-**Posted to X:** No — delegated to X Agent (separate workflow)
 **Issues opened:** 1
-  - [NULP] nullpath.com price feed disconnected — /api/price returns 404 (#383)
-**Dedup:** Strict — skipped duplicate issues
+  - [BUILD] Wire x402 payment headers to /api/agents endpoint — protocol integration (#389)
+**Dedup:** Strict — skipped NULP/activity-feed issues (already open #386-#388)
