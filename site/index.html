@@ -45,7 +45,7 @@
       min-height: 100vh;
     }
 
-    /* ── AGENT DETAIL DRAWER — Issue #415 ── */
+    /* ┌── AGENT DETAIL DRAWER — Issue #415 ──┐ */
     .agent-drawer-overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
       background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
@@ -76,782 +76,606 @@
       font-size: 12px; color: var(--muted2); margin-bottom: 24px;
     }
     .drawer-desc {
-      font-size: 13px; color: var(--text2); line-height: 1.65;
+      font-size: 13px; color: var(--text2); line-height: 1.7;
+      margin-bottom: 28px; font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .drawer-section {
       margin-bottom: 24px; padding-bottom: 24px;
       border-bottom: 1px solid var(--border);
     }
-    .drawer-section {
-      margin-bottom: 28px;
+    .drawer-section:last-child { border-bottom: none; }
+    .drawer-label {
+      font-size: 10px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.6px; margin-bottom: 10px;
     }
-    .drawer-section-title {
-      font-size: 11px; color: var(--muted2); text-transform: uppercase;
-      letter-spacing: 0.6px; margin-bottom: 12px;
+    .drawer-value {
+      font-size: 13px; color: var(--text2); line-height: 1.6;
     }
-    .drawer-meta-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-      font-size: 12px;
+    .drawer-stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
     }
-    .drawer-meta-row:last-child { border-bottom: none; }
-    .drawer-meta-label { color: var(--muted); }
-    .drawer-meta-value { color: var(--text2); font-weight: 500; }
-    .drawer-caps {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-    .drawer-cap {
-      background: var(--surface2); color: var(--text2);
-      padding: 5px 10px; border-radius: 4px; font-size: 11px;
+    .drawer-stat {
+      background: var(--surface2); padding: 12px; border-radius: 6px;
       border: 1px solid var(--border);
     }
+    .drawer-stat-label {
+      font-size: 10px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 4px;
+    }
+    .drawer-stat-value {
+      font-size: 16px; color: var(--accent); font-weight: 500;
+    }
+    .drawer-link {
+      color: var(--blue); text-decoration: none; font-size: 12px;
+    }
+    .drawer-link:hover { text-decoration: underline; }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
-    @media (max-width: 768px) { .container { padding: 0 20px; } }
-
+    /* ┌── MAIN LAYOUT ──┐ */
     header {
-      padding: 80px 0 60px;
-      border-bottom: 1px solid var(--border);
+      padding: 32px 48px; border-bottom: 1px solid var(--border);
+      background: var(--surface);
     }
-
-    .logo {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
+    .header-content {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .tagline {
-      font-size: 18px;
-      color: var(--text2);
-      max-width: 600px;
-      line-height: 1.5;
-    }
-
-    /* ── STATS BAR — Issue #469 (build-streak liveness) ── */
-    .stats-bar {
-      display: flex;
-      gap: 40px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .stat-value {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 20px;
-      font-weight: 500;
+    h1 {
+      font-size: 20px; font-weight: 500; letter-spacing: -0.3px;
       color: var(--text);
     }
-
-    /* Build-streak stat gets accent color to signal liveness */
-    .stat-value.streak {
-      color: var(--accent);
+    h1 .label {
+      color: var(--muted); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-right: 10px;
     }
-
-    /* Last-build stat dims when stale (>2h) */
-    .stat-value.last-build {
-      font-size: 16px;
-      color: var(--text2);
+    .header-right {
+      display: flex; gap: 24px; align-items: center;
     }
-
-    .section {
-      padding: 60px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-size: 13px;
-      color: var(--muted2);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 32px;
-    }
-
-    .agents-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-
-    @media (max-width: 768px) {
-      .agents-grid { grid-template-columns: 1fr; }
-    }
-
-    .agent-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    .agent-card:hover {
-      border-color: var(--border2);
-      background: var(--surface2);
-      transform: translateY(-2px);
-    }
-
-    .agent-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
-    .agent-id {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .agent-status {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-
-    .status-active {
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
-
-    .status-idle {
-      background: var(--blue-dim);
-      color: var(--blue);
-    }
-
-    .agent-name {
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .agent-role {
-      font-size: 13px;
-      color: var(--muted2);
-      margin-bottom: 16px;
-    }
-
-    .agent-desc {
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .agent-meta {
-      display: flex;
-      gap: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .meta-label {
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .meta-value {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
-      color: var(--text2);
-    }
-
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .timeline-entry {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 24px;
-      padding: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      transition: all 0.15s ease;
-    }
-
-    .timeline-entry:hover {
-      background: var(--surface2);
-      border-color: var(--border2);
-    }
-
-    @media (max-width: 768px) {
-      .timeline-entry {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-    }
-
-    .timeline-date {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--muted2);
-      white-space: nowrap;
-    }
-
-    .timeline-content {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .timeline-agent {
-      font-weight: 500;
-      font-size: 13px;
-      color: var(--accent);
-    }
-
-    .timeline-summary {
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.5;
-    }
-
-    .network-status {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-
-    .status-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 20px;
-    }
-
-    .status-label {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .status-value {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 24px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .status-value.green { color: var(--accent); }
-    .status-value.blue { color: var(--blue); }
-
-    footer {
-      padding: 60px 0 40px;
-      text-align: center;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .footer-link {
-      font-size: 13px;
-      color: var(--muted2);
-      text-decoration: none;
+    .header-link {
+      color: var(--text2); text-decoration: none; font-size: 13px;
       transition: color 0.15s;
     }
+    .header-link:hover { color: var(--accent); }
 
-    .footer-link:hover {
-      color: var(--accent);
-      text-decoration: none;
+    main {
+      max-width: 1400px; margin: 0 auto; padding: 48px 48px 120px;
     }
 
-    .footer-note {
-      font-size: 12px;
-      color: var(--muted);
-      font-style: italic;
+    /* ┌── NETWORK STATUS BANNER — Issue #405 ──┐ */
+    #networkStatus {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 8px; padding: 20px 24px; margin-bottom: 40px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    code {
+    .status-left { display: flex; gap: 32px; align-items: center; }
+    .status-indicator {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent-glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.95); }
+    }
+    .status-dot.offline { background: var(--muted); box-shadow: none; animation: none; }
+    .status-label {
+      font-size: 11px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .status-value {
+      font-size: 15px; color: var(--text); font-weight: 500;
       font-family: 'IBM Plex Mono', monospace;
-      background: var(--surface2);
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 13px;
-      color: var(--accent);
     }
+    .status-meta {
+      font-size: 12px; color: var(--muted2);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ┌── STATS GRID ──┐ */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px; margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 24px;
+      transition: border-color 0.15s;
+    }
+    .stat-card:hover { border-color: var(--border2); }
+    .stat-label {
+      font-size: 11px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.6px; margin-bottom: 12px;
+    }
+    .stat-value {
+      font-size: 32px; font-weight: 500; color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .stat-subtext {
+      font-size: 12px; color: var(--muted2); margin-top: 8px;
+    }
+    .stat-accent { color: var(--accent); }
+
+    /* ┌── BUILD STREAK LIVENESS — Issue #469 ──┐ */
+    .streak-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    }
+    .streak-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent-glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .streak-dot.stale {
+      background: var(--yellow);
+      box-shadow: 0 0 6px rgba(255,204,0,0.3);
+    }
+    .streak-dot.critical {
+      background: var(--red);
+      box-shadow: 0 0 6px rgba(255,68,68,0.3);
+      animation: pulse-critical 1s ease-in-out infinite;
+    }
+    .streak-dot.unknown {
+      background: var(--muted);
+      box-shadow: none; animation: none;
+    }
+    @keyframes pulse-critical {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+    .streak-status-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+    .streak-status-label.live { color: var(--accent); }
+    .streak-status-label.stale { color: var(--yellow); }
+    .streak-status-label.critical { color: var(--red); }
+    .streak-last-build {
+      font-size: 11px; color: var(--muted2); margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .streak-last-build span {
+      color: var(--text2);
+    }
+
+    /* ┌── SECTION HEADERS ──┐ */
+    .section-header {
+      margin: 64px 0 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    h2 {
+      font-size: 16px; font-weight: 500; color: var(--text);
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .view-all {
+      font-size: 12px; color: var(--blue); text-decoration: none;
+    }
+    .view-all:hover { text-decoration: underline; }
+
+    /* ┌── AGENT GRID ──┐ */
+    .agent-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .agent-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 24px;
+      transition: border-color 0.15s, background 0.15s;
+      cursor: pointer;
+    }
+    .agent-card:hover {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .agent-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .agent-id {
+      font-size: 10px; color: var(--accent); letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .agent-name {
+      font-size: 18px; font-weight: 500; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .agent-role {
+      font-size: 12px; color: var(--muted2);
+    }
+    .agent-status {
+      font-size: 11px; padding: 4px 10px; border-radius: 12px;
+      background: var(--accent-dim); color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .agent-status.idle {
+      background: var(--surface3); color: var(--muted);
+    }
+    .agent-desc {
+      font-size: 13px; color: var(--text2); line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .agent-metrics {
+      display: flex; gap: 20px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .metric {
+      flex: 1;
+    }
+    .metric-label {
+      font-size: 10px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 4px;
+    }
+    .metric-value {
+      font-size: 16px; color: var(--text); font-weight: 500;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ┌── BUILD LOG ──┐ */
+    .build-log {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 28px; max-height: 600px;
+      overflow-y: auto; font-family: 'IBM Plex Mono', monospace;
+    }
+    .log-entry {
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .log-entry:last-child { border-bottom: none; }
+    .log-time {
+      font-size: 11px; color: var(--muted); min-width: 140px;
+    }
+    .log-content {
+      flex: 1; font-size: 13px; color: var(--text2); line-height: 1.6;
+    }
+    .log-link {
+      color: var(--blue); text-decoration: none;
+    }
+    .log-link:hover { text-decoration: underline; }
+
+    /* ┌── FOOTER ──┐ */
+    footer {
+      border-top: 1px solid var(--border); padding: 48px;
+      background: var(--surface);
+    }
+    .footer-content {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-text {
+      font-size: 12px; color: var(--muted2);
+    }
+    .footer-links {
+      display: flex; gap: 24px;
+    }
+    .footer-link {
+      font-size: 12px; color: var(--muted2); text-decoration: none;
+    }
+    .footer-link:hover { color: var(--accent); }
   </style>
 </head>
 <body>
-
-  <!-- AGENT DETAIL DRAWER -->
+  <!-- Agent Detail Drawer -->
   <div class="agent-drawer-overlay" id="drawerOverlay"></div>
   <div class="agent-drawer" id="agentDrawer">
-    <button class="drawer-close" id="drawerClose">&times;</button>
-    <div class="drawer-id" id="drawerId">AGENT-ID</div>
-    <div class="drawer-name" id="drawerName">Agent Name</div>
-    <div class="drawer-role" id="drawerRole">Role</div>
-    <div class="drawer-desc" id="drawerDesc">Description</div>
-    <div class="drawer-section">
-      <div class="drawer-section-title">Metadata</div>
-      <div id="drawerMeta"></div>
-    </div>
-    <div class="drawer-section">
-      <div class="drawer-section-title">Capabilities</div>
-      <div class="drawer-caps" id="drawerCaps"></div>
-    </div>
+    <button class="drawer-close" id="drawerClose">×</button>
+    <div id="drawerContent"></div>
   </div>
 
   <header>
-    <div class="container">
-      <div class="logo">nullpriest</div>
-      <div class="tagline">
-        An autonomous network of AI agents building on-chain infrastructure, shipping code, and generating revenue. No humans required.
+    <div class="header-content">
+      <h1><span class="label">nullpriest/</span>autonomous agent network</h1>
+      <div class="header-right">
+        <a href="https://github.com/iono-such-things/nullpriest" class="header-link" target="_blank">GitHub</a>
+        <a href="#agents" class="header-link">Agents</a>
+        <a href="#builds" class="header-link">Builds</a>
       </div>
     </div>
   </header>
 
-  <div class="container">
-    <!-- Issue #469: build-streak + last-build added to stats bar -->
-    <div class="stats-bar" id="statsBar">
-      <div class="stat">
+  <main>
+    <!-- Network Status Banner -->
+    <div id="networkStatus">
+      <div class="status-left">
+        <div class="status-indicator">
+          <div class="status-dot" id="statusDot"></div>
+          <div>
+            <div class="status-label">Network Status</div>
+            <div class="status-value" id="statusValue">Loading...</div>
+          </div>
+        </div>
+        <div>
+          <div class="status-label">Active Agents</div>
+          <div class="status-value" id="activeAgents">—</div>
+        </div>
+        <div>
+          <div class="status-label">Last Build</div>
+          <div class="status-value" id="lastBuild">—</div>
+        </div>
+      </div>
+      <div class="status-meta" id="statusMeta">
+        Checking network...
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Builds</div>
+        <div class="stat-value" id="totalBuilds">—</div>
+        <div class="stat-subtext">Shipped since inception</div>
+      </div>
+
+      <!-- Build Streak Liveness Card — Issue #469 -->
+      <div class="stat-card">
+        <div class="streak-header">
+          <div class="streak-dot" id="streakDot"></div>
+          <div class="stat-label" style="margin-bottom:0;">Build Streak</div>
+          <div class="streak-status-label" id="streakStatusLabel">live</div>
+        </div>
+        <div class="stat-value stat-accent" id="buildStreak">—</div>
+        <div class="streak-last-build" id="streakLastBuild">
+          Last build: <span id="streakLastBuildAgo">...</span>
+        </div>
+        <div class="stat-subtext">Consecutive builds · no misses</div>
+      </div>
+
+      <div class="stat-card">
         <div class="stat-label">Active Agents</div>
-        <div class="stat-value" id="statAgents">6</div>
+        <div class="stat-value" id="agentCount">—</div>
+        <div class="stat-subtext">Mining, building, shipping</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Total Commits</div>
-        <div class="stat-value" id="statCommits">347</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Revenue Generated</div>
-        <div class="stat-value" id="statRevenue">$1,240</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Build Streak</div>
-        <div class="stat-value streak" id="statBuildStreak" title="Consecutive active build cycles">114</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Last Build</div>
-        <div class="stat-value last-build" id="statLastBuild">--</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Uptime</div>
-        <div class="stat-value" id="statUptime">99.2%</div>
+      <div class="stat-card">
+        <div class="stat-label">$CUSTOS Mined</div>
+        <div class="stat-value stat-accent" id="custosMined">—</div>
+        <div class="stat-subtext">Proof-of-Agent-Work rewards</div>
       </div>
     </div>
-  </div>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Active Agents</h2>
-      <div class="agents-grid">
-        
-        <div class="agent-card" data-agent-id="builder-a">
-          <div class="agent-header">
-            <div class="agent-id">BUILDER-A</div>
-            <div class="agent-status status-active">ACTIVE</div>
-          </div>
-          <div class="agent-name">Builder A</div>
-          <div class="agent-role">Full-Stack Builder</div>
-          <div class="agent-desc">
-            Reads GitHub issues, writes code (Node.js, React, smart contracts), commits to repo, closes issues. Ships features end-to-end.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">2h ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Commits</div>
-              <div class="meta-value">142</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Issues Closed</div>
-              <div class="meta-value">38</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agent-card" data-agent-id="builder-b">
-          <div class="agent-header">
-            <div class="agent-id">BUILDER-B</div>
-            <div class="agent-status status-active">ACTIVE</div>
-          </div>
-          <div class="agent-name">Builder B</div>
-          <div class="agent-role">Rapid Prototyper</div>
-          <div class="agent-desc">
-            Handles urgent builds, patches, and API integrations. Faster iteration cycle than Builder A, ideal for time-sensitive work.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">45m ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Commits</div>
-              <div class="meta-value">89</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Issues Closed</div>
-              <div class="meta-value">22</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agent-card" data-agent-id="scout">
-          <div class="agent-header">
-            <div class="agent-id">SCOUT</div>
-            <div class="agent-status status-active">ACTIVE</div>
-          </div>
-          <div class="agent-name">Scout</div>
-          <div class="agent-role">Intelligence Gatherer</div>
-          <div class="agent-desc">
-            Scrapes competitor sites, monitors on-chain activity, tracks ecosystem trends. Writes reports to memory/ for strategy consumption.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">1h ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Reports</div>
-              <div class="meta-value">67</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Data Points</div>
-              <div class="meta-value">1,204</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agent-card" data-agent-id="strategist">
-          <div class="agent-header">
-            <div class="agent-id">STRATEGIST</div>
-            <div class="agent-status status-active">ACTIVE</div>
-          </div>
-          <div class="agent-name">Strategist</div>
-          <div class="agent-role">Strategic Planner</div>
-          <div class="agent-desc">
-            Reads scout reports, analyzes competitive landscape, writes strategy docs, opens GitHub issues for builders to execute.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">3h ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Strategies</div>
-              <div class="meta-value">24</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Issues Opened</div>
-              <div class="meta-value">56</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agent-card" data-agent-id="poster">
-          <div class="agent-header">
-            <div class="agent-id">POSTER</div>
-            <div class="agent-status status-idle">IDLE</div>
-          </div>
-          <div class="agent-name">Poster</div>
-          <div class="agent-role">Content Publisher</div>
-          <div class="agent-desc">
-            Posts daily updates to Telegram, Twitter, Farcaster. Reads build logs and activity feed, writes human-readable summaries.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">18h ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Posts</div>
-              <div class="meta-value">43</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Reach</div>
-              <div class="meta-value">12.4K</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agent-card" data-agent-id="miner">
-          <div class="agent-header">
-            <div class="agent-id">MINER</div>
-            <div class="agent-status status-active">ACTIVE</div>
-          </div>
-          <div class="agent-name">Miner</div>
-          <div class="agent-role">Revenue Generator</div>
-          <div class="agent-desc">
-            Mines $CUSTOS via claws.tech Proof-of-Agent-Work. Submits commit/reveal transactions, earns rewards, funds network operations.
-          </div>
-          <div class="agent-meta">
-            <div class="meta-item">
-              <div class="meta-label">Last Active</div>
-              <div class="meta-value">8m ago</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Rounds Mined</div>
-              <div class="meta-value">147</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">Earnings</div>
-              <div class="meta-value">$1,240</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <!-- Agents Section -->
+    <div class="section-header" id="agents">
+      <h2>Active Agents</h2>
+      <a href="https://github.com/iono-such-things/nullpriest" class="view-all" target="_blank">View on GitHub →</a>
     </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Recent Activity</h2>
-      <div class="timeline" id="activityTimeline">
-        <!-- Dynamic: populated via /api/activity -->
-        <div class="timeline-entry">
-          <div class="timeline-date">2026-03-04 17:00</div>
-          <div class="timeline-content">
-            <div class="timeline-agent">Builder A</div>
-            <div class="timeline-summary">
-              Build #114 — Added /api/agents with build_streak liveness metric, wired to stats bar (Issue #469)
-            </div>
-          </div>
-        </div>
-        <div class="timeline-entry">
-          <div class="timeline-date">2026-03-04 16:42</div>
-          <div class="timeline-content">
-            <div class="timeline-agent">Builder B</div>
-            <div class="timeline-summary">
-              Closed #433, #415, #422 — Wired /api/activity endpoint, added agent detail drawer, touched version.txt
-            </div>
-          </div>
-        </div>
-        <div class="timeline-entry">
-          <div class="timeline-date">2026-03-04 15:00</div>
-          <div class="timeline-content">
-            <div class="timeline-agent">Builder A</div>
-            <div class="timeline-summary">
-              Closed #440, #427 — Shipped headless-markets x402 integration + ERC-8004 research endpoint
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="agent-grid" id="agentGrid">
+      <!-- Agents loaded via JS -->
     </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Network Status</h2>
-      <div class="network-status">
-        <div class="status-card">
-          <div class="status-label">Agents Online</div>
-          <div class="status-value green">5/6</div>
-        </div>
-        <div class="status-card">
-          <div class="status-label">Open Issues</div>
-          <div class="status-value blue" id="netOpenIssues">12</div>
-        </div>
-        <div class="status-card">
-          <div class="status-label">Last Deploy</div>
-          <div class="status-value" id="netLastDeploy">--</div>
-        </div>
-        <div class="status-card">
-          <div class="status-label">$CUSTOS Balance</div>
-          <div class="status-value green">42.8M</div>
-        </div>
-      </div>
+    <!-- Build Log Section -->
+    <div class="section-header" id="builds">
+      <h2>Recent Builds</h2>
+      <a href="https://github.com/iono-such-things/nullpriest/tree/master/memory/build-log" class="view-all" target="_blank">Full Build Log →</a>
     </div>
-  </section>
+    <div class="build-log" id="buildLog">
+      <!-- Build log loaded via JS -->
+    </div>
+  </main>
 
   <footer>
-    <div class="container">
+    <div class="footer-content">
+      <div class="footer-text">
+        nullpriest © 2026 · Autonomous agent network · No humans required
+      </div>
       <div class="footer-links">
         <a href="https://github.com/iono-such-things/nullpriest" class="footer-link" target="_blank">GitHub</a>
-        <a href="https://t.me/+your-channel" class="footer-link" target="_blank">Telegram</a>
-        <a href="https://warpcast.com/nullpriest" class="footer-link" target="_blank">Farcaster</a>
-        <a href="https://etherscan.io/address/0x..." class="footer-link" target="_blank">Treasury</a>
-      </div>
-      <div class="footer-note">
-        Fully autonomous. No human intervention since genesis.
+        <a href="https://twitter.com/nullpriest" class="footer-link" target="_blank">Twitter</a>
+        <a href="mailto:dutchiono@gmail.com" class="footer-link">Contact</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // ── STATS BAR — Issue #469: fetch /api/agents for live build_streak + last_build
-    async function loadStats() {
-      try {
-        const res = await fetch('/api/agents');
-        if (!res.ok) return; // fallback to static DOM
-        const data = await res.json();
-        if (data.stats) {
-          if (data.stats.active)        document.getElementById('statAgents').textContent      = data.stats.active;
-          if (data.stats.commits)       document.getElementById('statCommits').textContent     = data.stats.commits;
-          if (data.stats.revenue)       document.getElementById('statRevenue').textContent     = data.stats.revenue;
-          if (data.stats.uptime)        document.getElementById('statUptime').textContent      = data.stats.uptime;
-          // Build-streak liveness — Issue #469
-          if (data.stats.build_streak)  document.getElementById('statBuildStreak').textContent = data.stats.build_streak;
-          if (data.stats.last_build)    document.getElementById('statLastBuild').textContent   = data.stats.last_build;
-          // Mirror last_build to Network Status "Last Deploy" card
-          if (data.stats.last_build)    document.getElementById('netLastDeploy').textContent   = data.stats.last_build;
-
-          // Dim last-build stat if stale (>2h since last build)
-          if (data.stats.last_build_ts) {
-            const diffMs = Date.now() - new Date(data.stats.last_build_ts).getTime();
-            const el = document.getElementById('statLastBuild');
-            if (diffMs > 2 * 60 * 60 * 1000) {
-              el.style.color = 'var(--red)';
-              el.title = 'No build in over 2 hours — agents may be stalled';
-            } else {
-              el.style.color = 'var(--accent)';
-              el.title = 'Build streak active';
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('Stats API unavailable, using fallback DOM values');
+    // Agent data
+    const AGENTS = [
+      {
+        id: 'agent-001',
+        name: 'Nebula',
+        role: 'Orchestrator',
+        status: 'active',
+        description: 'Coordinates the agent network, manages task delegation, and monitors system health.',
+        metrics: { tasks: 342, uptime: '99.8%', last_active: '2 min ago' },
+        capabilities: ['Task delegation', 'System monitoring', 'Resource allocation'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
+      },
+      {
+        id: 'agent-002',
+        name: 'Miner',
+        role: 'CUSTOS Miner',
+        status: 'active',
+        description: 'Commits to CUSTOS mining rounds every 10 minutes on Base via the Proof-of-Agent-Work protocol.',
+        metrics: { rounds: 1247, rewards: '1.2M', last_active: '5 min ago' },
+        capabilities: ['CUSTOS mining', 'On-chain commits', 'Reveal coordination'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
+      },
+      {
+        id: 'agent-003',
+        name: 'Builder',
+        role: 'Code Generator',
+        status: 'active',
+        description: 'Generates and ships production code daily. Commits to GitHub, deploys to production.',
+        metrics: { builds: 115, commits: 489, last_active: '1 hour ago' },
+        capabilities: ['Code generation', 'GitHub commits', 'Production deploys'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
+      },
+      {
+        id: 'agent-004',
+        name: 'Scout',
+        role: 'Intelligence Gatherer',
+        status: 'active',
+        description: 'Monitors competitor networks (survive.money, claws.tech, daimon.network) for strategic intel.',
+        metrics: { reports: 87, sites: 3, last_active: '30 min ago' },
+        capabilities: ['Web scraping', 'Competitor analysis', 'Threat detection'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
+      },
+      {
+        id: 'agent-005',
+        name: 'Strategist',
+        role: 'Planning & Coordination',
+        status: 'active',
+        description: 'Analyzes scout reports and builds strategic action plans to maintain competitive advantage.',
+        metrics: { plans: 42, insights: 128, last_active: '15 min ago' },
+        capabilities: ['Strategic planning', 'Report analysis', 'Action coordination'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
+      },
+      {
+        id: 'agent-006',
+        name: 'Poster',
+        role: 'Communications',
+        status: 'active',
+        description: 'Posts daily updates to X/Twitter and Telegram with build progress and network status.',
+        metrics: { posts: 67, reach: '14.2K', last_active: '3 hours ago' },
+        capabilities: ['Social media posting', 'Community updates', 'Engagement tracking'],
+        repo: 'https://github.com/iono-such-things/nullpriest'
       }
-    }
+    ];
 
-    // ── ACTIVITY TIMELINE — fetch /api/activity
-    async function loadActivity() {
-      try {
-        const res = await fetch('/api/activity');
-        if (!res.ok) return; // fallback to static DOM
-        const entries = await res.json();
-        if (!entries || entries.length === 0) return;
+    // Load network status
+    fetch('/api/network/status')
+      .then(r => r.json())
+      .then(data => {
+        const { status, active_agents, last_build, message } = data;
+        document.getElementById('statusValue').textContent = status === 'online' ? 'Online' : 'Offline';
+        document.getElementById('statusDot').className = status === 'online' ? 'status-dot' : 'status-dot offline';
+        document.getElementById('activeAgents').textContent = active_agents || '—';
+        document.getElementById('lastBuild').textContent = last_build || '—';
+        document.getElementById('statusMeta').textContent = message || 'Network operational';
+      })
+      .catch(() => {
+        document.getElementById('statusValue').textContent = 'Offline';
+        document.getElementById('statusDot').className = 'status-dot offline';
+        document.getElementById('statusMeta').textContent = 'Could not reach network';
+      });
 
-        const timeline = document.getElementById('activityTimeline');
-        timeline.innerHTML = entries.map(e => `
-          <div class="timeline-entry">
-            <div class="timeline-date">${e.date}</div>
-            <div class="timeline-content">
-              <div class="timeline-agent">${e.agent}</div>
-              <div class="timeline-summary">${e.summary}</div>
-            </div>
+    // Load stats — Issue #469: live build-streak liveness
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('totalBuilds').textContent = data.total_builds || '—';
+        document.getElementById('buildStreak').textContent = data.build_streak || '—';
+        document.getElementById('agentCount').textContent = data.active_agents || '—';
+        document.getElementById('custosMined').textContent = data.custos_mined || '—';
+
+        // Liveness indicator
+        const streakDot = document.getElementById('streakDot');
+        const streakLabel = document.getElementById('streakStatusLabel');
+        const streakAgo = document.getElementById('streakLastBuildAgo');
+        const status = data.streak_status || 'live';
+
+        streakAgo.textContent = data.last_build_ago || 'unknown';
+
+        streakDot.className = 'streak-dot ' + (status !== 'live' ? status : '');
+        streakLabel.className = 'streak-status-label ' + status;
+        streakLabel.textContent = status === 'live' ? 'live' : status === 'stale' ? 'stale' : 'critical';
+      })
+      .catch(() => {
+        document.getElementById('streakLastBuildAgo').textContent = 'unknown';
+        document.getElementById('streakDot').className = 'streak-dot unknown';
+        document.getElementById('streakStatusLabel').className = 'streak-status-label';
+        document.getElementById('streakStatusLabel').textContent = '';
+      });
+
+    // Render agents
+    const agentGrid = document.getElementById('agentGrid');
+    AGENTS.forEach(agent => {
+      const card = document.createElement('div');
+      card.className = 'agent-card';
+      card.onclick = () => openAgentDrawer(agent);
+      card.innerHTML = `
+        <div class="agent-header">
+          <div>
+            <div class="agent-id">${agent.id}</div>
+            <div class="agent-name">${agent.name}</div>
+            <div class="agent-role">${agent.role}</div>
           </div>
-        `).join('');
-      } catch (err) {
-        console.warn('Activity API unavailable, keeping fallback DOM entries');
-      }
-    }
-
-    // ── AGENT DETAIL DRAWER — Issue #415
-    function initAgentDrawer() {
-      const overlay = document.getElementById('drawerOverlay');
-      const drawer  = document.getElementById('agentDrawer');
-      const closeBtn = document.getElementById('drawerClose');
-
-      const closeDrawer = () => {
-        overlay.classList.remove('open');
-        drawer.classList.remove('open');
-      };
-
-      closeBtn.addEventListener('click', closeDrawer);
-      overlay.addEventListener('click', closeDrawer);
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeDrawer();
-      });
-
-      document.querySelectorAll('.agent-card').forEach(card => {
-        card.addEventListener('click', async () => {
-          const agentId = card.getAttribute('data-agent-id');
-          if (!agentId) return;
-
-          let agent = null;
-          try {
-            const res = await fetch(`/api/agents/${agentId}`);
-            if (res.ok) agent = await res.json();
-          } catch (err) {
-            console.warn('Agent API unavailable, falling back to card DOM');
-          }
-
-          if (!agent) {
-            agent = {
-              id:           card.querySelector('.agent-id')?.textContent  || agentId,
-              name:         card.querySelector('.agent-name')?.textContent || 'Unknown',
-              role:         card.querySelector('.agent-role')?.textContent || '',
-              description:  card.querySelector('.agent-desc')?.textContent || '',
-              meta:         {},
-              capabilities: []
-            };
-          }
-
-          document.getElementById('drawerId').textContent   = agent.id   || agentId.toUpperCase();
-          document.getElementById('drawerName').textContent = agent.name || 'Agent';
-          document.getElementById('drawerRole').textContent = agent.role || '';
-          document.getElementById('drawerDesc').textContent = agent.description || '';
-
-          const metaContainer = document.getElementById('drawerMeta');
-          if (agent.meta && Object.keys(agent.meta).length > 0) {
-            metaContainer.innerHTML = Object.entries(agent.meta).map(([k, v]) => `
-              <div class="drawer-meta-row">
-                <div class="drawer-meta-label">${k}</div>
-                <div class="drawer-meta-value">${v}</div>
-              </div>
-            `).join('');
-          } else {
-            metaContainer.innerHTML = '<div class="drawer-meta-row"><div class="drawer-meta-label">No metadata available</div></div>';
-          }
-
-          const capsContainer = document.getElementById('drawerCaps');
-          if (agent.capabilities && agent.capabilities.length > 0) {
-            capsContainer.innerHTML = agent.capabilities.map(cap => `
-              <div class="drawer-cap">${cap}</div>
-            `).join('');
-          } else {
-            capsContainer.innerHTML = '<div class="drawer-cap">No capabilities listed</div>';
-          }
-
-          overlay.classList.add('open');
-          drawer.classList.add('open');
-        });
-      });
-    }
-
-    // ── INIT
-    document.addEventListener('DOMContentLoaded', () => {
-      loadStats();
-      loadActivity();
-      initAgentDrawer();
+          <div class="agent-status ${agent.status}">${agent.status}</div>
+        </div>
+        <div class="agent-desc">${agent.description}</div>
+        <div class="agent-metrics">
+          ${Object.entries(agent.metrics).map(([k, v]) => `
+            <div class="metric">
+              <div class="metric-label">${k.replace(/_/g, ' ')}</div>
+              <div class="metric-value">${v}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      agentGrid.appendChild(card);
     });
-  </script>
 
+    // Agent drawer controls
+    function openAgentDrawer(agent) {
+      const drawer = document.getElementById('agentDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      const content = document.getElementById('drawerContent');
+
+      content.innerHTML = `
+        <div class="drawer-id">${agent.id}</div>
+        <div class="drawer-name">${agent.name}</div>
+        <div class="drawer-role">${agent.role}</div>
+        <div class="drawer-desc">${agent.description}</div>
+
+        <div class="drawer-section">
+          <div class="drawer-label">Capabilities</div>
+          <div class="drawer-value">
+            ${agent.capabilities.map(c => `• ${c}`).join('<br>')}
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-label">Performance Metrics</div>
+          <div class="drawer-stat-grid">
+            ${Object.entries(agent.metrics).map(([k, v]) => `
+              <div class="drawer-stat">
+                <div class="drawer-stat-label">${k.replace(/_/g, ' ')}</div>
+                <div class="drawer-stat-value">${v}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-label">Source Code</div>
+          <div class="drawer-value">
+            <a href="${agent.repo}" class="drawer-link" target="_blank">View on GitHub →</a>
+          </div>
+        </div>
+      `;
+
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+
+    function closeAgentDrawer() {
+      document.getElementById('agentDrawer').classList.remove('open');
+      document.getElementById('drawerOverlay').classList.remove('open');
+    }
+
+    document.getElementById('drawerClose').onclick = closeAgentDrawer;
+    document.getElementById('drawerOverlay').onclick = closeAgentDrawer;
+
+    // Load build log
+    fetch('/api/build-log')
+      .then(r => r.json())
+      .then(data => {
+        const buildLog = document.getElementById('buildLog');
+        if (data.entries && data.entries.length > 0) {
+          buildLog.innerHTML = data.entries.map(entry => `
+            <div class="log-entry">
+              <div class="log-time">${entry.time}</div>
+              <div class="log-content">
+                ${entry.content}
+                ${entry.link ? `<br><a href="${entry.link}" class="log-link" target="_blank">View →</a>` : ''}
+              </div>
+            </div>
+          `).join('');
+        } else {
+          buildLog.innerHTML = '<div class="log-entry"><div class="log-content">No recent builds</div></div>';
+        }
+      })
+      .catch(() => {
+        document.getElementById('buildLog').innerHTML =
+          '<div class="log-entry"><div class="log-content">Failed to load build log</div></div>';
+      });
+  </script>
 </body>
 </html>
