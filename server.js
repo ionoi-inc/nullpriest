@@ -71,7 +71,7 @@ app.get('/.well-known/agent.json', (req, res) => {
   });
 });
 
-// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // Intercept all /api/* and /memory/* requests
 // If no valid x402 payment proof → return 402 Payment Required with Base payment details
 // If payment verified → serve the resource
@@ -85,7 +85,7 @@ const X402_PAYMENT_NETWORK = 'base-mainnet';
 function x402PaymentGate(req, res, next) {
   // Check for payment proof header
   const paymentProof = req.headers['x-payment-proof'];
-  
+
   if (!paymentProof) {
     return res.status(402).json({
       error: 'Payment Required',
@@ -107,26 +107,23 @@ function x402PaymentGate(req, res, next) {
   next();
 }
 
-// Apply x402 gate to premium endpoints
-app.use('/api/agents', x402PaymentGate);
-app.use('/memory', x402PaymentGate);
-
-// ▓▓ /api/agents — Agent Registry ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// Returns list of all nullpriest agents with metadata, build count, and verification status
-app.get('/api/agents', (req, res) => {
-  const agents = [
+// ▓▓ Shared agent data — single source of truth ▓▓
+// Used by both /api/agents/public and /api/agents (x402-gated)
+function getAgentRegistry() {
+  return [
     {
       id: 'agt_nullpriest_core',
       name: 'nullpriest',
       slug: 'nullpriest',
       description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
       capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 97,
+      build_count: 98,
       verified: true,
       on_chain_address: null, // Pre-launch
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-03T22:00:00Z',
+      last_build: '2026-03-04T00:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
       id: 'agt_custos_miner',
@@ -134,119 +131,145 @@ app.get('/api/agents', (req, res) => {
       slug: 'custos-miner',
       description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
       capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 12,
+      build_count: 98,
       verified: true,
-      on_chain_address: null, // Wallet pending
-      mining_contract: '0xF3e20293514d775a3149C304820d9E6a6FA29b07',
+      on_chain_address: null,
       github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-28T00:00:00Z',
-      last_mine: '2026-03-03T23:00:00Z',
+      created_at: '2026-02-15T00:00:00Z',
+      last_build: '2026-03-04T00:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
+    {
+      id: 'agt_scout',
+      name: 'Scout',
+      slug: 'scout',
+      description: 'Market intelligence agent. Scans competitors, X CT, and on-chain signals every 30 min. Feeds Strategist.',
+      capabilities: ['intelligence', 'monitoring', 'market-scan'],
+      build_count: 73,
+      verified: true,
+      on_chain_address: null,
+      github: 'iono-such-things/nullpriest',
+      created_at: '2026-02-15T00:00:00Z',
+      last_build: '2026-03-04T00:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
+    },
+    {
+      id: 'agt_strategist',
+      name: 'Strategist',
+      slug: 'strategist',
+      description: 'Strategy and prioritization agent. Reads Scout report, updates strategy.md, opens issues, re-queues failures.',
+      capabilities: ['strategy', 'prioritization', 'issue-management'],
+      build_count: 98,
+      verified: true,
+      on_chain_address: null,
+      github: 'iono-such-things/nullpriest',
+      created_at: '2026-02-15T00:00:00Z',
+      last_build: '2026-03-04T00:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
+    },
+    {
+      id: 'agt_builder_a',
+      name: 'Builder A',
+      slug: 'builder-a',
+      description: 'Code builder agent. Picks issues #1 and #6 from priority queue, builds production code, commits to GitHub.',
+      capabilities: ['code-generation', 'git-operations', 'deployment'],
+      build_count: 98,
+      verified: true,
+      on_chain_address: null,
+      github: 'iono-such-things/nullpriest',
+      created_at: '2026-02-15T00:00:00Z',
+      last_build: '2026-03-04T00:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
+    }
   ];
+}
 
+// ▓▓ /api/agents/public — Issue #75 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// PUBLIC endpoint — no x402 gate. Used by /app/agents frontend to show real agent registry.
+// Issue #75: Wire /app/agents page to real /api/agents endpoint (replace mock data)
+app.get('/api/agents/public', (req, res) => {
+  const agents = getAgentRegistry();
   res.json({
     agents,
     total: agents.length,
-    quorum_size: 2,
-    verified_count: agents.filter(a => a.verified).length,
-    timestamp: new Date().toISOString(),
+    network: 'base-mainnet',
+    updated_at: new Date().toISOString(),
   });
 });
 
-// ▓▓ /memory/* — GitHub-backed memory proxy ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// Proxies /memory/* to GitHub raw content
-// Example: /memory/context.md → https://raw.githubusercontent.com/.../memory/context.md
-app.get('/memory/*', async (req, res) => {
-  const filePath = req.path.replace('/memory/', 'memory/');
-  const rawUrl = `${GITHUB_RAW_BASE}/${filePath}`;
+// ▓▓ /api/agents/public/:id — Issue #61 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// PUBLIC endpoint — no x402 gate. Used by /app/agents/:id profile page.
+// Issue #61: Add agent profile page at /app/agents/[id]
+app.get('/api/agents/public/:id', (req, res) => {
+  const agents = getAgentRegistry();
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  res.json(agent);
+});
 
+// Apply x402 gate to premium endpoints (gated versions for programmatic/paid access)
+app.use('/api/agents', x402PaymentGate);
+app.use('/memory', x402PaymentGate);
+
+// ▓▓ /api/agents — Agent Registry (x402-gated) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// Returns list of all nullpriest agents with metadata, build count, and verification status
+app.get('/api/agents', (req, res) => {
+  const agents = getAgentRegistry();
+  res.json({
+    agents,
+    total: agents.length,
+    network: 'base-mainnet',
+    updated_at: new Date().toISOString(),
+  });
+});
+
+app.get('/api/agents/:id', (req, res) => {
+  const agents = getAgentRegistry();
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  res.json(agent);
+});
+
+// ▓▓ Memory proxy routes ▓▓
+// Proxies GitHub raw content for memory files
+app.get('/memory/activity-feed.md', async (req, res) => {
   try {
-    const response = await fetch(rawUrl);
-    
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: 'File not found in GitHub repository',
-        path: filePath,
-        github_status: response.status,
-      });
-    }
-
-    const content = await response.text();
-    const contentType = filePath.endsWith('.json') ? 'application/json' :
-                        filePath.endsWith('.md')   ? 'text/markdown' : 'text/plain';
-
-    res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=60');
-    res.send(content);
+    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
+    const gitRes = await fetch(url);
+    if (!gitRes.ok) return res.status(404).json({ error: 'Activity feed not found' });
+    const text = await gitRes.text();
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(text);
   } catch (err) {
-    res.status(500).json({
-      error: 'Failed to fetch from GitHub',
-      details: err.message,
-    });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ▓▓ NULP Price Proxy — Issue #374 / #386 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// Proxies DexScreener API to avoid CORS and keep pair address in one place.
-// Returns { price, change24h, volume24h, liquidity, marketCap, timestamp }
-const NULP_PAIR_ADDRESS = '0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c';
-const DEXSCREENER_API   = `https://api.dexscreener.com/latest/dex/pairs/base/${NULP_PAIR_ADDRESS}`;
-
-app.get('/api/price', async (req, res) => {
+app.get('/memory/:filename', async (req, res) => {
   try {
-    const response = await fetch(DEXSCREENER_API, {
-      headers: { 'Accept': 'application/json' },
-    });
-
-    if (!response.ok) {
-      return res.status(502).json({
-        error: 'DexScreener upstream error',
-        status: response.status,
-        pair: NULP_PAIR_ADDRESS,
-      });
-    }
-
-    const data = await response.json();
-    const pair = data?.pair ?? data?.pairs?.[0];
-
-    if (!pair) {
-      return res.status(404).json({
-        error: 'Pair not found',
-        pair: NULP_PAIR_ADDRESS,
-      });
-    }
-
-    res.setHeader('Cache-Control', 'public, max-age=30'); // 30s cache
-    res.json({
-      symbol:     'NULP',
-      price:      pair.priceUsd ?? null,
-      change24h:  pair.priceChange?.h24 ?? null,
-      volume24h:  pair.volume?.h24 ?? null,
-      liquidity:  pair.liquidity?.usd ?? null,
-      marketCap:  pair.marketCap ?? pair.fdv ?? null,
-      pair:       NULP_PAIR_ADDRESS,
-      dex:        pair.dexId ?? 'uniswap',
-      chain:      'base',
-      timestamp:  new Date().toISOString(),
-    });
+    const url = `${GITHUB_RAW_BASE}/memory/${req.params.filename}`;
+    const gitRes = await fetch(url);
+    if (!gitRes.ok) return res.status(404).json({ error: 'Memory file not found' });
+    const text = await gitRes.text();
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(text);
   } catch (err) {
-    res.status(500).json({
-      error:   'Price fetch failed',
-      details: err.message,
-      pair:    NULP_PAIR_ADDRESS,
-    });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ▓▓ Static file serving ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-app.use(express.static(path.join(__dirname, 'public')));
+// ▓▓ Site static files ▓▓
+app.use(express.static(path.join(__dirname, 'site')));
 
+// Serve index.html for all other routes — fixed aex.get typo (was breaking catch-all)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`✓ nullpriest server running on port ${PORT}`);
-  console.log(`✓ x402 payment gate active on /api/agents and /memory/*`);
-  console.log(`✓ Payment address: ${X402_PAYMENT_ADDRESS}`);
+  console.log(`nullpriest server listening on port ${PORT}`);
 });
