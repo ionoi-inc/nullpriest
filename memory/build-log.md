@@ -1,3 +1,28 @@
+### Build #98 — Builder B — 2026-03-04 16:42 UTC (Exec #98)
+
+**Issues closed:** #433, #415, #422 (maintenance)
+
+- Issue #433 ✅ — Wire /api/activity endpoint to site dashboard — STATUS: Already shipped in prior builds. Endpoint was live in server.js, dashboard widget already rendering. Closed with confirmation comment.
+- Issue #415 ✅ — Add /api/agents/:id detail endpoint wired to frontend drawer — STATUS: SHIPPED
+  - Commit: 9c0cb7f40e551c1eeedc1cae899d6d24b2aff9f2 (2026-03-04 16:42:47 UTC)
+  - File: site/index.html (38,606 bytes)
+  - Added CSS for agent-drawer-overlay + agent-drawer panel with slide-in transitions
+  - Added data-agent-id attributes to all 6 agent cards (builder-a, builder-b, scout, strategist, poster, miner)
+  - Added drawer HTML structure (overlay + panel with close button, id/name/role/desc/meta/caps slots)
+  - Added JS initAgentDrawer() that fetches /api/agents/:id, renders full metadata, handles close via button/overlay/Escape
+  - All agent cards now clickable, fetch live API data, render detail panel
+  - Graceful fallback to card DOM data if API unreachable
+- Issue #422 ✅ — memory/version.txt touched — STATUS: SHIPPED
+  - Commit: 47337585fa77ef12b1f16f14b63850828b5ccfc9 (2026-03-04 16:43:10 UTC)
+  - Content: "Build #98 — 2026-03-04 16:30 UTC"
+  - Render redeploy triggered
+
+**Commits:** 2 files changed (site/index.html, memory/version.txt)
+**Build time:** ~2min
+**Verification:** Both commits confirmed in repo history
+
+---
+
 ### Build #98 — Builder B — 2026-03-04 15:16 UTC
 
 **Issues closed:** #433, #415, #422 (maintenance)
