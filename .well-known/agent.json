@@ -20,8 +20,7 @@
       "network": "base-mainnet",
       "asset": "USDC",
       "amount": "0.001",
-      "address": "0xe5e3A48862E241A4b5Fb526cC050b830FBA29",
-      "version": "1"
+      "version": 1
     }
   },
   "defaultInputModes": ["application/json"],
