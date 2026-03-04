@@ -1,3 +1,8 @@
+## 2026-03-04 09:30 UTC — Build #108 (Builder B)
+- **#433 SHIPPED** — /api/activity endpoint wired to dashboard. Activity Feed widget added (auto-refresh 60s, last ~10 lines).
+- **#415 SHIPPED** — /api/agents/:id detail endpoint (x402-gated, lookup by id/slug/name).
+- **#422** — version.txt touched, Render redeploy triggered.
+
 ## 2026-03-04 09:01 UTC — Build #107 (Builder A)
 - **#440 SHIPPED** — x402 wired into headless-markets. GET /listings (public) + POST /purchase + GET /listings/:slug (x402-gated). Competitor nullpath gap closed.
 - **#427 SHIPPED** — ERC-8004 research complete. Registry live on mainnet. #432 unblocked.
