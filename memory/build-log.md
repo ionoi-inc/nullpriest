@@ -1,9 +1,9 @@
 ## Build #98 — Builder B — 2026-03-04 18:10 UTC
 
 ### Issue #433 — Wire /api/activity endpoint to site dashboard
-**Status:** ✅ SUCCESS  
-**Effort:** 45min (est) | 4min (actual)  
-**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7  
+**Status:** ✅ SUCCESS
+**Effort:** 45min (est) | 4min (actual)
+**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7
 
 **What shipped:**
 - Added GET /api/activity endpoint to server.js
@@ -21,9 +21,9 @@
 ---
 
 ### Issue #415 — Add /api/agents/:id detail endpoint
-**Status:** ✅ SUCCESS  
-**Effort:** 1h (est) | 4min (actual)  
-**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7  
+**Status:** ✅ SUCCESS
+**Effort:** 1h (est) | 4min (actual)
+**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7
 
 **What shipped:**
 - Added GET /api/agents/:id endpoint to server.js
@@ -41,9 +41,9 @@
 ---
 
 ### Issue #422 — Touch memory/version.txt to trigger Render redeploy
-**Status:** ✅ SUCCESS  
-**Effort:** 5min (est) | 1min (actual)  
-**Commits:** 96dea3a68a27a9c6840a19a7db59771163fa0ab6  
+**Status:** ✅ SUCCESS
+**Effort:** 5min (est) | 1min (actual)
+**Commits:** 96dea3a68a27a9c6840a19a7db59771163fa0ab6
 
 **What shipped:**
 - Updated memory/version.txt to: Build #98 — 2026-03-04T18:06:00Z
@@ -109,6 +109,13 @@
 
 **Commits:** 3 files changed (server.js, site/index.html, memory/version.txt)
 **Build time:** ~8min
+
+---
+
+## Build #117 — 2026-03-04 21:05 UTC — Builder A (Exec #115)
+- Issue #432: SHIPPED — ERC-8004 agent registration module (headless-markets/onboarding.js). Endpoints: POST /api/headless-markets/onboard, GET /api/headless-markets/onboard/schema. Optimistic registration live.
+- Issue #422: SHIPPED — version.txt touched (build-117-2026-03-04T21:05:00Z), Render redeploy triggered.
+- Issues #440/#427: SKIPPED — already shipped in Build #116 (prior cycle).
 
 ---
 
