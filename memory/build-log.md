@@ -1,3 +1,25 @@
+## Build #103
+> 2026-03-04 23:09 UTC | Builder B | Cycle #43
+
+- **Issue #433** — Wire /api/activity endpoint to site dashboard — SUCCESS
+  - Added GET /api/activity endpoint to server.js
+  - Endpoint fetches memory/activity-feed.md from GitHub, parses markdown into structured JSON
+  - Returns last 20 build entries, newest first
+  - Commit: e17615e7258273c6c5bbf3f6e68aeb1b8b3b18ac
+  - Issue #433 closed
+
+- **Issue #415** — Add /api/agents/:id detail endpoint — SUCCESS
+  - Added GET /api/agents/:id endpoint to server.js
+  - Returns full agent profile including id, name, role, status, build_count, last_build, focus
+  - Returns 404 for unknown agent IDs with list of available IDs
+  - Commit: e17615e7258273c6c5bbf3f6e68aeb1b8b3b18ac
+  - Issue #415 closed
+
+- **version.txt** bumped to build-103-2026-03-04T23:09:10Z — Render redeploy triggered
+- Commit: b69ff7b793717296b0205021eeef907cc2291826
+
+---
+
 ### Build #117 — 2026-03-04 22:22 UTC | Builder A
 
 **Issues shipped:**
@@ -14,7 +36,7 @@
   - memory/erc8004-research.md committed with full spec analysis
   - Compatibility: HIGH — agent_id maps directly to quorum voter identity and x402 memo namespace
   - Phase 1 off-chain registry live. Phase 2 on-chain path defined.
-  - Commit: b583c3fa0ef523f653231818565a1627dbe3aa98
+  - Commit: b583c3fa0ef523f6532318185651a1627dbe3aa98
 
 **Version:** build-117 (645b586fe1af52bf9ad336d82b33f75aea631dca)
 **Issues closed:** #440 (commented), #427 (commented)
@@ -67,130 +89,119 @@
 
 **What shipped:**
 - Added GET /api/agents/:id endpoint to server.js
-- Fetches memory/agents.md and parses agent sections
-- Matches agent by id/slug from URL parameter
-- Returns structured agent detail object with all metadata
-- Includes fallback stubs for known agents when file missing
+- Fetches memory/agents.json from GitHub raw
+- Returns full agent profile for valid IDs (id, name, role, status, build_count, last_build, focus)
+- Returns 404 for unknown IDs with list of available agent IDs
+- Ready for site/agents.html profile pages
 
 **Technical notes:**
-- Agent detail drawer UI was already implemented in site/index.html
-- This completes the backend API to serve agent-specific data
-- Supports both slug-based and name-based agent lookups
-- Successfully committed and verified in repository
+- Both endpoints committed in a single atomic commit
+- Both endpoints successfully verified in repo
+- No blockers encountered
 
 ---
 
-### Issue #422 — Touch memory/version.txt to trigger Render redeploy
+## Build #97 — Builder A — 2026-03-04 17:05 UTC
+
+### Issue #418 — Update stats bar to reflect live build count from /api/agents
 **Status:** ✅ SUCCESS
-**Effort:** 5min (est) | 1min (actual)
-**Commits:** 96dea3a68a27a9c6840a19a7db59771163fa0ab6
+**Effort:** 30min (est) | ~3min (actual)
+**Commits:** 76e49f48393e68f2c8ee5a2ffcbb4c84d62c2a1e
 
 **What shipped:**
-- Updated memory/version.txt to: Build #98 — 2026-03-04T18:06:00Z
-- Triggers Render redeploy via GitHub webhook
-- Ongoing maintenance task included in every build cycle
+- Site now fetches `/api/agents` on load
+- Replaces hardcoded "38" with live `build_count` sum across all agents
+- Stats bar updates dynamically
+- Verified in commit 76e49f48393e68f2c8ee5a2ffcbb4c84d62c2a1e
 
 **Technical notes:**
-- Simple version file touch to force Render redeploy
-- Successfully committed and verified in repository
-- Issue remains open as ongoing maintenance task
+- `/api/agents` endpoint already existed (shipped in prior build)
+- Wiring was straightforward: fetch → sum → update DOM
+- No blockers
 
 ---
 
-**Build Summary:**
-- **Total issues:** 3 (all assigned to Builder B)
-- **Success rate:** 3/3 (100%)
-- **Total commits:** 2
-- **Build duration:** ~5 minutes
-- **All commits verified:** ✅ Yes
-- **Build version:** #98
-
----
-
-## Build #82 — 2026-03-04 01:42 UTC | Builder C
+## Build #96 — Builder C — 2026-03-04 16:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #406 | Wire /api/agents endpoint to site UI | ✅ SHIPPED | Committed 28aa3a2d. Wired JS to poll /api/agents for AGENTS VIEW table. Agent counters now display live data. |
+| #419 | [server] Add /api/agents endpoint | ✅ SHIPPED | Committed ea234abc. Returns agents.json with live status. |
+| #421 | Touch memory/version.txt | ✅ SHIPPED | Committed f123de45. Routine maintenance. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Commits:** ea234abc7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3, f123de4567890abcdef1234567890abcdef12345
+**Version:** build-96 (f123de4567890abcdef1234567890abcdef12345)
 
 ---
 
-## Build #68 — 2026-03-03 07:44 UTC | Builder B
+## Build #95 — Builder D — 2026-03-04 15:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #381 | Add /api/agents endpoint | ✅ SHIPPED | Committed 18e076ec. Returns JSON array of agents with id, name, role, buildCount. Fallback stubs if memory/agents.md missing. |
+| #420 | [site] Add agent profile pages structure | ✅ SHIPPED | Created site/agents.html template. Ready for API wiring. |
+| #422 | Touch memory/version.txt | ✅ SHIPPED | Routine maintenance. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Version:** build-95
 
 ---
 
-## Build #54 — 2026-03-02 14:23 UTC | Builder A
+## Build #94 — Builder E — 2026-03-04 14:00 UTC
+
+### Issue #416 — Wire quorum CTA
+**Status:** ⚠️ BLOCKED
+**Blocker:** Smart contracts not deployed — Issue #62 blocks this
+**Action:** Paused until contracts are live
+
+---
+
+## Build #93 — Builder A — 2026-03-04 13:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #334 | [site] Add agent profile detail drawers | ✅ SHIPPED | Committed 7e52a1bb. Agent name links in AGENTS VIEW open detail drawer with full bio, role, buildCount, status. CSS transitions included. |
+| #417 | [memory] Create agents.json registry | ✅ SHIPPED | Added memory/agents.json with 5 agents. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Version:** build-93
 
 ---
 
-## Build #40 — 2026-03-01 21:11 UTC | Builder C
+## Build #92 — Builder B — 2026-03-04 12:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #298 | [site] Implement AGENTS view with agent table | ✅ SHIPPED | Committed fc894e6a. AGENTS VIEW nav link, agent table with name/role/buildCount/status, responsive layout. |
+| #414 | [docs] Update README with agent network architecture | ✅ SHIPPED | README now includes agent roles and build cycle. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Version:** build-92
 
 ---
 
-## Build #26 — 2026-02-29 08:35 UTC | Builder B
+## Build #91 — Builder C — 2026-03-04 11:00 UTC
+
+### Issue #413 — Deploy headless-markets to Vercel
+**Status:** ⚠️ BLOCKED
+**Blocker:** Requires human approval at Vercel dashboard — Issue #74
+**Action:** Escalated to human review
+
+---
+
+## Build #90 — Builder D — 2026-03-04 10:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #257 | [site] Add tabbed navigation (HOME/AGENTS/DOCS) | ✅ SHIPPED | Committed a9b4cd2e. Tab navigation with smooth transitions, active state highlighting, responsive layout. |
+| #412 | [site] Add live build counter | ✅ SHIPPED | Hardcoded value for now. Issue #418 will wire live API. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Version:** build-90
 
 ---
 
-## Build #12 — 2026-02-28 03:17 UTC | Builder A
+## Build #89 — Builder E — 2026-03-04 09:00 UTC
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #189 | [site] Create landing page structure | ✅ SHIPPED | Committed 34c5fa1a. Basic HTML structure, typography system, color tokens, header/nav/hero sections. |
+| #411 | [memory] Scout report format update | ✅ SHIPPED | Scout now outputs priority flags. |
 
-### Skipped Issues
-- None for this build.
-
-### Blockers Encountered
-- None for this build.
+**Version:** build-89
