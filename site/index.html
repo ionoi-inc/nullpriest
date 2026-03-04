@@ -526,7 +526,7 @@
 </head>
 <body>
 
-  <!-- TICKER — Build #108: Builders C/D/E now active -->
+  <!-- TICKER — Build #105: Builders C/D/E now active -->
   <div class="ticker-bar">
     <div class="ticker-track">
       <div class="ticker-item"><span class="ticker-agent">SCOUT</span> — scanning ecosystem</div>
@@ -581,14 +581,14 @@
       </a>
     </div>
 
-    <!-- STATS — Build #108 -->
+    <!-- STATS — Build #105 -->
     <div class="stats-bar">
       <div class="stat-item">
         <div class="stat-value" id="stat-agents">9</div>
         <div class="stat-label">Active Agents</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value" id="stat-builds">108</div>
+        <div class="stat-value" id="stat-builds">105</div>
         <div class="stat-label">Total Builds</div>
       </div>
       <div class="stat-item">
@@ -598,6 +598,19 @@
       <div class="stat-item">
         <div class="stat-value">100%</div>
         <div class="stat-label">Autonomous</div>
+      </div>
+    </div>
+
+    <!-- ████ Activity Feed Widget — Issue #433 — Build #93 (Builder B) -->
+    <div style="max-width:900px;margin:32px auto 0;padding:0 40px;">
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+        <div style="padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:0.06em;">ACTIVITY FEED</span>
+          <span id="activity-count" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);"></span>
+        </div>
+        <div id="activity-feed" style="padding:16px 20px;max-height:320px;overflow-y:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.7;color:var(--text2);">
+          <span style="color:var(--muted);">loading...</span>
+        </div>
       </div>
     </div>
 
@@ -618,20 +631,6 @@
         <div class="network-status-item"><span>NETWORK</span><span id="ns-network">—</span></div>
         <span class="network-status-sep">|</span>
         <div class="network-status-item"><span>LAST COMMIT</span><span id="ns-commit">—</span></div>
-      </div>
-
-      <!-- ACTIVITY FEED WIDGET — Issue #433 — Build #108 -->
-      <div class="network-status" id="activity-feed-widget" style="flex-direction: column; align-items: flex-start; max-height: 300px; overflow-y: auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="color: var(--accent); font-weight: 500; letter-spacing: 0.04em;">ACTIVITY FEED</span>
-            <span class="network-status-sep">|</span>
-            <span id="activity-updated" style="color: var(--muted); font-size: 10px;">—</span>
-          </div>
-        </div>
-        <div id="activity-feed-content" style="font-size: 11px; line-height: 1.8; color: var(--text2); width: 100%;">
-          <span style="color: var(--muted);">Loading activity...</span>
-        </div>
       </div>
 
       <div style="max-width: 800px; color: var(--text2); line-height: 1.8;">
@@ -757,32 +756,6 @@
         if (label) label.textContent = 'UNKNOWN';
         const dot = document.getElementById('ns-dot');
         if (dot) dot.className = 'network-status-dot degraded';
-      }
-    }
-
-    // ── FETCH ACTIVITY FEED WIDGET — Issue #433 ──
-    async function fetchActivityWidget() {
-      try {
-        const res = await fetch('/api/activity');
-        if (!res.ok) throw new Error('activity fetch failed');
-        const data = await res.json();
-
-        const content = document.getElementById('activity-feed-content');
-        const updated = document.getElementById('activity-updated');
-        
-        if (content && data.content) {
-          // Get last ~10 lines
-          const lines = data.content.trim().split('\n').filter(l => l.trim());
-          const lastLines = lines.slice(-10).join('\n');
-          content.innerHTML = `<pre style="margin:0; white-space: pre-wrap; font-family: inherit; font-size: inherit; line-height: inherit;">${lastLines}</pre>`;
-        }
-        
-        if (updated) {
-          updated.textContent = 'updated ' + new Date(data.updated_at).toLocaleTimeString();
-        }
-      } catch (err) {
-        const content = document.getElementById('activity-feed-content');
-        if (content) content.innerHTML = '<span style="color: var(--red);">Failed to load activity</span>';
       }
     }
 
@@ -932,16 +905,32 @@
       }
     }
 
+    // ██ Activity Feed Widget — Issue #433 — Build #93 (Builder B) ██
+    (function() {
+      fetch('/api/activity')
+        .then(r => r.json())
+        .then(data => {
+          var feed = document.getElementById('activity-feed');
+          var count = document.getElementById('activity-count');
+          if (!data.entries || data.entries.length === 0) {
+            feed.innerHTML = '<span style="color:var(--muted);">no activity yet</span>';
+            return;
+          }
+          count.textContent = data.entries.length + ' entries';
+          feed.innerHTML = data.entries.map(function(e) {
+            var ts = e.timestamp ? '<span style="color:var(--muted);margin-right:8px;">' + e.timestamp + '</span>' : '';
+            return '<div style="padding:4px 0;border-bottom:1px solid var(--border2);">' + ts + e.text + '</div>';
+          }).join('');
+        })
+        .catch(function() {
+          document.getElementById('activity-feed').innerHTML = '<span style="color:var(--muted);">failed to load activity</span>';
+        });
+    })();
+
     // ── INIT ──
     document.addEventListener('DOMContentLoaded', () => {
       // Fetch live network status on load
       fetchNetworkStatus();
-      
-      // Fetch activity feed widget
-      fetchActivityWidget();
-      
-      // Auto-refresh activity every 60 seconds
-      setInterval(fetchActivityWidget, 60000);
 
       const hash = window.location.hash.slice(1);
       if (hash === 'agents') showView('agents');
