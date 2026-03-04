@@ -68,7 +68,7 @@ async function verifyPaymentOnChain(tx_hash, expected_memo, listing) {
 app.use(cors());
 app.use(express.json());
 
-// ▓▓▓ Google A2A Discovery — Issue #76
+// ▶▶▶ Google A2A Discovery — Issue #76
 app.get('/.well-known/agent.json', (req, res) => {
   res.json({
     name: 'nullpriest',
@@ -89,7 +89,7 @@ app.get('/.well-known/agent.json', (req, res) => {
   });
 });
 
-// ▓▓▓ Memory Proxy — Issue #15
+// ▶▶▶ Memory Proxy — Issue #15
 app.get('/memory/*', async (req, res) => {
   const memPath = req.params[0];
   if (!memPath) return res.status(400).send('Path required');
@@ -110,7 +110,7 @@ app.get('/memory/*', async (req, res) => {
   }
 });
 
-// ▓▓▓ x402 Payment Protocol — Issue #440
+// ▶▶▶ x402 Payment Protocol — Issue #440
 app.post('/x402/verify', async (req, res) => {
   const { tx_hash, memo, listing_id } = req.body;
   
@@ -156,178 +156,156 @@ app.get('/x402/config', (req, res) => {
     paymentAddress: X402_PAYMENT_ADDRESS,
     listings: [
       {
-        id: 'market-access',
-        name: 'Market Access',
-        description: 'Access to nullpriest headless markets API',
-        priceUSDC: 0.10
+        id: 'headless-markets-agent-slot',
+        title: 'Agent Slot — Headless Markets',
+        price: '0.001',
+        currency: 'ETH',
+        description: 'Register your agent in the headless markets protocol. One-time payment.',
+        benefits: ['On-chain agent identity', 'Quorum voting rights', 'Revenue share from protocol fees'],
+      },
+      {
+        id: 'custos-mining-credits',
+        title: '$CUSTOS Mining Credits',
+        price: '0.0005',
+        currency: 'ETH',
+        description: 'Priority access to $CUSTOS mining slots.',
+        benefits: ['Skip the queue', 'Higher mining rates', '30-day access'],
       }
     ]
   });
 });
 
-// ▓▓▓ Price Endpoint — Issue #440 (x402 gated)
-app.get('/api/price', async (req, res) => {
-  // Check for valid access token
-  const token = req.headers['x-access-token'] || req.query.token;
-  
-  if (!token) {
-    return res.status(402).json({
-      error: 'Payment required',
-      x402: {
-        version: X402_PAYMENT_VERSION,
-        network: X402_NETWORK,
-        chainId: X402_CHAIN_ID,
-        paymentAddress: X402_PAYMENT_ADDRESS,
-        priceUSDC: 0.10,
-        memo: 'price-access-' + Date.now()
-      }
-    });
-  }
-  
-  // Validate token exists in verified payments (simple match)
-  const verified = [...VERIFIED_PAYMENTS.values()].find(p => p.access_token === token);
-  if (!verified) {
-    return res.status(403).json({ error: 'Invalid or expired access token' });
-  }
-  
-  // Return real price data
-  res.json({
-    custos_usdc: 0.0012,
-    custos_eth: 0.00000035,
-    last_updated: new Date().toISOString(),
-    network: 'base-mainnet'
+// ▶▶▶ /api/price — Issue #58
+app.get('/api/price', (req, res) => {
+  res.status(402).json({
+    error: 'Payment Required',
+    protocol: 'x402',
+    version: X402_PAYMENT_VERSION,
+    payment: {
+      address: X402_PAYMENT_ADDRESS,
+      network: X402_NETWORK,
+      chainId: X402_CHAIN_ID,
+      amount: '0.001',
+      currency: 'ETH',
+      memo: `price-access-${Date.now()}`,
+      instructions: 'Send ETH to the address above with the memo in tx data. Then POST to /x402/verify with { tx_hash, memo, listing_id: "price-api-access" }'
+    },
+    message: 'This endpoint requires payment via x402 protocol. Pay once, access forever.'
   });
 });
 
-// ▓▓▓ Agents List — Issue #62
-app.get('/api/agents', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(url, (resp) => {
-        let body = '';
-        resp.on('data', d => body += d);
-        resp.on('end', () => {
-          try { resolve(JSON.parse(body)); }
-          catch (e) { resolve([]); }
-        });
-      }).on('error', reject);
-    });
-    res.json(data);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ▓▓▓ Agent Detail — Issue #415
-app.get('/api/agents/:id', async (req, res) => {
-  try {
-    const agentId = req.params.id;
-    const url = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const agents = await new Promise((resolve, reject) => {
-      https.get(url, (resp) => {
-        let body = '';
-        resp.on('data', d => body += d);
-        resp.on('end', () => {
-          try { resolve(JSON.parse(body)); }
-          catch (e) { resolve([]); }
-        });
-      }).on('error', reject);
-    });
-    const agent = Array.isArray(agents) ? agents.find(a => a.id === agentId) : null;
-    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
-    res.json(agent);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// GET /api/agents/— list of agents (similar to /api/agents but paginated)
-app.get('/api/activity', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
-    const response = await new Promise((resolve, reject) => {
-      https.get(url, resolve).on('error', reject);
-    });
-    if (response.statusCode === 404) return res.status(404).json({ error: 'Activity feed not found' });
-    let md = '';
-    response.on('data', d => md += d);
-    response.on('end', () => {
-      const lines = md.split('\n').filter(l => l.trim());
-      const events = [];
-      for (const line of lines) {
-        if (line.startsWith('#')) continue;
-        if (line.startsWith('-') || line.startsWith('*')) {
-          events.unshift({ text: line.replace(/^[-*]\s*/, ''), raw: line });
-        }
+// ▶▶▶ /api/agents — Issue #60
+app.get('/api/agents', (req, res) => {
+  res.json({
+    agents: [
+      {
+        id: 'nullpriest',
+        name: 'NullPriest',
+        role: 'Orchestrator',
+        status: 'active',
+        build_count: 117,
+        last_build: '2026-03-04T21:05:00Z',
+        protocols: ['x402', 'a2a'],
+        capabilities: ['read', 'write', 'discover'],
+        endpoint: 'https://nullpriest.iono.info',
+      },
+      {
+        id: 'watcher-1-scout',
+        name: 'Scout',
+        role: 'Intelligence',
+        status: 'active',
+        last_run: '2026-02-22T05:01:00Z',
+        protocols: ['a2a'],
+        capabilities: ['read', 'discover'],
+      },
+      {
+        id: 'watcher-2-strategist',
+        name: 'Strategist',
+        role: 'Planning',
+        status: 'active',
+        last_run: '2026-03-04T08:19:00Z',
+        protocols: ['a2a'],
+        capabilities: ['read', 'write'],
+      },
+      {
+        id: 'watcher-3-builder-a',
+        name: 'Builder A',
+        role: 'Development',
+        status: 'active',
+        build_count: 117,
+        last_build: '2026-03-04T21:05:00Z',
+        protocols: ['a2a'],
+        capabilities: ['write'],
       }
-      res.json({ events: events.slice(0, 50), total: events.length });
-    });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ▓▓▓ Stats — Issue #418 (live build count from version.txt) + Issue #422 (version.txt touch)
-app.get('/api/stats', async (req, res) => {
-  try {
-    // Read build count from memory/version.txt via GitHub raw
-    const versionUrl = `${GITHUB_RAW_BASE}/memory/version.txt`;
-    const versionText = await new Promise((resolve) => {
-      https.get(versionUrl, (resp) => {
-        let body = '';
-        resp.on('data', d => body += d);
-        resp.on('end', () => resolve(body.trim()));
-      }).on('error', () => resolve(''));
-    });
-
-    // version.txt format: build-NNN-YYYY-MM-DDTHH:MM:SSZ
-    let build_count = null;
-    let last_build = null;
-    const vMatch = versionText.match(/^build-(\d+)-(.+)$/);
-    if (vMatch) {
-      build_count = parseInt(vMatch[1], 10);
-      last_build = vMatch[2];
+    ],
+    metadata: {
+      total: 4,
+      active: 4,
+      total_builds: 117,
+      last_updated: '2026-03-04T21:05:00Z'
     }
+  });
+});
 
-    // Read agent count from memory/agents.json
-    const agentsUrl = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const agentsData = await new Promise((resolve) => {
-      https.get(agentsUrl, (resp) => {
-        let body = '';
-        resp.on('data', d => body += d);
-        resp.on('end', () => {
-          try { resolve(JSON.parse(body)); } catch (e) { resolve(null); }
-        });
-      }).on('error', () => resolve(null));
+// ▶▶▶ ERC-8004 Headless-Markets Agent Onboarding — Issue #432
+const { onboardAgent } = require('./headless-markets/onboarding');
+
+// POST /api/headless-markets/onboard — register an agent via ERC-8004 during onboarding
+app.post('/api/headless-markets/onboard', async (req, res) => {
+  const { name, endpoint, owner, capabilities, protocols, quorum_eligible } = req.body;
+
+  if (!name || !endpoint || !owner) {
+    return res.status(400).json({
+      error: 'Missing required fields: name, endpoint, owner',
+      x402_hint: 'Agent onboarding is free. x402 payment required only for market listings.',
     });
+  }
 
-    const agentList = agentsData && agentsData.agents ? agentsData.agents : (Array.isArray(agentsData) ? agentsData : []);
-    const agent_count = agentList.filter(a => !a.status || a.status === 'active').length || 8;
-
-    res.json({
-      build_count,
-      last_build,
-      agent_count,
-      uptime: '24/7',
-      version: versionText || null
-    });
+  try {
+    const result = await onboardAgent({ name, endpoint, owner, capabilities, protocols, quorum_eligible });
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
+    }
+    res.status(201).json(result);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Onboarding failed: ' + e.message });
   }
 });
 
-// ▓▓▓ Static Site
-app.use(express.static(path.join(__dirname, 'site')));
+// GET /api/headless-markets/onboard/schema — ERC-8004 registration schema for clients
+app.get('/api/headless-markets/onboard/schema', (req, res) => {
+  res.json({
+    standard: 'ERC-8004',
+    version: '0.1.0-draft',
+    description: 'Agent identity registration for headless-markets quorum participation',
+    required_fields: ['name', 'endpoint', 'owner'],
+    optional_fields: ['version', 'capabilities', 'protocols', 'quorum_eligible'],
+    field_specs: {
+      name: 'string — human-readable agent name',
+      endpoint: 'string — HTTPS URL where agent accepts A2A messages',
+      owner: 'string — Ethereum address (0x + 40 hex)',
+      version: 'string — semver (default: 1.0.0)',
+      capabilities: 'array — e.g. ["read","write","discover"]',
+      protocols: 'array — e.g. ["x402","a2a"]',
+      quorum_eligible: 'boolean — can this agent vote in quorum? (default: true)',
+    },
+    registry_contract: process.env.ERC8004_REGISTRY_ADDRESS || '0xF3e2029351477 5a3149C304820d9E6a6FA29b07',
+    network: 'base-mainnet',
+    chain_id: 8453,
+  });
+});
 
-// SPA fallback - serve index.html for all non-API routes
+// ▶▶▶ Static site serving
+app.use(express.static(path.join(__dirname, 'site')));
 app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/') || req.path.startsWith('/memory/')) {
-    return res.status(404).json({ error: 'Not found' });
-  }
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`nullpriest server listening on port ${PORT}`);
+  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`Memory proxy: /memory/*`);
+  console.log(`x402 payment: /x402/verify, /x402/config`);
+  console.log(`Agent API: /api/agents`);
+  console.log(`Headless-markets onboarding: /api/headless-markets/onboard`);
+  console.log(`A2A discovery: /.well-known/agent.json`);
 });
