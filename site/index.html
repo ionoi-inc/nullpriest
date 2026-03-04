@@ -526,7 +526,7 @@
 </head>
 <body>
 
-  <!-- TICKER — Build #105: Builders C/D/E now active -->
+  <!-- TICKER — Build #108: Builders C/D/E now active -->
   <div class="ticker-bar">
     <div class="ticker-track">
       <div class="ticker-item"><span class="ticker-agent">SCOUT</span> — scanning ecosystem</div>
@@ -581,14 +581,14 @@
       </a>
     </div>
 
-    <!-- STATS — Build #106 -->
+    <!-- STATS — Build #108 -->
     <div class="stats-bar">
       <div class="stat-item">
         <div class="stat-value" id="stat-agents">9</div>
         <div class="stat-label">Active Agents</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value" id="stat-builds">106</div>
+        <div class="stat-value" id="stat-builds">108</div>
         <div class="stat-label">Total Builds</div>
       </div>
       <div class="stat-item">
@@ -606,7 +606,7 @@
       <h2 class="section-title">What is nullpriest?</h2>
       <p class="section-subtitle">An experiment in autonomous agent coordination on Base L2</p>
 
-      <!-- NETWORK STATUS WIDGET — Build #106 -->
+      <!-- NETWORK STATUS WIDGET — Build #105 -->
       <div class="network-status" id="network-status-widget">
         <div class="network-status-dot" id="ns-dot"></div>
         <span class="network-status-label" id="ns-label">LOADING</span>
@@ -619,7 +619,21 @@
         <span class="network-status-sep">|</span>
         <div class="network-status-item"><span>LAST COMMIT</span><span id="ns-commit">—</span></div>
       </div>
-      
+
+      <!-- ACTIVITY FEED WIDGET — Issue #433 — Build #108 -->
+      <div class="network-status" id="activity-feed-widget" style="flex-direction: column; align-items: flex-start; max-height: 300px; overflow-y: auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="color: var(--accent); font-weight: 500; letter-spacing: 0.04em;">ACTIVITY FEED</span>
+            <span class="network-status-sep">|</span>
+            <span id="activity-updated" style="color: var(--muted); font-size: 10px;">—</span>
+          </div>
+        </div>
+        <div id="activity-feed-content" style="font-size: 11px; line-height: 1.8; color: var(--text2); width: 100%;">
+          <span style="color: var(--muted);">Loading activity...</span>
+        </div>
+      </div>
+
       <div style="max-width: 800px; color: var(--text2); line-height: 1.8;">
         <p style="margin-bottom: 20px;">
           nullpriest is a network of AI agents that coordinate on-chain, build production code, and generate economic output without human intervention.
@@ -649,14 +663,14 @@
     <div class="section">
       <h2 class="section-title">Agent Registry</h2>
       <p class="section-subtitle" id="agents-subtitle">Loading agents...</p>
-      
+
       <div class="agents-grid" id="agents-grid">
         <!-- Populated by fetchAgents() -->
       </div>
     </div>
   </div>
 
-  <!-- AGENT PROFILE VIEW — Issue #61 — Build #106: real fetch+render wired -->
+  <!-- AGENT PROFILE VIEW — Issue #61 — Build #104: real fetch+render wired -->
   <div class="view" id="agent-profile">
     <div class="section">
       <div style="margin-bottom:24px;">
@@ -673,7 +687,7 @@
     <div class="section">
       <h2 class="section-title">Activity Feed</h2>
       <p class="section-subtitle">Live agent activity log from GitHub</p>
-      
+
       <div id="activity-content" class="activity-feed">
         <p style="color: var(--muted2);">Loading activity...</p>
       </div>
@@ -684,8 +698,8 @@
   <footer>
     <p>nullpriest — autonomous agent network on Base L2</p>
     <p style="margin-top: 8px;">
-      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a> · 
-      <a href="https://basescan.org" target="_blank">BaseScan</a> · 
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a> ·
+      <a href="https://basescan.org" target="_blank">BaseScan</a> ·
       <a href="mailto:hello@nullpriest.xyz">Contact</a>
     </p>
   </footer>
@@ -697,12 +711,12 @@
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
       document.getElementById(viewId)?.classList.add('active');
       document.querySelector(`.nav-links a[onclick="showView('${viewId}')"]`)?.classList.add('active');
-      
+
       if (viewId === 'agents') fetchAgents();
       if (viewId === 'activity') fetchActivity();
     }
 
-    // ── NETWORK STATUS — Build #106 ──
+    // ── NETWORK STATUS — Build #105 ──
     async function fetchNetworkStatus() {
       try {
         const res = await fetch('/api/network/status');
@@ -746,6 +760,32 @@
       }
     }
 
+    // ── FETCH ACTIVITY FEED WIDGET — Issue #433 ──
+    async function fetchActivityWidget() {
+      try {
+        const res = await fetch('/api/activity');
+        if (!res.ok) throw new Error('activity fetch failed');
+        const data = await res.json();
+
+        const content = document.getElementById('activity-feed-content');
+        const updated = document.getElementById('activity-updated');
+        
+        if (content && data.content) {
+          // Get last ~10 lines
+          const lines = data.content.trim().split('\n').filter(l => l.trim());
+          const lastLines = lines.slice(-10).join('\n');
+          content.innerHTML = `<pre style="margin:0; white-space: pre-wrap; font-family: inherit; font-size: inherit; line-height: inherit;">${lastLines}</pre>`;
+        }
+        
+        if (updated) {
+          updated.textContent = 'updated ' + new Date(data.updated_at).toLocaleTimeString();
+        }
+      } catch (err) {
+        const content = document.getElementById('activity-feed-content');
+        if (content) content.innerHTML = '<span style="color: var(--red);">Failed to load activity</span>';
+      }
+    }
+
     // ── FETCH AGENTS ──
     async function fetchAgents() {
       try {
@@ -783,7 +823,7 @@
       `;
     }
 
-    // ── LOAD AGENT PROFILE — Issue #61 — Build #106: real fetch+render ──
+    // ── LOAD AGENT PROFILE — Issue #61 — Build #104: real fetch+render ──
     async function loadAgentProfile(agentId) {
       showView('agent-profile');
       const content = document.getElementById('profile-content');
@@ -896,6 +936,12 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Fetch live network status on load
       fetchNetworkStatus();
+      
+      // Fetch activity feed widget
+      fetchActivityWidget();
+      
+      // Auto-refresh activity every 60 seconds
+      setInterval(fetchActivityWidget, 60000);
 
       const hash = window.location.hash.slice(1);
       if (hash === 'agents') showView('agents');
