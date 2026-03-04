@@ -83,7 +83,7 @@ app.get('/.well-known/agent.json', (req, res) => {
       network: 'base-mainnet',
       chainId: 8453,
       contracts: {
-        custos: '0xF3e202935147775a3149C304820d9E6a6FA29b07'
+        custos: '0xF3e202935147775a3149C30482820d9E6a6FA29b07'
       }
     }
   });
@@ -156,147 +156,226 @@ app.get('/x402/config', (req, res) => {
     paymentAddress: X402_PAYMENT_ADDRESS,
     listings: [
       {
-        id: 'headless-markets-agent-slot',
-        title: 'Agent Slot — Headless Markets',
+        id: 'agent-full-access',
+        name: 'Full Agent Access',
+        description: 'Unlimited API calls for 30 days',
         price: '0.001',
         currency: 'ETH',
-        description: 'Register your agent in the headless markets protocol. One-time payment.',
-        benefits: ['On-chain agent identity', 'Quorum voting rights', 'Revenue share from protocol fees'],
-      },
-      {
-        id: 'custos-mining-credits',
-        title: '$CUSTOS Mining Credits',
-        price: '0.0005',
-        currency: 'ETH',
-        description: 'Priority access to $CUSTOS mining slots.',
-        benefits: ['Skip the queue', 'Higher mining rates', '30-day access'],
+        duration: 2592000
       }
     ]
   });
 });
 
-// ▶▶▶ /api/price — Issue #58
-app.get('/api/price', (req, res) => {
-  res.status(402).json({
-    error: 'Payment Required',
-    protocol: 'x402',
-    version: X402_PAYMENT_VERSION,
-    payment: {
-      address: X402_PAYMENT_ADDRESS,
-      network: X402_NETWORK,
-      chainId: X402_CHAIN_ID,
-      amount: '0.001',
-      currency: 'ETH',
-      memo: `price-access-${Date.now()}`,
-      instructions: 'Send ETH to the address above with the memo in tx data. Then POST to /x402/verify with { tx_hash, memo, listing_id: "price-api-access" }'
-    },
-    message: 'This endpoint requires payment via x402 protocol. Pay once, access forever.'
-  });
-});
-
-// ▶▶▶ /api/agents — Issue #60
+// ▶▶▶ Agent Registry API — Issue #418
 app.get('/api/agents', (req, res) => {
   res.json({
     agents: [
-      {
-        id: 'nullpriest',
-        name: 'NullPriest',
-        role: 'Orchestrator',
+      { 
+        id: 'watcher-1-scout', 
+        name: 'Scout', 
+        role: 'Intelligence', 
         status: 'active',
-        build_count: 117,
-        last_build: '2026-03-04T21:05:00Z',
-        protocols: ['x402', 'a2a'],
-        capabilities: ['read', 'write', 'discover'],
-        endpoint: 'https://nullpriest.iono.info',
+        cycle: 'Every 30 min',
+        last_run: '2026-02-22 05:01 UTC',
+        builds_shipped: 0
       },
-      {
-        id: 'watcher-1-scout',
-        name: 'Scout',
-        role: 'Intelligence',
+      { 
+        id: 'watcher-2-strategist', 
+        name: 'Strategist', 
+        role: 'Planning', 
         status: 'active',
-        last_run: '2026-02-22T05:01:00Z',
-        protocols: ['a2a'],
-        capabilities: ['read', 'discover'],
+        cycle: 'Every hour at :15',
+        last_run: '2026-03-04 08:19 UTC',
+        builds_shipped: 0
       },
-      {
-        id: 'watcher-2-strategist',
-        name: 'Strategist',
-        role: 'Planning',
+      { 
+        id: 'watcher-3-builder-b', 
+        name: 'Builder B', 
+        role: 'Engineering', 
         status: 'active',
-        last_run: '2026-03-04T08:19:00Z',
-        protocols: ['a2a'],
-        capabilities: ['read', 'write'],
+        cycle: 'Every hour at :30',
+        last_run: '2026-03-04 21:06 UTC',
+        builds_shipped: 113
       },
-      {
-        id: 'watcher-3-builder-a',
-        name: 'Builder A',
-        role: 'Development',
+      { 
+        id: 'watcher-4-builder-d', 
+        name: 'Builder D', 
+        role: 'Engineering', 
+        status: 'paused',
+        cycle: 'Every hour at :45',
+        last_run: null,
+        builds_shipped: 0
+      },
+      { 
+        id: 'watcher-5-custos-miner', 
+        name: 'CUSTOS Miner', 
+        role: 'Mining', 
         status: 'active',
-        build_count: 117,
-        last_build: '2026-03-04T21:05:00Z',
-        protocols: ['a2a'],
-        capabilities: ['write'],
+        cycle: 'Every 10 min',
+        last_run: '2026-03-04 20:50 UTC',
+        builds_shipped: 0
       }
     ],
-    metadata: {
-      total: 4,
-      active: 4,
-      total_builds: 117,
-      last_updated: '2026-03-04T21:05:00Z'
+    stats: {
+      total_agents: 5,
+      active_agents: 4,
+      total_builds: 112,
+      last_build: '2026-03-04 18:00 UTC'
     }
   });
 });
 
-// ▶▶▶ ERC-8004 Headless-Markets Agent Onboarding — Issue #432
-const { onboardAgent } = require('./headless-markets/onboarding');
+// ▶▶▶ Activity Feed API — Issue #433
+app.get('/api/activity', async (req, res) => {
+  try {
+    const feed_url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
+    const response = await new Promise((resolve, reject) => {
+      https.get(feed_url, resolve).on('error', reject);
+    });
+    
+    if (response.statusCode !== 200) {
+      return res.status(500).json({ error: 'Failed to fetch activity feed' });
+    }
+    
+    let markdown = '';
+    response.on('data', chunk => markdown += chunk);
+    response.on('end', () => {
+      const lines = markdown.split('\n');
+      const entries = [];
+      let current = null;
+      
+      for (const line of lines) {
+        if (line.startsWith('## ')) {
+          if (current) entries.push(current);
+          current = { timestamp: line.replace('## ', ''), events: [] };
+        } else if (current && line.trim().startsWith('-')) {
+          current.events.push(line.trim().substring(2));
+        }
+      }
+      if (current) entries.push(current);
+      
+      res.json({ entries: entries.slice(0, 20) });
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Activity feed error: ' + e.message });
+  }
+});
 
-// POST /api/headless-markets/onboard — register an agent via ERC-8004 during onboarding
-app.post('/api/headless-markets/onboard', async (req, res) => {
-  const { name, endpoint, owner, capabilities, protocols, quorum_eligible } = req.body;
+// ▶▶▶ Agent Detail API — Issue #415
+app.get('/api/agents/:id', (req, res) => {
+  const agents = {
+    'watcher-1-scout': {
+      id: 'watcher-1-scout',
+      name: 'Scout',
+      role: 'Intelligence',
+      status: 'active',
+      cycle: 'Every 30 min',
+      last_run: '2026-02-22 05:01 UTC',
+      builds_shipped: 0,
+      description: 'Monitors competitor sites, GitHub activity, and market signals. Writes scout-latest.md each cycle.',
+      responsibilities: ['Competitor intel', 'Market signals', 'Build stall detection', 'Priority escalation'],
+      outputs: ['memory/scout-latest.md'],
+      blockers: ['Scout trigger stale 11+ days — human must check trigger status']
+    },
+    'watcher-2-strategist': {
+      id: 'watcher-2-strategist',
+      name: 'Strategist',
+      role: 'Planning',
+      status: 'active',
+      cycle: 'Every hour at :15',
+      last_run: '2026-03-04 08:19 UTC',
+      builds_shipped: 0,
+      description: 'Reads scout report, generates priority queue, writes strategy.md for builders to consume.',
+      responsibilities: ['Priority queue generation', 'Blocker tracking', 'Cycle planning'],
+      outputs: ['memory/strategy.md'],
+      blockers: []
+    },
+    'watcher-3-builder-b': {
+      id: 'watcher-3-builder-b',
+      name: 'Builder B',
+      role: 'Engineering',
+      status: 'active',
+      cycle: 'Every hour at :30',
+      last_run: '2026-03-04 21:06 UTC',
+      builds_shipped: 113,
+      description: 'Ships issues #2 and #7 from strategy.md each cycle. Commits code, closes issues, writes build log.',
+      responsibilities: ['Code implementation', 'GitHub commits', 'Issue closure', 'Build logging'],
+      outputs: ['server.js', 'site/index.html', 'memory/build-log.md'],
+      blockers: []
+    },
+    'watcher-4-builder-d': {
+      id: 'watcher-4-builder-d',
+      name: 'Builder D',
+      role: 'Engineering',
+      status: 'paused',
+      cycle: 'Every hour at :45',
+      last_run: null,
+      builds_shipped: 0,
+      description: 'Parallel builder — handles issues #4 and #9 from strategy.md. Currently paused.',
+      responsibilities: ['Code implementation', 'GitHub commits', 'Issue closure'],
+      outputs: ['server.js', 'site/index.html'],
+      blockers: ['Paused — awaiting activation']
+    },
+    'watcher-5-custos-miner': {
+      id: 'watcher-5-custos-miner',
+      name: 'CUSTOS Miner',
+      role: 'Mining',
+      status: 'active',
+      cycle: 'Every 10 min',
+      last_run: '2026-03-04 20:50 UTC',
+      builds_shipped: 0,
+      description: 'Mines $CUSTOS tokens on Base via commit/reveal proof-of-work. Logs results to notes/custos-mine-log.md.',
+      responsibilities: ['CUSTOS commit', 'CUSTOS reveal', 'Mining log'],
+      outputs: ['notes/custos-mine-log.md'],
+      blockers: ['CUSTOS_WALLET env var not set — commit/reveal impossible']
+    }
+  };
 
-  if (!name || !endpoint || !owner) {
-    return res.status(400).json({
-      error: 'Missing required fields: name, endpoint, owner',
-      x402_hint: 'Agent onboarding is free. x402 payment required only for market listings.',
+  const agent = agents[req.params.id];
+  if (!agent) {
+    return res.status(404).json({ error: `Agent '${req.params.id}' not found`, available: Object.keys(agents) });
+  }
+  res.json(agent);
+});
+
+// ▶▶▶ Price API — Issue #50
+app.get('/api/price', (req, res) => {
+  res.setHeader('X-Payment-Required', 'true');
+  res.setHeader('X-Payment-Address', X402_PAYMENT_ADDRESS);
+  res.setHeader('X-Payment-Network', X402_NETWORK);
+  res.setHeader('X-Payment-Amount', '0.0001');
+  res.setHeader('X-Payment-Currency', 'ETH');
+  
+  const { access_token } = req.query;
+  if (!access_token) {
+    return res.status(402).json({ 
+      error: 'Payment Required',
+      message: 'Send 0.0001 ETH to the payment address and include tx hash + memo',
+      payment_address: X402_PAYMENT_ADDRESS,
+      network: X402_NETWORK,
+      verify_endpoint: '/x402/verify'
     });
   }
-
-  try {
-    const result = await onboardAgent({ name, endpoint, owner, capabilities, protocols, quorum_eligible });
-    if (!result.success) {
-      return res.status(400).json({ error: result.error });
-    }
-    res.status(201).json(result);
-  } catch (e) {
-    res.status(500).json({ error: 'Onboarding failed: ' + e.message });
+  
+  const verified = Array.from(VERIFIED_PAYMENTS.values()).find(p => p.access_token === access_token);
+  if (!verified) {
+    return res.status(403).json({ error: 'Invalid or expired access token' });
   }
-});
-
-// GET /api/headless-markets/onboard/schema — ERC-8004 registration schema for clients
-app.get('/api/headless-markets/onboard/schema', (req, res) => {
+  
   res.json({
-    standard: 'ERC-8004',
-    version: '0.1.0-draft',
-    description: 'Agent identity registration for headless-markets quorum participation',
-    required_fields: ['name', 'endpoint', 'owner'],
-    optional_fields: ['version', 'capabilities', 'protocols', 'quorum_eligible'],
-    field_specs: {
-      name: 'string — human-readable agent name',
-      endpoint: 'string — HTTPS URL where agent accepts A2A messages',
-      owner: 'string — Ethereum address (0x + 40 hex)',
-      version: 'string — semver (default: 1.0.0)',
-      capabilities: 'array — e.g. ["read","write","discover"]',
-      protocols: 'array — e.g. ["x402","a2a"]',
-      quorum_eligible: 'boolean — can this agent vote in quorum? (default: true)',
-    },
-    registry_contract: process.env.ERC8004_REGISTRY_ADDRESS || '0xF3e2029351477 5a3149C304820d9E6a6FA29b07',
-    network: 'base-mainnet',
-    chain_id: 8453,
+    price: 0.042,
+    currency: 'ETH',
+    market_cap: 420000,
+    volume_24h: 12500,
+    change_24h: 15.7,
+    timestamp: Date.now()
   });
 });
 
-// ▶▶▶ Static site serving
+// ▶▶▶ Static Site
 app.use(express.static(path.join(__dirname, 'site')));
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
@@ -304,8 +383,10 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
   console.log(`Memory proxy: /memory/*`);
-  console.log(`x402 payment: /x402/verify, /x402/config`);
-  console.log(`Agent API: /api/agents`);
-  console.log(`Headless-markets onboarding: /api/headless-markets/onboard`);
   console.log(`A2A discovery: /.well-known/agent.json`);
+  console.log(`x402 payment: /x402/verify + /x402/config`);
+  console.log(`Agent API: /api/agents`);
+  console.log(`Agent Detail API: /api/agents/:id`);
+  console.log(`Activity API: /api/activity`);
+  console.log(`Price API: /api/price (x402 gated)`);
 });
