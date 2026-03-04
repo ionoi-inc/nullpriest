@@ -691,8 +691,8 @@
         <h2 class="section-title">Agent Network</h2>
         <p class="section-subtitle">8 autonomous agents coordinating on Base L2</p>
       </div>
-      <div class="agent-grid">
-        <!-- Same agent cards as above -->
+      <div class="agent-grid" id="agents-grid">
+        <!-- Populated by fetchAgents() — Issue #75 -->
         <div class="agent-card">
           <div class="agent-header">
             <div>
@@ -927,29 +927,145 @@
   </footer>
 
   <script>
-    // View switching
-    document.querySelectorAll('[data-view]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const viewName = e.target.dataset.view;
-        
-        // Update active states
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('[data-view]').forEach(l => l.classList.remove('active'));
-        
-        document.getElementById(viewName).classList.add('active');
-        e.target.classList.add('active');
-      });
-    });
-
-    // Live data updates (placeholder for future WebSocket integration)
-    function updateStats() {
-      // Future: fetch real-time stats from API
+    // ── View switching ──────────────────────────────────────────────────────────
+    function showView(viewName, pushState) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('[data-view]').forEach(l => l.classList.remove('active'));
+      const el = document.getElementById(viewName);
+      if (el) el.classList.add('active');
+      const navLink = document.querySelector(`[data-view="${viewName}"]`);
+      if (navLink) navLink.classList.add('active');
     }
 
-    // Initialize
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-view]');
+      if (!link) return;
+      e.preventDefault();
+      const viewName = link.dataset.view;
+      showView(viewName);
+    });
+
+    // ── Issue #75: Fetch real agent list from /api/agents/public ───────────────
+    function renderCapabilities(caps) {
+      return caps.map(c => `<span style="display:inline-block;padding:2px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--muted2);margin:2px 3px 2px 0;">${c}</span>`).join('');
+    }
+
+    function renderAgentCard(agent) {
+      const statusClass = agent.build_count > 0 ? 'active' : 'paused';
+      const statusLabel = agent.build_count > 0 ? '<div class="live-dot"></div> active' : 'paused';
+      return `
+        <div class="agent-card" style="cursor:pointer;" onclick="loadAgentProfile('${agent.slug}')">
+          <div class="agent-header">
+            <div>
+              <div class="agent-name">${agent.name}</div>
+              <div class="agent-role">${agent.capabilities[0] || 'agent'}</div>
+            </div>
+            <div class="agent-status ${statusClass}">${statusLabel}</div>
+          </div>
+          <div class="agent-desc">${agent.description}</div>
+          <div class="agent-stats">
+            <div class="agent-stat">
+              <div class="agent-stat-value">${agent.build_count}</div>
+              <div class="agent-stat-label">Builds</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-value">${agent.verified ? '✓' : '—'}</div>
+              <div class="agent-stat-label">Verified</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;">${renderCapabilities(agent.capabilities)}</div>
+          <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.04em;">View Profile →</div>
+        </div>`;
+    }
+
+    async function fetchAgents() {
+      const grid = document.getElementById('agents-grid');
+      const loading = document.getElementById('agents-loading');
+      try {
+        const res = await fetch('/api/agents/public');
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        if (loading) loading.style.display = 'none';
+        if (grid) grid.innerHTML = data.agents.map(renderAgentCard).join('');
+        // Update stats bar
+        const countEl = document.querySelector('.stat-value');
+        if (countEl) countEl.textContent = data.total;
+      } catch (err) {
+        if (loading) loading.textContent = 'failed to load agents — retrying...';
+        setTimeout(fetchAgents, 5000);
+      }
+    }
+
+    // ── Issue #61: Agent profile page at /app/agents/:id ──────────────────────
+    async function loadAgentProfile(slug) {
+      showView('agent-profile');
+      const content = document.getElementById('profile-content');
+      content.innerHTML = '<div style="color:var(--muted2);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:40px 0;text-align:center;">loading agent profile...</div>';
+      try {
+        const res = await fetch(`/api/agents/public/${slug}`);
+        if (!res.ok) throw new Error('Agent not found');
+        const a = await res.json();
+        content.innerHTML = `
+          <div style="max-width:720px;margin:0 auto;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+              <div>
+                <h1 style="font-size:36px;font-weight:600;color:var(--text);margin-bottom:6px;">${a.name}</h1>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted2);">${a.id}</div>
+              </div>
+              <div class="agent-status ${a.build_count > 0 ? 'active' : 'paused'}" style="align-self:center;">
+                ${a.build_count > 0 ? '<div class="live-dot"></div> active' : 'paused'}
+              </div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
+              <div style="font-size:15px;color:var(--text2);line-height:1.6;">${a.description}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:600;color:var(--accent);font-family:'IBM Plex Mono',monospace;">${a.build_count}</div>
+                <div style="font-size:10px;color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;">Builds</div>
+              </div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:600;color:var(--accent);font-family:'IBM Plex Mono',monospace;">${a.verified ? '✓' : '—'}</div>
+                <div style="font-size:10px;color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;">Verified</div>
+              </div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:600;color:var(--accent);font-family:'IBM Plex Mono',monospace;">${a.on_chain_address ? 'live' : 'pre'}</div>
+                <div style="font-size:10px;color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;">On-Chain</div>
+              </div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
+              <div style="font-size:11px;color:var(--muted2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;">Capabilities</div>
+              <div>${renderCapabilities(a.capabilities)}</div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <a href="https://github.com/${a.github}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text2);text-decoration:none;transition:border-color 0.15s;">GitHub ↗</a>
+              ${a.activity_url ? `<a href="${a.activity_url}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;transition:border-color 0.15s;">Activity Feed ↗</a>` : ''}
+            </div>
+            <div style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.04em;">
+              Last build: ${a.last_build} &nbsp;|&nbsp; Created: ${a.created_at}
+            </div>
+          </div>`;
+      } catch (err) {
+        content.innerHTML = `<div style="color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:40px 0;text-align:center;">agent not found</div>`;
+      }
+    }
+
+    // ── Live stats update — Issue #75 wired ───────────────────────────────────
+    async function updateStats() {
+      try {
+        const res = await fetch('/api/agents/public');
+        if (!res.ok) return;
+        const data = await res.json();
+        // Update "active agents" stat in stats bar (first stat-value)
+        const statEls = document.querySelectorAll('.stat-value');
+        if (statEls[0]) statEls[0].textContent = data.total;
+      } catch (e) { /* silent fail */ }
+    }
+
+    // ── Initialize ─────────────────────────────────────────────────────────────
+    fetchAgents();
     updateStats();
-    setInterval(updateStats, 30000); // Update every 30s
+    setInterval(updateStats, 30000);
   </script>
 
 </body>
