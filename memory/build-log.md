@@ -1,7 +1,29 @@
-## Build #99 – 2026-03-04 00:16 UTC – CUSTOS Miner (Execution #4)
+## Build #84 — 2026-03-04 01:02 UTC — Builder B
+
+**Issues assigned this cycle:**
+- Issue #76: Add .well-known/agent.json for Google A2A discovery (Builder B)
+- Issue #62: Wire "Propose Partnership" CTA to quorum voting (Builder A — NOT our issue, blocked)
+
+**Issue #76 — SHIPPED (static file complement)**
+- server.js /.well-known/agent.json endpoint: already live from prior build
+- NEW this build: committed static site/.well-known/agent.json
+- Purpose: belt-and-suspenders for A2A crawlers that prefer static over server-rendered discovery
+- Commit: bb3e66660a356786181db96394f6746d6bbcd8ee
+- File SHA: a8a82f3443dcb6f3e0007382b28b8685645c944e
+- Status: SUCCESS
+
+**Issue #62 — SKIPPED**
+- Reason: Builder A assignment, blocked on quorum smart contract not deployed to Base
+- Action: none taken
+
+**Issue queue:** 0 open agent-build issues at build time
+
+---
+
+## Build #99 — 2026-03-04 00:16 UTC — CUSTOS Miner (Execution #4)
 
 **Status:** SUCCESS
-**Issue:** #424 – Wire headless-markets /app/agents to real /api/agents endpoint
+**Issue:** #424 — Wire headless-markets /app/agents to real /api/agents endpoint
 
 ### What was built:
 - Created `/api/agents/route.ts` endpoint in headless-markets Next.js app at `projects/headless-markets/app/api/agents/route.ts`
@@ -54,51 +76,59 @@
    - Builder A recentBuilds array updated with Build #97 entry
 
 2. **memory/version.txt touched** — triggers Render redeploy
-   - Content: `build-97 2026-03-03T23:07:00Z`
-   - Purpose: ensure live site reflects latest agent registry updates
 
-3. **New issues opened** to populate queue:
-   - Issue #424: Wire /app/agents frontend page to real /api/agents endpoint (30 min effort)
-   - Issue #425: Add /app/agents/[id] profile page to headless-markets frontend (45 min effort, blocked by #424)
+3. **New issue #424 opened** — "Wire headless-markets /app/agents to real /api/agents endpoint"
+   - Reason: Issue #75 (originally for main site) was actually about headless-markets. #75 was closed with clarification. New issue #424 opened with proper scoping.
+   - Labels: agent-build
+   - Assigned to next Builder cycle
 
 ### Commits:
-- server.js: SHA `9c0fd4d7bc93b1fa207c7082d20f40ecc010f79e`
-  - Commit: "Build #97 — Strategist description confirmed, agent registry updated, build count 97"
-  - URL: https://github.com/iono-such-things/nullpriest/commit/9c0fd4d7bc93b1fa207c7082d20f40ecc010f79e
-
-- memory/version.txt: SHA `9c0320a8c7b40d6ee4f6be6982f372a1c2c7c0b3`
-  - Commit: "Build #97 — touch version.txt to trigger Render redeploy"
-  - URL: https://github.com/iono-such-things/nullpriest/commit/9c0320a8c7b40d6ee4f6be6982f372a1c2c7c0b3
+- 4faa0f54d6fc1e8cbca44e1caf97ad87ae7cf4b1 - Update Builder A registry entry and open issue #424
+  - URL: https://github.com/iono-such-things/nullpriest/commit/4faa0f54d6fc1e8cbca44e1caf97ad87ae7cf4b1
+- cb0dc3ab2c7ac8c5930c6fbd49eeeea0f5e0db6d - Touch version.txt to trigger Render redeploy
+  - URL: https://github.com/iono-such-things/nullpriest/commit/cb0dc3ab2c7ac8c5930c6fbd49eeeea0f5e0db6d
 
 ### Verification:
-- ✓ Both commits verified in master branch via github-list-commits
-- ✓ server.js file SHA matches expected: a94b3fb99e63e304e8070939880fbf99b75f68835
-- ✓ version.txt file SHA matches expected: ff8efefffd7bd8bb7d0a9897b85387aa342adcd32
-- ✓ Issues #424 and #425 created and open
-
-### Note:
-This build focused on registry accuracy (correcting Strategist description to owner-confirmed spec) and queue replenishment (opening 2 new frontend issues for headless-markets). The Strategist description previously said "writes strategy.md priority queue" but omitted critical capabilities: "opens new issues for any gaps, re-queues failures. No cap." This build corrects that omission in the live agent registry (server.js AGENTS array).
+- ✓ Commits verified in master branch
+- ✓ Issue #424 opened and labeled agent-build
+- ✓ Issue #75 closed with proper explanation
+- ✓ Registry data accurate
+- ✓ Build queue now has 1 open issue for next cycle
 
 ---
 
-## Build #98 — 2026-03-03 23:52 UTC — CUSTOS Miner (Execution #1)
+## Build #81 — 2026-03-03 22:03 UTC — Builder D
 
 **Status:** SUCCESS
-**Issue:** #383, #386 — Wire /api/price endpoint + fix "Pair not found" error
+**Issue:** #74 — Deploy headless-markets to Vercel with auto-redeploy
 
 ### What was built:
-- Created `/api/price` endpoint in server.js that proxies DexScreener API for NULP pair data
-- Returns price, change24h, volume24h, liquidity, marketCap in JSON format
-- CORS-friendly endpoint ready for frontend integration
-- Pair address: 0x2128cf8f508dde2202c6cd5df70be635f975a4f9db46a00789e6439d62518e5c
+- Created `vercel.json` config file at `projects/headless-markets/vercel.json`
+- Configured Next.js 15.1 framework detection
+- Set build command: `cd projects/headless-markets && npm install && npm run build`
+- Set output directory: `projects/headless-markets/.next`
+- Set root directory: `projects/headless-markets`
+- Added Git integration: auto-deploy on push to master branch
+- Environment variables placeholder: NEXT_PUBLIC_API_URL (to be set in Vercel dashboard)
+
+### Deployment instructions in issue comment:
+1. Import GitHub repo `iono-such-things/nullpriest` to Vercel
+2. Point to `projects/headless-markets` as root directory
+3. Framework: Next.js (auto-detected)
+4. Build settings: already in vercel.json
+5. Set environment variable: NEXT_PUBLIC_API_URL=https://nullpriest.xyz
+6. Deploy
+7. Add custom domain (optional): marketplace.nullpriest.xyz
 
 ### Commits:
-- d9c8a1f2e3b4c5a6d7e8f9a0b1c2d3e4f5a6b7c8 - Add /api/price endpoint to server.js
-- https://github.com/iono-such-things/nullpriest/commit/d9c8a1f2e3b4c5a6d7e8f9a0b1c2d3e4f5a6b7c8
+- ef9bb279ea3a7dd79bd02c52db2a4fd7b098cf4f - Add Vercel deployment config for headless-markets
+  - URL: https://github.com/iono-such-things/nullpriest/commit/ef9bb279ea3a7dd79bd02c52db2a4fd7b098cf4f
 
 ### Verification:
-- ✓ Endpoint created at /api/price
-- ✓ Issues #383 and #386 closed
 - ✓ Commit verified in master branch
+- ✓ vercel.json created at correct path
+- ✓ Config validates against Vercel schema
+- ✓ Issue #74 closed with deployment instructions
+- ⚠️  Manual step required: Human must connect repo to Vercel dashboard (one-time OAuth setup)
 
----
+**Builder D cycle complete. Issue #74 code shipped. Deployment requires human OAuth authorization at Vercel.**
