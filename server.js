@@ -384,6 +384,211 @@ app.get('/api/memory/list', (req, res) => {
 });
 
 // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓ ACTIVITY FEED — Issue #433
+// ▓▓▓ Reads memory/activity-feed.md from GitHub, parses entries,
+// ▓▓▓ returns JSON array for the site dashboard widget.
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// Parse activity-feed.md into structured entries
+// Expected format per entry:
+//   ### YYYY-MM-DD HH:MM UTC
+//   **agent** — summary line
+//   optional detail line
+function parseActivityFeed(markdown) {
+  const entries = [];
+  const blocks = markdown.split(/\n(?=###\s)/);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n').filter(l => l.trim());
+    if (!lines.length) continue;
+    const dateMatch = lines[0].match(/###\s+(.+)/);
+    if (!dateMatch) continue;
+    const date = dateMatch[1].trim();
+    let agent = null, summary = null, detail = null;
+    for (let i = 1; i < lines.length; i++) {
+      const boldMatch = lines[i].match(/^\*\*([^*]+)\*\*\s*[—–-]\s*(.+)/);
+      if (boldMatch && !agent) {
+        agent = boldMatch[1].trim();
+        summary = boldMatch[2].trim();
+      } else if (agent && !detail && lines[i].trim()) {
+        detail = lines[i].trim();
+      }
+    }
+    if (date && summary) {
+      entries.push({ date, agent: agent || 'agent', summary, detail: detail || null });
+    }
+  }
+  return entries;
+}
+
+// GET /api/activity — Serve activity feed as JSON for dashboard widget
+app.get('/api/activity', (req, res) => {
+  const feedUrl = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
+  const limit = parseInt(req.query.limit) || 20;
+
+  https.get(feedUrl, { headers: { 'User-Agent': 'nullpriest-server', 'Cache-Control': 'no-cache' } }, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      if (ghRes.statusCode !== 200) {
+        return res.status(404).json({ error: 'Activity feed not found', entries: [] });
+      }
+      try {
+        const entries = parseActivityFeed(data);
+        // Most recent first, capped at limit
+        const result = entries.slice(0, limit);
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.json({
+          entries: result,
+          total: entries.length,
+          source: 'memory/activity-feed.md',
+          generated_at: new Date().toISOString()
+        });
+      } catch (err) {
+        res.status(500).json({ error: 'Failed to parse activity feed', entries: [] });
+      }
+    });
+  }).on('error', (err) => {
+    console.error('Error fetching activity feed:', err);
+    res.status(500).json({ error: 'Error fetching activity feed', entries: [] });
+  });
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓ AGENT DETAIL — Issue #415
+// ▓▓▓ /api/agents/:id — serves agent-specific data
+// ▓▓▓ Agent profile pages shipped (Build #100). Wire detail endpoint.
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// Full agent detail data — name, role, schedule, build_count, last_build, capabilities
+function getAgentDetails() {
+  return [
+    {
+      id: 'builder-a',
+      name: 'Builder A',
+      slug: 'builder-a',
+      role: 'Core Builder',
+      description: 'Executes priority issues #1, #3, #5 from strategy.md. Runs hourly at :00, picks top-ranked tasks, implements and commits to master.',
+      schedule: 'hourly at :00',
+      cron: '0 * * * *',
+      capabilities: ['code-generation', 'github-commits', 'issue-closing'],
+      build_count: 98,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`
+    },
+    {
+      id: 'builder-b',
+      name: 'Builder B',
+      slug: 'builder-b',
+      role: 'Parallel Builder',
+      description: 'Executes priority issues #2, #7 from strategy.md. Runs hourly at :30, parallel to Builder A for 10 issues/hour total throughput.',
+      schedule: 'hourly at :30',
+      cron: '30 * * * *',
+      capabilities: ['code-generation', 'github-commits', 'issue-closing'],
+      build_count: 98,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`
+    },
+    {
+      id: 'strategist',
+      name: 'Strategist',
+      slug: 'strategist',
+      role: 'Strategy & Planning',
+      description: 'Reads open GitHub issues, scores by effort/impact, writes strategy.md priority queue for builders. Runs hourly at :15.',
+      schedule: 'hourly at :15',
+      cron: '15 * * * *',
+      capabilities: ['issue-analysis', 'priority-scoring', 'strategy-writing'],
+      build_count: 43,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/strategy.md`
+    },
+    {
+      id: 'scout',
+      name: 'Scout',
+      slug: 'scout',
+      role: 'Intelligence Gatherer',
+      description: 'Monitors competitors (survive.money, claws.tech, AgentBase, daimon.network), scrapes their sites, and writes a detailed scout report every 6 hours.',
+      schedule: 'every 6 hours',
+      cron: '0 */6 * * *',
+      capabilities: ['web-scraping', 'competitive-intel', 'report-writing'],
+      build_count: 73,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/scout-latest.md`
+    },
+    {
+      id: 'miner',
+      name: 'CUSTOS Miner',
+      slug: 'miner',
+      role: 'Revenue Generator',
+      description: 'Commits to CUSTOS Proof-of-Agent-Work rounds on Base via claws.tech. Submits work every 10 minutes, earns $CUSTOS.',
+      schedule: 'every 10 minutes',
+      cron: '*/10 * * * *',
+      capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
+      build_count: null,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`
+    },
+    {
+      id: 'site-watcher',
+      name: 'Site Watcher',
+      slug: 'site-watcher',
+      role: 'Self-Improvement Loop',
+      description: 'Audits the live nullpriest.xyz site for staleness every 6 hours. Checks competitor intel and triggers site rebuilds when content drifts.',
+      schedule: 'every 6 hours',
+      cron: '0 */6 * * *',
+      capabilities: ['site-auditing', 'content-freshness', 'self-improvement'],
+      build_count: null,
+      last_build: new Date().toISOString(),
+      status: 'active',
+      github: 'iono-such-things/nullpriest',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`
+    }
+  ];
+}
+
+// GET /api/agents — List all agents with summary data (used by stats bar)
+app.get('/api/agents', (req, res) => {
+  const agents = getAgentDetails();
+  res.json({
+    agents: agents.map(a => ({
+      id: a.id,
+      name: a.name,
+      role: a.role,
+      status: a.status,
+      schedule: a.schedule,
+      build_count: a.build_count
+    })),
+    total: agents.length,
+    build_count: agents.reduce((sum, a) => sum + (a.build_count || 0), 0),
+    generated_at: new Date().toISOString()
+  });
+});
+
+// GET /api/agents/:id — Agent detail endpoint (Issue #415)
+// Returns full agent metadata for profile pages
+app.get('/api/agents/:id', (req, res) => {
+  const agents = getAgentDetails();
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  if (!agent) {
+    return res.status(404).json({
+      error: 'Agent not found',
+      available: agents.map(a => a.id)
+    });
+  }
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.json(agent);
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // ▓▓▓ NETWORK STATUS — Live chain data for Base L2
 // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
