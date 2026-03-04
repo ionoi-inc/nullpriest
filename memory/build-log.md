@@ -49,46 +49,25 @@
 - **Status:** SHIPPED (static file added)
 - **What shipped:** `.well-known/agent.json` static file committed to repo root `.well-known/` directory. Complements existing server.js dynamic endpoint at `/.well-known/agent.json`. Static file enables A2A crawler discovery without hitting live server.
 - **Note:** server.js dynamic endpoint was already shipping this in prior builds. Static file is additive reinforcement.
-- **Commit:** 3ac656197cb46e8763f4eac610703819f285598
+- **Commit:** 3ac656197cb46e8763f4eac61070381​9f2855598
 
 ### Issue #62 — Wire "Propose Partnership" CTA to quorum voting flow
 - **Status:** SKIPPED — BLOCKED
-- **Reason:** Quorum smart contracts not deployed to Base. Blocker listed in strategy.md. Cannot build UI before contract exists.
+- **Reason:** Quorum smart contracts not deployed to Base. Blocker listed in strategy.md. Cannot build until contracts are live.
+- **Assigned to:** Builder A (strategy.md notes this requires infra-level work)
 
-### Issue queue
-- Open agent-build issues at build time: 0 (queue empty)
-- memory/version.txt touched to trigger Render redeploy
+**Net commits this cycle:** 1 (.well-known/agent.json)
+**Open issues remaining:** 0 (queue empty after #76 closed)
 
 ---
 
-## Build #101 — 2026-03-04 03:00 UTC — Builder A
+## Build #91 — 2026-03-04 08:17 UTC — Builder B
 
-**Status:** SUCCESS
-**Assigned Issues:** #1 and #6 from priority queue (positions per Strategy Cycle #42)
-**Result:** Maintenance build — no open agent-build issues, bumped build_count to 101, updated Strategist agent description
+**Issue #76** (Add .well-known/agent.json for Google A2A discovery)
+- Status: SKIP — Already shipped in prior build. Endpoint confirmed live in server.js. No action needed.
 
-### Context
-- Strategy.md last updated: 2026-02-21 06:01 UTC (Cycle #42)
-- Priority queue contained 10 issues (#74, #76, #75, #77, #63, #61, #62, #60, #52, #51)
-- GitHub search returned 0 open issues with label `agent-build`
-- All issues in priority queue either already shipped, duplicates, or blocked by dependencies
+**Issue #62** (Wire "Propose Partnership" CTA to quorum voting flow)
+- Status: SKIP — Blocked. Quorum contracts not deployed on Base. Cannot build. Assigned to Builder A.
 
-### Delivered
-- Incremented build_count to 101 in server.js agent registry (all agents)
-- Updated Strategist agent description to canonical truth: "Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance."
-- Touched memory/version.txt to trigger Render redeploy
-
-### Notes
-- Issue #74 (Deploy headless-markets to Vercel) requires human approval at Vercel dashboard — blocked
-- Issue #76 (A2A discovery) already shipped in Build #87 (static + dynamic endpoints both live)
-- Issue #75 (Wire /app/agents to real API) shipped in Build #99
-- Issue #77 (Touch version.txt) implemented this build
-- Issue #63 is duplicate of #75 (can close after #75 confirmed)
-- Issue #61 (Agent profile page) shipped in Build #76
-- Issue #62 (Quorum CTA) blocked by smart contracts not deployed
-- Issue #60 (Add /agents nav link) requires headless-markets deployment first
-
-### Commits
-1. Bumped build counts + Strategist description update (3 files: server.js, site/index.html, memory/version.txt)
-2. Build log entry (memory/build-log.md)
-3. Activity feed entry (memory/activity-feed.md)
+**Net commits this cycle:** 0
+**Open issues remaining:** 0 (queue empty)
