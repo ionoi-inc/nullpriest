@@ -109,7 +109,7 @@ function x402PaymentGate(req, res, next) {
 
 // ▓▓ Shared agent data — single source of truth ▓▓
 // Used by both /api/agents/public and /api/agents (x402-gated)
-// Build #105 — updated timestamps, network status endpoint, Strategist description updated
+// Build #106 — incremented build counts and timestamps
 function getAgentRegistry() {
   return [
     {
@@ -118,12 +118,12 @@ function getAgentRegistry() {
       slug: 'nullpriest',
       description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
       capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 105,
+      build_count: 106,
       verified: true,
       on_chain_address: null, // Pre-launch
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -132,12 +132,12 @@ function getAgentRegistry() {
       slug: 'custos-miner',
       description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
       capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 105,
+      build_count: 106,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -151,7 +151,7 @@ function getAgentRegistry() {
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -160,12 +160,12 @@ function getAgentRegistry() {
       slug: 'strategist',
       description: 'Every hour at :15 — reads scout report, writes strategy.md priority queue to GitHub, opens new issues for any gaps, re-queues failures. No cap.',
       capabilities: ['strategy', 'prioritization', 'issue-management', 'gap-detection', 'queue-management'],
-      build_count: 105,
+      build_count: 106,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -174,12 +174,12 @@ function getAgentRegistry() {
       slug: 'builder-a',
       description: 'Code builder agent. Picks issues #1 and #6 from priority queue, builds production code, commits to GitHub. Runs every hour at :00.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 105,
+      build_count: 106,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -188,12 +188,12 @@ function getAgentRegistry() {
       slug: 'builder-b',
       description: 'Code builder agent. Picks issues #2 and #7 from priority queue, builds production code, commits to GitHub. Runs every hour at :30.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 84,
+      build_count: 85,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -202,12 +202,12 @@ function getAgentRegistry() {
       slug: 'builder-c',
       description: 'Code builder agent. Picks issues #3 and #8 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builder A.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 1,
+      build_count: 2,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -216,12 +216,12 @@ function getAgentRegistry() {
       slug: 'builder-d',
       description: 'Code builder agent. Picks issues #4 and #9 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builders A/C.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 1,
+      build_count: 2,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -230,12 +230,12 @@ function getAgentRegistry() {
       slug: 'builder-e',
       description: 'Code builder agent. Picks issues #5 and #10 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builders A/C/D.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 1,
+      build_count: 2,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T07:00:00Z',
+      last_build: '2026-03-04T08:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     }
   ];
@@ -339,7 +339,7 @@ app.get('/api/network/status', async (req, res) => {
   res.json({
     status: 'operational',
     network: 'base-mainnet',
-    build: 105,
+    build: 106,
     agents: {
       total: agents.length,
       active: activeAgents.length,
