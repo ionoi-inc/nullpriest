@@ -66,14 +66,6 @@ app.get('/.well-known/agent.json', (req, res) => {
         tags: ['discovery', 'search', 'marketplace', 'quorum'],
         inputModes: ['application/json'],
         outputModes: ['application/json']
-      },
-      {
-        id: 'headless-markets',
-        name: 'Headless Markets',
-        description: 'x402-gated agent marketplace. List and purchase agent services with on-chain payment verification on Base.',
-        tags: ['marketplace', 'x402', 'payments', 'base'],
-        inputModes: ['application/json'],
-        outputModes: ['application/json']
       }
     ]
   });
@@ -117,7 +109,7 @@ function x402PaymentGate(req, res, next) {
 
 // ▓▓ Shared agent data — single source of truth ▓▓
 // Used by both /api/agents/public and /api/agents (x402-gated)
-// Build #107 — incremented build counts and timestamps
+// Build #105 — updated timestamps, network status endpoint, Strategist description updated
 function getAgentRegistry() {
   return [
     {
@@ -126,12 +118,12 @@ function getAgentRegistry() {
       slug: 'nullpriest',
       description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
       capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 107,
+      build_count: 105,
       verified: true,
       on_chain_address: null, // Pre-launch
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -140,12 +132,12 @@ function getAgentRegistry() {
       slug: 'custos-miner',
       description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
       capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 107,
+      build_count: 105,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -159,7 +151,7 @@ function getAgentRegistry() {
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -168,12 +160,12 @@ function getAgentRegistry() {
       slug: 'strategist',
       description: 'Every hour at :15 — reads scout report, writes strategy.md priority queue to GitHub, opens new issues for any gaps, re-queues failures. No cap.',
       capabilities: ['strategy', 'prioritization', 'issue-management', 'gap-detection', 'queue-management'],
-      build_count: 107,
+      build_count: 105,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -182,12 +174,12 @@ function getAgentRegistry() {
       slug: 'builder-a',
       description: 'Code builder agent. Picks issues #1 and #6 from priority queue, builds production code, commits to GitHub. Runs every hour at :00.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 107,
+      build_count: 105,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -196,12 +188,12 @@ function getAgentRegistry() {
       slug: 'builder-b',
       description: 'Code builder agent. Picks issues #2 and #7 from priority queue, builds production code, commits to GitHub. Runs every hour at :30.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 85,
+      build_count: 84,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -210,12 +202,12 @@ function getAgentRegistry() {
       slug: 'builder-c',
       description: 'Code builder agent. Picks issues #3 and #8 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builder A.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 3,
+      build_count: 1,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -224,12 +216,12 @@ function getAgentRegistry() {
       slug: 'builder-d',
       description: 'Code builder agent. Picks issues #4 and #9 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builders A/C.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 3,
+      build_count: 1,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -238,18 +230,18 @@ function getAgentRegistry() {
       slug: 'builder-e',
       description: 'Code builder agent. Picks issues #5 and #10 from priority queue, builds production code, commits to GitHub. Runs every hour at :00 in parallel with Builders A/C/D.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 3,
+      build_count: 1,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-03-04T00:00:00Z',
-      last_build: '2026-03-04T09:00:00Z',
+      last_build: '2026-03-04T07:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     }
   ];
 }
 
-// ▓▓ /api/agents/public — Issue #75 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/agents/public — Issue #75 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // PUBLIC endpoint — no x402 gate. Used by /app/agents frontend to show real agent registry.
 // Issue #75: Wire /app/agents page to real /api/agents endpoint — SHIPPED Build #99
 app.get('/api/agents/public', (req, res) => {
@@ -262,7 +254,7 @@ app.get('/api/agents/public', (req, res) => {
   });
 });
 
-// ▓▓ /api/agents/public/:id — Issue #61 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/agents/public/:id — Issue #61 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // PUBLIC endpoint — no x402 gate. Used by /app/agents/:id profile page.
 // Issue #61: Add agent profile page at /app/agents/[id] — SHIPPED Build #104
 app.get('/api/agents/public/:id', (req, res) => {
@@ -291,11 +283,42 @@ app.get('/api/agents/public/:id', (req, res) => {
   });
 });
 
+// ▓▓ /api/activity — Issue #433 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// PUBLIC endpoint — no x402 gate. Fetches activity-feed.md from GitHub and returns as JSON.
+// Used by dashboard Activity Feed widget.
+app.get('/api/activity', async (req, res) => {
+  try {
+    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      return res.status(502).json({
+        error: 'Failed to fetch activity feed',
+        source: 'memory/activity-feed.md',
+        upstream_status: response.status
+      });
+    }
+    
+    const content = await response.text();
+    
+    res.json({
+      content,
+      updated_at: new Date().toISOString(),
+      source: 'memory/activity-feed.md'
+    });
+  } catch (err) {
+    res.status(502).json({
+      error: 'Network error fetching activity feed',
+      message: err.message
+    });
+  }
+});
+
 // Apply x402 gate to premium endpoints (gated versions for programmatic/paid access)
 app.use('/api/agents', x402PaymentGate);
 app.use('/memory', x402PaymentGate);
 
-// ▓▓ /api/agents — Agent Registry (x402-gated) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/agents — Agent Registry (x402-gated) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // Returns list of all nullpriest agents with metadata, build count, and verification status
 app.get('/api/agents', (req, res) => {
   const agents = getAgentRegistry();
@@ -307,22 +330,38 @@ app.get('/api/agents', (req, res) => {
   });
 });
 
+// ▓▓ /api/agents/:id — Issue #415 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// x402-gated endpoint for detailed agent lookup by id, slug, or name
 app.get('/api/agents/:id', (req, res) => {
   const agents = getAgentRegistry();
-  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  const searchId = req.params.id.toLowerCase();
+  
+  // Match by id, slug, or name (case-insensitive for name/slug)
+  const agent = agents.find(a => 
+    a.id === req.params.id || 
+    a.slug.toLowerCase() === searchId || 
+    a.name.toLowerCase() === searchId
+  );
+  
   if (!agent) {
-    return res.status(404).json({ error: 'Agent not found' });
+    return res.status(404).json({ 
+      error: 'Agent not found',
+      id: req.params.id
+    });
   }
+  
   res.json(agent);
 });
 
-// ▓▓ /api/network/status — Build #105 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/network/status — Build #105 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // PUBLIC endpoint — no x402 gate. Returns live network health summary.
+// Useful for dashboards, uptime monitors, and A2A callers checking org health.
 app.get('/api/network/status', async (req, res) => {
   const agents = getAgentRegistry();
   const activeAgents = agents.filter(a => a.last_build !== null);
   const totalBuilds = agents.reduce((sum, a) => sum + (a.build_count || 0), 0);
 
+  // Attempt to fetch latest build log from GitHub for live last_commit
   let lastCommit = null;
   try {
     const ghRes = await fetch(`${GITHUB_API_BASE}/commits?per_page=1`, {
@@ -345,7 +384,7 @@ app.get('/api/network/status', async (req, res) => {
   res.json({
     status: 'operational',
     network: 'base-mainnet',
-    build: 107,
+    build: 105,
     agents: {
       total: agents.length,
       active: activeAgents.length,
@@ -354,113 +393,6 @@ app.get('/api/network/status', async (req, res) => {
     total_builds: totalBuilds,
     last_commit: lastCommit,
     updated_at: new Date().toISOString(),
-  });
-});
-
-// ▓▓▓▓▓▓ headless-markets x402 Payment Flow — Issue #440 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// Wire x402 HTTP payment standard into headless-markets listing and purchase flow.
-// Pattern mirrors /api/price gate already live. Same x402 middleware applied.
-// Competitors (nullpath) already using x402. Every cycle without this compounds risk.
-// Build #107 — Issue #440 SHIPPED
-
-// PUBLIC: List available agent service offerings in the headless marketplace
-// No payment required to browse — only to purchase/access
-app.get('/api/headless-markets/listings', (req, res) => {
-  const agents = getAgentRegistry();
-  const listings = agents
-    .filter(a => a.verified)
-    .map(a => ({
-      id: `listing_${a.slug}`,
-      agent_id: a.id,
-      agent_slug: a.slug,
-      name: a.name,
-      description: a.description,
-      capabilities: a.capabilities,
-      price: {
-        protocol: 'x402',
-        network: X402_PAYMENT_NETWORK,
-        asset: X402_PAYMENT_ASSET,
-        amount: X402_PAYMENT_AMOUNT,
-        address: X402_PAYMENT_ADDRESS,
-      },
-      verified: a.verified,
-      build_count: a.build_count,
-      available: true,
-    }));
-
-  res.json({
-    listings,
-    total: listings.length,
-    payment_protocol: 'x402',
-    network: X402_PAYMENT_NETWORK,
-    updated_at: new Date().toISOString(),
-  });
-});
-
-// x402-GATED: Purchase/access an agent service from the headless marketplace
-// Requires valid x-payment-proof header (Base USDC payment on-chain)
-app.post('/api/headless-markets/purchase', x402PaymentGate, (req, res) => {
-  const { agent_slug, task } = req.body;
-
-  if (!agent_slug) {
-    return res.status(400).json({ error: 'agent_slug is required' });
-  }
-
-  const agents = getAgentRegistry();
-  const agent = agents.find(a => a.slug === agent_slug);
-  if (!agent) {
-    return res.status(404).json({ error: 'Agent not found in marketplace' });
-  }
-
-  if (!agent.verified) {
-    return res.status(403).json({ error: 'Agent not verified for marketplace access' });
-  }
-
-  // Payment proof validated by x402PaymentGate middleware
-  // Return access token and agent endpoint for task execution
-  res.json({
-    success: true,
-    purchase: {
-      agent_id: agent.id,
-      agent_slug: agent.slug,
-      agent_name: agent.name,
-      task: task || null,
-      payment_verified: true,
-      access_token: `np_${agent.slug}_${Date.now()}`,
-      endpoint: `https://nullpriest.xyz/api/agents/${agent.slug}`,
-      github: `https://github.com/${agent.github}`,
-      expires_at: new Date(Date.now() + 3600000).toISOString(), // 1h
-    },
-    network: X402_PAYMENT_NETWORK,
-    protocol: 'x402',
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// x402-GATED: Get detailed agent service spec for a specific listing
-app.get('/api/headless-markets/listings/:slug', x402PaymentGate, (req, res) => {
-  const agents = getAgentRegistry();
-  const agent = agents.find(a => a.slug === req.params.slug);
-  if (!agent) {
-    return res.status(404).json({ error: 'Listing not found' });
-  }
-
-  res.json({
-    listing: {
-      id: `listing_${agent.slug}`,
-      agent: agent,
-      price: {
-        protocol: 'x402',
-        network: X402_PAYMENT_NETWORK,
-        asset: X402_PAYMENT_ASSET,
-        amount: X402_PAYMENT_AMOUNT,
-        address: X402_PAYMENT_ADDRESS,
-      },
-      payment_docs: 'https://nullpriest.xyz/docs/x402',
-      quorum_required: false, // Pre-launch: quorum gates activate on token launch
-      erc8004_registry: '0x8004A169FB4a3325136EB29fA0ceB6D2e539a432', // Ethereum mainnet
-    },
-    timestamp: new Date().toISOString(),
   });
 });
 
@@ -492,7 +424,7 @@ app.get('/memory/:filename', async (req, res) => {
   }
 });
 
-// ▓▓ /app/agents/:id — Agent Profile Page (Issue #61) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /app/agents/:id — Agent Profile Page (Issue #61) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // SPA route — serves index.html, JS handles profile rendering from /api/agents/public/:id
 app.get('/app/agents/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
