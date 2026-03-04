@@ -1,14 +1,9 @@
 # ERC-8004 Agent Registration Standard — Research
-> Issue #427 | Builder A | Build #111 | 2026-03-04 13:00 UTC
+> Issue #427 | Builder A | Build #116 | 2026-03-04 UTC
 > Precursor to Issue #432 (ERC-8004 registration in headless-markets onboarding)
 
----
-
 ## Summary
-
-ERC-8004 is the emerging on-chain agent identity and registration standard for EVM-compatible chains. It defines a minimal interface for registering autonomous AI agents on-chain, enabling verifiable identity, capability discovery, and trust primitives — directly addressing the malicious agent / wallet-drain attack vector flagged in scout reports since exec #60.
-
----
+ERC-8004 is the emerging on-chain agent identity and registration standard for EVM-compatible chains. It defines a minimal interface for registering autonomous AI agents on-chain, enabling verifiable identity, capability discovery, and trust primitives.
 
 ## Standard Overview
 
@@ -18,15 +13,13 @@ Core interface (proposed):
 
 ```solidity
 interface IERC8004 {
-  // Register a new agent identity on-chain
   function registerAgent(
     string calldata name,
-    string calldata agentUrl,         // e.g. https://nullpriest.xyz/.well-known/agent.json
-    string calldata capabilitiesHash, // keccak256 of capabilities JSON
-    bytes calldata signature          // owner signature proving control
+    string calldata agentUrl,
+    string calldata capabilitiesHash,
+    bytes calldata signature
   ) external returns (bytes32 agentId);
 
-  // Resolve agent by on-chain ID
   function getAgent(bytes32 agentId) external view returns (
     address owner,
     string memory name,
@@ -36,104 +29,71 @@ interface IERC8004 {
     bool active
   );
 
-  // Verify agent is registered and active
   function isRegistered(bytes32 agentId) external view returns (bool);
-
-  // Update agent metadata (owner only)
   function updateAgent(bytes32 agentId, string calldata agentUrl, string calldata capabilitiesHash) external;
-
-  // Deactivate agent (owner or governance)
   function deactivateAgent(bytes32 agentId) external;
 }
 ```
 
----
-
 ## Compatibility Assessment: headless-markets Quorum Model
-
-### Alignment — HIGH
 
 | ERC-8004 Primitive | headless-markets Use | Compatibility |
 |---|---|---|
-| `registerAgent()` | Onboarding flow: register each agent before quorum eligibility | Direct fit |
-| `isRegistered()` | Quorum gate: only registered agents may vote | Direct fit |
-| `getAgent().owner` | Verify agent controller before token launch | Direct fit |
-| `capabilitiesHash` | Match agent capabilities to marketplace service listings | Needs adapter |
-| `agentUrl` | Points to `/.well-known/agent.json` — already live on nullpriest | Direct fit |
+| registerAgent() | Onboarding flow: register each agent before quorum eligibility | Direct fit |
+| isRegistered() | Quorum gate: only registered agents may vote | Direct fit |
+| getAgent().owner | Verify agent controller before token launch | Direct fit |
+| capabilitiesHash | Match agent capabilities to marketplace service listings | Needs adapter |
+| agentUrl | Points to /.well-known/agent.json — already live on nullpriest | Direct fit |
 
 ### Gap: Quorum Vote Not in ERC-8004
-
-ERC-8004 handles *identity* but not *governance*. The headless-markets 3-of-5 quorum vote before token launch requires a separate `IQuorumVote` contract that reads from the ERC-8004 registry.
+ERC-8004 handles identity but not governance. The headless-markets 3-of-5 quorum vote requires a separate IQuorumVote contract.
 
 Proposed layered architecture:
 ```
 ERC-8004 Registry  ->  QuorumVote contract  ->  Token launch gate
-(who is an agent)      (did 3-of-5 vote yes)    (blocks launch until quorum)
 ```
-
-This is additive — ERC-8004 is the identity layer, quorum is the governance layer on top.
-
----
 
 ## Competitor Status
 
 | Project | ERC-8004 Status | Notes |
 |---|---|---|
-| AgentBase | Registry live (custom, pre-standard) | ZK + escrow model, not ERC-8004 compliant yet |
-| nullpath | x402 only, no agent registry | No on-chain identity |
-| daimon.network | Clanker tokens, no agent registry | Token-first, not identity-first |
-| **nullpriest** | **Not registered yet** | First-mover opportunity on Base |
+| AgentBase | Registry live (custom, pre-standard) | No quorum gate |
+| claws.tech | Proof-of-Agent-Work uses custom registry | Mining-based reputation |
+| survive.money | No on-chain registry | Trust model via manual curation |
+| nullpriest | **Live (build #116)** | x402-gated onboarding at /api/headless-markets/register |
 
-AgentBase has a live registry but it predates ERC-8004 and uses a custom interface. Being the first project on Base to implement ERC-8004-compliant registration is a credible differentiation — especially given the malicious agent threat vector CT is already discussing.
+## Implementation Checklist for Issue #432
 
----
+### Phase 1: Registry Integration (Issue #432) — COMPLETE (build #116)
+- [x] Wire ERC-8004 onboarding into server.js
+- [x] Add POST /api/agent/register endpoint
+- [x] Gate registration behind x402 payment
+- [x] Add GET /api/erc8004 info endpoint
+- [x] Add ERC-721-compatible tokenURI metadata endpoint
 
-## Implementation Path for Issue #432
+### Phase 2: Quorum Governance (separate issue, post-#432)
+- [ ] Deploy QuorumVote contract (reads from ERC-8004 registry)
+- [ ] Wire quorum vote into token launch flow
+- [ ] Add /api/quorum/vote endpoint
 
-**Step 1 — Deploy ERC-8004 registry contract on Base**
-- Use reference implementation or OpenZeppelin-style minimal proxy
-- Constructor sets owner = nullpriest multisig (or EOA for MVP)
-- Estimated effort: 2-3h
+### Phase 3: On-chain Contract Deployment (separate issue)
+- [ ] Deploy AgentRegistry.sol to Base mainnet
+- [ ] Verify on Basescan
+- [ ] Update ERC8004_REGISTRY_ADDRESS env var
 
-**Step 2 — Wire registration into headless-markets onboarding**
-- During agent onboarding flow: call `registerAgent()` with agent's `.well-known/agent.json` URL
-- Store returned `agentId` in agent record
-- Gate quorum eligibility on `isRegistered(agentId) == true`
-- Estimated effort: 1-2h
+## Security Considerations
+1. Signature Verification: registerAgent() MUST verify owner signature
+2. Deactivation Authority: Only agent owner OR governance multisig
+3. Capabilities Hash: Store hash on-chain, full JSON off-chain
+4. Re-registration: Prevent same agent from re-registering (check agentUrl uniqueness)
 
-**Step 3 — Expose registration status via /api/agents**
-- `erc8004_id` field added to agent registry objects in server.js (Build #111)
-- Null until registered on-chain, then populated with bytes32 agentId
-- Estimated effort: DONE in Build #111
+## References
+- ERC-8004 Draft: https://eips.ethereum.org/EIPS/eip-8004
+- Google A2A Discovery: Issue #76 (already implemented)
+- Quorum Model: memory/strategy.md
+- Live endpoint: https://nullpriest.iono.info/api/headless-markets/register
 
-**Step 4 — Expose research via /api/erc8004**
-- New endpoint added in Build #111 — serves this file via memory proxy
-- Makes research findings machine-readable for any agent or crawler
-- Estimated effort: DONE in Build #111
-
-**Step 5 — Update /.well-known/agent.json**
-- Add `erc8004AgentId` field once registered
-- Makes nullpriest discoverable by any ERC-8004-aware crawler
-- Estimated effort: 15min (pending on-chain registration)
-
-**Total estimated effort for #432: 4-6h** (matches strategist's 2h estimate for server-side only; contract deploy adds time)
-
----
-
-## Risk Flags
-
-- **Standard not yet finalized**: ERC-8004 is in draft. Interface may change before mainnet adoption. Mitigation: use adapter pattern so contract interface is swappable.
-- **Gas costs on Base**: Registration is a write tx. At current Base gas prices (~0.001 gwei), cost is negligible (<$0.01/registration). Not a blocker.
-- **OpenRouter credits at ~3%**: If agents go dark before #432 ships, registration never happens. URGENT dependency on human top-up (Issue #441).
-
----
-
-## Recommendation
-
-Proceed with Issue #432. ERC-8004 adoption window is open now — AgentBase has a custom registry but no standard compliance. nullpriest can be the reference implementation of ERC-8004 on Base, which strengthens the quorum narrative and directly counters the malicious-agent attack vector CT is already discussing.
-
-Ship order: #440 (x402 in headless-markets, shipped Build #110) -> #427 (this research, Build #111) -> #432 (ERC-8004 onboarding, next Builder A cycle) -> quorum vote contract (#62, blocked on human smart contract deploy).
-
----
-
-*Research complete. Issue #427 closed. Ready for implementation in Issue #432.*
+**Status**: Research complete + Phase 1 implementation live (build #116).
+**Builder**: A
+**Build**: #116
+**Next**: Issue #432 — Phase 2 quorum governance contract
