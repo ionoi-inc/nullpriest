@@ -1,99 +1,141 @@
 # ERC-8004 Agent Registration Standard — Research
-> Issue #427 | Builder A | Build #116 | 2026-03-04 UTC
-> Precursor to Issue #432 (ERC-8004 registration in headless-markets onboarding)
+> Issue #427 | Builder A | Build #117 | 2026-03-04 22:05 UTC
+> Precursor research for Issue #432 (headless-markets onboarding integration)
 
-## Summary
-ERC-8004 is the emerging on-chain agent identity and registration standard for EVM-compatible chains. It defines a minimal interface for registering autonomous AI agents on-chain, enabling verifiable identity, capability discovery, and trust primitives.
+---
 
-## Standard Overview
+## Overview
 
-**ERC-8004: Agent Registry Interface**
+ERC-8004 is an emerging Ethereum standard for on-chain agent identity and registry. It defines a minimal interface for registering AI agents as first-class blockchain entities — giving them verifiable identities, capability declarations, and payment addresses that other contracts and agents can query.
 
-Core interface (proposed):
+Status as of 2026-03: **draft/emerging standard** — no finalized EIP, but multiple independent implementations have converged on similar patterns. AgentBase has a live registry. nullpath uses agent identity for x402 memo namespacing.
 
-```solidity
-interface IERC8004 {
-  function registerAgent(
-    string calldata name,
-    string calldata agentUrl,
-    string calldata capabilitiesHash,
-    bytes calldata signature
-  ) external returns (bytes32 agentId);
+---
 
-  function getAgent(bytes32 agentId) external view returns (
-    address owner,
-    string memory name,
-    string memory agentUrl,
-    string memory capabilitiesHash,
-    uint256 registeredAt,
-    bool active
-  );
+## Core Spec (Synthesized from active implementations)
 
-  function isRegistered(bytes32 agentId) external view returns (bool);
-  function updateAgent(bytes32 agentId, string calldata agentUrl, string calldata capabilitiesHash) external;
-  function deactivateAgent(bytes32 agentId) external;
+### Agent Identity Fields
+```
+struct AgentIdentity {
+  address wallet;          // EOA or smart contract wallet
+  string  agent_id;        // human-readable slug (e.g. "nullpriest-builder-a")
+  string  name;            // display name
+  string  description;     // capability summary
+  string[] capabilities;   // ["read", "write", "sign", "trade", "quorum"]
+  string  metadata_uri;    // IPFS or HTTPS URI for extended metadata
+  uint256 registered_at;   // block timestamp
+  bool    active;          // tombstone flag
 }
 ```
 
+### Registry Interface (Minimal)
+```solidity
+interface IERC8004Registry {
+  function register(AgentIdentity calldata identity) external returns (bytes32 agentId);
+  function update(bytes32 agentId, AgentIdentity calldata identity) external;
+  function deactivate(bytes32 agentId) external;
+  function get(bytes32 agentId) external view returns (AgentIdentity memory);
+  function getByWallet(address wallet) external view returns (AgentIdentity memory);
+
+  event AgentRegistered(bytes32 indexed agentId, address indexed wallet, string name);
+  event AgentUpdated(bytes32 indexed agentId);
+  event AgentDeactivated(bytes32 indexed agentId);
+}
+```
+
+### Key Design Decisions
+- `agent_id` is a human-readable slug; the on-chain key is `keccak256(agent_id)`
+- One wallet → one active agent identity (enforced by registry)
+- `metadata_uri` allows off-chain extension without on-chain cost
+- No token gating in the base spec — access control is out of scope
+
+---
+
 ## Compatibility Assessment: headless-markets Quorum Model
 
-| ERC-8004 Primitive | headless-markets Use | Compatibility |
+### Compatibility: HIGH
+
+| ERC-8004 Concept | headless-markets Mapping | Status |
 |---|---|---|
-| registerAgent() | Onboarding flow: register each agent before quorum eligibility | Direct fit |
-| isRegistered() | Quorum gate: only registered agents may vote | Direct fit |
-| getAgent().owner | Verify agent controller before token launch | Direct fit |
-| capabilitiesHash | Match agent capabilities to marketplace service listings | Needs adapter |
-| agentUrl | Points to /.well-known/agent.json — already live on nullpriest | Direct fit |
+| `wallet` (agent EOA) | Quorum voter address | Direct match |
+| `agent_id` slug | x402 memo namespace (`hm:<listing>:<agent_id>`) | Compatible |
+| `capabilities` array | Quorum role declaration | Extend with `"quorum"` capability |
+| `registered_at` | Quorum eligibility timestamp | Use for "no fresh registrations mid-vote" rule |
+| `active` flag | Quorum exclusion | Deactivated agents cannot vote |
+| `metadata_uri` | Agent profile page URL | Wire to `/api/agents/:id` |
 
-### Gap: Quorum Vote Not in ERC-8004
-ERC-8004 handles identity but not governance. The headless-markets 3-of-5 quorum vote requires a separate IQuorumVote contract.
+### Integration Points for Issue #432
 
-Proposed layered architecture:
-```
-ERC-8004 Registry  ->  QuorumVote contract  ->  Token launch gate
-```
+1. **Onboarding flow**: During headless-markets agent onboarding, call `/api/headless-markets/register` (now live in server.js). This is the off-chain Phase 1 registry.
 
-## Competitor Status
+2. **Phase 2 (on-chain)**: Deploy ERC-8004-compatible registry contract on Base mainnet. The `memory/agents.json` structure already mirrors the on-chain schema — migration path is clean.
 
-| Project | ERC-8004 Status | Notes |
-|---|---|---|
-| AgentBase | Registry live (custom, pre-standard) | No quorum gate |
-| claws.tech | Proof-of-Agent-Work uses custom registry | Mining-based reputation |
-| survive.money | No on-chain registry | Trust model via manual curation |
-| nullpriest | **Live (build #116)** | x402-gated onboarding at /api/headless-markets/register |
+3. **Quorum gate**: Before any quorum vote, verify `active === true` AND `registered_at` is at least N blocks before vote start. Prevents Sybil attacks via last-minute registrations.
 
-## Implementation Checklist for Issue #432
+4. **x402 integration**: `agent_id` in ERC-8004 identity maps directly to the memo namespace in x402 payment flows: `hm:<listing_id>:<agent_id>`. No schema changes needed.
 
-### Phase 1: Registry Integration (Issue #432) — COMPLETE (build #116)
-- [x] Wire ERC-8004 onboarding into server.js
-- [x] Add POST /api/agent/register endpoint
-- [x] Gate registration behind x402 payment
-- [x] Add GET /api/erc8004 info endpoint
-- [x] Add ERC-721-compatible tokenURI metadata endpoint
+5. **AgentBase compatibility**: AgentBase's live registry uses the same `wallet + agent_id + capabilities` pattern. Cross-registry lookups are feasible via `metadata_uri` federation.
 
-### Phase 2: Quorum Governance (separate issue, post-#432)
-- [ ] Deploy QuorumVote contract (reads from ERC-8004 registry)
-- [ ] Wire quorum vote into token launch flow
-- [ ] Add /api/quorum/vote endpoint
+---
 
-### Phase 3: On-chain Contract Deployment (separate issue)
-- [ ] Deploy AgentRegistry.sol to Base mainnet
-- [ ] Verify on Basescan
-- [ ] Update ERC8004_REGISTRY_ADDRESS env var
+## Competitor Analysis
 
-## Security Considerations
-1. Signature Verification: registerAgent() MUST verify owner signature
-2. Deactivation Authority: Only agent owner OR governance multisig
-3. Capabilities Hash: Store hash on-chain, full JSON off-chain
-4. Re-registration: Prevent same agent from re-registering (check agentUrl uniqueness)
+### AgentBase (live, ZK + escrow)
+- Has a live agent registry on Base
+- Uses ZK proofs for capability verification
+- Escrow-based trust model (agents stake tokens)
+- **Gap vs nullpriest**: No quorum mechanism. Agents operate independently.
 
-## References
-- ERC-8004 Draft: https://eips.ethereum.org/EIPS/eip-8004
-- Google A2A Discovery: Issue #76 (already implemented)
-- Quorum Model: memory/strategy.md
-- Live endpoint: https://nullpriest.iono.info/api/headless-markets/register
+### nullpath (x402 live)
+- Uses agent wallet as identity (no formal registry)
+- x402 payment uses wallet address as memo, not named agent_id
+- **Gap vs nullpriest**: No multi-agent coordination. No quorum. Single-agent model.
 
-**Status**: Research complete + Phase 1 implementation live (build #116).
-**Builder**: A
-**Build**: #116
-**Next**: Issue #432 — Phase 2 quorum governance contract
+### daimon.network (Clanker tokens)
+- Token-per-agent model
+- Identity is the token contract address
+- **Gap vs nullpriest**: Tokens ≠ verified capability. No quorum. No ERC-8004.
+
+### nullpriest advantage
+- First mover on **quorum + ERC-8004 + x402** combined stack
+- `memory/agents.json` off-chain registry already live and serving `/api/agents`
+- Phase 1 → Phase 2 migration path is defined and clean
+
+---
+
+## Recommended Implementation Path (Issue #432)
+
+### Phase 1 (this build — DONE)
+- [x] Off-chain registry via `memory/agents.json` + GitHub
+- [x] `/api/agents` and `/api/agents/:id` endpoints live
+- [x] `/api/headless-markets/register` endpoint added (server.js Issue #440 patch)
+- [x] `/api/erc8004` discovery endpoint added
+
+### Phase 2 (next cycle)
+- [ ] Deploy ERC-8004 registry contract on Base Sepolia (test)
+- [ ] Wire `/api/headless-markets/register` to call contract `register()` function
+- [ ] Add `erc8004_on_chain_id` field to agent records
+- [ ] Quorum vote requires on-chain registration (Issue #62 dependency)
+
+### Phase 3 (post-quorum)
+- [ ] Cross-registry federation with AgentBase via `metadata_uri`
+- [ ] ZK capability proofs (optional, AgentBase compatibility)
+
+---
+
+## Risk Assessment
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| ERC-8004 spec changes before finalization | Medium | Low | Off-chain Phase 1 isolates us from spec churn |
+| AgentBase captures registry market first | Medium | Medium | Ship Phase 1 now; differentiate on quorum |
+| On-chain gas costs deter registration | Low | Low | x402 payment covers gas; $1 slot fee absorbs it |
+| Sybil attack via mass registration | Low | High | `registered_at` quorum gate + slot fee friction |
+
+---
+
+## Conclusion
+
+ERC-8004 is **fully compatible** with headless-markets quorum model. The off-chain Phase 1 registry is now live (this build). Phase 2 on-chain deployment is the critical path to Issue #432 completion and unblocking Issue #62 (quorum CTA).
+
+**Recommendation**: Ship Phase 1 now (done). Open Issue #432 with Phase 2 spec. Block quorum launch on Phase 2 completion, not Phase 1.
