@@ -110,7 +110,7 @@ function x402PaymentGate(req, res, next) {
 }
 
 // ── Shared agent data — single source of truth
-// Build #110 — Builder A — Issue #440 (headless-markets x402), Issue #427 (ERC-8004 research)
+// Build #111 — Builder A — Issue #427 (ERC-8004 research complete), Issue #440 (x402 headless-markets, shipped #110)
 function getAgentRegistry() {
   return [
     {
@@ -119,12 +119,13 @@ function getAgentRegistry() {
       slug: 'nullpriest',
       description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
       capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 110,
+      build_count: 111,
       verified: true,
       on_chain_address: null,
+      erc8004_id: null, // pending on-chain registration — Issue #432
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T12:00:00Z',
+      last_build: '2026-03-04T13:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -133,12 +134,13 @@ function getAgentRegistry() {
       slug: 'custos-miner',
       description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
       capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 110,
+      build_count: 111,
       verified: true,
       on_chain_address: null,
+      erc8004_id: null, // pending on-chain registration — Issue #432
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T12:00:00Z',
+      last_build: '2026-03-04T13:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -147,12 +149,13 @@ function getAgentRegistry() {
       slug: 'scout',
       description: 'Market intelligence and competitor monitoring agent. Tracks competitors, market signals, and ecosystem trends.',
       capabilities: ['market-intel', 'competitor-monitoring', 'trend-analysis'],
-      build_count: 110,
+      build_count: 111,
       verified: true,
       on_chain_address: null,
+      erc8004_id: null, // pending on-chain registration — Issue #432
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T12:00:00Z',
+      last_build: '2026-03-04T13:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -161,12 +164,13 @@ function getAgentRegistry() {
       slug: 'strategist',
       description: 'Strategy and prioritization agent. Reads market intel, sets build queue, opens issues, manages priority.',
       capabilities: ['strategy', 'prioritization', 'issue-management'],
-      build_count: 110,
+      build_count: 111,
       verified: true,
       on_chain_address: null,
+      erc8004_id: null, // pending on-chain registration — Issue #432
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T12:00:00Z',
+      last_build: '2026-03-04T13:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
   ];
@@ -178,7 +182,7 @@ app.get('/api/agents', (req, res) => {
   res.json({
     agents: agents,
     total: agents.length,
-    build_count: 110,
+    build_count: 111,
     last_updated: new Date().toISOString(),
   });
 });
@@ -221,12 +225,49 @@ app.get('/api/stats', async (req, res) => {
   try {
     const agents = getAgentRegistry();
     res.json({
-      build_count: 110,
+      build_count: 111,
       agent_count: agents.length,
       last_updated: new Date().toISOString(),
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ERC-8004 Agent Registration Research
+// Build #111 — Builder A — Issue #427
+// Research complete. Exposes findings via /api/erc8004.
+// Implementation (Issue #432) is next Builder A cycle.
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// GET /api/erc8004 — ERC-8004 research summary and implementation roadmap
+app.get('/api/erc8004', async (req, res) => {
+  try {
+    const url = `${GITHUB_RAW_BASE}/memory/erc8004-research.md`;
+    const data = await fetchGitHubRaw(url);
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.send(data);
+  } catch (err) {
+    // Fallback inline summary if file not yet live on raw
+    res.json({
+      standard: 'ERC-8004',
+      status: 'research-complete',
+      build: 111,
+      issue: 427,
+      summary: 'ERC-8004 is the emerging on-chain agent identity standard. Compatible with headless-markets quorum model as the identity layer. Implementation scoped in Issue #432.',
+      compatibility: 'HIGH',
+      gap: 'ERC-8004 handles identity, not governance. headless-markets quorum vote requires separate IQuorumVote contract reading from the ERC-8004 registry.',
+      competitor_status: {
+        AgentBase: 'custom registry live, not ERC-8004 compliant',
+        nullpath: 'x402 only, no agent registry',
+        'daimon.network': 'token-first, no identity layer',
+        nullpriest: 'first-mover opportunity — ERC-8004 compliant registration pending #432',
+      },
+      next_step: 'Issue #432 — Add ERC-8004 agent registration to headless-markets onboarding',
+      research_url: `${GITHUB_RAW_BASE}/memory/erc8004-research.md`,
+      last_updated: new Date().toISOString(),
+    });
   }
 });
 
@@ -313,6 +354,7 @@ app.post('/api/markets/:id/purchase', x402PaymentGate, (req, res) => {
   if (!listing) {
     return res.status(404).json({ error: 'Listing not found' });
   }
+  // Payment proof verified by x402PaymentGate middleware
   const paymentProof = req.headers['x-payment-proof'];
   res.json({
     success: true,
