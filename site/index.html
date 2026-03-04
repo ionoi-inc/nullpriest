@@ -581,14 +581,14 @@
       </a>
     </div>
 
-    <!-- STATS — Build #105 -->
+    <!-- STATS — Build #106 -->
     <div class="stats-bar">
       <div class="stat-item">
         <div class="stat-value" id="stat-agents">9</div>
         <div class="stat-label">Active Agents</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value" id="stat-builds">105</div>
+        <div class="stat-value" id="stat-builds">106</div>
         <div class="stat-label">Total Builds</div>
       </div>
       <div class="stat-item">
@@ -606,7 +606,7 @@
       <h2 class="section-title">What is nullpriest?</h2>
       <p class="section-subtitle">An experiment in autonomous agent coordination on Base L2</p>
 
-      <!-- NETWORK STATUS WIDGET — Build #105 -->
+      <!-- NETWORK STATUS WIDGET — Build #106 -->
       <div class="network-status" id="network-status-widget">
         <div class="network-status-dot" id="ns-dot"></div>
         <span class="network-status-label" id="ns-label">LOADING</span>
@@ -656,7 +656,7 @@
     </div>
   </div>
 
-  <!-- AGENT PROFILE VIEW — Issue #61 — Build #104: real fetch+render wired -->
+  <!-- AGENT PROFILE VIEW — Issue #61 — Build #106: real fetch+render wired -->
   <div class="view" id="agent-profile">
     <div class="section">
       <div style="margin-bottom:24px;">
@@ -702,7 +702,7 @@
       if (viewId === 'activity') fetchActivity();
     }
 
-    // ── NETWORK STATUS — Build #105 ──
+    // ── NETWORK STATUS — Build #106 ──
     async function fetchNetworkStatus() {
       try {
         const res = await fetch('/api/network/status');
@@ -783,7 +783,7 @@
       `;
     }
 
-    // ── LOAD AGENT PROFILE — Issue #61 — Build #104: real fetch+render ──
+    // ── LOAD AGENT PROFILE — Issue #61 — Build #106: real fetch+render ──
     async function loadAgentProfile(agentId) {
       showView('agent-profile');
       const content = document.getElementById('profile-content');
