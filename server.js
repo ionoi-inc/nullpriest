@@ -71,7 +71,7 @@ app.get('/.well-known/agent.json', (req, res) => {
   });
 });
 
-// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
 const X402_PAYMENT_VERSION = '1.0';
 const X402_PAYMENT_AMOUNT  = '0.001'; // USDC
@@ -140,7 +140,7 @@ function getAgentRegistry() {
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-16T00:00:00Z',
+      created_at: '2026-02-15T00:00:00Z',
       last_build: '2026-03-04T08:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/strategy.md`,
     },
@@ -148,13 +148,13 @@ function getAgentRegistry() {
       id: 'agt_watcher_scout',
       name: 'Scout',
       slug: 'scout',
-      description: 'Market intelligence agent. Monitors competitors, tracks CT signals, surfaces build blockers. Every 30 min.',
-      capabilities: ['intelligence', 'monitoring', 'competitor-analysis'],
+      description: 'External intel + self-reflection agent. Monitors competitors, CT narratives, ecosystem signals. 30min reporting cycle.',
+      capabilities: ['intelligence', 'monitoring', 'analysis'],
       build_count: 73,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-16T00:00:00Z',
+      created_at: '2026-02-15T00:00:00Z',
       last_build: '2026-02-22T05:01:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/scout-latest.md`,
     },
@@ -162,160 +162,120 @@ function getAgentRegistry() {
       id: 'agt_builder_a',
       name: 'Builder A',
       slug: 'builder-a',
-      description: 'Production code agent. Picks issues #1 and #6 from strategy.md priority queue. Ships hourly at :30.',
-      capabilities: ['code-generation', 'github-integration', 'automated-deployment'],
-      build_count: 91,
+      description: 'Production code builder. Executes issues #1, #3, #6, #8 from priority queue. Hourly execution at :00.',
+      capabilities: ['code-generation', 'deployment', 'testing'],
+      build_count: 89,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-17T00:00:00Z',
-      last_build: '2026-03-04T08:30:00Z',
+      created_at: '2026-02-16T00:00:00Z',
+      last_build: '2026-03-04T09:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/build-log.md`,
     },
     {
       id: 'agt_builder_b',
       name: 'Builder B',
       slug: 'builder-b',
-      description: 'Production code agent. Picks issues #2 and #7 from strategy.md priority queue. Ships hourly at :30.',
-      capabilities: ['code-generation', 'github-integration', 'automated-deployment'],
-      build_count: 92,
+      description: 'Production code builder. Executes issues #2, #7 from priority queue. Hourly execution at :30.',
+      capabilities: ['code-generation', 'deployment', 'testing'],
+      build_count: 93,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-17T00:00:00Z',
-      last_build: '2026-03-04T09:16:00Z',
+      created_at: '2026-02-16T00:00:00Z',
+      last_build: '2026-03-04T10:06:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/build-log.md`,
     },
   ];
 }
 
-// ▓▓ /api/agents/public — no payment required
-app.get('/api/agents/public', (req, res) => {
-  const agents = getAgentRegistry();
-  res.json({ agents, count: agents.length });
+// ████ /api/price endpoint — proxies memory/price.json from GitHub — Build #82 (Builder A)
+app.get('/api/price', x402PaymentGate, (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const url = `${GITHUB_RAW_BASE}/memory/price.json`;
+  https.get(url, { headers: { 'User-Agent': 'nullpriest-server' } }, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => { data += chunk; });
+    ghRes.on('end', () => {
+      try {
+        const json = JSON.parse(data);
+        res.json(json);
+      } catch (e) {
+        res.status(500).json({ error: 'Failed to parse price data', detail: e.message });
+      }
+    });
+  }).on('error', (err) => {
+    res.status(502).json({ error: 'Failed to fetch price data', detail: err.message });
+  });
 });
 
-// ▓▓ /api/agents — x402 payment required
-app.get('/api/agents', x402PaymentGate, (req, res) => {
-  const agents = getAgentRegistry();
-  res.json({ agents, count: agents.length });
+// ████ /api/agents endpoint — returns full agent registry — Build #92 (Builder B)
+app.get('/api/agents', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json({ agents: getAgentRegistry(), count: getAgentRegistry().length });
 });
 
-// ▓▓ /api/agents/:id — agent detail endpoint — Issue #415
-// Returns single agent by id, slug, or name (case-insensitive). Public.
+// ████ /api/agents/:id detail endpoint — Issue #415 — Build #93 (Builder B)
 app.get('/api/agents/:id', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   const agents = getAgentRegistry();
-  const query = req.params.id.toLowerCase();
-  const agent = agents.find(a =>
-    a.id === req.params.id ||
-    a.slug.toLowerCase() === query ||
-    a.name.toLowerCase() === query
-  );
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
   if (!agent) {
     return res.status(404).json({ error: 'Agent not found', id: req.params.id });
   }
   res.json(agent);
 });
 
-// ▓▓ /api/activity — public activity feed endpoint — Issue #433
-// Fetches memory/activity-feed.md from GitHub raw and parses into structured activities array.
-// Used by site dashboard widget. No x402 gate — public endpoint.
+// ████ /api/activity endpoint — Issue #433 — Build #93 (Builder B)
+// Proxies memory/activity-feed.md from GitHub raw, parsed into structured JSON
 app.get('/api/activity', (req, res) => {
-  const rawUrl = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
-
-  https.get(rawUrl, { headers: { 'User-Agent': 'nullpriest-server' } }, (apiRes) => {
-    if (apiRes.statusCode !== 200) {
-      return res.status(502).json({
-        error: 'Failed to fetch activity feed',
-        status: apiRes.statusCode,
-        source: 'memory/activity-feed.md'
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
+  https.get(url, { headers: { 'User-Agent': 'nullpriest-server' } }, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => { data += chunk; });
+    ghRes.on('end', () => {
+      const lines = data.split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
+      const entries = lines.slice(0, 50).map(line => {
+        const raw = line.replace(/^[-*]\s*/, '').trim();
+        const tsMatch = raw.match(/\[?(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}[^\]]*)\]?/);
+        return {
+          timestamp: tsMatch ? tsMatch[1].trim() : null,
+          text: raw,
+        };
       });
-    }
-
-    let body = '';
-    apiRes.on('data', chunk => { body += chunk; });
-    apiRes.on('end', () => {
-      const lines = body.split('\n');
-      const activities = [];
-
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed.startsWith('-')) continue;
-
-        // Parse structured log lines: - TIMESTAMP | AGENT | DESCRIPTION
-        const pipeMatch = trimmed.match(/^-\s+\*?\*?([0-9]{4}-[0-9]{2}-[0-9]{2}[T\s][0-9:]+\s*UTC?)\*?\*?\s*\|\s*\*?\*?([^|*]+)\*?\*?\s*\|\s*(.+)$/);
-        if (pipeMatch) {
-          const [, tsRaw, agentRaw, descRaw] = pipeMatch;
-          activities.push({
-            timestamp: new Date(tsRaw.replace(' UTC', 'Z').replace(' ', 'T')).toISOString(),
-            agent: agentRaw.trim(),
-            description: descRaw.trim().replace(/\*\*/g, '')
-          });
-          continue;
-        }
-
-        // Fallback: plain line as description
-        const plainMatch = trimmed.match(/^-\s+(.+)$/);
-        if (plainMatch) {
-          activities.push({
-            timestamp: new Date().toISOString(),
-            agent: 'nullpriest',
-            description: plainMatch[1].replace(/\*\*/g, '').trim()
-          });
-        }
-      }
-
-      res.json({
-        activities: activities.slice(-20).reverse(),
-        count: activities.length,
-        updated_at: new Date().toISOString(),
-        source: 'memory/activity-feed.md'
-      });
+      res.json({ entries, source: 'memory/activity-feed.md', count: entries.length });
     });
   }).on('error', (err) => {
-    res.status(502).json({
-      error: 'Failed to fetch activity feed',
-      message: err.message,
-      source: 'memory/activity-feed.md'
+    res.status(502).json({ error: 'Failed to fetch activity feed', detail: err.message });
+  });
+});
+
+// ████ /api/quorum endpoint — proxies memory/quorum.md from GitHub — Build #91 (Builder B)
+app.get('/api/quorum', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const url = `${GITHUB_RAW_BASE}/memory/quorum.md`;
+  https.get(url, { headers: { 'User-Agent': 'nullpriest-server' } }, (ghRes) => {
+    let data = '';
+    ghRes.on('data', chunk => { data += chunk; });
+    ghRes.on('end', () => {
+      res.json({ raw: data, source: 'memory/quorum.md' });
     });
+  }).on('error', (err) => {
+    res.status(502).json({ error: 'Failed to fetch quorum data', detail: err.message });
   });
 });
 
-// ▓▓ /api/price — x402-gated pricing endpoint
-app.get('/api/price', x402PaymentGate, (req, res) => {
-  res.json({
-    price_usd: 0.042,
-    change_24h: 12.5,
-    market_cap: 420000,
-    volume_24h: 8500,
-    circulating_supply: 10000000,
-    last_updated: new Date().toISOString(),
-  });
-});
-
-// ▓▓ /memory/* proxy — serves memory files from GitHub
-app.get('/memory/*', (req, res) => {
-  const memoryPath = req.path.replace('/memory/', '');
-  const rawUrl = `${GITHUB_RAW_BASE}/memory/${memoryPath}`;
-
-  https.get(rawUrl, (apiRes) => {
-    if (apiRes.statusCode !== 200) {
-      return res.status(404).json({ error: 'Memory file not found' });
-    }
-    apiRes.pipe(res);
-  }).on('error', () => {
-    res.status(500).json({ error: 'Failed to fetch memory file' });
-  });
-});
-
-// ▓▓ Serve static site
+// ████ Static site serving — Build #82 (Builder A)
 app.use(express.static(path.join(__dirname, 'site')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
+// ████ Start server
 app.listen(PORT, () => {
-  console.log(`[nullpriest] Server running on port ${PORT}`);
-  console.log(`[x402] Payment gate active — ${X402_PAYMENT_AMOUNT} ${X402_PAYMENT_ASSET} on ${X402_PAYMENT_NETWORK}`);
+  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`Site: http://localhost:${PORT}`);
+  console.log(`API: http://localhost:${PORT}/api/agents`);
 });
