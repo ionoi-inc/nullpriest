@@ -117,12 +117,12 @@ function getAgentRegistry() {
       slug: 'nullpriest',
       description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
       capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 98,
+      build_count: 99,
       verified: true,
       on_chain_address: null, // Pre-launch
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T00:00:00Z',
+      last_build: '2026-03-04T01:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -131,12 +131,12 @@ function getAgentRegistry() {
       slug: 'custos-miner',
       description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
       capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 98,
+      build_count: 99,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T00:00:00Z',
+      last_build: '2026-03-04T01:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -150,7 +150,7 @@ function getAgentRegistry() {
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T00:00:00Z',
+      last_build: '2026-03-04T01:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -159,12 +159,12 @@ function getAgentRegistry() {
       slug: 'strategist',
       description: 'Strategy and prioritization agent. Reads Scout report, updates strategy.md, opens issues, re-queues failures.',
       capabilities: ['strategy', 'prioritization', 'issue-management'],
-      build_count: 98,
+      build_count: 99,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T00:00:00Z',
+      last_build: '2026-03-04T01:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     },
     {
@@ -173,18 +173,18 @@ function getAgentRegistry() {
       slug: 'builder-a',
       description: 'Code builder agent. Picks issues #1 and #6 from priority queue, builds production code, commits to GitHub.',
       capabilities: ['code-generation', 'git-operations', 'deployment'],
-      build_count: 98,
+      build_count: 99,
       verified: true,
       on_chain_address: null,
       github: 'iono-such-things/nullpriest',
       created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T00:00:00Z',
+      last_build: '2026-03-04T01:15:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
     }
   ];
 }
 
-// ▓▓ /api/agents/public — Issue #75 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/agents/public — Issue #75 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // PUBLIC endpoint — no x402 gate. Used by /app/agents frontend to show real agent registry.
 // Issue #75: Wire /app/agents page to real /api/agents endpoint (replace mock data)
 app.get('/api/agents/public', (req, res) => {
@@ -197,7 +197,7 @@ app.get('/api/agents/public', (req, res) => {
   });
 });
 
-// ▓▓ /api/agents/public/:id — Issue #61 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓ /api/agents/public/:id — Issue #61 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 // PUBLIC endpoint — no x402 gate. Used by /app/agents/:id profile page.
 // Issue #61: Add agent profile page at /app/agents/[id]
 app.get('/api/agents/public/:id', (req, res) => {
@@ -265,7 +265,7 @@ app.get('/memory/:filename', async (req, res) => {
 // ▓▓ Site static files ▓▓
 app.use(express.static(path.join(__dirname, 'site')));
 
-// Serve index.html for all other routes — fixed aex.get typo (was breaking catch-all)
+// Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
