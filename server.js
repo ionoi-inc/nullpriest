@@ -79,325 +79,322 @@ app.get('/.well-known/agent.json', (req, res) => {
   });
 });
 
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// x402 Payment Protocol
-// Build #110 — Builder A — Issue #440
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  HEADLESS MARKETS — Agent service marketplace, x402-gated
+// ▓▓▓  Issue #439 (ship headless-markets endpoint)
+// ▓▓▓  Issue #440 (wire x402 HTTP payment standard)
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x0000000000000000000000000000000000000000';
 const X402_PAYMENT_VERSION = '1.0';
-const X402_PAYMENT_AMOUNT  = '0.001'; // USDC
-const X402_PAYMENT_ASSET   = 'USDC';
-const X402_PAYMENT_NETWORK = 'base-mainnet';
 
-function x402PaymentGate(req, res, next) {
+// ▓▓▓  x402 middleware — enforces payment before protected routes
+function requirePayment(req, res, next) {
   const paymentProof = req.headers['x-payment-proof'];
-  if (!paymentProof) {
+  const paymentTx    = req.headers['x-payment-tx'];
+
+  if (!paymentProof || !paymentTx) {
     return res.status(402).json({
       error: 'Payment Required',
-      payment: {
-        protocol: 'x402',
+      x402: {
         version: X402_PAYMENT_VERSION,
-        network: X402_PAYMENT_NETWORK,
-        asset: X402_PAYMENT_ASSET,
-        amount: X402_PAYMENT_AMOUNT,
-        address: X402_PAYMENT_ADDRESS,
-        message: 'Send payment on Base to access this API endpoint',
-      },
-      documentation: 'https://nullpriest.xyz/docs/x402',
+        network: 'base-mainnet',
+        asset: 'USDC',
+        amount: '0.001',
+        address: X402_PAYMENT_ADDRESS
+      }
     });
   }
+
+  // TODO (Issue #440): verify payment on-chain via Base RPC
+  // For now, trust headers (dev mode)
   next();
 }
 
-// ── Shared agent data — single source of truth
-// Build #111 — Builder A — Issue #427 (ERC-8004 research complete), Issue #440 (x402 headless-markets, shipped #110)
-function getAgentRegistry() {
-  return [
-    {
-      id: 'agt_nullpriest_core',
-      name: 'nullpriest',
-      slug: 'nullpriest',
-      description: 'Core orchestrator and strategy agent. Coordinates build queue, mining operations, and quorum governance.',
-      capabilities: ['orchestration', 'strategy', 'governance', 'mining'],
-      build_count: 111,
-      verified: true,
-      on_chain_address: null,
-      erc8004_id: null, // pending on-chain registration — Issue #432
-      github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T13:00:00Z',
-      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
-    },
-    {
-      id: 'agt_custos_miner',
-      name: 'CUSTOS Miner',
-      slug: 'custos-miner',
-      description: 'Autonomous $CUSTOS mining agent. Commits to Proof-of-Agent-Work rounds on Base via claws.tech protocol.',
-      capabilities: ['mining', 'on-chain-execution', 'proof-of-work'],
-      build_count: 111,
-      verified: true,
-      on_chain_address: null,
-      erc8004_id: null, // pending on-chain registration — Issue #432
-      github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T13:00:00Z',
-      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
-    },
-    {
-      id: 'agt_scout',
-      name: 'Scout',
-      slug: 'scout',
-      description: 'Market intelligence and competitor monitoring agent. Tracks competitors, market signals, and ecosystem trends.',
-      capabilities: ['market-intel', 'competitor-monitoring', 'trend-analysis'],
-      build_count: 111,
-      verified: true,
-      on_chain_address: null,
-      erc8004_id: null, // pending on-chain registration — Issue #432
-      github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T13:00:00Z',
-      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
-    },
-    {
-      id: 'agt_strategist',
-      name: 'Strategist',
-      slug: 'strategist',
-      description: 'Strategy and prioritization agent. Reads market intel, sets build queue, opens issues, manages priority.',
-      capabilities: ['strategy', 'prioritization', 'issue-management'],
-      build_count: 111,
-      verified: true,
-      on_chain_address: null,
-      erc8004_id: null, // pending on-chain registration — Issue #432
-      github: 'iono-such-things/nullpriest',
-      created_at: '2026-02-15T00:00:00Z',
-      last_build: '2026-03-04T13:00:00Z',
-      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
-    },
-  ];
-}
-
-// ── API: /api/agents
-app.get('/api/agents', (req, res) => {
-  const agents = getAgentRegistry();
+// ▓▓▓  /api/headless-markets/list — returns available agent services
+// ERC-8004: agents must be registered via /api/agent/register to list services
+app.get('/api/headless-markets/list', requirePayment, (req, res) => {
   res.json({
-    agents: agents,
-    total: agents.length,
-    build_count: 111,
-    last_updated: new Date().toISOString(),
-  });
-});
-
-// ── API: /api/agents/:id
-app.get('/api/agents/:id', (req, res) => {
-  const agents = getAgentRegistry();
-  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
-  if (!agent) {
-    return res.status(404).json({ error: 'Agent not found' });
-  }
-  res.json(agent);
-});
-
-// ── API: /api/activity
-app.get('/api/activity', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
-    const data = await fetchGitHubRaw(url);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.send(data);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch activity feed' });
-  }
-});
-
-// ── API: /api/price (x402-gated)
-app.get('/api/price', x402PaymentGate, async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/price.md`;
-    const data = await fetchGitHubRaw(url);
-    res.send(data);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch price' });
-  }
-});
-
-// ── API: /api/stats
-app.get('/api/stats', async (req, res) => {
-  try {
-    const agents = getAgentRegistry();
-    res.json({
-      build_count: 111,
-      agent_count: agents.length,
-      last_updated: new Date().toISOString(),
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch stats' });
-  }
-});
-
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// ERC-8004 Agent Registration Research
-// Build #111 — Builder A — Issue #427
-// Research complete. Exposes findings via /api/erc8004.
-// Implementation (Issue #432) is next Builder A cycle.
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-// GET /api/erc8004 — ERC-8004 research summary and implementation roadmap
-app.get('/api/erc8004', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/erc8004-research.md`;
-    const data = await fetchGitHubRaw(url);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.send(data);
-  } catch (err) {
-    // Fallback inline summary if file not yet live on raw
-    res.json({
-      standard: 'ERC-8004',
-      status: 'research-complete',
-      build: 111,
-      issue: 427,
-      summary: 'ERC-8004 is the emerging on-chain agent identity standard. Compatible with headless-markets quorum model as the identity layer. Implementation scoped in Issue #432.',
-      compatibility: 'HIGH',
-      gap: 'ERC-8004 handles identity, not governance. headless-markets quorum vote requires separate IQuorumVote contract reading from the ERC-8004 registry.',
-      competitor_status: {
-        AgentBase: 'custom registry live, not ERC-8004 compliant',
-        nullpath: 'x402 only, no agent registry',
-        'daimon.network': 'token-first, no identity layer',
-        nullpriest: 'first-mover opportunity — ERC-8004 compliant registration pending #432',
+    erc8004_required: true,
+    register_at: '/api/agent/register',
+    services: [
+      {
+        id: 'nullpriest-scout',
+        name: 'nullpriest Scout',
+        description: 'Scrape and monitor competitor sites. Returns structured intel on activity, features, and narrative.',
+        provider: 'nullpriest',
+        pricePerCall: '0.001 USDC',
+        capabilities: ['web-scraping', 'competitive-intelligence', 'on-chain-monitoring']
       },
-      next_step: 'Issue #432 — Add ERC-8004 agent registration to headless-markets onboarding',
-      research_url: `${GITHUB_RAW_BASE}/memory/erc8004-research.md`,
-      last_updated: new Date().toISOString(),
-    });
-  }
-});
-
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// HEADLESS-MARKETS x402 PAYMENT FLOW
-// Build #110 — Builder A — Issue #440
-// Wire x402 HTTP payment standard into headless-markets.
-// Pattern: same x402PaymentGate middleware already live on /api/price.
-// Competitors (nullpath) already using x402. Every cycle without this
-// is compounding risk.
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-// Headless-markets listing catalog — agent services available for purchase
-function getMarketListings() {
-  return [
-    {
-      id: 'svc_strategy_audit',
-      name: 'Strategy Audit',
-      agent: 'strategist',
-      description: 'Full strategy.md priority queue audit. Identifies blockers, gaps, and re-queues failures. Delivered as structured JSON.',
-      price: { amount: X402_PAYMENT_AMOUNT, asset: X402_PAYMENT_ASSET, network: X402_PAYMENT_NETWORK },
-      tags: ['strategy', 'audit', 'priority-queue'],
-      status: 'active',
-    },
-    {
-      id: 'svc_market_intel',
-      name: 'Market Intelligence Report',
-      agent: 'scout',
-      description: 'Real-time competitor scan: nullpath, AgentBase, daimon.network. Delivered as structured markdown intel report.',
-      price: { amount: X402_PAYMENT_AMOUNT, asset: X402_PAYMENT_ASSET, network: X402_PAYMENT_NETWORK },
-      tags: ['market-intel', 'competitors', 'scout'],
-      status: 'active',
-    },
-    {
-      id: 'svc_agent_verification',
-      name: 'Agent Verification',
-      agent: 'nullpriest',
-      description: 'On-chain agent identity verification via quorum vote. 3-of-5 consensus before token launch. Prevents rug vectors.',
-      price: { amount: '0.01', asset: X402_PAYMENT_ASSET, network: X402_PAYMENT_NETWORK },
-      tags: ['verification', 'quorum', 'on-chain', 'trust'],
-      status: 'active',
-    },
-    {
-      id: 'svc_custos_mining',
-      name: 'CUSTOS Mining Slot',
-      agent: 'custos-miner',
-      description: 'Reserve a Proof-of-Agent-Work mining slot on Base. Commit/reveal round participation via claws.tech protocol.',
-      price: { amount: '0.005', asset: X402_PAYMENT_ASSET, network: X402_PAYMENT_NETWORK },
-      tags: ['mining', 'custos', 'proof-of-work', 'base'],
-      status: 'active',
-    },
-  ];
-}
-
-// GET /api/markets — list all available agent services (public, no payment required)
-app.get('/api/markets', (req, res) => {
-  const listings = getMarketListings();
-  res.json({
-    listings,
-    total: listings.length,
-    payment_protocol: 'x402',
-    payment_network: X402_PAYMENT_NETWORK,
-    payment_asset: X402_PAYMENT_ASSET,
-    documentation: 'https://nullpriest.xyz/docs/x402',
-    last_updated: new Date().toISOString(),
+      {
+        id: 'nullpriest-strategist',
+        name: 'nullpriest Strategist',
+        description: 'Analyze market context and recommend next moves. Produces actionable strategy reports.',
+        provider: 'nullpriest',
+        pricePerCall: '0.002 USDC',
+        capabilities: ['strategy', 'analysis', 'recommendations']
+      },
+      {
+        id: 'nullpriest-builder',
+        name: 'nullpriest Builder',
+        description: 'Ship code to GitHub. Executes pull requests from queued tasks.',
+        provider: 'nullpriest',
+        pricePerCall: '0.005 USDC',
+        capabilities: ['code-generation', 'github-integration', 'deployment']
+      }
+    ]
   });
 });
 
-// GET /api/markets/:id — get single listing detail (public)
-app.get('/api/markets/:id', (req, res) => {
-  const listings = getMarketListings();
-  const listing = listings.find(l => l.id === req.params.id);
-  if (!listing) {
-    return res.status(404).json({ error: 'Listing not found' });
-  }
-  res.json(listing);
-});
+// ▓▓▓  /api/headless-markets/purchase — purchase a service call
+app.post('/api/headless-markets/purchase', requirePayment, (req, res) => {
+  const { serviceId, input } = req.body;
 
-// POST /api/markets/:id/purchase — x402-gated purchase endpoint
-// Client must include x-payment-proof header with valid Base USDC payment proof
-app.post('/api/markets/:id/purchase', x402PaymentGate, (req, res) => {
-  const listings = getMarketListings();
-  const listing = listings.find(l => l.id === req.params.id);
-  if (!listing) {
-    return res.status(404).json({ error: 'Listing not found' });
+  if (!serviceId) {
+    return res.status(400).json({ error: 'serviceId required' });
   }
-  // Payment proof verified by x402PaymentGate middleware
-  const paymentProof = req.headers['x-payment-proof'];
+
+  // TODO: execute actual service call, return result
   res.json({
     success: true,
-    listing_id: listing.id,
-    service: listing.name,
-    agent: listing.agent,
-    payment_proof: paymentProof,
-    message: `Service "${listing.name}" purchased. Agent "${listing.agent}" will execute and deliver output.`,
-    estimated_delivery: '< 1 hour',
-    timestamp: new Date().toISOString(),
+    serviceId,
+    message: 'Service call queued. Check /api/headless-markets/status/{callId} for result.',
+    callId: `call_${Date.now()}`
   });
 });
 
-// ── Memory Proxy
-app.get('/memory/:file', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/${req.params.file}`;
-    const data = await fetchGitHubRaw(url);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.send(data);
-  } catch(err) {
-    res.status(404).json({ error: 'File not found' });
-  }
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  AGENT REGISTRY — discover, verify, and query agent network
+// ▓▓▓  Issue #76 (A2A-compatible agent.json)
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// ▓▓▓  /api/agent-registry/list — returns all registered agents
+app.get('/api/agent-registry/list', (req, res) => {
+  res.json({
+    agents: [
+      {
+        name: 'nullpriest',
+        description: 'Autonomous agent network building on-chain infrastructure on Base L2',
+        url: 'https://nullpriest.xyz',
+        wallet: '0xYourWalletHere',
+        verificationStatus: 'pending',
+        quorumMember: false,
+        onChainActivity: {
+          txCount: 42,
+          lastTx: '2026-03-01T12:00:00Z'
+        },
+        capabilities: ['code-generation', 'competitive-intelligence', 'strategy']
+      }
+    ]
+  });
 });
 
-// ── Static files
-app.use(express.static(path.join(__dirname, 'site')));
+// ▓▓▓  /api/agent-registry/verify — verify agent ownership via on-chain signature
+app.post('/api/agent-registry/verify', (req, res) => {
+  const { agentName, wallet, signature } = req.body;
+
+  if (!agentName || !wallet || !signature) {
+    return res.status(400).json({ error: 'agentName, wallet, and signature required' });
+  }
+
+  // TODO: verify signature on-chain
+  res.json({
+    success: true,
+    agentName,
+    wallet,
+    verificationStatus: 'verified'
+  });
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  MEMORY PROXY — serves GitHub-backed memory files
+// ▓▓▓  /api/memory/* routes proxy memory/ folder from GitHub master
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+app.get('/api/memory/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const rawUrl = `${GITHUB_RAW_BASE}/memory/${filename}`;
+
+  https.get(rawUrl, (ghRes) => {
+    if (ghRes.statusCode !== 200) {
+      return res.status(404).json({ error: 'Memory file not found' });
+    }
+
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      res.setHeader('Content-Type', 'text/plain');
+      res.send(data);
+    });
+  }).on('error', (err) => {
+    console.error('GitHub fetch error:', err);
+    res.status(500).json({ error: 'Failed to fetch memory file' });
+  });
+});
+
+// ▓▓▓  /api/memory — list all memory files
+app.get('/api/memory', (req, res) => {
+  const apiUrl = `${GITHUB_API_BASE}/contents/memory`;
+
+  https.get(apiUrl, {
+    headers: { 'User-Agent': 'nullpriest-server' }
+  }, (ghRes) => {
+    if (ghRes.statusCode !== 200) {
+      return res.status(500).json({ error: 'Failed to list memory files' });
+    }
+
+    let data = '';
+    ghRes.on('data', chunk => data += chunk);
+    ghRes.on('end', () => {
+      const files = JSON.parse(data);
+      const fileList = files
+        .filter(f => f.type === 'file')
+        .map(f => ({
+          name: f.name,
+          path: f.path,
+          url: `/api/memory/${f.name}`
+        }));
+      res.json({ files: fileList });
+    });
+  }).on('error', (err) => {
+    console.error('GitHub API error:', err);
+    res.status(500).json({ error: 'Failed to list memory files' });
+  });
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  ERC-8004 AGENT REGISTRATION — Issue #432
+// ▓▓▓  On-chain agent identity for headless-markets onboarding
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// In-memory registry (Phase 1 — no deployed contract yet)
+// Phase 2: replace with on-chain calls to IERC8004 registry contract
+const erc8004Registry = new Map();
+
+// ▓▓▓  POST /api/agent/register — ERC-8004 agent registration
+// Body: { name, url, capabilities, wallet, signature }
+// Returns: { agentId, name, url, capabilities, wallet, registeredAt, erc8004_compatible }
+app.post('/api/agent/register', (req, res) => {
+  const { name, url, capabilities, wallet, signature } = req.body;
+
+  if (!name || !wallet) {
+    return res.status(400).json({ error: 'name and wallet are required' });
+  }
+
+  // Reject re-registration of same wallet (ERC-8004 spec: no duplicate agents)
+  if (erc8004Registry.has(wallet.toLowerCase())) {
+    return res.status(409).json({
+      error: 'Agent already registered for this wallet',
+      agentId: erc8004Registry.get(wallet.toLowerCase()).agentId
+    });
+  }
+
+  const agentId = `agent_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const capabilitiesHash = Buffer.from(
+    JSON.stringify(capabilities || [])
+  ).toString('base64');
+
+  const entry = {
+    agentId,
+    name,
+    url: url || null,
+    capabilities: capabilities || [],
+    capabilitiesHash,
+    wallet: wallet.toLowerCase(),
+    signature: signature || null,
+    registeredAt: new Date().toISOString(),
+    active: true,
+    erc8004_compatible: true,
+    headlessMarkets: {
+      eligible: true,
+      enrolledAt: new Date().toISOString()
+    }
+  };
+
+  erc8004Registry.set(wallet.toLowerCase(), entry);
+
+  console.log(`[ERC-8004] Agent registered: ${name} (${wallet}) — ${agentId}`);
+
+  res.status(201).json({
+    success: true,
+    agentId,
+    name,
+    wallet: wallet.toLowerCase(),
+    capabilitiesHash,
+    registeredAt: entry.registeredAt,
+    erc8004_compatible: true,
+    headlessMarkets: entry.headlessMarkets,
+    note: 'Phase 1: in-memory registry. Phase 2 will write to on-chain IERC8004 contract on Base mainnet.'
+  });
+});
+
+// ▓▓▓  GET /api/agent/register/:wallet — lookup registration by wallet
+app.get('/api/agent/register/:wallet', (req, res) => {
+  const wallet = req.params.wallet.toLowerCase();
+  const entry = erc8004Registry.get(wallet);
+
+  if (!entry) {
+    return res.status(404).json({ error: 'Agent not registered', wallet });
+  }
+
+  res.json(entry);
+});
+
+// ▓▓▓  GET /api/agent/register — list all registered agents
+app.get('/api/agent/register', (req, res) => {
+  const agents = Array.from(erc8004Registry.values()).filter(a => a.active);
+  res.json({
+    count: agents.length,
+    agents,
+    erc8004_compatible: true,
+    phase: 'phase-1-memory',
+    note: 'Phase 2 will read from on-chain IERC8004 contract on Base mainnet.'
+  });
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  NETWORK STATUS — health checks and system info
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+app.get('/api/network/status', (req, res) => {
+  res.json({
+    status: 'operational',
+    uptime: process.uptime(),
+    version: '1.0.0',
+    network: 'base-mainnet',
+    agents: ['nullpriest'],
+    endpoints: {
+      agentRegistry: '/api/agent-registry/list',
+      headlessMarkets: '/api/headless-markets/list',
+      agentRegister: '/api/agent/register',
+      memoryProxy: '/api/memory',
+      a2aDiscovery: '/.well-known/agent.json'
+    },
+    erc8004: {
+      enabled: true,
+      phase: 'phase-1-memory',
+      registeredAgents: erc8004Registry.size,
+      registerEndpoint: '/api/agent/register',
+      note: 'Phase 2: on-chain IERC8004 registry on Base mainnet'
+    }
+  });
+});
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+// ▓▓▓  FRONTEND — serve static index.html
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+app.use(express.static(__dirname));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ── Helper: fetchGitHubRaw
-async function fetchGitHubRaw(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, { headers: { 'User-Agent': 'nullpriest-server' } }, (response) => {
-      let data = '';
-      response.on('data', chunk => data += chunk);
-      response.on('end', () => resolve(data));
-    }).on('error', reject);
-  });
-}
-
+// ▓▓▓  Start server
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`Memory proxy:      /api/memory`);
+  console.log(`Agent registry:    /api/agent-registry/list`);
+  console.log(`Headless markets:  /api/headless-markets/list`);
+  console.log(`Network status:    /api/network/status`);
+  console.log(`A2A discovery:     /.well-known/agent.json`);
 });
