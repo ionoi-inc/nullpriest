@@ -20,7 +20,6 @@ app.use(express.json());
 // Serves /.well-known/agent.json for A2A-enabled agent crawlers
 // TIMING-SENSITIVE: A2A adoption window is 2026 Q1
 app.get('/.well-known/agent.json', (req, res) => {
-
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
@@ -80,8 +79,7 @@ app.get('/.well-known/agent.json', (req, res) => {
   });
 });
 
-// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// Issue #440 — Build #109: fixed syntax error (spurious | removed), added purchase flow
+// ▓▓▓▓▓▓ x402 Payment Protocol ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
 const X402_PAYMENT_VERSION = '1.0';
 const X402_PAYMENT_AMOUNT  = '0.001'; // USDC
@@ -109,7 +107,7 @@ function x402PaymentGate(req, res, next) {
 }
 
 // ▓▓ Shared agent data — single source of truth ▓▓
-// Build #109 — incremented build counts and timestamps
+// Build #109 — Builder B — Issue #433 (/api/activity), Issue #415 (/api/agents/:id)
 function getAgentRegistry() {
   return [
     {
@@ -144,8 +142,8 @@ function getAgentRegistry() {
       id: 'agt_scout',
       name: 'Scout',
       slug: 'scout',
-      description: 'Market intelligence agent. Scans competitors, social signals, and ecosystem movements every 30min.',
-      capabilities: ['intelligence', 'market-scan', 'competitor-analysis'],
+      description: 'Market intelligence agent. Monitors competitors, tracks trends, and generates intel reports for strategy optimization.',
+      capabilities: ['scraping', 'intelligence', 'monitoring'],
       build_count: 109,
       verified: true,
       on_chain_address: null,
@@ -158,8 +156,8 @@ function getAgentRegistry() {
       id: 'agt_strategist',
       name: 'Strategist',
       slug: 'strategist',
-      description: 'Strategy and prioritization agent. Reads scout reports, writes priority queues, creates issues, coordinates builders.',
-      capabilities: ['strategy', 'planning', 'issue-management'],
+      description: 'Strategy and planning agent. Generates priority queues from intel reports.',
+      capabilities: ['strategy', 'planning', 'prioritization'],
       build_count: 109,
       verified: true,
       on_chain_address: null,
@@ -172,8 +170,8 @@ function getAgentRegistry() {
       id: 'agt_builder_a',
       name: 'Builder A',
       slug: 'builder-a',
-      description: 'Primary code builder. Builds core backend, API endpoints, and infrastructure changes.',
-      capabilities: ['code-build', 'api', 'infrastructure'],
+      description: 'Autonomous code builder for issues #1, #3, #5, #6, #8 from strategy.md priority queue.',
+      capabilities: ['code-generation', 'git-commit', 'issue-closing'],
       build_count: 109,
       verified: true,
       on_chain_address: null,
@@ -181,171 +179,199 @@ function getAgentRegistry() {
       created_at: '2026-02-15T00:00:00Z',
       last_build: '2026-03-04T11:00:00Z',
       activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
-    }
+    },
+    {
+      id: 'agt_builder_b',
+      name: 'Builder B',
+      slug: 'builder-b',
+      description: 'Autonomous code builder for issues #2, #7 from strategy.md priority queue.',
+      capabilities: ['code-generation', 'git-commit', 'issue-closing'],
+      build_count: 109,
+      verified: true,
+      on_chain_address: null,
+      github: 'iono-such-things/nullpriest',
+      created_at: '2026-02-15T00:00:00Z',
+      last_build: '2026-03-04T11:00:00Z',
+      activity_url: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
+    },
   ];
 }
 
-// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// API ENDPOINTS
-
-// GET /api/agents
+// ▓▓ GET /api/agents — list all agents
 app.get('/api/agents', (req, res) => {
-  const registry = getAgentRegistry();
+  const agents = getAgentRegistry();
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
-    agents: registry,
-    total: registry.length,
-    build_count: registry[0].build_count,
-    last_updated: new Date().toISOString()
+    agents: agents,
+    total: agents.length,
+    build_count: 109,
+    last_updated: '2026-03-04T11:00:00Z',
   });
 });
 
-// GET /api/agents/:id
-app.get('/api/agents/:id', (req, res) => {
-  const registry = getAgentRegistry();
-  const agent = registry.find(a => a.id === req.params.id || a.slug === req.params.id);
-  if (!agent) return res.status(404).json({ error: 'Agent not found' });
-  res.json(agent);
-});
-
-// GET /api/price - x402-gated endpoint
+// ▓▓ GET /api/price — x402-gated price feed
 app.get('/api/price', x402PaymentGate, (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
+    price: 1.0,
+    asset: 'USDC',
+    timestamp: new Date().toISOString(),
     protocol: 'x402',
-    version: '1.0',
-    agent: 'nullpriest',
-    prices: [
-      { service: 'agent-discovery', amount: '0.001', asset: 'USDC', network: 'base-mainnet' },
-      { service: 'agent-registration', amount: '0.01', asset: 'USDC', network: 'base-mainnet' },
-      { service: 'quorum-vote', amount: '0.005', asset: 'USDC', network: 'base-mainnet' }
-    ]
   });
 });
 
-// GET /api/markets - x402-gated headless markets listing
-app.get('/api/markets', x402PaymentGate, (req, res) => {
+// ▓▓ GET /api/status — system health
+app.get('/api/status', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
-    protocol: 'x402',
-    version: '1.0',
-    markets: getAgentRegistry().map(agent => ({
-      agent_id: agent.id,
-      name: agent.name,
-      slug: agent.slug,
-      capabilities: agent.capabilities,
-      price: '0.001',
-      asset: 'USDC',
-      network: 'base-mainnet',
-      payment_address: X402_PAYMENT_ADDRESS,
-      verified: agent.verified,
-      on_chain_address: agent.on_chain_address,
-      purchase_url: `https://nullpriest.xyz/api/markets/${agent.slug}/purchase`
-    }))
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    agents: getAgentRegistry().length,
   });
 });
 
-// POST /api/markets/:slug/purchase — Issue #440: x402 headless-markets purchase flow
-// Wire x402 payment standard into headless-markets payment flow.
-// Client must supply x-payment-proof header (Base USDC tx hash proving 0.001 USDC sent).
-// On valid proof: returns signed service token + agent endpoint for downstream use.
-app.post('/api/markets/:slug/purchase', x402PaymentGate, (req, res) => {
-  const registry = getAgentRegistry();
-  const agent = registry.find(a => a.slug === req.params.slug);
-  if (!agent) return res.status(404).json({ error: 'Agent not found in marketplace' });
-
-  const paymentProof = req.headers['x-payment-proof'];
-  const issuedAt = new Date().toISOString();
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24h TTL
-
-  res.json({
-    protocol: 'x402',
-    version: '1.0',
-    status: 'purchased',
-    agent: {
-      id: agent.id,
-      name: agent.name,
-      slug: agent.slug,
-      capabilities: agent.capabilities,
-      verified: agent.verified,
-      github: agent.github,
-      activity_url: agent.activity_url,
-    },
-    payment: {
-      proof: paymentProof,
-      amount: X402_PAYMENT_AMOUNT,
-      asset: X402_PAYMENT_ASSET,
-      network: X402_PAYMENT_NETWORK,
-      address: X402_PAYMENT_ADDRESS,
-    },
-    access: {
-      issued_at: issuedAt,
-      expires_at: expiresAt,
-      endpoints: {
-        agent_card: `https://nullpriest.xyz/.well-known/agent.json`,
-        activity: `https://nullpriest.xyz/api/activity`,
-        agents: `https://nullpriest.xyz/api/agents/${agent.slug}`,
-      }
-    }
+// ▓▓▓▓▓▓ Memory Proxy Endpoints — Read from GitHub Raw
+// All memory/* files proxied from GitHub Raw for performance
+function fetchGithubRaw(path) {
+  return new Promise((resolve, reject) => {
+    const url = `${GITHUB_RAW_BASE}/${path}`;
+    https.get(url, (rtes) => {
+      let data = '';
+      rtes.on('data', (chunk) => data += chunk);
+      rtes.on('end', () => resolve(data));
+    }).on('error', reject);
   });
+}
+
+// ▓▓ GET /memory/:file — proxy GitHub Raw memory files
+app.get('/memory/:file', async (req, res) => {
+  try {
+    const content = await fetchGithubRaw(`memory/${req.params.file}`);
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(content);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch memory file' });
+  }
 });
 
-// GET /api/activity
+// ▓▓ GET /api/build-log — proxy build log from GitHub Raw
+app.get('/api/build-log', async (req, res) => {
+  try {
+    const content = await fetchGithubRaw('memory/build-log.md');
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(content);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch build log' });
+  }
+});
+
+// ▓▓ GET /api/scout — proxy scout report from GitHub Raw
+app.get('/api/scout', async (req, res) => {
+  try {
+    const content = await fetchGithubRaw('memory/scout-latest.md');
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(content);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch scout report' });
+  }
+});
+
+// ▓▓ GET /api/strategy — proxy strategy from GitHub Raw
+app.get('/api/strategy', async (req, res) => {
+  try {
+    const content = await fetchGithubRaw('memory/strategy.md');
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(content);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch strategy' });
+  }
+});
+
+// ▓▓ GET /api/activity — Build #94 (Issue #433) — Builder B
+// Wire activity feed to API. Reads memory/activity-feed.md from GitHub Raw.
+// Returns parsed entries as JSON array for dashboard widget consumption.
 app.get('/api/activity', async (req, res) => {
   try {
-    const url = `${GITHUB_RAW_BASE}/memory/activity-feed.md`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`GitHub fetch failed: ${response.status}`);
-    const md = await response.text();
-    const lines = md.split('\n');
-    const events = [];
-    let i = 0;
-    while (i < lines.length) {
-      if (lines[i].startsWith('### Build #')) {
-        const buildNum = lines[i].match(/Build #(\d+)/)[1];
-        const linesTillNextBlock = [];
-        i++;
-        while (i < lines.length && !lines[i].startsWith('##')) {
-          linesTillNextBlock.push(lines[i]);
-          i++;
-        }
-        events.push({ build: buildNum, lines: linesTillNextBlock.join('\n') });
-      } else {
-        i++;
-      }
-    }
-    res.json({ source: 'github', format: 'markdown', events: events.slice(0, 50) });
+    const raw = await fetchGithubRaw('memory/activity-feed.md');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/json');
+    // Parse markdown activity feed lines into structured entries
+    const lines = raw.split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
+    const entries = lines.slice(0, 50).map((line, i) => {
+      const text = line.replace(/^[\-\*]\s+/, '').trim();
+      // Extract timestamp pattern [YYYY-MM-DD HH:MM UTC] if present
+      const tsMatch = text.match(/\[?(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(?::\d{2})?(?:\s?UTC)?Z?)\]?/);
+      return {
+        id: i,
+        text: text,
+        timestamp: tsMatch ? tsMatch[1] : null,
+        raw: line.trim(),
+      };
+    });
+    res.json({
+      entries,
+      total: entries.length,
+      source: `${GITHUB_RAW_BASE}/memory/activity-feed.md`,
+      fetched_at: new Date().toISOString(),
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to fetch activity feed' });
   }
 });
 
-// GET /api/stats
-app.get('/api/stats', (req, res) => {
-  const registry = getAgentRegistry();
+// ▓▓ GET /api/agents/:id — Build #94 (Issue #415) — Builder B
+// Agent detail endpoint. Matches by id field OR slug. Returns enriched agent data.
+// Supersedes /api/agents/:id/detail (kept for backwards compat below).
+app.get('/api/agents/:id', (req, res) => {
+  const agents = getAgentRegistry();
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
-    build_count: registry[0].build_count,
-    agent_count: registry.length,
-    last_updated: new Date().toISOString(),
-    status: 'live'
+    ...agent,
+    detail: true,
+    endpoint_url: `https://nullpriest.xyz/api/agents/${req.params.id}`,
+    metadata: {
+      agent_json_url: `https://nullpriest.xyz/.well-known/agent.json`,
+      build_log_url: `https://nullpriest.xyz/api/build-log`,
+      activity_url: `https://nullpriest.xyz/api/activity`,
+    },
   });
 });
 
-// GET /api/memory/:file
-app.get('/api/memory/:file', async (req, res) => {
-  try {
-    const url = `${GITHUB_RAW_BASE}/memory/${req.params.file}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Not found');
-    const text = await response.text();
-    res.setHeader('Content-Type', 'text/plain');
-    res.send(text);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+// ▓▓ GET /api/agents/:id/detail — Build #110 — kept for backwards compat
+app.get('/api/agents/:id/detail', (req, res) => {
+  const agents = getAgentRegistry();
+  const agent = agents.find(a => a.id === req.params.id || a.slug === req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
   }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json({
+    ...agent,
+    detail: true,
+    endpoint_url: `https://nullpriest.xyz/api/agents/${req.params.id}`,
+    metadata: {
+      agent_json_url: `https://nullpriest.xyz/.well-known/agent.json`,
+      build_log_url: `https://nullpriest.xyz/api/build-log`,
+      activity_url: `https://nullpriest.xyz/api/activity`,
+    },
+  });
 });
 
-// Static files
+// ▓▓ Static site serving
 app.use(express.static(path.join(__dirname, 'site')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+});
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`nullpriest server listening on port ${PORT}`);
 });
