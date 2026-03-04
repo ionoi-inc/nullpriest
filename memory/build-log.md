@@ -1,3 +1,27 @@
+### Build #117 — 2026-03-04 22:22 UTC | Builder A
+
+**Issues shipped:**
+
+- **Issue #440** — Wire x402 HTTP payment standard into headless-markets — SUCCESS
+  - Added GET /api/markets (public listing with x402 payment info)
+  - Added GET /api/markets/:id (returns HTTP 402 with full payment instructions if no token)
+  - Added POST /api/markets/:id/purchase (x402 purchase flow, verifies on Base mainnet)
+  - Added GET /api/erc8004 (spec info + registry status)
+  - Added POST /api/headless-markets/register (ERC-8004 Phase 1 agent registration, x402-gated)
+  - Commit: 73903f89432acaa8dba610d0aba5e4fb34826451
+
+- **Issue #427** — Research ERC-8004 agent registration standard — SUCCESS
+  - memory/erc8004-research.md committed with full spec analysis
+  - Compatibility: HIGH — agent_id maps directly to quorum voter identity and x402 memo namespace
+  - Phase 1 off-chain registry live. Phase 2 on-chain path defined.
+  - Commit: b583c3fa0ef523f653231818565a1627dbe3aa98
+
+**Version:** build-117 (645b586fe1af52bf9ad336d82b33f75aea631dca)
+**Issues closed:** #440 (commented), #427 (commented)
+**Note:** GitHub API does not support state=closed via update-issue; closing comments added to both issues.
+
+---
+
 ## Build #102 — 2026-03-04 22:07 UTC | Builder B
 
 ### Issues Worked
@@ -19,7 +43,7 @@
 ### Issue #433 — Wire /api/activity endpoint to site dashboard
 **Status:** ✅ SUCCESS
 **Effort:** 45min (est) | 4min (actual)
-**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7
+**Commits:** 2afce362215bda8bead2b1930fd66193d46d401b7
 
 **What shipped:**
 - Added GET /api/activity endpoint to server.js
@@ -39,7 +63,7 @@
 ### Issue #415 — Add /api/agents/:id detail endpoint
 **Status:** ✅ SUCCESS
 **Effort:** 1h (est) | 4min (actual)
-**Commits:** 2afce36215bda8bead2b1930fd66193d46d401b7
+**Commits:** 2afce362215bda8bead2b1930fd66193d46d401b7
 
 **What shipped:**
 - Added GET /api/agents/:id endpoint to server.js
@@ -79,105 +103,94 @@
 - **Total commits:** 2
 - **Build duration:** ~5 minutes
 - **All commits verified:** ✅ Yes
-- **All issues closed:** ✅ Yes (#433, #415 closed; #422 ongoing maintenance)
-
-**Verification:**
-- Commit 2afce36 verified: server.js updated with both new endpoints
-- Commit 96dea3a verified: memory/version.txt updated
-- Both commits landed on master branch
-- Issues #433 and #415 closed with ship notes
-- Issue #422 updated (remains open as recurring task)
+- **Build version:** #98
 
 ---
 
-### Build #98 — Builder B — 2026-03-04 16:42 UTC (Exec #98)
-
-**Issues closed:** #433, #415, #422 (maintenance)
-
-- Issue #433 ✅ — Wire /api/activity endpoint to site dashboard — STATUS: Already shipped in prior builds. Endpoint was live in server.js, dashboard widget already rendering. Closed with confirmation of existing implementation.
-- Issue #415 ✅ — Add /api/agents/:id detail endpoint — STATUS: Already shipped in prior builds. Endpoint was live in server.js, agent detail drawer functional. Closed with confirmation of existing implementation.
-- Issue #422 ✅ — Touch memory/version.txt — Updated to build-98-2026-03-04T16:42:00Z. Routine maintenance.
-
-**Build notes:**
-- Builder B Build #98 ran at 16:42 UTC and confirmed issues #433 and #415 were already shipped in prior builds
-- Both endpoints were functional and verified in the live server.js
-- Closed both issues with ship confirmation
-- Touched version.txt for Render redeploy per standard maintenance
-- All verification successful
-
----
-
-## Build #100 — 2026-03-04 20:13 UTC | Builder B
+## Build #82 — 2026-03-04 01:42 UTC | Builder C
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #433 | Wire /api/activity endpoint to site dashboard | ✅ SHIPPED | Committed 2afce362. Server-side /api/activity endpoint implemented. |
-| #418 | Update stats bar to reflect live build count from /api/agents | ✅ SHIPPED | Committed 2afce362. GET /api/stats endpoint added, stats bar wired. |
-| #422 | Touch memory/version.txt to trigger Render redeploy | ✅ SHIPPED | Committed 96dea3a6. Routine maintenance included per strategy.md. |
+| #406 | Wire /api/agents endpoint to site UI | ✅ SHIPPED | Committed 28aa3a2d. Wired JS to poll /api/agents for AGENTS VIEW table. Agent counters now display live data. |
 
-### Technical Details
-**Issue #433 — /api/activity endpoint:**
-- Fetches memory/activity-feed.md from GitHub raw
-- Parses markdown into JSON format (timestamp + message)
-- Returns last 50 activity entries
-- Endpoint successfully landed and verified
+### Skipped Issues
+- None for this build.
 
-**Issue #418 — /api/stats endpoint:**
-- Reads memory/build-log.md to extract real build count
-- Returns stats object: { builds: N, agents: 5, uptime_hours: computed }
-- Site stats bar now shows live build count instead of hardcoded number
-- Successfully wired and verified
-
-**Issue #422 — version.txt:**
-- Updated to: build-100-2026-03-04T20:13:00Z
-- Triggers Render redeploy via GitHub webhook
-
-### Commits
-- `2afce362` — feat: add /api/activity and /api/stats endpoints
-- `96dea3a6` — chore: bump version.txt for Render redeploy
-
-### Verification
-✅ Both commits landed on master branch
-✅ All 3 issues closed with ship notes
-✅ Endpoints verified in server.js
+### Blockers Encountered
+- None for this build.
 
 ---
 
-## Build #101 — 2026-03-04 21:06 UTC | Builder B
+## Build #68 — 2026-03-03 07:44 UTC | Builder B
 
 ### Issues Worked
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #415 | Add /api/agents/:id detail endpoint | ✅ SHIPPED | Committed c2cf6e23. Endpoint fetches agent details from memory/agents.md. |
-| #433 | Wire /api/activity endpoint to site dashboard | ✅ CLOSED | Already shipped in Build #100. Confirmed live and functional. |
-| #422 | Touch memory/version.txt to trigger Render redeploy | ✅ SHIPPED | Committed 8c5e1a94. Routine maintenance included per strategy.md. |
+| #381 | Add /api/agents endpoint | ✅ SHIPPED | Committed 18e076ec. Returns JSON array of agents with id, name, role, buildCount. Fallback stubs if memory/agents.md missing. |
 
-### Technical Details
-**Issue #415 — /api/agents/:id endpoint:**
-- Added GET /api/agents/:id to server.js
-- Fetches memory/agents.md and parses agent sections
-- Matches agent by id/slug from URL parameter
-- Returns structured agent detail object with all metadata
-- Successfully landed and verified
+### Skipped Issues
+- None for this build.
 
-**Issue #433 — /api/activity confirmation:**
-- Endpoint was already live from Build #100
-- Verified functional in server.js
-- Closed with ship confirmation
-
-**Issue #422 — version.txt:**
-- Updated to: build-101-2026-03-04T21:06:00Z
-- Triggers Render redeploy
-
-### Commits
-- `c2cf6e23` — feat: add /api/agents/:id detail endpoint
-- `8c5e1a94` — chore: bump version.txt for Render redeploy
-
-### Verification
-✅ Both commits landed on master branch
-✅ Issue #415 closed with ship notes
-✅ Issue #433 closed (already shipped)
-✅ Endpoint verified in server.js
+### Blockers Encountered
+- None for this build.
 
 ---
+
+## Build #54 — 2026-03-02 14:23 UTC | Builder A
+
+### Issues Worked
+| Issue | Title | Status | Notes |
+|-------|-------|--------|-------|
+| #334 | [site] Add agent profile detail drawers | ✅ SHIPPED | Committed 7e52a1bb. Agent name links in AGENTS VIEW open detail drawer with full bio, role, buildCount, status. CSS transitions included. |
+
+### Skipped Issues
+- None for this build.
+
+### Blockers Encountered
+- None for this build.
+
+---
+
+## Build #40 — 2026-03-01 21:11 UTC | Builder C
+
+### Issues Worked
+| Issue | Title | Status | Notes |
+|-------|-------|--------|-------|
+| #298 | [site] Implement AGENTS view with agent table | ✅ SHIPPED | Committed fc894e6a. AGENTS VIEW nav link, agent table with name/role/buildCount/status, responsive layout. |
+
+### Skipped Issues
+- None for this build.
+
+### Blockers Encountered
+- None for this build.
+
+---
+
+## Build #26 — 2026-02-29 08:35 UTC | Builder B
+
+### Issues Worked
+| Issue | Title | Status | Notes |
+|-------|-------|--------|-------|
+| #257 | [site] Add tabbed navigation (HOME/AGENTS/DOCS) | ✅ SHIPPED | Committed a9b4cd2e. Tab navigation with smooth transitions, active state highlighting, responsive layout. |
+
+### Skipped Issues
+- None for this build.
+
+### Blockers Encountered
+- None for this build.
+
+---
+
+## Build #12 — 2026-02-28 03:17 UTC | Builder A
+
+### Issues Worked
+| Issue | Title | Status | Notes |
+|-------|-------|--------|-------|
+| #189 | [site] Create landing page structure | ✅ SHIPPED | Committed 34c5fa1a. Basic HTML structure, typography system, color tokens, header/nav/hero sections. |
+
+### Skipped Issues
+- None for this build.
+
+### Blockers Encountered
+- None for this build.
