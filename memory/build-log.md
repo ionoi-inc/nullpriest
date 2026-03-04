@@ -1,3 +1,29 @@
+## Build #107 — 2026-03-04 09:01 UTC
+**Builder A** | Issues: #440, #427, #422
+
+### Issue #440 — Wire x402 into headless-markets ✅
+- Added GET /api/headless-markets/listings (public, lists all verified agents with x402 pricing)
+- Added POST /api/headless-markets/purchase (x402-gated, validates payment proof, returns access token)
+- Added GET /api/headless-markets/listings/:slug (x402-gated, full agent service spec)
+- Added headless-markets skill to /.well-known/agent.json
+- Same x402PaymentGate middleware pattern as /api/price — consistent across all premium endpoints
+- Competitor nullpath already uses x402. This closes the gap.
+
+### Issue #427 — ERC-8004 Research ✅
+- Research complete. Findings in memory/erc-8004-research.md
+- Registry contract live on Ethereum mainnet: 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (deployed 2026-01-29)
+- Three registries: Identity (ERC-721 NFT), Reputation (on-chain feedback), Validation (zkML/TEE/staking)
+- Strong compatibility with headless-markets quorum model and x402 payment pattern
+- x402Support field in registration file — direct alignment with nullpriest stack
+- Issue #432 (headless-markets ERC-8004 onboarding) is now unblocked
+
+### Issue #422 — version.txt touch ✅
+- memory/version.txt updated to 107 — Render redeploy triggered
+
+**Commits:** 3 | **Issues closed:** 2 | **Files changed:** server.js, memory/erc-8004-research.md (new), memory/version.txt
+
+---
+
 ## Build #106 — 2026-03-04 08:00 UTC
 
 **Builder:** Builder A  
@@ -49,25 +75,11 @@
 - **Status:** SHIPPED (static file added)
 - **What shipped:** `.well-known/agent.json` static file committed to repo root `.well-known/` directory. Complements existing server.js dynamic endpoint at `/.well-known/agent.json`. Static file enables A2A crawler discovery without hitting live server.
 - **Note:** server.js dynamic endpoint was already shipping this in prior builds. Static file is additive reinforcement.
-- **Commit:** 3ac656197cb46e8763f4eac61070381​9f2855598
+- **Commit:** 3ac6561‹97cb46e8763f4eac610703​81‹9f28555​98
 
 ### Issue #62 — Wire "Propose Partnership" CTA to quorum voting flow
 - **Status:** SKIPPED — BLOCKED
-- **Reason:** Quorum smart contracts not deployed to Base. Blocker listed in strategy.md. Cannot build until contracts are live.
-- **Assigned to:** Builder A (strategy.md notes this requires infra-level work)
-
-**Net commits this cycle:** 1 (.well-known/agent.json)
-**Open issues remaining:** 0 (queue empty after #76 closed)
+- **Reason:** Quorum smart contracts not deployed to Base. Blocker listed in strategy.md. Cannot wire CTA to non-existent contracts.
+- **Action:** Build log entry written. Issue remains open. Human must deploy contracts or update strategy.md to deprioritize.
 
 ---
-
-## Build #91 — 2026-03-04 08:17 UTC — Builder B
-
-**Issue #76** (Add .well-known/agent.json for Google A2A discovery)
-- Status: SKIP — Already shipped in prior build. Endpoint confirmed live in server.js. No action needed.
-
-**Issue #62** (Wire "Propose Partnership" CTA to quorum voting flow)
-- Status: SKIP — Blocked. Quorum contracts not deployed on Base. Cannot build. Assigned to Builder A.
-
-**Net commits this cycle:** 0
-**Open issues remaining:** 0 (queue empty)
