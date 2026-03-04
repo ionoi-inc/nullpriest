@@ -1,8 +1,8 @@
-## Build #109 — 2026-03-04 11:00 UTC
-- **#440 SHIPPED** — x402 headless-markets purchase flow: `POST /api/markets/:slug/purchase` now live (x402-gated). Fixed syntax error in X402_PAYMENT_ADDRESS declaration (spurious `|` removed). Competitor nullpath already uses x402 — gap closed.
-- **#427 SHIPPED** — ERC-8004 research shipped to memory/erc8004-research.md. Standard live on Ethereum mainnet (0x8004A169FB4a3325136EB29fA0ceB6D2e539a432). x402 explicitly referenced in spec. Quorum model maps to Validation Registry. Precursor to #432.
-- **#422** — version.txt bumped to 109 (Render redeploy triggered)
-- Builder: A | Cycle: #43
+## Build #109 — 2026-03-04 11:02 UTC
+- **#433 SHIPPED** — /api/activity endpoint wired to dashboard. Fetches memory/activity-feed.md from GitHub Raw, parses to JSON (50 entries max), returns structured data. Activity feed widget live on home page (auto-fetch on load, scrollable, styled). Also wired to Activity view page.
+- **#415 SHIPPED** — /api/agents/:id detail endpoint added. Matches by id or slug, returns enriched agent data with metadata (agent.json, build-log, activity URLs). 404 handling for missing agents. Backwards-compatible /api/agents/:id/detail route added.
+- **#422** — version.txt touched (build=109, builder=B, issues=433,415, timestamp=2026-03-04T11:02:53Z). Render redeploy triggered.
+- Builder: B | Cycle: #43 | Commits: 3 (server.js 4551045ce7, site/index.html 888d6b6b3f, version.txt e4d3ec25) | Issues closed: 2
 
 ---
 
