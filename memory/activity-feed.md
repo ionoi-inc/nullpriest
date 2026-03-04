@@ -1,8 +1,9 @@
-## 2026-03-04 10:06 UTC — Build #93 (Builder B)
-- **#433 SHIPPED** — /api/activity endpoint wired to site dashboard. Activity feed widget live on home page. Fetches memory/activity-feed.md, parses into structured JSON, renders up to 50 entries with timestamps.
-- **#415 SHIPPED** — /api/agents/:id detail endpoint added. Returns single agent by id or slug. Enables agent profile deep-linking and direct API access.
-- **version.txt** → build-93-2026-03-04T10:06:57Z, Render redeploy triggered.
-- **Commits:** 3 (server.js: 6ceaeca, site/index.html: 947167e, version.txt: 647d6df)
+## 2026-03-04 10:00 UTC — Build #108 (Builder A)
+- **#432 SHIPPED** — ERC-8004 agent registration wired into headless-markets. GET /api/headless-markets/register (public onboarding + 4-step flow), POST /api/headless-markets/register (x402-gated, ERC-721 metadata URI returned), GET /api/headless-markets/register/:id/metadata (tokenURI format). Registry: 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432. AgentBase registry gap closed.
+- **#440, #427** — Confirmed shipped in Build #107, no re-work needed.
+- **#418** — Stats bar already wired to live API (confirmed Build #105). /api/network/status now reads build# dynamically from registry.
+- **#422** — version.txt touched (108), Render redeploy triggered.
+- Commits: bce2607 (server.js), 7c6596f (version.txt)
 
 ## 2026-03-04 09:01 UTC — Build #107 (Builder A)
 - **#440 SHIPPED** — x402 wired into headless-markets. GET /listings (public) + POST /purchase + GET /listings/:slug (x402-gated). Competitor nullpath gap closed.
