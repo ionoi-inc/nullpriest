@@ -45,7 +45,7 @@ app.get('/.well-known/agent.json', (req, res) => {
     blockchain: {
       network: 'base-mainnet',
       chainId: 8453,
-      contracts: { custos: '0xF3e202935147775a3149C3048220d9E6a6FA29b07' }
+      contracts: { custos: '0xF3e202935147775a3149C304822D9E6a6FA29b07' }
     }
   });
 });
@@ -140,21 +140,17 @@ app.get('/api/agents', async (req, res) => {
     const agents = [];
     let current = null;
     for (const line of lines) {
-      if (line.match(/^#{2,3}\s+/)) {
+      if (line.match(/^#{1,3}\s+/)) {
         if (current) agents.push(current);
-        const nameMatch = line.match(/^#+\s+(.+)$/);
-        current = { name: nameMatch ? nameMatch[1].trim() : '', slug: '', id: '', build_count: 0, capabilities: [], status: 'active' };
+        const nameClean = line.replace(/^#+\s*/, '').trim();
+        const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const idMatch = line.match(/#(\d+)/);
+        current = { id: idMatch ? idMatch[1] : idSlug, name: nameClean, build_count: 0, status: 'active' };
       } else if (current) {
-        const slugMatch = line.match(/^\*\*Slug:\*\*\s*(.+)$/i);
-        const idMatch = line.match(/^\*\*ID:\*\*\s*(.+)$/i);
-        const buildMatch = line.match(/^\*\*Build count:\*\*\s*(\d+)/i);
-        const capMatch = line.match(/^\*\*Capabilities:\*\*\s*(.+)$/i);
-        const statusMatch = line.match(/^\*\*Status:\*\*\s*(.+)$/i);
-        if (slugMatch) current.slug = slugMatch[1].trim();
-        if (idMatch) current.id = idMatch[1].trim();
+        const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
         if (buildMatch) current.build_count = parseInt(buildMatch[1]);
-        if (capMatch) current.capabilities = capMatch[1].split(',').map(c => c.trim());
-        if (statusMatch) current.status = statusMatch[1].trim().toLowerCase();
+        const statusMatch = line.match(/status[:\s]+(active|inactive|paused|retired)/i);
+        if (statusMatch) current.status = statusMatch[1].toLowerCase();
       }
     }
     if (current) agents.push(current);
@@ -166,9 +162,9 @@ app.get('/api/agents', async (req, res) => {
 
 // Agent Detail Endpoint — Issue #415
 app.get('/api/agents/:id', async (req, res) => {
+  const agentId = req.params.id;
+  if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
   try {
-    const agentId = req.params.id;
-    if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
     const content = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
@@ -177,51 +173,80 @@ app.get('/api/agents/:id', async (req, res) => {
         response.on('data', d => data += d);
         response.on('end', () => resolve(data));
       }).on('error', reject);
-    }).on('error', reject);
     });
     const lines = content.split('\n');
     const agents = [];
     let current = null;
     for (const line of lines) {
-      if (line.match(/^#{2,3}\s+/)) {
+      if (line.match(/^#{1,3}\s+/)) {
         if (current) agents.push(current);
-        const nameMatch = line.match(/^#+\s+(.+)$/);
-        current = { name: nameMatch ? nameMatch[1].trim() : '', slug: '', id: '', build_count: 0, capabilities: [], status: 'active', description: '' };
+        const nameClean = line.replace(/^#+\s*/, '').trim();
+        const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const idMatch = line.match(/#(\d+)/);
+        current = { id: idMatch ? idMatch[1] : idSlug, name: nameClean, build_count: 0, status: 'active', detail_lines: [] };
       } else if (current) {
-        const slugMatch = line.match(/^\*\*Slug:\*\*\s*(.+)$/i);
-        const idMatch = line.match(/^\*\*ID:\*\*\s*(.+)$/i);
-        const buildMatch = line.match(/^\*\*Build count:\*\*\s*(\d+)/i);
-        const capMatch = line.match(/^\*\*Capabilities:\*\*\s*(.+)$/i);
-        const statusMatch = line.match(/^\*\*Status:\*\*\s*(.+)$/i);
-        const descMatch = line.match(/^\*\*Description:\*\*\s*(.+)$/i);
-        if (slugMatch) current.slug = slugMatch[1].trim();
-        if (idMatch) current.id = idMatch[1].trim();
+        current.detail_lines.push(line);
+        const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
         if (buildMatch) current.build_count = parseInt(buildMatch[1]);
-        if (capMatch) current.capabilities = capMatch[1].split(',').map(c => c.trim());
-        if (statusMatch) current.status = statusMatch[1].trim().toLowerCase();
-        if (descMatch) current.description = descMatch[1].trim();
+        const statusMatch = line.match(/status[:\s]+(active|inactive|paused|retired)/i);
+        if (statusMatch) current.status = statusMatch[1].toLowerCase();
       }
     }
     if (current) agents.push(current);
     const agent = agents.find(a =>
       a.id === agentId ||
-      a.slug === agentId ||
-      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
+      (a.name && a.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === agentId.toLowerCase())
     );
-    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
-    res.json({ source: 'memory/agents.md', agent });
+    if (!agent) return res.status(404).json({ error: `Agent '${agentId}' not found`, available: agents.length });
+    const { detail_lines, ...agentData } = agent;
+    res.json({
+      ...agentData,
+      detail: detail_lines.filter(l => l.trim()).join('\n').substring(0, 1000),
+      source: 'memory/agents.md',
+      timestamp: new Date().toISOString()
+    });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
 });
 
+// x402 Payment Verification — Issue #46
+app.post('/api/verify-payment', async (req, res) => {
+  const { tx_hash, listing_id, memo } = req.body;
+  if (!tx_hash || !listing_id) return res.status(400).json({ error: 'Missing tx_hash or listing_id' });
+  if (!isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid transaction hash format' });
+  if (VERIFIED_PAYMENTS.has(tx_hash)) {
+    const existing = VERIFIED_PAYMENTS.get(tx_hash);
+    return res.json({ verified: true, access_token: existing.access_token, cached: true });
+  }
+  try {
+    const basescan_url = `https://api.basescan.org/api?module=proxy&action=eth_getTransactionByHash&txhash=${tx_hash}&apikey=${process.env.BASESCAN_API_KEY || 'YourApiKeyToken'}`;
+    const txData = await new Promise((resolve, reject) => {
+      https.get(basescan_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`Basescan returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(JSON.parse(data)));
+      }).on('error', reject);
+    });
+    if (!txData.result || txData.result.to?.toLowerCase() !== X402_PAYMENT_ADDRESS.toLowerCase()) {
+      return res.status(402).json({ verified: false, error: 'Payment not found or invalid recipient', payment_address: X402_PAYMENT_ADDRESS });
+    }
+    const access_token = generateAccessToken(listing_id, memo || '');
+    VERIFIED_PAYMENTS.set(tx_hash, { listing_id, memo, access_token, timestamp: Date.now() });
+    res.json({ verified: true, access_token, tx_hash, network: X402_NETWORK, chain_id: X402_CHAIN_ID });
+  } catch (e) {
+    res.status(500).json({ error: 'Payment verification failed', message: e.message });
+  }
+});
+
 // Static Site
 app.use(express.static(path.join(__dirname, 'site')));
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`nullpriest server listening on port ${PORT}`);
+  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`x402 payment address: ${X402_PAYMENT_ADDRESS}`);
 });
