@@ -45,7 +45,7 @@ app.get('/.well-known/agent.json', (req, res) => {
     blockchain: {
       network: 'base-mainnet',
       chainId: 8453,
-      contracts: { custos: '0xF3e2029351477775a3149C30482820d9E6a6FA29b07' }
+      contracts: { custos: '0xF3e20293514777775a3149C304828 20d9E6a6FA29b07' }
     }
   });
 });
@@ -142,24 +142,15 @@ app.get('/api/agents', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), lines: [] };
+        current = { name: line.slice(3).trim(), status: '', role: '', build_count: 0 };
       } else if (current) {
-        current.lines.push(line);
+        if (line.includes('Status:')) current.status = line.split(':').slice(1).join(':').trim();
+        if (line.includes('Role:')) current.role = line.split(':').slice(1).join(':').trim();
+        if (line.includes('Builds:')) { const m = line.match(/\d+/); if (m) current.build_count = parseInt(m[0]); }
       }
     }
     if (current) agents.push(current);
-    const parsed = agents.map(a => {
-      const fields = {};
-      for (const l of a.lines) {
-        const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
-        if (m) {
-          const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
-          fields[fieldKey] = m[2];
-        }
-      }
-      return { name: a.name, id: a.name.toLowerCase().replace(/\s+/g, '-'), ...fields };
-    });
-    res.json({ source: 'memory/agents.md', count: parsed.length, build_count: parsed.length, agents: parsed });
+    res.json({ source: 'memory/agents.md', count: agents.length, agents, build_count: agents.reduce((a, b) => a + b.build_count, 0) });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
   }
@@ -168,6 +159,7 @@ app.get('/api/agents', async (req, res) => {
 // Agent Detail Endpoint — Issue #415
 app.get('/api/agents/:id', async (req, res) => {
   try {
+    const agentId = req.params.id;
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
     const content = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
@@ -183,27 +175,35 @@ app.get('/api/agents/:id', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.replace('## ', ''), fields: {}, raw: [line] };
-      } else if (current && line.includes(': ')) {
-        const [key, ...valueParts] = line.split(': ');
-        current.fields[key.trim()] = valueParts.join(': ').trim();
-        current.raw.push(line);
+        current = { name: line.slice(3).trim(), status: '', role: '', build_count: 0, raw_lines: [] };
       } else if (current) {
-        current.raw.push(line);
+        current.raw_lines.push(line);
+        if (line.includes('Status:')) current.status = line.split(':').slice(1).join(':').trim();
+        if (line.includes('Role:')) current.role = line.split(':').slice(1).join(':').trim();
+        if (line.includes('Builds:')) { const m = line.match(/\d+/); if (m) current.build_count = parseInt(m[0]); }
       }
     }
     if (current) agents.push(current);
-    const agentId = req.params.id.toLowerCase();
+
+    // Match by slug (lowercased name with hyphens) or exact name
+    const slug = agentId.toLowerCase();
     const agent = agents.find(a =>
-      a.name.toLowerCase() === agentId ||
-      a.name.toLowerCase().replace(/\s+/g, '-') === agentId ||
-      (a.fields.id && a.fields.id.toLowerCase() === agentId)
+      a.name.toLowerCase() === slug ||
+      a.name.toLowerCase().replace(/\s+/g, '-') === slug
     );
-    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
+
+    if (!agent) {
+      return res.status(404).json({ error: 'Agent not found', id: agentId });
+    }
+
+    const detail = agent.raw_lines.filter(l => l.trim()).join('\n');
     res.json({
-      id: agentId,
+      id: agent.name.toLowerCase().replace(/\s+/g, '-'),
       name: agent.name,
-      fields: agent.fields,
+      status: agent.status,
+      role: agent.role,
+      build_count: agent.build_count,
+      detail,
       source: 'memory/agents.md'
     });
   } catch (e) {
@@ -211,13 +211,56 @@ app.get('/api/agents/:id', async (req, res) => {
   }
 });
 
-// Health Check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), port: PORT });
+// X402 Payment Endpoint — Issue #91
+app.get('/api/payment', (req, res) => {
+  res.json({
+    address: X402_PAYMENT_ADDRESS,
+    network: X402_NETWORK,
+    chainId: X402_CHAIN_ID,
+    version: X402_PAYMENT_VERSION,
+    acceptedTokens: ['ETH', 'USDC'],
+    minPaymentUSD: 0.01
+  });
 });
 
-// Serve Site
+// X402 Gated Price Endpoint
+app.get('/api/price/premium', async (req, res) => {
+  const txHash = req.headers['x402-tx'] || req.query.tx;
+  if (!txHash) return res.status(402).json({ error: 'Payment required', payment_info: { address: X402_PAYMENT_ADDRESS, amount_usd: 0.01, network: X402_NETWORK, chain_id: X402_CHAIN_ID } });
+  if (!isValidTxHash(txHash)) return res.status(400).json({ error: 'Invalid transaction hash' });
+  if (VERIFIED_PAYMENTS.has(txHash)) return res.status(409).json({ error: 'Payment already used' });
+  VERIFIED_PAYMENTS.set(txHash, Date.now());
+  try {
+    const coingecko_url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
+    const priceData = await new Promise((resolve, reject) => {
+      https.get(coingecko_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(JSON.parse(data)));
+      }).on('error', reject);
+    });
+    const ethPrice = priceData.ethereum?.usd;
+    if (!ethPrice) throw new Error('Invalid price data from CoinGecko');
+    const accessToken = generateAccessToken('premium_price', txHash);
+    res.json({ price: ethPrice, currency: 'USD', asset: 'ETH', source: 'coingecko', timestamp: new Date().toISOString(), premium: true, access_token: accessToken });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch premium price', message: e.message });
+  }
+});
+
+// Healthcheck
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Serve static site
 app.use(express.static(path.join(__dirname, 'site')));
+
+// Catch-all: return index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
