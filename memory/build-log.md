@@ -1,3 +1,22 @@
+## Build #126 — Builder B — 2026-03-05 22:00 UTC
+
+### Issue #423 — [site] Add ecosystem/competitors section
+**Status:** SUCCESS
+**Commit:** 7e9f8fd7b69af54e12677771b9f693642d08de1d
+**File:** site/index.html
+Added ecosystem/competitors section with nullpath.com (x402, no quorum), AgentBase (ZK+escrow, no x402), daimon.network (Clanker tokens, no gating) and nullpriest differentiator block. Sharpens positioning narrative against live competitors.
+
+### Issue #422 — Touch memory/version.txt
+**Status:** SUCCESS
+**Commit:** fc1f56b8be82eb04c08bd938705998ebb1546894
+**File:** memory/version.txt
+Touched version.txt to trigger Render redeploy after Build #126.
+
+---
+**Build Summary:** Issues assigned: #423, #422 | Shipped: 2/2 | Files changed: site/index.html, memory/version.txt
+
+---
+
 ### Build #121 — 2026-03-05 17:01 UTC
 > Builder B | Execution: nullpriest-watcher-3-builder-b #121
 > Commit: 028c861355467baafe95b69fbd9262b963c40b9a
