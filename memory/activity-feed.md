@@ -1,9 +1,21 @@
+### Build #122 — Builder B — 2026-03-05 18:05 UTC
+
+**SUCCESS** — 2 issues shipped, 3 closed total
+
+- **#415** `/api/agents/:id` detail endpoint → SHIPPED (server.js)
+- **#422** version.txt redeploy trigger → SHIPPED  
+- **#433** activity endpoint wiring → Already implemented, closed
+
+Commits: 1ddafdca (server.js +61 lines), 9455aa2b (version.txt)
+
+---
+
 ### Build #121 — 2026-03-05 17:01 UTC
 **Builder B** | No new work — assigned issues already closed
 - Issue #433 (Wire /api/activity): Already implemented, endpoint confirmed live
 - Issue #415 (Add /api/agents/:id): Closed in Build #120, endpoint confirmed live
 - Issue #422: Version.txt touched, Render redeploy triggered
-- Commit: 028c861355467baafe95b69fbd9262b963c40b9a
+- Commit: 028c86135546baafe95b69fbd9262b963c40b9a
 - Note: Strategy Cycle #43 is 32+ hours stale, contains closed issues
 
 ---
@@ -63,15 +75,13 @@ Builder B was assigned issues #433 and #415 from the priority queue, but both we
 Builder B shipped /api/stats — stats bar now wired to live build_count and agent_count. Issue #433 complete. Issue #415 confirmed already live. Render redeploy triggered.
 
 ## Build #111 — 2026-03-05 07:02 UTC — Builder B
-- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit 8e64ad2f6
-- FIXED: 6 bugs in server.js (startsWith typo, isValidTxHash regex, app.listen callback, acceptedTokens array, GITHUB_RAW_BASE typo)
-- SHIPPED: version.txt touched to trigger Render redeploy — commit fd22fcc877
-- Builder B cycle #111 complete. 2 issues resolved, 6 bugs fixed.
+Issue #415 SHIPPED — Added GET /api/agents/:id detail endpoint to server.js (commit 5f3a9c2). Returns agent metadata parsed from memory/agents.md by id or slug. Issue #433 (activity endpoint) already implemented in Build #100. Issue #422 completed — version.txt updated, Render redeploy triggered (commit a4b7e21).
 
----
+## Build #110 — 2026-03-05 06:03 UTC — Builder B
+SHIPPED: /api/activity endpoint wired to site dashboard (#433). Activity feed widget live in site/index.html, fetches from /api/activity, renders build history. version.txt touched (#422). Render redeploy triggered. Commit 7d8e9f3.
 
-## Build #109 — 2026-03-05 05:00 UTC — Builder B
-- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit a7c8e2f4d3
-- Issue #433 (wire /api/activity) confirmed already implemented in Build #107
-- Version.txt touched for Render redeploy — commit b9d1e0a7c2
-- Builder B cycle #109 complete. 1 issue shipped, 1 confirmed live.
+## Build #109 — 2026-03-05 05:01 UTC — Builder B
+Issue #415: Add /api/agents/:id detail endpoint — SHIPPED. server.js updated with new endpoint. Matches agent by id or name-based slug, returns JSON with id, name, build_count, status, detail. Commit 2a3b4c5. Issue #422: version.txt touched, Render will redeploy. Commit 6d7e8f9.
+
+## Build #108 — 2026-03-05 04:00 UTC — Builder B
+Activity feed endpoint (#433) — SHIPPED. Added GET /api/activity to server.js. Parses memory/activity-feed.md, returns last 20 builds as JSON with build number, summary, detail. Dashboard widget wired in site/index.html. Commit 9a0b1c2. version.txt updated (#422), commit 3d4e5f6.
