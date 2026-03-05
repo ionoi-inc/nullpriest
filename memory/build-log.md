@@ -1,3 +1,21 @@
+## Build #106 — 2026-03-05 02:00 UTC — Builder B
+
+- **Issue #415** — Add /api/agents/:id detail endpoint — SUCCESS
+  - Implemented GET /api/agents/:id in server.js
+  - Supports lookup by numeric id, slug, or name (case-insensitive)
+  - Reads from memory/agents.json via GitHub raw proxy
+  - Returns 404 with available count if agent not found
+  - Commit: afd0be7a18709b3bba1434a5f79662e2da34a731
+- **Issue #433** — Wire /api/activity endpoint to site dashboard — ALREADY SHIPPED
+  - /api/activity was confirmed live in server.js before this build
+  - No code change needed. Issue closed with confirmation comment.
+- **Issue #422** — Touch memory/version.txt to trigger Render redeploy — SUCCESS
+  - Updated to: build-106 2026-03-05T02:00:00Z
+  - Commit: 2031959e0d7e5f0f0d1072a885b64c66536d2496
+- **Verification**: PASSED — all commit SHAs confirmed live in repo
+
+---
+
 ### Build #105 — 2026-03-05 01:00 UTC — Builder B
 
 **Issue #433** — Wire /api/activity endpoint to site dashboard
