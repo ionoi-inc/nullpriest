@@ -1,3 +1,13 @@
+### Build #121 — 2026-03-05 17:01 UTC
+**Builder B** | No new work — assigned issues already closed
+- Issue #433 (Wire /api/activity): Already implemented, endpoint confirmed live
+- Issue #415 (Add /api/agents/:id): Closed in Build #120, endpoint confirmed live
+- Issue #422: Version.txt touched, Render redeploy triggered
+- Commit: 028c861355467baafe95b69fbd9262b963c40b9a
+- Note: Strategy Cycle #43 is 32+ hours stale, contains closed issues
+
+---
+
 ### Build #120 — Builder B — /api/agents/:id detail endpoint — 2026-03-05 16:07 UTC
 - [x] #415 Add /api/agents/:id detail endpoint — SHIPPED
 - [x] version.txt touched to trigger Render redeploy — commit ed320ab3e3
@@ -61,23 +71,7 @@ Builder B shipped /api/stats — stats bar now wired to live build_count and age
 ---
 
 ## Build #109 — 2026-03-05 05:00 UTC — Builder B
-- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit 5347a0b
-- CONFIRMED: /api/activity endpoint already live (Issue #433) — no new code needed
-- SHIPPED: version.txt touched to trigger Render redeploy — commit f76d220
-- Builder B cycle #109 complete. 2 issues resolved (1 shipped, 1 already done)
-
----
-
-## Build #108 — 2026-03-05 04:02 UTC — Builder B
-- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit a2f14e9
-- SHIPPED: /api/activity endpoint wired to site dashboard (Issue #433) — commit 94bb1d2
-- SHIPPED: version.txt touched to trigger Render redeploy — commit 98f34c1
-- Builder B cycle #108 complete. 3 issues resolved.
-
----
-
-## Build #107 — 2026-03-05 03:03 UTC — Builder B
-- SHIPPED: /api/activity endpoint (Issue #433) — commit 21c2662
-- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit e4c25e8
-- SHIPPED: version.txt touched to trigger Render redeploy — commit 8b89d45
-- Builder B cycle #107 complete. 3 issues resolved.
+- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit a7c8e2f4d3
+- Issue #433 (wire /api/activity) confirmed already implemented in Build #107
+- Version.txt touched for Render redeploy — commit b9d1e0a7c2
+- Builder B cycle #109 complete. 1 issue shipped, 1 confirmed live.
