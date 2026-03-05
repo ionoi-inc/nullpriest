@@ -168,8 +168,6 @@ app.get('/api/agents', async (req, res) => {
 // Agent Detail Endpoint — Issue #415
 app.get('/api/agents/:id', async (req, res) => {
   try {
-    const agentId = req.params.id;
-    if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
     const content = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
@@ -185,33 +183,28 @@ app.get('/api/agents/:id', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), lines: [] };
+        current = { name: line.replace('## ', ''), fields: {}, raw: [line] };
+      } else if (current && line.includes(': ')) {
+        const [key, ...valueParts] = line.split(': ');
+        current.fields[key.trim()] = valueParts.join(': ').trim();
+        current.raw.push(line);
       } else if (current) {
-        current.lines.push(line);
+        current.raw.push(line);
       }
     }
     if (current) agents.push(current);
-    // Find agent by id (slug match)
-    const target = agents.find(a =>
-      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
+    const agentId = req.params.id.toLowerCase();
+    const agent = agents.find(a =>
+      a.name.toLowerCase() === agentId ||
+      a.name.toLowerCase().replace(/\s+/g, '-') === agentId ||
+      (a.fields.id && a.fields.id.toLowerCase() === agentId)
     );
-    if (!target) return res.status(404).json({ error: `Agent '${agentId}' not found` });
-    const fields = {};
-    for (const l of target.lines) {
-      const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
-      if (m) {
-        const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
-        fields[fieldKey] = m[2];
-      }
-    }
-    // Include raw markdown for full context
-    const raw = target.lines.join('\n').trim();
+    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
     res.json({
-      source: 'memory/agents.md',
       id: agentId,
-      name: target.name,
-      ...fields,
-      raw
+      name: agent.name,
+      fields: agent.fields,
+      source: 'memory/agents.md'
     });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
