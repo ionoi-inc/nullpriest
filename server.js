@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 31499;
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master';
 const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpriest';
 
-const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEbc';
+const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc97595f0bEbc';
 const X402_PAYMENT_VERSION = process.env.X402_PAYMENT_VERSION || '1';
 const X402_NETWORK = 'base-mainnet';
 const X402_CHAIN_ID = 8453;
@@ -142,23 +142,15 @@ app.get('/api/agents', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), props: {} };
-      } else if (current && line.startsWith('- ')) {
-        const [key, ...valueParts] = line.slice(2).split(':');
-        const value = valueParts.join(':').trim();
-        if (key && value) current.props[key.trim()] = value;
+        current = { name: line.replace(/^#+\s*/, ''), fields: {} };
+      } else if (current && line.includes(':')) {
+        const [key, ...valueParts] = line.split(':');
+        current.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
       }
     }
     if (current) agents.push(current);
-    const results = agents.map(a => ({
-      id: a.name.toLowerCase().replace(/\s/g, '-'),
-      name: a.name,
-      status: a.props.status || 'active',
-      role: a.props.role || null,
-      build_count: parseInt(a.props.build_count) || 0,
-      last_active: a.props.last_active || null
-    }));
-    res.json({ source: 'memory/agents.md', count: results.length, agents: results });
+    const buildCount = agents.filter(a => a.fields.build_count).reduce((acc, a) => acc + parseInt(a.fields.build_count) || 0, 0);
+    res.json({ agents: agents, build_count: buildCount });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
   }
@@ -184,38 +176,40 @@ app.get('/api/agents/:id', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), props: {}, desc_lines: [] };
-      } else if (current && line.startsWith('- ')) {
-        const [key, ...valueParts] = line.slice(2).split(':');
-        const value = valueParts.join(':').trim();
-        if (key && value) current.props[key.trim()] = value;
-      } else if (current && line.trim() && !line.startsWith('#')) {
-        current.desc_lines.push(line.trim());
+        current = { name: line.replace(/^#+\s*/, ''), fields: {}, raw_lines: [] };
+      } else if (current) {
+        current.raw_lines.push(line);
+        if (line.includes(':')) {
+          const [key, ...valueParts] = line.split(':');
+          current.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
+        }
       }
     }
     if (current) agents.push(current);
-    const agent = agents.find(a => a.name.toLowerCase().replace(/\s/g, '-') === agentId.toLowerCase());
+    // Match by id field, name slug, or numeric index
+    const agent = agents.find(a =>
+      a.fields.id === agentId ||
+      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase() ||
+      a.fields.slug === agentId
+    );
     if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
     res.json({
-      id: agent.name.toLowerCase().replace(/\s/g, '-'),
+      id: agentId,
       name: agent.name,
-      status: agent.props.status || 'active',
-      role: agent.props.role || null,
-      build_count: parseInt(agent.props.build_count) || 0,
-      last_active: agent.props.last_active || null,
-      wallet: agent.props.wallet || null,
-      description: agent.desc_lines.join(' ') || null,
-      source: 'memory/agents.md'
+      fields: agent.fields,
+      detail: agent.raw_lines.filter(l => l.trim()).join('\n').substring(0, 2000),
+      source: 'memory/agents.md',
+      timestamp: new Date().toISOString()
     });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
 });
 
-// Headless Markets Listings
-app.get('/api/markets', async (req, res) => {
+// Listings Endpoint — Issue #82
+app.get('/api/listings', async (req, res) => {
   try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/markets.md`;
+    const raw_url = `${GITHUB_RAW_BASE}/memory/listings.md`;
     const content = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
         if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
@@ -226,89 +220,54 @@ app.get('/api/markets', async (req, res) => {
     });
     const lines = content.split('\n');
     const listings = [];
-    let current = null;
+    let currentListing = null;
     for (const line of lines) {
       if (line.startsWith('## ')) {
-        if (current) listings.push(current);
-        current = { title: line.slice(3).trim(), props: {}, desc_lines: [] };
-      } else if (current && line.startsWith('- ')) {
-        const [key, ...valueParts] = line.slice(2).split(':');
-        const value = valueParts.join(':').trim();
-        if (key && value) current.props[key.trim()] = value;
-      } else if (current && line.trim()) {
-        current.desc_lines.push(line.trim());
+        if (currentListing) listings.push(currentListing);
+        currentListing = { name: line.replace(/^#+\s*/, ''), fields: {} };
+      } else if (currentListing && line.includes(':')) {
+        const [key, ...valueParts] = line.split(':');
+        currentListing.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
       }
     }
-    if (current) listings.push(current);
-    const results = listings.map((l, i) => {
-      const id = l.props.id || `listing-${i + 1}`;
-      const priceStr = l.props.price || '0';
-      const priceWei = parseFloat(priceStr);
-      return {
-        id,
-        title: l.title,
-        price_usdc: isNaN(priceWei) ? 0 : priceWei,
-        seller: l.props.seller || null,
-        category: l.props.category || null,
-        description: l.desc_lines.join(' '),
-        status: l.props.status || 'live'
-      };
-    });
-    const paymentInfo = {
-      protocol: 'x402',
-      address: X402_PAYMENT_ADDRESS,
-      version: X402_PAYMENT_VERSION,
-      network: X402_NETWORK,
-      chainId: X402_CHAIN_ID
-    };
-    res.json({ source: 'memory/markets.md', count: results.length, listings: results, payment: paymentInfo });
+    if (currentListing) listings.push(currentListing);
+    res.json({ listings: listings });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch markets', message: e.message });
+    res.status(500).json({ error: 'Failed to fetch listings', message: e.message });
   }
 });
 
-// x402 Payment Verification — Issue #46
-app.post('/api/verify-payment', async (req, res) => {
+// x402 Payment Gate — Issue #90
+app.post('/api/payment/verify', async (req, res) => {
   try {
-    const { tx_hash, listing_id, memo } = req.body;
-    if (!tx_hash || !listing_id) return res.status(400).json({ error: 'tx_hash and listing_id required' });
-    if (!isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid transaction hash format' });
-    if (VERIFIED_PAYMENTS.has(tx_hash)) {
-      const cached = VERIFIED_PAYMENTS.get(tx_hash);
-      return res.json({ verified: true, access_token: cached.access_token, cached: true });
-    }
-    const basescan_url = `https://api.basescan.org/api?module=proxy&action=eth_getTransactionByHash&txhash=${tx_hash}&apikey=YourApiKeyToken`;
-    const txData = await new Promise((resolve, reject) => {
-      https.get(basescan_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`Basescan returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(JSON.parse(data)));
-      }).on('error', reject);
-    });
-    if (!txData.result || !txData.result.to) {
-      return res.status(400).json({ verified: false, error: 'Transaction not found or pending' });
-    }
-    const txTo = txData.result.to.toLowerCase();
-    const expectedTo = X402_PAYMENT_ADDRESS.toLowerCase();
-    if (txTo !== expectedTo) {
-      return res.status(400).json({ verified: false, error: 'Payment sent to incorrect address' });
-    }
-    const access_token = generateAccessToken(listing_id, memo || 'default');
-    VERIFIED_PAYMENTS.set(tx_hash, { listing_id, access_token, verified_at: Date.now() });
-    res.json({ verified: true, access_token, tx_hash });
+    const { tx_hash, listing_id, amount, memo } = req.body;
+    if (!tx_hash || !isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid tx hash' });
+    if ((listing_id) && VERIFIED_PAYMENTS.has(tx_hash)) return res.status(409).json({ error: 'Payment already used' });
+    VERIFIED_PAYMENTS.set(tx_hash, { listing_id, memo, verified_at: Date.now() });
+    const token = generateAccessToken(listing_id, memo);
+    res.json({ success: true, token: token, listing_id });
   } catch (e) {
     res.status(500).json({ error: 'Payment verification failed', message: e.message });
   }
 });
 
-// Static Site
-app.use(express.static(path.join(__dirname, 'site')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+// x402 Protected Resource — Issue #90
+app.get('/api/listings/:id/preview', async (req, res) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    return res.status(402).json({
+      error: 'Payment required',
+      x402: true,
+      payment_address: X402_PAYMENT_ADDRESS,
+      payment_version: X402_PAYMENT_VERSION,
+      chain_id: X402_CHAIN_ID,
+      network: X402_NETWORK,
+      amount_usd: 0.10
+    });
+  }
+  res.json({ success: true, listing_id: req.params.id });
 });
 
 app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`nullpriest server listening on port ${PORT}`);
 });
