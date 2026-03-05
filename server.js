@@ -83,7 +83,7 @@ app.get('/.well-known/agent.json', (req, res) => {
       network: 'base-mainnet',
       chainId: 8453,
       contracts: {
-        custos: '0xF3e20293514777 5a3149C30482820d9E6a6FA29b07'
+        custos: '0xF3e202935147775a3149C30482820d9E6a6FA29b07'
       }
     }
   });
@@ -146,7 +146,8 @@ app.get('/api/activity', async (req, res) => {
   }
 });
 
-// ♟♟♟ Agents API — Issue #79
+// 🔋 Agents API — Issue #92
+// Data lives in GitHub at memory/agents.json
 app.get('/api/agents', async (req, res) => {
   try {
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
@@ -164,10 +165,13 @@ app.get('/api/agents', async (req, res) => {
   }
 });
 
-// ♟♟♟ Agent Detail API — Issue #415
+// Agent Detail Endpoint — Issue #415
+// Returns full agent profile data for a specific agent by id or slug
 app.get('/api/agents/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id) return res.status(400).json({ error: 'Agent id required' });
+
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
     const data = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
@@ -177,144 +181,45 @@ app.get('/api/agents/:id', async (req, res) => {
         response.on('end', () => resolve(JSON.parse(d)));
       }).on('error', reject);
     });
-    const agent = data.agents.find(a => a.id === id || a.slug === id);
-    if (!agent) return res.status(404).json({ error: `Agent '${id}' not found`, available: data.agents.map(a => a.id || a.slug) });
-    res.json(agent);
+
+    // Support lookup by numeric id, slug, or name (case-insensitive)
+    const agents = Array.isArray(data) ? data : (data.agents || []);
+    const agent = agents.find(a =>
+      String(a.id) === id ||
+      (a.slug && a.slug.toLowerCase() === id.toLowerCase()) ||
+      (a.name && a.name.toLowerCase() === id.toLowerCase())
+    );
+
+    if (!agent) {
+      return res.status(404).json({ error: `Agent '${id}' not found`, available: agents.length });
+    }
+
+    res.json({ agent, source: 'memory/agents.json' });
   } catch (e) {
-    // Fallback: return from in-memory registry if GitHub fetch fails
-    const registry = {
-      'strategist': { id: 'strategist', name: 'Strategist', role: 'Reads scout reports, writes strategy.md, opens issues', schedule: 'hourly at :15', status: 'active', build_count: 43 },
-      'builder-a': { id: 'builder-a', name: 'Builder A', role: 'Issues #1 and #6, builds production code', schedule: 'hourly at :00', status: 'active', build_count: 105 },
-      'builder-b': { id: 'builder-b', name: 'Builder B', role: 'Issues #2 and #7, builds production code', schedule: 'hourly at :30', status: 'active', build_count: 105 },
-      'builder-c': { id: 'builder-c', name: 'Builder C', role: 'Issues #3 and #8, builds production code', schedule: 'hourly at :15', status: 'active', build_count: 104 },
-      'builder-d': { id: 'builder-d', name: 'Builder D', role: 'Issues #4 and #9, builds production code', schedule: 'hourly at :00', status: 'active', build_count: 104 },
-      'builder-e': { id: 'builder-e', name: 'Builder E', role: 'Issues #5 and #10, builds production code', schedule: 'hourly at :45', status: 'active', build_count: 104 },
-      'scout': { id: 'scout', name: 'Scout', role: 'Monitors competitors and market signals', schedule: 'every 6 hours', status: 'stale', build_count: 73 }
-    };
-    const agent = registry[id];
-    if (!agent) return res.status(404).json({ error: `Agent '${id}' not found` });
-    res.json(agent);
+    res.status(500).json({ error: e.message });
   }
 });
 
-// ♟♟♟ Price API — Issue #44
+// 🔋 Price API — Issue #106
 app.get('/api/price', async (req, res) => {
   try {
-    const authHeader = req.headers['authorization'];
-    const x402Token = req.headers['x-402-token'];
-    if (!authHeader && !x402Token) {
-      return res.status(402).json({
-        error: 'Payment required',
-        x402: {
-          version: X402_PAYMENT_VERSION,
-          network: X402_NETWORK,
-          chain_id: X402_CHAIN_ID,
-          payment_address: X402_PAYMENT_ADDRESS,
-          price_usdc: '0.01',
-          asset: 'USDC',
-          memo: 'nullpriest-price-api',
-          description: 'Agent-native price feed. Pay once, get 24h access.'
-        }
-      });
-    }
-    const raw_url = `${GITHUB_RAW_BASE}/memory/custos-state.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let d = '';
-        response.on('data', chunk => d += chunk);
-        response.on('end', () => resolve(JSON.parse(d)));
-      }).on('error', reject);
-    });
-    res.json(data);
+    const priceData = {
+      token: 'CUSTOS',
+      price_usd: 0.0,
+      market_cap_usd: 0.0,
+      volume_24h: 0.0,
+      last_updated: new Date().toISOString(),
+      note: 'CUSTOS mining active on Base mainnet. Price feed integration pending.'
+    };
+    res.setHeader('X-Pas402-Accept', `ETH network=base-mainnet recipient=${X402_PAYMENT_ADDRESS} amount=10000000000000000 memo=price-feed-v1 version=${X402_PAYMENT_VERSION}`);
+    res.json(priceData);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-// 🔌 Headless-Markets Listings API - Issue #83
-app.get('/api/markets', async (req, res) => {
-  try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/headless-markets.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let d = '';
-        response.on('data', chunk => d += chunk);
-        response.on('end', () => resolve(JSON.parse(d)));
-      }).on('error', reject);
-    });
-    res.json(data);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// 🔌 Headless-Markets Buy API with x402 gate - Issue #83
-app.post('/api/markets/:listing_id/buy', async (req, res) => {
-  const { listing_id } = req.params;
-  const { tx_hash, memo } = req.body;
-
-  if (!tx_hash) {
-    return res.status(402).json({
-      error: 'Payment required',
-      x402: {
-        version: X402_PAYMENT_VERSION,
-        network: X402_NETWORK,
-        chain_id: X402_CHAIN_ID,
-        payment_address: X402_PAYMENT_ADDRESS,
-        price_usdc: '0.10',
-        asset: 'USDC',
-        description: 'Purchase access to this market listing.'
-      }
-    });
-  }
-
-  if (!isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid tx hash format' });
-
-  const proof_key = `${listing_id}:${tx_hash}`;
-  if (VERIFIED_PAYMENTS.has(proof_key)) {
-    const existing = VERIFIED_PAYMENTS.get(proof_key);
-    return res.json({ success: true, access_token: existing.access_token, cached: true });
-  }
-
-  const result = await verifyPaymentOnChain(tx_hash, memo, listing_id);
-  if (!result.valid) return res.status(402).json({ error: result.error });
-
-  const access_token = generateAccessToken(listing_id, tx_hash);
-  VERIFIED_PAYMENTS.set(proof_key, { tx: tx_hash, listing_id, verified_at: Date.now(), access_token });
-  res.json({ success: true, access_token, warning: result.warning || null });
-});
-
-// ♟♟♟ Agent Profile Pages — Issue #92
-app.get('/agents/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let d = '';
-        response.on('data', chunk => d += chunk);
-        response.on('end', () => resolve(JSON.parse(d)));
-      }).on('error', reject);
-    });
-    const agent = data.agents.find(a => a.id === id || a.slug === id);
-    if (!agent) return res.status(404).json({ error: 'Agent not found' });
-    res.sendFile(path.resolve(__dirname, 'site/index.html'));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ♟♟♟ Static site
+// 🏠 Static site
 app.use(express.static(path.join(__dirname, 'site')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'site', 'index.html')));
 
-// ♟♟♟ Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`nullpriest server running on port ${PORT}`));
