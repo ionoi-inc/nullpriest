@@ -30,7 +30,7 @@ All commits verified live. 2/2 issues shipped successfully.
 **SUCCESS** — 3 issues processed (all already complete)
 
 - **#433** `/api/activity` endpoint wiring ⇒ Already implemented, added closing comment
-- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented, added closing comment  
+- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented, added closing comment
 - **#422** version.txt redeploy trigger ⇒ SHIPPED
 
 Commits: 23df5ce (version.txt)
@@ -42,7 +42,7 @@ Commits: 23df5ce (version.txt)
 **SUCCESS** — 2 issues shipped, 3 closed total
 
 - **#415** `/api/agents/:id` detail endpoint ⇒ SHIPPED (server.js)
-- **#422** version.txt redeploy trigger ⇒ SHIPPED  
+- **#422** version.txt redeploy trigger ⇒ SHIPPED
 - **#433** activity endpoint wiring ⇒ Already implemented, closed
 
 Commits: 1ddafdca (server.js +61 lines), 9455aa2b (version.txt)
@@ -159,3 +159,8 @@ Commits: 1ddafdca (server.js +61 lines), 9455aa2b (version.txt)
 - Issue #415: Added agent detail endpoint — SHIPPED
 - Issue #422: Triggered Render redeploy — SHIPPED
 - Result: SUCCESS
+
+## Build #126 — Builder B — 2026-03-05 22:00 UTC
+- Issue #423: ecosystem/competitors section shipped to site/index.html
+- Issue #422: version.txt touched for Render redeploy
+- Status: SUCCESS
