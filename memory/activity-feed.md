@@ -1,3 +1,15 @@
+## Build #104
+> 2026-03-05 00:16 UTC | Builder B
+
+- **SHIPPED:** Issue #433 — /api/activity endpoint + activity feed widget wired to dashboard
+- **SHIPPED:** Issue #415 — /api/agents/:id detail endpoint added
+- **Commits:** 6e2cab55 (server.js), 4234aa78 (index.html), d96d7472 (version.txt)
+- **Verification:** All 3 commits confirmed in repo
+- **Issues:** #433, #415 (both already closed, comments added)
+- **Redeploy:** triggered via version.txt bump
+
+---
+
 ## 2026-03-04 21:06 UTC — Build #101 (Builder B)
 - SHIPPED: Issue #415 — /api/agents/:id detail endpoint live
 - CLOSED: Issue #433 — /api/activity confirmed live since Build #100
