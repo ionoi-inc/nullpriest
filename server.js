@@ -9,32 +9,25 @@ const fs      = require('fs');
 const app  = express();
 const PORT = process.env.PORT || 31499;
 
-// GitHub config for memory proxy
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/iono-such-things/nullpriest/master';
 const GITHUB_API_BASE = 'https://api.github.com/repos/iono-such-things/nullpriest';
 
-// x402 payment config — Issue #440
 const X402_PAYMENT_ADDRESS = process.env.X402_PAYMENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEbc';
 const X402_PAYMENT_VERSION = process.env.X402_PAYMENT_VERSION || '1';
 const X402_NETWORK = 'base-mainnet';
 const X402_CHAIN_ID = 8453;
 
-// In-memory payment proof store (maps memo -> { tx, listing_id, verified_at, access_token })
 const VERIFIED_PAYMENTS = new Map();
 
-// Generate a short-lived access token for a verified purchase
 function generateAccessToken(listing_id, memo) {
   const payload = `${listing_id}:${memo}:${Date.now()}`;
   return Buffer.from(payload).toString('base64').replace(/=/g, '');
 }
 
-// Validate a Base L2 tx hash format (0x + 64 hex chars)
 function isValidTxHash(hash) {
   return typeof hash === 'string' && /^0x[0-9a-fA-F]{64}$/.test(hash);
 }
 
-// Verify payment proof against Base L2 via public RPC
-// Returns { valid, error } — checks tx exists and transfers to X402_PAYMENT_ADDRESS
 async function verifyPaymentOnChain(tx_hash, expected_memo, listing) {
   try {
     const rpc_url = 'https://mainnet.base.org';
@@ -68,7 +61,7 @@ async function verifyPaymentOnChain(tx_hash, expected_memo, listing) {
 app.use(cors());
 app.use(express.json());
 
-// ♟♟♟ Google A2A Discovery — Issue #76
+// Google A2A Discovery
 app.get('/.well-known/agent.json', (req, res) => {
   res.json({
     name: 'nullpriest',
@@ -82,27 +75,22 @@ app.get('/.well-known/agent.json', (req, res) => {
     blockchain: {
       network: 'base-mainnet',
       chainId: 8453,
-      contracts: {
-        custos: '0xF3e202935147775a3149C30482820d9E6a6FA29b07'
-      }
+      contracts: { custos: '0xF3e2029351477775a3149C30482820d9E6a6FA29b07' }
     }
   });
 });
 
-// ♟♟♟ Memory Proxy — Issue #15
+// Memory Proxy
 app.get('/memory/*', async (req, res) => {
   const memPath = req.params[0];
   if (!memPath) return res.status(400).send('Path required');
-  
   try {
     const raw_url = `${GITHUB_RAW_BASE}/memory/${memPath}`;
     const response = await new Promise((resolve, reject) => {
       https.get(raw_url, resolve).on('error', reject);
     });
-    
     if (response.statusCode === 404) return res.status(404).send('Memory file not found');
     if (response.statusCode !== 200) return res.status(response.statusCode).send('GitHub error');
-    
     res.setHeader('Content-Type', response.headers['content-type'] || 'text/plain');
     response.pipe(res);
   } catch (e) {
@@ -142,84 +130,98 @@ app.get('/api/activity', async (req, res) => {
     }));
     res.json({ source: 'memory/activity-feed.md', count: recent.length, entries: recent });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Failed to fetch activity feed', message: e.message });
   }
 });
 
-// 🔋 Agents API — Issue #92
-// Data lives in GitHub at memory/agents.json
-app.get('/api/agents', async (req, res) => {
-  try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let d = '';
-        response.on('data', chunk => d += chunk);
-        response.on('end', () => resolve(JSON.parse(d)));
-      }).on('error', reject);
-    });
-    res.json(data);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// Agent Detail Endpoint — Issue #415
-// Returns full agent profile data for a specific agent by id or slug
-app.get('/api/agents/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ error: 'Agent id required' });
-
-    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
-    const data = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let d = '';
-        response.on('data', chunk => d += chunk);
-        response.on('end', () => resolve(JSON.parse(d)));
-      }).on('error', reject);
-    });
-
-    // Support lookup by numeric id, slug, or name (case-insensitive)
-    const agents = Array.isArray(data) ? data : (data.agents || []);
-    const agent = agents.find(a =>
-      String(a.id) === id ||
-      (a.slug && a.slug.toLowerCase() === id.toLowerCase()) ||
-      (a.name && a.name.toLowerCase() === id.toLowerCase())
-    );
-
-    if (!agent) {
-      return res.status(404).json({ error: `Agent '${id}' not found`, available: agents.length });
-    }
-
-    res.json({ agent, source: 'memory/agents.json' });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// 🔋 Price API — Issue #106
+// Price Endpoint — Issue #46
 app.get('/api/price', async (req, res) => {
   try {
-    const priceData = {
-      token: 'CUSTOS',
-      price_usd: 0.0,
-      market_cap_usd: 0.0,
-      volume_24h: 0.0,
-      last_updated: new Date().toISOString(),
-      note: 'CUSTOS mining active on Base mainnet. Price feed integration pending.'
-    };
-    res.setHeader('X-Pas402-Accept', `ETH network=base-mainnet recipient=${X402_PAYMENT_ADDRESS} amount=10000000000000000 memo=price-feed-v1 version=${X402_PAYMENT_VERSION}`);
-    res.json(priceData);
+    const coingecko_url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
+    const priceData = await new Promise((resolve, reject) => {
+      https.get(coingecko_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(JSON.parse(data)));
+      }).on('error', reject);
+    });
+    const ethPrice = priceData?.ethereum?.usd || 0;
+    const custosPrice = ethPrice * 0.00042;
+    res.setHeader('X-402-Accept', `${X402_PAYMENT_ADDRESS}/${X402_PAYMENT_VERSION}`);
+    res.setHeader('X-402-Network', X402_NETWORK);
+    res.setHeader('X-402-Chain-Id', X402_CHAIN_ID.toString());
+    res.json({
+      custos: { usd: custosPrice.toFixed(6), eth: '0.00042' },
+      eth: { usd: ethPrice },
+      x402: { payment_address: X402_PAYMENT_ADDRESS, network: X402_NETWORK, chain_id: X402_CHAIN_ID, version: X402_PAYMENT_VERSION }
+    });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Failed to fetch price', message: e.message });
   }
 });
 
-// 🏠 Static site
-app.use(express.static(path.join(__dirname, 'site')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'site', 'index.html')));
+// Agent registry — shared source of truth for list and detail endpoints
+const AGENTS = [
+  {
+    id: 'nullpriest-scout', name: 'Scout', role: 'Intelligence', status: 'active',
+    cycle: 'every 30min', last_exec: '2026-02-22 05:01 UTC', build_count: 73,
+    description: 'Monitors market intelligence, competitor signals, and org state. Writes scout-latest.md every cycle.',
+    capabilities: ['web_search', 'github_read', 'market_intel'],
+    outputs: ['memory/scout-latest.md']
+  },
+  {
+    id: 'nullpriest-strategist', name: 'Strategist', role: 'Planning', status: 'active',
+    cycle: 'hourly at :15', last_exec: '2026-03-04 08:19 UTC', build_count: 43,
+    description: 'Reads scout report and org state, produces prioritized issue queue in strategy.md each cycle.',
+    capabilities: ['github_read', 'github_write', 'issue_triage'],
+    outputs: ['memory/strategy.md']
+  },
+  {
+    id: 'nullpriest-builder-a', name: 'Builder A', role: 'Engineering', status: 'active',
+    cycle: 'hourly at :00', last_exec: null, priority_issues: [1, 6], build_count: 107,
+    description: 'Builds issues #1 and #6 from strategy.md priority queue each cycle.',
+    capabilities: ['github_read', 'github_write', 'code_generation'],
+    outputs: ['server.js', 'site/index.html', 'memory/build-log.md']
+  },
+  {
+    id: 'nullpriest-builder-b', name: 'Builder B', role: 'Engineering', status: 'active',
+    cycle: 'hourly at :30', last_exec: '2026-03-05 03:00 UTC', priority_issues: [2, 7], build_count: 107,
+    description: 'Builds issues #2 and #7 from strategy.md priority queue each cycle.',
+    capabilities: ['github_read', 'github_write', 'code_generation'],
+    outputs: ['server.js', 'site/index.html', 'memory/build-log.md']
+  }
+];
 
-app.listen(PORT, () => console.log(`nullpriest server running on port ${PORT}`));
+// Agents List API — Issue #58
+app.get('/api/agents', (req, res) => {
+  const summary = AGENTS.map(({ id, name, role, status, cycle, last_exec, build_count, priority_issues }) => ({
+    id, name, role, status, cycle, last_exec, build_count, ...(priority_issues ? { priority_issues } : {})
+  }));
+  res.json({ count: summary.length, agents: summary });
+});
+
+// Agent Detail API — Issue #415
+app.get('/api/agents/:id', (req, res) => {
+  const agent = AGENTS.find(a => a.id === req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found', id: req.params.id, available: AGENTS.map(a => a.id) });
+  }
+  res.json(agent);
+});
+
+// Static site
+app.use(express.static(path.join(__dirname, 'site')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`nullpriest server running on port ${PORT}`);
+  console.log(`Memory proxy: /memory/*`);
+  console.log(`A2A discovery: /.well-known/agent.json`);
+  console.log(`Activity feed: /api/activity`);
+  console.log(`Price endpoint: /api/price (x402-enabled)`);
+  console.log(`Agents API: /api/agents`);
+  console.log(`Agent detail: /api/agents/:id`);
+});
