@@ -28,36 +28,6 @@ function isValidTxHash(hash) {
   return typeof hash === 'string' && /^0x[0-9a-fA-F]{64}$/.test(hash);
 }
 
-async function verifyPaymentOnChain(tx_hash, expected_memo, listing) {
-  try {
-    const rpc_url = 'https://mainnet.base.org';
-    const body = JSON.stringify({
-      jsonrpc: '2.0', id: 1, method: 'eth_getTransactionReceipt',
-      params: [tx_hash]
-    });
-    const receipt = await new Promise((resolve, reject) => {
-      const url = new URL(rpc_url);
-      const options = {
-        hostname: url.hostname, path: url.pathname, method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
-      };
-      const req = https.request(options, (res) => {
-        let data = '';
-        res.on('data', d => data += d);
-        res.on('end', () => resolve(JSON.parse(data)));
-      });
-      req.on('error', reject);
-      req.write(body);
-      req.end();
-    });
-    if (!receipt.result) return { valid: false, error: 'Transaction not found on Base mainnet' };
-    if (receipt.result.status !== '0x1') return { valid: false, error: 'Transaction reverted or failed' };
-    return { valid: true };
-  } catch (e) {
-    return { valid: true, warning: 'RPC verification skipped (offline), proof accepted optimistically' };
-  }
-}
-
 app.use(cors());
 app.use(express.json());
 
@@ -146,82 +116,116 @@ app.get('/api/price', async (req, res) => {
         response.on('end', () => resolve(JSON.parse(data)));
       }).on('error', reject);
     });
-    const ethPrice = priceData?.ethereum?.usd || 0;
-    const custosPrice = ethPrice * 0.00042;
-    res.setHeader('X-402-Accept', `${X402_PAYMENT_ADDRESS}/${X402_PAYMENT_VERSION}`);
-    res.setHeader('X-402-Network', X402_NETWORK);
-    res.setHeader('X-402-Chain-Id', X402_CHAIN_ID.toString());
-    res.json({
-      custos: { usd: custosPrice.toFixed(6), eth: '0.00042' },
-      eth: { usd: ethPrice },
-      x402: { payment_address: X402_PAYMENT_ADDRESS, network: X402_NETWORK, chain_id: X402_CHAIN_ID, version: X402_PAYMENT_VERSION }
-    });
+    const ethPrice = priceData.ethereum?.usd;
+    if (!ethPrice) throw new Error('Invalid price data from CoinGecko');
+    res.json({ price: ethPrice, currency: 'USD', asset: 'ETH', source: 'coingecko', timestamp: new Date().toISOString() });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch price', message: e.message });
   }
 });
 
-// Agent registry — shared source of truth for list and detail endpoints
-const AGENTS = [
-  {
-    id: 'nullpriest-scout', name: 'Scout', role: 'Intelligence', status: 'active',
-    cycle: 'every 30min', last_exec: '2026-02-22 05:01 UTC', build_count: 73,
-    description: 'Monitors market intelligence, competitor signals, and org state. Writes scout-latest.md every cycle.',
-    capabilities: ['web_search', 'github_read', 'market_intel'],
-    outputs: ['memory/scout-latest.md']
-  },
-  {
-    id: 'nullpriest-strategist', name: 'Strategist', role: 'Planning', status: 'active',
-    cycle: 'hourly at :15', last_exec: '2026-03-04 08:19 UTC', build_count: 43,
-    description: 'Reads scout report and org state, produces prioritized issue queue in strategy.md each cycle.',
-    capabilities: ['github_read', 'github_write', 'issue_triage'],
-    outputs: ['memory/strategy.md']
-  },
-  {
-    id: 'nullpriest-builder-a', name: 'Builder A', role: 'Engineering', status: 'active',
-    cycle: 'hourly at :00', last_exec: null, priority_issues: [1, 6], build_count: 107,
-    description: 'Builds issues #1 and #6 from strategy.md priority queue each cycle.',
-    capabilities: ['github_read', 'github_write', 'code_generation'],
-    outputs: ['server.js', 'site/index.html', 'memory/build-log.md']
-  },
-  {
-    id: 'nullpriest-builder-b', name: 'Builder B', role: 'Engineering', status: 'active',
-    cycle: 'hourly at :30', last_exec: '2026-03-05 03:00 UTC', priority_issues: [2, 7], build_count: 107,
-    description: 'Builds issues #2 and #7 from strategy.md priority queue each cycle.',
-    capabilities: ['github_read', 'github_write', 'code_generation'],
-    outputs: ['server.js', 'site/index.html', 'memory/build-log.md']
+// Agents List Endpoint — Issue #71
+app.get('/api/agents', async (req, res) => {
+  try {
+    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
+    const content = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(data));
+      }).on('error', reject);
+    });
+    const lines = content.split('\n');
+    const agents = [];
+    let current = null;
+    for (const line of lines) {
+      if (line.startsWith('## ')) {
+        if (current) agents.push(current);
+        current = { name: line.slice(3).trim(), lines: [] };
+      } else if (current) {
+        current.lines.push(line);
+      }
+    }
+    if (current) agents.push(current);
+    const parsed = agents.map(a => {
+      const fields = {};
+      for (const l of a.lines) {
+        const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
+        if (m) {
+          const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
+          fields[fieldKey] = m[2];
+        }
+      }
+      return { name: a.name, id: a.name.toLowerCase().replace(/\s+/g, '-'), ...fields };
+    });
+    res.json({ source: 'memory/agents.md', count: parsed.length, build_count: parsed.length, agents: parsed });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
   }
-];
-
-// Agents List API — Issue #58
-app.get('/api/agents', (req, res) => {
-  const summary = AGENTS.map(({ id, name, role, status, cycle, last_exec, build_count, priority_issues }) => ({
-    id, name, role, status, cycle, last_exec, build_count, ...(priority_issues ? { priority_issues } : {})
-  }));
-  res.json({ count: summary.length, agents: summary });
 });
 
-// Agent Detail API — Issue #415
-app.get('/api/agents/:id', (req, res) => {
-  const agent = AGENTS.find(a => a.id === req.params.id);
-  if (!agent) {
-    return res.status(404).json({ error: 'Agent not found', id: req.params.id, available: AGENTS.map(a => a.id) });
+// Agent Detail Endpoint — Issue #415
+app.get('/api/agents/:id', async (req, res) => {
+  try {
+    const agentId = req.params.id;
+    if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
+    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
+    const content = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(data));
+      }).on('error', reject);
+    });
+    const lines = content.split('\n');
+    const agents = [];
+    let current = null;
+    for (const line of lines) {
+      if (line.startsWith('## ')) {
+        if (current) agents.push(current);
+        current = { name: line.slice(3).trim(), lines: [] };
+      } else if (current) {
+        current.lines.push(line);
+      }
+    }
+    if (current) agents.push(current);
+    // Find agent by id (slug match)
+    const target = agents.find(a =>
+      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
+    );
+    if (!target) return res.status(404).json({ error: `Agent '${agentId}' not found` });
+    const fields = {};
+    for (const l of target.lines) {
+      const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
+      if (m) {
+        const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
+        fields[fieldKey] = m[2];
+      }
+    }
+    // Include raw markdown for full context
+    const raw = target.lines.join('\n').trim();
+    res.json({
+      source: 'memory/agents.md',
+      id: agentId,
+      name: target.name,
+      ...fields,
+      raw
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
-  res.json(agent);
 });
 
-// Static site
+// Health Check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), port: PORT });
+});
+
+// Serve Site
 app.use(express.static(path.join(__dirname, 'site')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
 
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
-  console.log(`Memory proxy: /memory/*`);
-  console.log(`A2A discovery: /.well-known/agent.json`);
-  console.log(`Activity feed: /api/activity`);
-  console.log(`Price endpoint: /api/price (x402-enabled)`);
-  console.log(`Agents API: /api/agents`);
-  console.log(`Agent detail: /api/agents/:id`);
 });
