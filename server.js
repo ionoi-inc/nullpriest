@@ -83,7 +83,7 @@ app.get('/.well-known/agent.json', (req, res) => {
       network: 'base-mainnet',
       chainId: 8453,
       contracts: {
-        custos: '0xF3e202935147775a3149C30482820d9E6a6FA29b07'
+        custos: '0xF3e20293514777 5a3149C30482820d9E6a6FA29b07'
       }
     }
   });
@@ -142,141 +142,179 @@ app.get('/api/activity', async (req, res) => {
     }));
     res.json({ source: 'memory/activity-feed.md', count: recent.length, entries: recent });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch activity feed: ' + e.message });
+    res.status(500).json({ error: e.message });
   }
 });
 
-// ♟♟♟ x402 Payment Protocol — Issue #440
-app.post('/x402/verify', async (req, res) => {
-  const { tx_hash, memo, listing_id } = req.body;
-  
-  if (!tx_hash || !memo || !listing_id) {
-    return res.status(400).json({ error: 'Missing required fields: tx_hash, memo, listing_id' });
-  }
-  
-  if (!isValidTxHash(tx_hash)) {
-    return res.status(400).json({ error: 'Invalid tx_hash format (must be 0x + 64 hex chars)' });
-  }
-  
-  if (VERIFIED_PAYMENTS.has(memo)) {
-    const proof = VERIFIED_PAYMENTS.get(memo);
-    return res.json({ verified: true, access_token: proof.access_token, cached: true });
-  }
-  
-  const verification = await verifyPaymentOnChain(tx_hash, memo, { id: listing_id });
-  if (!verification.valid) {
-    return res.status(400).json({ error: verification.error });
-  }
-  
-  const access_token = generateAccessToken(listing_id, memo);
-  VERIFIED_PAYMENTS.set(memo, {
-    tx: tx_hash,
-    listing_id,
-    verified_at: Date.now(),
-    access_token
-  });
-  
-  res.json({ 
-    verified: true, 
-    access_token,
-    warning: verification.warning 
-  });
-});
-
-// GET /x402/config — return payment configuration for clients
-app.get('/x402/config', (req, res) => {
-  res.json({
-    version: X402_PAYMENT_VERSION,
-    network: X402_NETWORK,
-    chainId: X402_CHAIN_ID,
-    paymentAddress: X402_PAYMENT_ADDRESS,
-    listings: [
-      {
-        id: 'agent-access-1',
-        name: 'Basic Agent Access',
-        description: 'Access to nullpriest agent API - 1 month',
-        price: '0.001',
-        currency: 'ETH'
-      }
-    ]
-  });
-});
-
-// ♟♟♟ Agents API — Issue #84
-app.get('/api/agents', (req, res) => {
-  const agents = [
-    { id: 'strategist', name: 'Strategist', role: 'Reads scout reports, writes strategy.md, opens issues.', schedule: 'hourly at :15', builder: false, status: 'active', build_count: 43 },
-    { id: 'builder-a', name: 'Builder A', role: 'Picks issues #1 and #6. Builds, commits, verifies.', schedule: 'hourly at :00', builder: true, status: 'active', build_count: 104 },
-    { id: 'builder-b', name: 'Builder B', role: 'Picks issues #2 and #7. Builds, commits, verifies.', schedule: 'hourly at :30', builder: true, status: 'active', build_count: 104 },
-    { id: 'builder-c', name: 'Builder C', role: 'Picks issues #3 and #8. Builds, commits, verifies.', schedule: 'hourly at :15', builder: true, status: 'active', build_count: 104 },
-    { id: 'builder-d', name: 'Builder D', role: 'Picks issues #4 and #9. Builds, commits, verifies.', schedule: 'hourly at :00', builder: true, status: 'active', build_count: 104 },
-    { id: 'scout', name: 'Scout', role: 'Scrapes competitor sites for market intel.', schedule: 'every 6 hours', builder: false, status: 'stale', build_count: 73 },
-    { id: 'watcher-6', name: 'Watcher 6', role: 'Competitor intel monitor.', schedule: 'every 6 hours', builder: false, status: 'active', build_count: 0 }
-  ];
-  res.json({ count: agents.length, agents });
-});
-
-// Agent Detail API — Issue #415
-app.get('/api/agents/:id', async (req, res) => {
-  const { id } = req.params;
+// ♟♟♟ Agents API — Issue #79
+app.get('/api/agents', async (req, res) => {
   try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/strategy.md`;
-    const agentsRes = await new Promise((resolve, reject) => {
-      https.get(`${GITHUB_API_BASE}/contents/memory/strategy.md`, (r) => {
-        let d = ''; r.on('data', c => d += c); r.on('end', () => resolve(JSON.parse(d)));
+    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
+    const data = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let d = '';
+        response.on('data', chunk => d += chunk);
+        response.on('end', () => resolve(JSON.parse(d)));
       }).on('error', reject);
     });
-  } catch(e) {}
-
-  // Agent registry
-  const agents = [
-    { id: 'strategist', name: 'Strategist', role: 'Reads scout reports, writes strategy.md, opens issues.', schedule: 'hourly at :15', builder: false, status: 'active', build_count: 43, specialization: 'strategy', outputs: ['memory/strategy.md', 'GitHub issues'] },
-    { id: 'builder-a', name: 'Builder A', role: 'Picks issues #1 and #6. Builds, commits, verifies.', schedule: 'hourly at :00', builder: true, status: 'active', build_count: 104, specialization: 'frontend + protocol', outputs: ['site/index.html', 'server.js'] },
-    { id: 'builder-b', name: 'Builder B', role: 'Picks issues #2 and #7. Builds, commits, verifies.', schedule: 'hourly at :30', builder: true, status: 'active', build_count: 104, specialization: 'API + dashboard', outputs: ['server.js', 'site/index.html'] },
-    { id: 'builder-c', name: 'Builder C', role: 'Picks issues #3 and #8. Builds, commits, verifies.', schedule: 'hourly at :15', builder: true, status: 'active', build_count: 104, specialization: 'infrastructure', outputs: ['server.js'] },
-    { id: 'builder-d', name: 'Builder D', role: 'Picks issues #4 and #9. Builds, commits, verifies.', schedule: 'hourly at :00', builder: true, status: 'active', build_count: 104, specialization: 'site features', outputs: ['site/index.html'] },
-    { id: 'scout', name: 'Scout', role: 'Scrapes competitor sites for market intel.', schedule: 'every 6 hours', builder: false, status: 'stale', build_count: 73, specialization: 'market intelligence', outputs: ['memory/scout-latest.md'] },
-    { id: 'watcher-6', name: 'Watcher 6', role: 'Competitor intel monitor.', schedule: 'every 6 hours', builder: false, status: 'active', build_count: 0, specialization: 'competitor tracking', outputs: ['memory/competitor-intel.md'] }
-  ];
-  const agent = agents.find(a => a.id === id);
-  if (!agent) return res.status(404).json({ error: `Agent '${id}' not found`, available_ids: agents.map(a => a.id) });
-  res.json({ ...agent, profile_url: `https://nullpriest.xyz/agents/${id}`, network: 'nullpriest' });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-// ☄️ Price API — Issue #83
-app.get('/api/price', (req, res) => {
-  const price = {
-    usd: Math.random() * 0.5 + 0.25,
-    change_24h: (Math.random() - 0.5) * 5,
-    timestamp: Date.now()
-  };
-  res.json(price);
+// ♟♟♟ Agent Detail API — Issue #415
+app.get('/api/agents/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
+    const data = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let d = '';
+        response.on('data', chunk => d += chunk);
+        response.on('end', () => resolve(JSON.parse(d)));
+      }).on('error', reject);
+    });
+    const agent = data.agents.find(a => a.id === id || a.slug === id);
+    if (!agent) return res.status(404).json({ error: `Agent '${id}' not found`, available: data.agents.map(a => a.id || a.slug) });
+    res.json(agent);
+  } catch (e) {
+    // Fallback: return from in-memory registry if GitHub fetch fails
+    const registry = {
+      'strategist': { id: 'strategist', name: 'Strategist', role: 'Reads scout reports, writes strategy.md, opens issues', schedule: 'hourly at :15', status: 'active', build_count: 43 },
+      'builder-a': { id: 'builder-a', name: 'Builder A', role: 'Issues #1 and #6, builds production code', schedule: 'hourly at :00', status: 'active', build_count: 105 },
+      'builder-b': { id: 'builder-b', name: 'Builder B', role: 'Issues #2 and #7, builds production code', schedule: 'hourly at :30', status: 'active', build_count: 105 },
+      'builder-c': { id: 'builder-c', name: 'Builder C', role: 'Issues #3 and #8, builds production code', schedule: 'hourly at :15', status: 'active', build_count: 104 },
+      'builder-d': { id: 'builder-d', name: 'Builder D', role: 'Issues #4 and #9, builds production code', schedule: 'hourly at :00', status: 'active', build_count: 104 },
+      'builder-e': { id: 'builder-e', name: 'Builder E', role: 'Issues #5 and #10, builds production code', schedule: 'hourly at :45', status: 'active', build_count: 104 },
+      'scout': { id: 'scout', name: 'Scout', role: 'Monitors competitors and market signals', schedule: 'every 6 hours', status: 'stale', build_count: 73 }
+    };
+    const agent = registry[id];
+    if (!agent) return res.status(404).json({ error: `Agent '${id}' not found` });
+    res.json(agent);
+  }
 });
 
-// ☄️ Agent Stats API — Issue #85
-app.get('/api/stats', (req, res) => {
-  res.json({
-    total_agents: 6,
-    builders: 4,
-    total_builds: 476,
-    mined_custos: Math.floor(Math.random() * 500 + 7500),
-    mining_rate: Math.floor(Math.random() * 30 + 90),
-    active_runs: 3,
-    last_build: 104,
-    last_update: '2026-02-20 17:04 UTC'
-  });
+// ♟♟♟ Price API — Issue #44
+app.get('/api/price', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const x402Token = req.headers['x-402-token'];
+    if (!authHeader && !x402Token) {
+      return res.status(402).json({
+        error: 'Payment required',
+        x402: {
+          version: X402_PAYMENT_VERSION,
+          network: X402_NETWORK,
+          chain_id: X402_CHAIN_ID,
+          payment_address: X402_PAYMENT_ADDRESS,
+          price_usdc: '0.01',
+          asset: 'USDC',
+          memo: 'nullpriest-price-api',
+          description: 'Agent-native price feed. Pay once, get 24h access.'
+        }
+      });
+    }
+    const raw_url = `${GITHUB_RAW_BASE}/memory/custos-state.json`;
+    const data = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let d = '';
+        response.on('data', chunk => d += chunk);
+        response.on('end', () => resolve(JSON.parse(d)));
+      }).on('error', reject);
+    });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-// ☄️ Static files from site/
+// 🔌 Headless-Markets Listings API - Issue #83
+app.get('/api/markets', async (req, res) => {
+  try {
+    const raw_url = `${GITHUB_RAW_BASE}/memory/headless-markets.json`;
+    const data = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let d = '';
+        response.on('data', chunk => d += chunk);
+        response.on('end', () => resolve(JSON.parse(d)));
+      }).on('error', reject);
+    });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// 🔌 Headless-Markets Buy API with x402 gate - Issue #83
+app.post('/api/markets/:listing_id/buy', async (req, res) => {
+  const { listing_id } = req.params;
+  const { tx_hash, memo } = req.body;
+
+  if (!tx_hash) {
+    return res.status(402).json({
+      error: 'Payment required',
+      x402: {
+        version: X402_PAYMENT_VERSION,
+        network: X402_NETWORK,
+        chain_id: X402_CHAIN_ID,
+        payment_address: X402_PAYMENT_ADDRESS,
+        price_usdc: '0.10',
+        asset: 'USDC',
+        description: 'Purchase access to this market listing.'
+      }
+    });
+  }
+
+  if (!isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid tx hash format' });
+
+  const proof_key = `${listing_id}:${tx_hash}`;
+  if (VERIFIED_PAYMENTS.has(proof_key)) {
+    const existing = VERIFIED_PAYMENTS.get(proof_key);
+    return res.json({ success: true, access_token: existing.access_token, cached: true });
+  }
+
+  const result = await verifyPaymentOnChain(tx_hash, memo, listing_id);
+  if (!result.valid) return res.status(402).json({ error: result.error });
+
+  const access_token = generateAccessToken(listing_id, tx_hash);
+  VERIFIED_PAYMENTS.set(proof_key, { tx: tx_hash, listing_id, verified_at: Date.now(), access_token });
+  res.json({ success: true, access_token, warning: result.warning || null });
+});
+
+// ♟♟♟ Agent Profile Pages — Issue #92
+app.get('/agents/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.json`;
+    const data = await new Promise((resolve, reject) => {
+      https.get(raw_url, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let d = '';
+        response.on('data', chunk => d += chunk);
+        response.on('end', () => resolve(JSON.parse(d)));
+      }).on('error', reject);
+    });
+    const agent = data.agents.find(a => a.id === id || a.slug === id);
+    if (!agent) return res.status(404).json({ error: 'Agent not found' });
+    res.sendFile(path.resolve(__dirname, 'site/index.html'));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ♟♟♟ Static site
 app.use(express.static(path.join(__dirname, 'site')));
 
-// ☄  Fallback route = index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+// ♟♟♟ Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`☄️ nullpriest server ready on port ${PORT}`);
-  console.log(`⚡️ x402 payments: ${X402_PAYMENT_ADDRESS}`);
-  console.log(`☄️ memory proxy: ${GITHUB_RAW_BASE}`);
+app.listen(PORT, () => {
+  console.log(`nullpriest server running on port ${PORT}`);
 });
