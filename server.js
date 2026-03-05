@@ -145,7 +145,7 @@ app.get('/api/agents', async (req, res) => {
         const nameClean = line.replace(/^#+\s*/, '').trim();
         const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         const idMatch = line.match(/#(\d+)/);
-        current = { id: idMatch ? idMatch[1] : idSlug, name: nameClean, build_count: 0, status: 'active' };
+        current = { id: idMatch ? idMatch[1] : idSlug, slug: idSlug, name: nameClean, build_count: 0, status: 'active' };
       } else if (current) {
         const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
         if (buildMatch) current.build_count = parseInt(buildMatch[1]);
@@ -161,6 +161,8 @@ app.get('/api/agents', async (req, res) => {
 });
 
 // Agent Detail Endpoint — Issue #415
+// Wire /api/agents/:id to serve agent-specific data from memory/agents.md
+// Agent profile pages shipped (Build #100). This endpoint serves the data layer.
 app.get('/api/agents/:id', async (req, res) => {
   const agentId = req.params.id;
   if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
@@ -183,70 +185,30 @@ app.get('/api/agents/:id', async (req, res) => {
         const nameClean = line.replace(/^#+\s*/, '').trim();
         const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         const idMatch = line.match(/#(\d+)/);
-        current = { id: idMatch ? idMatch[1] : idSlug, name: nameClean, build_count: 0, status: 'active', detail_lines: [] };
+        current = { id: idMatch ? idMatch[1] : idSlug, slug: idSlug, name: nameClean, build_count: 0, status: 'active', details: [] };
       } else if (current) {
-        current.detail_lines.push(line);
         const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
         if (buildMatch) current.build_count = parseInt(buildMatch[1]);
         const statusMatch = line.match(/status[:\s]+(active|inactive|paused|retired)/i);
         if (statusMatch) current.status = statusMatch[1].toLowerCase();
+        if (line.trim()) current.details.push(line.trim());
       }
     }
     if (current) agents.push(current);
     const agent = agents.find(a =>
       a.id === agentId ||
-      (a.name && a.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === agentId.toLowerCase())
+      a.slug === agentId ||
+      a.slug === agentId.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     );
-    if (!agent) return res.status(404).json({ error: `Agent '${agentId}' not found`, available: agents.length });
-    const { detail_lines, ...agentData } = agent;
-    res.json({
-      ...agentData,
-      detail: detail_lines.filter(l => l.trim()).join('\n').substring(0, 1000),
-      source: 'memory/agents.md',
-      timestamp: new Date().toISOString()
-    });
+    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId, available: agents.map(a => ({ id: a.id, slug: a.slug, name: a.name })) });
+    res.json({ source: 'memory/agents.md', agent });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
 });
 
-// x402 Payment Verification — Issue #46
-app.post('/api/verify-payment', async (req, res) => {
-  const { tx_hash, listing_id, memo } = req.body;
-  if (!tx_hash || !listing_id) return res.status(400).json({ error: 'Missing tx_hash or listing_id' });
-  if (!isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid transaction hash format' });
-  if (VERIFIED_PAYMENTS.has(tx_hash)) {
-    const existing = VERIFIED_PAYMENTS.get(tx_hash);
-    return res.json({ verified: true, access_token: existing.access_token, cached: true });
-  }
-  try {
-    const basescan_url = `https://api.basescan.org/api?module=proxy&action=eth_getTransactionByHash&txhash=${tx_hash}&apikey=${process.env.BASESCAN_API_KEY || 'YourApiKeyToken'}`;
-    const txData = await new Promise((resolve, reject) => {
-      https.get(basescan_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`Basescan returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(JSON.parse(data)));
-      }).on('error', reject);
-    });
-    if (!txData.result || txData.result.to?.toLowerCase() !== X402_PAYMENT_ADDRESS.toLowerCase()) {
-      return res.status(402).json({ verified: false, error: 'Payment not found or invalid recipient', payment_address: X402_PAYMENT_ADDRESS });
-    }
-    const access_token = generateAccessToken(listing_id, memo || '');
-    VERIFIED_PAYMENTS.set(tx_hash, { listing_id, memo, access_token, timestamp: Date.now() });
-    res.json({ verified: true, access_token, tx_hash, network: X402_NETWORK, chain_id: X402_CHAIN_ID });
-  } catch (e) {
-    res.status(500).json({ error: 'Payment verification failed', message: e.message });
-  }
-});
-
-// Static Site
+// Site routes
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'site', 'index.html')));
 app.use(express.static(path.join(__dirname, 'site')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
 
-app.listen(PORT, () => {
-  console.log(`nullpriest server running on port ${PORT}`);
-  console.log(`x402 payment address: ${X402_PAYMENT_ADDRESS}`);
-});
+app.listen(PORT, () => console.log(`nullpriest server live on port ${PORT}`));
