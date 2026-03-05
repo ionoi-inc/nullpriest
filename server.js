@@ -45,7 +45,7 @@ app.get('/.well-known/agent.json', (req, res) => {
     blockchain: {
       network: 'base-mainnet',
       chainId: 8453,
-      contracts: { custos: '0xF3e2029351477775a3149C30482820d9E6a6FA29b07' }
+      contracts: { custos: '0xF3e202935147775a3149C3048220d9E6a6FA29b07' }
     }
   });
 });
@@ -140,17 +140,25 @@ app.get('/api/agents', async (req, res) => {
     const agents = [];
     let current = null;
     for (const line of lines) {
-      if (line.startsWith('## ')) {
+      if (line.match(/^#{2,3}\s+/)) {
         if (current) agents.push(current);
-        current = { name: line.replace(/^#+\s*/, ''), fields: {} };
-      } else if (current && line.includes(':')) {
-        const [key, ...valueParts] = line.split(':');
-        current.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
+        const nameMatch = line.match(/^#+\s+(.+)$/);
+        current = { name: nameMatch ? nameMatch[1].trim() : '', slug: '', id: '', build_count: 0, capabilities: [], status: 'active' };
+      } else if (current) {
+        const slugMatch = line.match(/^\*\*Slug:\*\*\s*(.+)$/i);
+        const idMatch = line.match(/^\*\*ID:\*\*\s*(.+)$/i);
+        const buildMatch = line.match(/^\*\*Build count:\*\*\s*(\d+)/i);
+        const capMatch = line.match(/^\*\*Capabilities:\*\*\s*(.+)$/i);
+        const statusMatch = line.match(/^\*\*Status:\*\*\s*(.+)$/i);
+        if (slugMatch) current.slug = slugMatch[1].trim();
+        if (idMatch) current.id = idMatch[1].trim();
+        if (buildMatch) current.build_count = parseInt(buildMatch[1]);
+        if (capMatch) current.capabilities = capMatch[1].split(',').map(c => c.trim());
+        if (statusMatch) current.status = statusMatch[1].trim().toLowerCase();
       }
     }
     if (current) agents.push(current);
-    const buildCount = agents.filter(a => a.fields.build_count).reduce((acc, a) => acc + parseInt(a.fields.build_count) || 0, 0);
-    res.json({ agents: agents, build_count: buildCount });
+    res.json({ source: 'memory/agents.md', count: agents.length, agents });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
   }
@@ -169,103 +177,49 @@ app.get('/api/agents/:id', async (req, res) => {
         response.on('data', d => data += d);
         response.on('end', () => resolve(data));
       }).on('error', reject);
+    }).on('error', reject);
     });
     const lines = content.split('\n');
     const agents = [];
     let current = null;
     for (const line of lines) {
-      if (line.startsWith('## ')) {
+      if (line.match(/^#{2,3}\s+/)) {
         if (current) agents.push(current);
-        current = { name: line.replace(/^#+\s*/, ''), fields: {}, raw_lines: [] };
+        const nameMatch = line.match(/^#+\s+(.+)$/);
+        current = { name: nameMatch ? nameMatch[1].trim() : '', slug: '', id: '', build_count: 0, capabilities: [], status: 'active', description: '' };
       } else if (current) {
-        current.raw_lines.push(line);
-        if (line.includes(':')) {
-          const [key, ...valueParts] = line.split(':');
-          current.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
-        }
+        const slugMatch = line.match(/^\*\*Slug:\*\*\s*(.+)$/i);
+        const idMatch = line.match(/^\*\*ID:\*\*\s*(.+)$/i);
+        const buildMatch = line.match(/^\*\*Build count:\*\*\s*(\d+)/i);
+        const capMatch = line.match(/^\*\*Capabilities:\*\*\s*(.+)$/i);
+        const statusMatch = line.match(/^\*\*Status:\*\*\s*(.+)$/i);
+        const descMatch = line.match(/^\*\*Description:\*\*\s*(.+)$/i);
+        if (slugMatch) current.slug = slugMatch[1].trim();
+        if (idMatch) current.id = idMatch[1].trim();
+        if (buildMatch) current.build_count = parseInt(buildMatch[1]);
+        if (capMatch) current.capabilities = capMatch[1].split(',').map(c => c.trim());
+        if (statusMatch) current.status = statusMatch[1].trim().toLowerCase();
+        if (descMatch) current.description = descMatch[1].trim();
       }
     }
     if (current) agents.push(current);
-    // Match by id field, name slug, or numeric index
     const agent = agents.find(a =>
-      a.fields.id === agentId ||
-      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase() ||
-      a.fields.slug === agentId
+      a.id === agentId ||
+      a.slug === agentId ||
+      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
     );
     if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId });
-    res.json({
-      id: agentId,
-      name: agent.name,
-      fields: agent.fields,
-      detail: agent.raw_lines.filter(l => l.trim()).join('\n').substring(0, 2000),
-      source: 'memory/agents.md',
-      timestamp: new Date().toISOString()
-    });
+    res.json({ source: 'memory/agents.md', agent });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
 });
 
-// Listings Endpoint — Issue #82
-app.get('/api/listings', async (req, res) => {
-  try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/listings.md`;
-    const content = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(data));
-      }).on('error', reject);
-    });
-    const lines = content.split('\n');
-    const listings = [];
-    let currentListing = null;
-    for (const line of lines) {
-      if (line.startsWith('## ')) {
-        if (currentListing) listings.push(currentListing);
-        currentListing = { name: line.replace(/^#+\s*/, ''), fields: {} };
-      } else if (currentListing && line.includes(':')) {
-        const [key, ...valueParts] = line.split(':');
-        currentListing.fields[key.trim().toLowerCase().replace(/\s+/g, '_')] = valueParts.join(':').trim();
-      }
-    }
-    if (currentListing) listings.push(currentListing);
-    res.json({ listings: listings });
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch listings', message: e.message });
-  }
-});
+// Static Site
+app.use(express.static(path.join(__dirname, 'site')));
 
-// x402 Payment Gate — Issue #90
-app.post('/api/payment/verify', async (req, res) => {
-  try {
-    const { tx_hash, listing_id, amount, memo } = req.body;
-    if (!tx_hash || !isValidTxHash(tx_hash)) return res.status(400).json({ error: 'Invalid tx hash' });
-    if ((listing_id) && VERIFIED_PAYMENTS.has(tx_hash)) return res.status(409).json({ error: 'Payment already used' });
-    VERIFIED_PAYMENTS.set(tx_hash, { listing_id, memo, verified_at: Date.now() });
-    const token = generateAccessToken(listing_id, memo);
-    res.json({ success: true, token: token, listing_id });
-  } catch (e) {
-    res.status(500).json({ error: 'Payment verification failed', message: e.message });
-  }
-});
-
-// x402 Protected Resource — Issue #90
-app.get('/api/listings/:id/preview', async (req, res) => {
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    return res.status(402).json({
-      error: 'Payment required',
-      x402: true,
-      payment_address: X402_PAYMENT_ADDRESS,
-      payment_version: X402_PAYMENT_VERSION,
-      chain_id: X402_CHAIN_ID,
-      network: X402_NETWORK,
-      amount_usd: 0.10
-    });
-  }
-  res.json({ success: true, listing_id: req.params.id });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
 });
 
 app.listen(PORT, () => {
