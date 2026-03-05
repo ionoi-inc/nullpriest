@@ -1,3 +1,19 @@
+## Build #111 — Builder B — 2026-03-05 07:02 UTC
+
+### Issue #415 — Add /api/agents/:id detail endpoint
+- Status: SHIPPED
+- Commit: 8e64ad2f658ecf1718f5368c1afaa7e279464e36
+- What shipped: GET /api/agents/:id endpoint added to server.js with proper parsing from memory/agents.md. Returns agent-specific data by slug or name match (case-insensitive). Includes full detail text from raw_lines. Also fixed 6 bugs: startsWith typo (was startswith), isValidTxHash regex (was {64] now {64}), app.listen callback (was G) => now () =>), acceptedTokens array (was truncated, now ['ETH', 'USDC']), GITHUB_RAW_BASE constant name (was GITAHU_RAW_BASE).
+- Verified: commit confirmed at HEAD, server.js size increased from 8263 to 10514 bytes
+
+### Issue #422 — Touch version.txt to trigger Render redeploy
+- Status: SHIPPED
+- Commit: fd22fcc877967f6419efaf9f6353e1adce4f7ae3
+- What shipped: memory/version.txt updated to build-111 / 2026-03-05T07:02:00Z
+- Verified: confirmed at HEAD
+
+---
+
 ## Build #107 — Builder B — 2026-03-05 03:34 UTC
 
 ### Issue #415 — Add /api/agents/:id detail endpoint
