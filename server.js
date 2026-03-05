@@ -45,7 +45,7 @@ app.get('/.well-known/agent.json', (req, res) => {
     blockchain: {
       network: 'base-mainnet',
       chainId: 8453,
-      contracts: { custos: '0xF3e20293514777775a3149C304828 20d9E6a6FA29b07' }
+      contracts: { custos: '0xF3e2029351477775a3149C30482820d9E6a6FA29b07' }
     }
   });
 });
@@ -142,17 +142,65 @@ app.get('/api/agents', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), status: '', role: '', build_count: 0 };
+        current = { name: line.slice(3).trim(), lines: [] };
       } else if (current) {
-        if (line.includes('Status:')) current.status = line.split(':').slice(1).join(':').trim();
-        if (line.includes('Role:')) current.role = line.split(':').slice(1).join(':').trim();
-        if (line.includes('Builds:')) { const m = line.match(/\d+/); if (m) current.build_count = parseInt(m[0]); }
+        current.lines.push(line);
       }
     }
     if (current) agents.push(current);
-    res.json({ source: 'memory/agents.md', count: agents.length, agents, build_count: agents.reduce((a, b) => a + b.build_count, 0) });
+    const parsed = agents.map(a => {
+      const fields = {};
+      for (const l of a.lines) {
+        const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
+        if (m) {
+          const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
+          fields[fieldKey] = m[2];
+        }
+      }
+      return { name: a.name, id: a.name.toLowerCase().replace(/\s+/g, '-'), ...fields };
+    });
+    res.json({ source: 'memory/agents.md', count: parsed.length, build_count: parsed.length, agents: parsed });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
+  }
+});
+
+// Stats Endpoint — Issue #433
+app.get('/api/stats', async (req, res) => {
+  try {
+    // Fetch build_count from memory/version.txt
+    const versionUrl = `${GITHUB_RAW_BASE}/memory/version.txt`;
+    const versionText = await new Promise((resolve, reject) => {
+      https.get(versionUrl, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(data));
+      }).on('error', reject);
+    });
+    const buildMatch = versionText.match(/build-(\d+)/i);
+    const build_count = buildMatch ? parseInt(buildMatch[1]) : null;
+
+    // Fetch agent_count from memory/agents.md
+    const agentsUrl = `${GITHUB_RAW_BASE}/memory/agents.md`;
+    const agentsText = await new Promise((resolve, reject) => {
+      https.get(agentsUrl, (response) => {
+        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+        let data = '';
+        response.on('data', d => data += d);
+        response.on('end', () => resolve(data));
+      }).on('error', reject);
+    });
+    const agent_count = (agentsText.match(/^## /gm) || []).length;
+
+    res.json({
+      build_count,
+      agent_count,
+      source: 'memory/version.txt + memory/agents.md',
+      timestamp: new Date().toISOString()
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch stats', message: e.message });
   }
 });
 
@@ -160,6 +208,7 @@ app.get('/api/agents', async (req, res) => {
 app.get('/api/agents/:id', async (req, res) => {
   try {
     const agentId = req.params.id;
+    if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
     const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
     const content = await new Promise((resolve, reject) => {
       https.get(raw_url, (response) => {
@@ -175,92 +224,46 @@ app.get('/api/agents/:id', async (req, res) => {
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (current) agents.push(current);
-        current = { name: line.slice(3).trim(), status: '', role: '', build_count: 0, raw_lines: [] };
+        current = { name: line.slice(3).trim(), lines: [] };
       } else if (current) {
-        current.raw_lines.push(line);
-        if (line.includes('Status:')) current.status = line.split(':').slice(1).join(':').trim();
-        if (line.includes('Role:')) current.role = line.split(':').slice(1).join(':').trim();
-        if (line.includes('Builds:')) { const m = line.match(/\d+/); if (m) current.build_count = parseInt(m[0]); }
+        current.lines.push(line);
       }
     }
     if (current) agents.push(current);
-
-    // Match by slug (lowercased name with hyphens) or exact name
-    const slug = agentId.toLowerCase();
-    const agent = agents.find(a =>
-      a.name.toLowerCase() === slug ||
-      a.name.toLowerCase().replace(/\s+/g, '-') === slug
+    // Find agent by id (slug match)
+    const target = agents.find(a =>
+      a.name.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
     );
-
-    if (!agent) {
-      return res.status(404).json({ error: 'Agent not found', id: agentId });
+    if (!target) return res.status(404).json({ error: `Agent '${agentId}' not found` });
+    const fields = {};
+    for (const l of target.lines) {
+      const m = l.match(/^\s*- \*\*([^*]+)\*\*:\s*(.+)$/);
+      if (m) {
+        const fieldKey = m[1].toLowerCase().replace(/\s+/g, '_');
+        fields[fieldKey] = m[2];
+      }
     }
-
-    const detail = agent.raw_lines.filter(l => l.trim()).join('\n');
+    // Include raw markdown for full context
+    const raw = target.lines.join('\n').trim();
     res.json({
-      id: agent.name.toLowerCase().replace(/\s+/g, '-'),
-      name: agent.name,
-      status: agent.status,
-      role: agent.role,
-      build_count: agent.build_count,
-      detail,
-      source: 'memory/agents.md'
+      source: 'memory/agents.md',
+      id: agentId,
+      name: target.name,
+      ...fields,
+      raw
     });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
   }
 });
 
-// X402 Payment Endpoint — Issue #91
-app.get('/api/payment', (req, res) => {
-  res.json({
-    address: X402_PAYMENT_ADDRESS,
-    network: X402_NETWORK,
-    chainId: X402_CHAIN_ID,
-    version: X402_PAYMENT_VERSION,
-    acceptedTokens: ['ETH', 'USDC'],
-    minPaymentUSD: 0.01
-  });
-});
-
-// X402 Gated Price Endpoint
-app.get('/api/price/premium', async (req, res) => {
-  const txHash = req.headers['x402-tx'] || req.query.tx;
-  if (!txHash) return res.status(402).json({ error: 'Payment required', payment_info: { address: X402_PAYMENT_ADDRESS, amount_usd: 0.01, network: X402_NETWORK, chain_id: X402_CHAIN_ID } });
-  if (!isValidTxHash(txHash)) return res.status(400).json({ error: 'Invalid transaction hash' });
-  if (VERIFIED_PAYMENTS.has(txHash)) return res.status(409).json({ error: 'Payment already used' });
-  VERIFIED_PAYMENTS.set(txHash, Date.now());
-  try {
-    const coingecko_url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
-    const priceData = await new Promise((resolve, reject) => {
-      https.get(coingecko_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(JSON.parse(data)));
-      }).on('error', reject);
-    });
-    const ethPrice = priceData.ethereum?.usd;
-    if (!ethPrice) throw new Error('Invalid price data from CoinGecko');
-    const accessToken = generateAccessToken('premium_price', txHash);
-    res.json({ price: ethPrice, currency: 'USD', asset: 'ETH', source: 'coingecko', timestamp: new Date().toISOString(), premium: true, access_token: accessToken });
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch premium price', message: e.message });
-  }
-});
-
-// Healthcheck
+// Health Check
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), port: PORT });
 });
 
-// Serve static site
+// Serve Site
 app.use(express.static(path.join(__dirname, 'site')));
-
-// Catch-all: return index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'site', 'index.html'));
-});
 
 app.listen(PORT, () => {
   console.log(`nullpriest server running on port ${PORT}`);
