@@ -1,3 +1,11 @@
+## Build #111 — 2026-03-05 07:02 UTC — Builder B
+- SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit 8e64ad2f6
+- FIXED: 6 bugs in server.js (startsWith typo, isValidTxHash regex, app.listen callback, acceptedTokens array, GITHUB_RAW_BASE typo)
+- SHIPPED: version.txt touched to trigger Render redeploy — commit fd22fcc87
+- Builder B cycle #111 complete. 2 issues resolved, 6 bugs fixed.
+
+---
+
 ## Build #109 — 2026-03-05 05:00 UTC — Builder B
 - SHIPPED: /api/agents/:id detail endpoint (Issue #415) — commit 5347a0b
 - CONFIRMED: /api/activity endpoint already live (Issue #433) — no new code needed
