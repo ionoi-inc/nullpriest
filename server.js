@@ -110,8 +110,7 @@ app.get('/api/price', async (req, res) => {
     const coingecko_url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
     const priceData = await new Promise((resolve, reject) => {
       https.get(coingecko_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }
-        let data = '';
+        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }\n        let data = '';
         response.on('data', d => data += d);
         response.on('end', () => resolve(JSON.parse(data)));
       }).on('error', reject);
@@ -124,36 +123,50 @@ app.get('/api/price', async (req, res) => {
   }
 });
 
+// Shared agent parser helper
+async function fetchAgents() {
+  const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
+  const content = await new Promise((resolve, reject) => {
+    https.get(raw_url, (response) => {
+      if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
+      let data = '';
+      response.on('data', d => data += d);
+      response.on('end', () => resolve(data));
+    }).on('error', reject);
+  });
+  const lines = content.split('\n');
+  const agents = [];
+  let current = null;
+  for (const line of lines) {
+    if (line.match(/^##\s+/)) {
+      if (current) agents.push(current);
+      const titleMatch = line.match(/^##\s+(.+)/);
+      current = { name: titleMatch ? titleMatch[1].trim() : '', id: null, slug: null, role: null, build_count: 0, status: 'unknown', extra: {} };
+    } else if (current) {
+      const idMatch = line.match(/^\*\*ID:\*\*\s*(.+)/);
+      const slugMatch = line.match(/^\*\*Slug:\*\*\s*(.+)/);
+      const roleMatch = line.match(/^\*\*Role:\*\*\s*(.+)/);
+      const buildMatch = line.match(/^\*\*Build count:\*\*\s*(\d+)/);
+      const statusMatch = line.match(/^\*\*Status:\*\*\s*(.+)/);
+      const walletMatch = line.match(/^\*\*Wallet:\*\*\s*(.+)/);
+      const deployedMatch = line.match(/^\*\*Deployed:\*\*\s*(.+)/);
+      if (idMatch) current.id = idMatch[1].trim();
+      if (slugMatch) current.slug = slugMatch[1].trim();
+      if (roleMatch) current.role = roleMatch[1].trim();
+      if (buildMatch) current.build_count = parseInt(buildMatch[1]);
+      if (statusMatch) current.status = statusMatch[1].trim();
+      if (walletMatch) current.extra.wallet = walletMatch[1].trim();
+      if (deployedMatch) current.extra.deployed = deployedMatch[1].trim();
+    }
+  }
+  if (current) agents.push(current);
+  return agents;
+}
+
 // Agents List Endpoint — Issue #71
 app.get('/api/agents', async (req, res) => {
   try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
-    const content = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(data));
-      }).on('error', reject);
-    });
-    const lines = content.split('\n');
-    const agents = [];
-    let current = null;
-    for (const line of lines) {
-      if (line.match(/^#{1,3}\s+/)) {
-        if (current) agents.push(current);
-        const nameClean = line.replace(/^#+\s*/, '').trim();
-        const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        const idMatch = line.match(/#(\d+)/);
-        current = { id: idMatch ? idMatch[1] : idSlug, slug: idSlug, name: nameClean, build_count: 0, status: 'active' };
-      } else if (current) {
-        const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
-        if (buildMatch) current.build_count = parseInt(buildMatch[1]);
-        const statusMatch = line.match(/status[:\s]+(active|inactive|paused|retired)/i);
-        if (statusMatch) current.status = statusMatch[1].toLowerCase();
-      }
-    }
-    if (current) agents.push(current);
+    const agents = await fetchAgents();
     res.json({ source: 'memory/agents.md', count: agents.length, agents });
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch agents', message: e.message });
@@ -161,54 +174,32 @@ app.get('/api/agents', async (req, res) => {
 });
 
 // Agent Detail Endpoint — Issue #415
-// Wire /api/agents/:id to serve agent-specific data from memory/agents.md
-// Agent profile pages shipped (Build #100). This endpoint serves the data layer.
 app.get('/api/agents/:id', async (req, res) => {
-  const agentId = req.params.id;
-  if (!agentId) return res.status(400).json({ error: 'Agent ID required' });
   try {
-    const raw_url = `${GITHUB_RAW_BASE}/memory/agents.md`;
-    const content = await new Promise((resolve, reject) => {
-      https.get(raw_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`GitHub returned ${response.statusCode}`)); return; }
-        let data = '';
-        response.on('data', d => data += d);
-        response.on('end', () => resolve(data));
-      }).on('error', reject);
-    });
-    const lines = content.split('\n');
-    const agents = [];
-    let current = null;
-    for (const line of lines) {
-      if (line.match(/^#{1,3}\s+/)) {
-        if (current) agents.push(current);
-        const nameClean = line.replace(/^#+\s*/, '').trim();
-        const idSlug = nameClean.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        const idMatch = line.match(/#(\d+)/);
-        current = { id: idMatch ? idMatch[1] : idSlug, slug: idSlug, name: nameClean, build_count: 0, status: 'active', details: [] };
-      } else if (current) {
-        const buildMatch = line.match(/build[_\s]?count[:\s]+(\d+)/i);
-        if (buildMatch) current.build_count = parseInt(buildMatch[1]);
-        const statusMatch = line.match(/status[:\s]+(active|inactive|paused|retired)/i);
-        if (statusMatch) current.status = statusMatch[1].toLowerCase();
-        if (line.trim()) current.details.push(line.trim());
-      }
-    }
-    if (current) agents.push(current);
+    const agents = await fetchAgents();
+    const { id } = req.params;
+    // Match by id field, slug, or name (case-insensitive)
     const agent = agents.find(a =>
-      a.id === agentId ||
-      a.slug === agentId ||
-      a.slug === agentId.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      (a.id && a.id.toLowerCase() === id.toLowerCase()) ||
+      (a.slug && a.slug.toLowerCase() === id.toLowerCase()) ||
+      (a.name && a.name.toLowerCase() === id.toLowerCase())
     );
-    if (!agent) return res.status(404).json({ error: 'Agent not found', id: agentId, available: agents.map(a => ({ id: a.id, slug: a.slug, name: a.name })) });
+    if (!agent) {
+      return res.status(404).json({ error: 'Agent not found', id });
+    }
     res.json({ source: 'memory/agents.md', agent });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch agent detail', message: e.message });
+    res.status(500).json({ error: 'Failed to fetch agent', message: e.message });
   }
 });
 
-// Site routes
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'site', 'index.html')));
+// Static site
 app.use(express.static(path.join(__dirname, 'site')));
 
-app.listen(PORT, () => console.log(`nullpriest server live on port ${PORT}`));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'site', 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`nullpriest server running on port ${PORT}`);
+});
