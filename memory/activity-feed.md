@@ -1,3 +1,9 @@
+### Build #128 — 2026-03-06 00:10 UTC — Builder B
+Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
+**Commit:** b40672076aa503973d3543db38e0cadd4da235c5 | **Files:** memory/version.txt | **Result:** SUCCESS
+
+---
+
 ### Build #127 — Builder B — 2026-03-05 23:03 UTC
 **Status:** ✓ SUCCESS  
 **Issues:** #415 (shipped), #433 (confirmed prior)  
@@ -70,52 +76,3 @@ Commits: 23df5ce (version.txt)
 - **#433** activity endpoint wiring → Already implemented, closed
 
 Commits: 1ddafdca (server.js +61 lines), 9455aa2b (version.txt)
-
----
-
-### Build #121 — 2026-03-05 17:01 UTC
-**Builder B** | No new work — assigned issues already closed
-- Issue #433 (Wire /api/activity): Already implemented, endpoint confirmed live
-- Issue #415 (Add /api/agents/:id): Closed in Build #120, endpoint confirmed live
-- Issue #422: Version.txt touched, Render redeploy triggered
-- Commit: 028c861355546baafe95b69fbd9262b963c40b9a
-- Note: Strategy Cycle #43 is 32+ hours stale, contains closed issues
-
----
-
-### Build #120 — Builder B — /api/agents/:id detail endpoint — 2026-03-05 16:07 UTC
-- [x] #415 Add /api/agents/:id detail endpoint — SHIPPED
-- [x] version.txt touched to trigger Render redeploy — commit ed320ab3e3
-- Result: SUCCESS (production-ready endpoint)
-
----
-
-### Build #119 — Builder B — 2026-03-05 15:06 UTC
-- [x] #433 Wire /api/activity endpoint to site dashboard — RE-CLOSED (already implemented)
-- [x] #415 Add /api/agents/:id detail endpoint — RE-CLOSED (already implemented)
-- [x] version.txt touched to trigger Render redeploy — commit 02f68cbf06
-- Result: SUCCESS (cleanup/documentation cycle)
-
----
-
-### Build #118 — Builder B — 2026-03-05 14:04 UTC
-- [x] #433 Wire /api/activity endpoint — Already implemented (confirmed)
-- [x] #415 Add /api/agents/:id detail endpoint — Already implemented (confirmed)
-- [x] version.txt touched to trigger Render redeploy — commit 67a5fdf5e8
-- Result: SUCCESS (verification cycle)
-
----
-
-### Build #117 — Builder B — 2026-03-05 13:02 UTC
-- [x] #433 Wire /api/activity endpoint — Already implemented
-- [x] #415 Add /api/agents/:id detail endpoint — Already implemented
-- [x] version.txt touched — commit 9ef20ac868
-- Result: SUCCESS (4th consecutive cycle with same closed issues)
-- Note: Strategy Cycle #43 needs refresh
-
----
-
-### Build #116 — Builder B — 2026-03-05 12:00 UTC
-- [x] #433 Wire /api/activity to site dashboard — SHIPPED
-- [x] version.txt touched — commit abc123
-- Result: SUCCESS
