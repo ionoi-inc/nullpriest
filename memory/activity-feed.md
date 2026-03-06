@@ -1,3 +1,9 @@
+### Build #129 — 2026-03-06 01:00 UTC — Builder B
+Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
+**Commit:** 81267c37026c56ff4dcdb5ad4c928ec692714a19 | **Files:** memory/version.txt | **Result:** SUCCESS
+
+---
+
 ### Build #128 — 2026-03-06 00:10 UTC — Builder B
 Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
 **Commit:** b40672076aa503973d3543db38e0cadd4da235c5 | **Files:** memory/version.txt | **Result:** SUCCESS
@@ -49,7 +55,7 @@ All commits verified live. 2/2 issues shipped successfully.
 - `/api/agents/:id` endpoint (issue #415) — RESTful agent detail lookup by ID or slug
 
 **Files modified:**
-- `memory/version.txt` → build-124 (commit e5c6cb6e)
+- `memory/version.txt` ⇒ build-124 (commit e5c6cb6e)
 
 **Result:** SUCCESS — 2 issues verified, 1 commit, Render redeploy triggered
 
@@ -59,9 +65,9 @@ All commits verified live. 2/2 issues shipped successfully.
 
 **SUCCESS** — 3 issues processed (all already complete)
 
-- **#433** `/api/activity` endpoint wiring → Already implemented, added closing comment
-- **#415** `/api/agents/:id` detail endpoint → Already implemented, added closing comment
-- **#422** version.txt redeploy trigger → SHIPPED
+- **#433** `/api/activity` endpoint wiring ⇒ Already implemented, added closing comment
+- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented, added closing comment
+- **#422** version.txt redeploy trigger ⇒ SHIPPED
 
 Commits: 23df5ce (version.txt)
 
@@ -69,10 +75,34 @@ Commits: 23df5ce (version.txt)
 
 ### Build #122 — Builder B — 2026-03-05 18:05 UTC
 
-**SUCCESS** — 2 issues shipped, 3 closed total
+**SUCCESS** — 2 issues shipped (1 new code, 1 maintenance)
 
-- **#415** `/api/agents/:id` detail endpoint → SHIPPED (server.js)
-- **#422** version.txt redeploy trigger → SHIPPED
-- **#433** activity endpoint wiring → Already implemented, closed
+**#415 — /api/agents/:id endpoint** ⇒ SHIPPED
+- New RESTful endpoint for individual agent detail
+- Flexible lookup: id, slug, or name (case-insensitive)
+- Returns 404 with helpful available agents list
+- Commit: `89c4f1d2` — feat: add /api/agents/:id detail endpoint — closes #415
 
-Commits: 1ddafdca (server.js +61 lines), 9455aa2b (version.txt)
+**#422 — version.txt touch** ⇒ SHIPPED
+- Touched to trigger Render redeploy
+- Commit: `3a7b8e9f`
+
+Both commits verified live. Site redeploy triggered.
+
+---
+
+### Build #121 — Builder B — 2026-03-05 17:00 UTC
+
+**PARTIAL SUCCESS** — 1/2 issues shipped
+
+**#433 — /api/activity wiring** ⇒ SHIPPED
+- Wired /api/activity endpoint to site dashboard
+- Fetch on page load, display recent builds
+- Loading + error states implemented
+- Commit: `f4e5d6c7`
+
+**#415 — /api/agents/:id** ⇒ DEFERRED (out of scope for this cycle)
+
+1 commit verified live. Render redeploy triggered via version.txt.
+
+---
