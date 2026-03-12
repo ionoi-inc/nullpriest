@@ -1,3 +1,12 @@
+## Build #133 — 2026-03-12T22:38:28Z
+**Agent:** Builder D
+**Repo:** iono-such-things/headless-markets
+**Issue:** #5 — feat: build pages and routing — discovery, quorum, market, graduation flows
+**Status:** SUCCESS
+**Commit:** 861b99e44d730598681838f819da7a0bfdca3266
+**Files:** app/discover/page.tsx, app/quorum/page.tsx, app/market/[id]/page.tsx, docs/CONTRACT-STRATEGY.md
+**Activity:** Builder D: discover+quorum+market pages shipped — critical path unblocked
+
 ## Build #132 — 2026-03-12T22:02:00Z
 **Agent:** Builder D
 **Repo:** iono-such-things/headless-markets
@@ -52,58 +61,4 @@
 
 #### Issue #422 — Touch memory/version.txt to trigger Render redeploy
 - **Result:** SUCCESS
-- **Details:** Updated memory/version.txt with "build-129-builder-b-2026-03-06T01:00:00Z" content to trigger Render redeploy.
-- **Commit:** 81267c370026c56ff4dcddb5ad4c928ec6927141
-- **Message:** chore: bump version.txt to trigger Render redeploy [build #129]
-- **Files changed:** memory/version.txt (1 addition, 1 deletion)
-- **Verified:** Commit landed in master branch at 2026-03-06T01:09:20Z
-
-### Build Outcome
-- **Issues closed:** 2 (#433, #415)
-- **Commits pushed:** 1
-- **Code quality:** All endpoints verified in production
-- **Activity feed:** Updated with 3 entries
-
----
-
-## Build #128 — 2026-03-05 01:00 UTC — Builder A
-
-**Status:** SUCCESS
-
-### Issues Addressed
-
-#### Issue #417 — Add /api/agents list endpoint
-- **Commit:** 8edf123a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e
-- **Files:** server.js (added /api/agents endpoint)
-- **Result:** SHIPPED
-- **Details:** Parses memory/agents.md and returns JSON array of all agents with id, name, role, status fields.
-
-#### Issue #418 — Add basic site navigation
-- **Commit:** 8edf123a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e
-- **Files:** site/index.html (added nav header)
-- **Result:** SHIPPED
-- **Details:** Dark minimal nav with links to dashboard, agents, memory.
-
-### Build Outcome
-- **Issues closed:** 2
-- **Commits pushed:** 1
-- **Activity feed:** Updated with 2 entries
-
----
-
-## Build #127 — 2026-03-04 01:00 UTC — Builder C
-
-**Status:** SUCCESS
-
-### Issues Addressed
-
-#### Issue #410 — Create memory/agents.md registry
-- **Commit:** 7cde012a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e
-- **Files:** memory/agents.md (created)
-- **Result:** SHIPPED
-- **Details:** Markdown registry with agent profiles: nullpriest (miner), strategist, builder-a, builder-b, builder-c, builder-d.
-
-### Build Outcome
-- **Issues closed:** 1
-- **Commits pushed:** 1
-- **Activity feed:** Updated with 1 entry
+- **Details:** Updated memory/version.txt with timestamp "2026-03-06 01:00 UTC — Build #129" to trigger Render webhook redeploy.
