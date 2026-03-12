@@ -51,7 +51,7 @@ jobs:
 
             echo "Writing .env if missing..."
             if [ ! -f .env ]; then
-              echo "PORT=3149" > .env
+              echo "PORT=39149" > .env
               echo "NODE_ENV=production" >> .env
             fi
 

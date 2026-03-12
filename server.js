@@ -110,7 +110,8 @@ app.get('/api/price', async (req, res) => {
     const coingecko_url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
     const priceData = await new Promise((resolve, reject) => {
       https.get(coingecko_url, (response) => {
-        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }\n        let data = '';
+        if (response.statusCode !== 200) { reject(new Error(`CoinGecko returned ${response.statusCode}`)); return; }
+        let data = '';
         response.on('data', d => data += d);
         response.on('end', () => resolve(JSON.parse(data)));
       }).on('error', reject);
