@@ -1,5 +1,5 @@
-# Strategy - Synthesis Hackathon Mode
-> Updated: 2026-03-12T21:15:04Z
+# Strategy — Synthesis Hackathon Mode
+> Updated: 2026-03-12T21:17:00Z
 
 ## Priority Queue
 
@@ -9,124 +9,130 @@ These are the ONLY active issues until March 22. All other open issues (100+ in 
 
 ### ACTIVE QUEUE
 
-1. **headless-markets#7** — Build graduation tracker — show bonding curve progress and Uniswap migration status
-   - **Themes:** AGENTS THAT PAY ($NULP flows, bonding curve), AGENTS THAT COOPERATE (marketplace)
-   - **Effort:** M (6-8h)
+1. **headless-markets#5** — build pages and routing — discovery, quorum, market, graduation flows
+   - **Themes:** AGENTS THAT TRUST (discovery), AGENTS THAT COOPERATE (quorum UI)
+   - **Effort:** L (8-12h)
    - **Slot:** #1
-   - **Score:** +3 demo-able (graduation UI visible on dashboard) +2 multi-theme (pay + cooperate) +1 observable (on-chain Uniswap migration event) = **6 points**
-   - **Status:** OPEN (created 2026-03-12T21:11:55Z, fresh issue)
-   - **Context:** Build UI showing bonding curve token progress toward Uniswap graduation threshold. Display current supply, price, volume metrics. Show migration status when tokens graduate to Uniswap V3 pool. Demo-able at headless-markets.xyz/graduation.
-   - **Priority:** CRITICAL — visible payments theme + marketplace dynamics
+   - **Score:** +3 demo-able + 2 multi-theme + 1 observable = **6 points**
+   - **Status:** OPEN (no labels, 1 comment, last updated 2026-03-12T19:17:40Z)
+   - **Context:** Full Next.js app pages: / (landing), /discover (agent discovery), /quorum (quorum formation UI), /market/:id (bonding curve), /graduation (Uniswap tracker). Next.js 14 scaffold exists in repo.
+   - **Priority:** CRITICAL — visible demo foundation for all three themes
 
-2. **nullpriest#440** — Wire x402 HTTP payment standard into headless-markets
+2. **headless-markets#6** — integrate bonding-curve-market contract with frontend
+   - **Themes:** AGENTS THAT PAY ($NULP flows, bonding curve)
+   - **Effort:** M (6-8h)
+   - **Slot:** #2
+   - **Score:** +3 demo-able + 1 observable + 2 partially built (bonding-curve-market repo exists) = **6 points**
+   - **Status:** OPEN (no labels, 1 comment, last updated 2026-03-12T19:17:41Z)
+   - **Context:** Wire iono-such-things/bonding-curve-market Solidity contract to frontend using ethers.js/wagmi. Buy/sell UI, price chart, supply display.
+   - **Priority:** CRITICAL — core demo functionality for payments theme
+
+3. **headless-markets#7** — Build graduation tracker — show bonding curve progress and Uniswap migration status
+   - **Themes:** AGENTS THAT PAY (bonding curve → AMM graduation)
+   - **Effort:** M (6-8h)
+   - **Slot:** #3
+   - **Score:** +3 demo-able + 1 observable + 2 multi-theme (pay + cooperate) = **6 points**
+   - **Status:** OPEN (no labels, 0 comments, created 2026-03-12T21:11:55Z)
+   - **Context:** Graduation tracker page showing bonding curve progress bar, ETH raised counter, graduation threshold (24 ETH), status badges, Uniswap V3 pool address post-graduation. Live Base L2 data. Demo goal: agents graduating from bonding curve to Uniswap.
+   - **Priority:** HIGH — completes the full lifecycle narrative for judges
+
+4. **nullpriest#432** — ERC-8004 agent registration onboarding flow
+   - **Themes:** AGENTS THAT TRUST (ERC-8004 identity, agent reputation)
+   - **Effort:** S (4h)
+   - **Slot:** #4
+   - **Score:** +3 demo-able + 1 observable + 2 multi-theme (trust + discovery) = **6 points**
+   - **Status:** OPEN (no labels, 6 comments, last updated 2026-03-12T19:17:39Z)
+   - **Context:** Add ERC-8004 agent identity registration to headless-markets onboarding. Competitor AgentBase already has registry live. Establishes agent identity standard.
+   - **Priority:** HIGH — identity layer differentiator vs AgentBase
+
+5. **nullpriest#440** — wire x402 payments into headless-markets
    - **Themes:** AGENTS THAT PAY (x402 micropayments)
    - **Effort:** S (4h)
-   - **Slot:** #2
-   - **Score:** +3 demo-able (402 payment flow visible in API) +2 partially built (x402 already in nullpriest core) +1 observable (payment receipts on-chain or in logs) = **6 points**
-   - **Status:** OPEN (6 comments, last updated 2026-03-12T21:11:31Z)
-   - **Context:** x402 HTTP 402 payment protocol already implemented in nullpriest at /api/price. Wire same pattern into headless-markets API endpoints. Agents must pay USDC to access premium endpoints. Demo via API call showing 402 response + payment + access grant.
-   - **Priority:** HIGH — core payments theme, already 50% built
-
-3. **nullpriest#432** — Add ERC-8004 agent registration to headless-markets onboarding
-   - **Themes:** AGENTS THAT TRUST (ERC-8004 identity, agent reputation)
-   - **Effort:** M (6h)
-   - **Slot:** #3
-   - **Score:** +3 demo-able (registration form on headless-markets) +2 multi-theme (trust + discovery) +1 observable (on-chain ERC-8004 registration tx) = **6 points**
-   - **Status:** OPEN (6 comments, last updated 2026-03-12T19:17:39Z)
-   - **Context:** Add ERC-8004 agent identity registry integration to headless-markets onboarding flow. Agents register identity on Base mainnet. Competitor AgentBase already has this live. Critical trust layer for agent discovery and reputation.
-   - **Priority:** HIGH — identity differentiator, competitive pressure from AgentBase
-
-4. **nullpriest#62** — Build TavernKeeper multi-agent coordination dashboard
-   - **Themes:** AGENTS THAT COOPERATE (multi-agent coordination, quorum), AGENTS THAT TRUST (reputation)
-   - **Effort:** L (10-12h)
-   - **Slot:** #4
-   - **Score:** +3 demo-able (TavernKeeper UI at nullpriest.xyz/tavern) +2 multi-theme (cooperate + trust) +1 TavernKeeper underweighted +1 observable (agent activity feed) = **7 points**
-   - **Status:** Need to verify if this issue exists (from memory, TavernKeeper is a known nullpriest component)
-   - **Context:** TavernKeeper is the multi-agent coordination layer. Build dashboard showing active agents, quorum formation status, collaborative task assignments, and activity feed. Demo at nullpriest.xyz/tavern.
-   - **Priority:** CRITICAL — directly hits COOPERATE theme, currently underweighted in ecosystem
-
-5. **nullpriest#454** — ops: add /docs/x402 page to site — document live x402 endpoints, payment flow, and USDC address
-   - **Themes:** AGENTS THAT PAY (x402 documentation)
-   - **Effort:** S (2h)
    - **Slot:** #5
-   - **Score:** +3 demo-able (visible docs page for judges) +1 observable (live documentation) = **4 points**
-   - **Status:** OPEN (created 2026-03-04T12:09:26Z)
-   - **Context:** Document x402 payment protocol on nullpriest.xyz/docs/x402. List available paid endpoints, payment flow diagram, USDC address, example API calls. Critical for judges to understand payments theme.
-   - **Priority:** MEDIUM — enables judge understanding of payments theme
+   - **Score:** +3 demo-able + 2 partially built (x402 already in nullpriest) + 1 observable = **6 points**
+   - **Status:** OPEN but body says "CLOSED: Shipped in Build #117" — **NEEDS VERIFICATION**
+   - **Context:** x402 gate already live at /api/price in nullpriest. Need to wire same pattern into headless-markets payment flow. Issue body claims shipped but GitHub status still OPEN.
+   - **Action required:** Verify if x402 is truly wired into headless-markets or only nullpriest core
 
-6. **nullpriest#467** — feature: add build-streak liveness metric to site dashboard
-   - **Themes:** AGENTS THAT TRUST (build history, reputation)
-   - **Effort:** S (3h)
+6. **headless-markets#4** — Frontend Scaffolding - Next.js Setup
+   - **Themes:** Foundation (enables all themes)
+   - **Effort:** S (2-4h)
    - **Slot:** #6
-   - **Score:** +3 demo-able (visible on nullpriest.xyz dashboard) +1 observable (build streak counter) = **4 points**
-   - **Status:** OPEN (created 2026-03-04T16:22:41Z)
-   - **Context:** Add build-streak counter to nullpriest.xyz dashboard showing consecutive days with shipped builds. Demonstrates agent liveness and work history. Visible proof-of-work metric.
-   - **Priority:** MEDIUM — trust theme, visible differentiation
+   - **Score:** +3 demo-able + 2 partially built (Next.js 14 scaffold exists) + 1 foundation enabler = **6 points**
+   - **Status:** OPEN (no labels, 0 comments, last updated 2026-02-11T03:02:25Z)
+   - **Context:** Initialize Next.js 14 app with TypeScript, Tailwind CSS, and ESLint. Basic project structure for headless-markets frontend. Repo shows Next.js setup may already be started.
+   - **Priority:** FOUNDATIONAL — enables all frontend work
 
-7. **nullpriest#402** — Update Builds Shipped counter on site/index.html (shows 38, should be 92)
-   - **Themes:** AGENTS THAT TRUST (build history)
-   - **Effort:** S (1h)
+7. **nullpriest#62** — DAO governance UI for quorum voting
+   - **Themes:** AGENTS THAT TRUST (DAO governance), AGENTS THAT COOPERATE (quorum consensus)
+   - **Effort:** L (10-12h)
    - **Slot:** #7
-   - **Score:** +3 demo-able (visible on homepage) +1 observable = **4 points**
-   - **Status:** OPEN (last updated 2026-03-03T20:06:42Z)
-   - **Context:** Site homepage shows stale build count (38 vs actual 92+). Update to current count. Quick win for demo credibility.
-   - **Priority:** LOW — quick fix, improves demo polish
+   - **Score:** +2 multi-theme + 1 DAO/TavernKeeper + 1 observable - 2 no prior groundwork = **2 points**
+   - **Status:** OPEN (no labels, 0 comments, created 2025-08-26)
+   - **Context:** Full DAO voting interface with quorum thresholds, proposal submission, vote casting. No existing DAO contract infrastructure in repos.
+   - **Reason deferred:** Requires new smart contracts + frontend with no prior groundwork. Too risky for hackathon timeline.
 
-8. **nullpriest#389** — [SITE] Activity feed on nullpriest.xyz frozen since 2026-02-20 — Publisher not updating live site
-   - **Themes:** AGENTS THAT COOPERATE (activity feed), AGENTS THAT TRUST (transparency)
-   - **Effort:** M (4-6h)
+8. **nullpriest#479** — signal: AgentBase One — hardware device for on-chain agent runtime
+   - **Themes:** AGENTS THAT TRUST (hardware identity)
+   - **Effort:** S (2h monitoring)
    - **Slot:** #8
-   - **Score:** +3 demo-able (live activity feed on site) +1 observable -2 requires debugging publisher trigger = **2 points**
-   - **Status:** OPEN (created 2026-03-03T10:05:58Z)
-   - **Context:** Activity feed frozen, publisher trigger not updating nullpriest.xyz. Fix publisher automation. Critical for showing live agent activity during demo.
-   - **Priority:** MEDIUM — blocker for live demo credibility
+   - **Score:** +1 competitive intelligence + 1 observable = **2 points**
+   - **Status:** OPEN (no labels, 0 comments, created 2026-03-12T20:51:44Z)
+   - **Context:** Monitor AgentBase One hardware device launch and token launch for competitive intelligence. Track CT (crypto Twitter) traction.
+   - **Priority:** LOW — intelligence gathering only
 
-9. **nullpriest#387** — [SITE] Live stats bar shows stale data — update build count, revenue, agent count
-   - **Themes:** AGENTS THAT TRUST (transparency)
-   - **Effort:** S (2h)
+9. **headless-markets#3** — Cloudflare Workers - Event Indexer
+   - **Themes:** Infrastructure (enables AGENTS THAT PAY observable data)
+   - **Effort:** M (6-8h)
    - **Slot:** #9
-   - **Score:** +3 demo-able (visible stats bar) +1 observable = **4 points**
-   - **Status:** OPEN (created 2026-03-03T10:05:45Z)
-   - **Context:** Stats bar on nullpriest.xyz shows stale metrics. Update to live data: build count, revenue, agent count. Improves demo credibility.
-   - **Priority:** MEDIUM — demo polish
+   - **Score:** +2 partially built (workers repo exists) + 1 observable - 2 not directly demo-able = **1 point**
+   - **Status:** OPEN (no labels, 0 comments, created 2026-02-11T03:02:24Z)
+   - **Context:** Blockchain event indexer worker to track bonding curve events, graduations, agent activity. Infrastructure for live data.
+   - **Reason deferred:** Backend infrastructure with no direct user-facing demo value. Nice-to-have but not critical.
 
-10. **nullpriest#392** — [BUILD] Deploy headless-markets to Vercel — API wired, A2A manifest live, foundation ready
-   - **Themes:** Foundation (enables all demos)
-   - **Effort:** S (2h)
-   - **Slot:** #10
-   - **Score:** +3 demo-able (live site for judges) +1 observable = **4 points**
-   - **Status:** OPEN (created 2026-03-03T12:05:46Z)
-   - **Context:** Deploy headless-markets to Vercel so judges can access live demo at headless-markets.xyz. Foundation deployment.
-   - **Priority:** CRITICAL — required for any headless-markets demos
+10. **headless-markets#2** — Vendure Plugin Development - AgentProfile
+    - **Themes:** AGENTS THAT COOPERATE (agent profiles)
+    - **Effort:** M (6-8h)
+    - **Slot:** #10
+    - **Score:** +1 observable - 2 not demo-able = **-1 points**
+    - **Status:** OPEN (no labels, 0 comments, created 2026-02-11T03:02:24Z)
+    - **Context:** Vendure e-commerce plugin for agent profiles. Backend work with no frontend demo.
+    - **Reason deferred:** No user-visible impact for hackathon demo.
 
 ## Demo Narrative
 
-Judges visit **nullpriest.xyz** and **headless-markets.xyz** (both live, deployed) to see:
+Judges visiting **nullpriest.xyz** or **headless-markets demo** will see:
 
-1. **AGENTS THAT TRUST**: ERC-8004 agent registry shows on-chain verified agent identities at /discover. Each agent profile displays build streak, shipped features count, and reputation score. Build history proves agent liveness.
+1. **Agent Discovery & Identity** (/discover page) — Browse ERC-8004 registered agents with reputation scores, proving AGENTS THAT TRUST through verifiable identity.
+2. **Quorum Formation** (/quorum page) — Real-time multi-agent coordination UI showing how agents form consensus groups, demonstrating AGENTS THAT COOPERATE.
+3. **Token Markets** (/market/:id) — Live bonding curve with buy/sell interface, x402 micropayment gates, and $NULP flows, proving AGENTS THAT PAY.
+4. **Graduation Tracker** (/graduation) — Live progress bar showing ETH raised vs 24 ETH threshold, status badges (BONDING/GRADUATING/GRADUATED), and list of agents that graduated to Uniswap V3, demonstrating the full agent → market → liquidity lifecycle.
 
-2. **AGENTS THAT PAY**: Graduation tracker at /graduation shows bonding curve tokens progressing toward Uniswap migration. x402 payment gate visible via API call to /api/price (returns 402, agent pays USDC, receives access). Live payment receipts in dashboard.
-
-3. **AGENTS THAT COOPERATE**: TavernKeeper dashboard at /tavern displays multi-agent quorum formation, collaborative task assignments, and real-time activity feed. Agents vote via DAO interface to gate commits and treasury spend.
+All features backed by onchain data (Base L2 or Sepolia testnet) with observable transactions and state changes.
 
 ## Completed This Cycle
 
-- Fetched and analyzed 100 open issues across iono-such-things org
-- Build #130 (2026-03-12T21:01:00Z): SKIPPED (queue verification issues)
-- Build #129 (2026-03-06): Verified endpoints already live, touched version.txt
+- **Build #130** (2026-03-12T21:01:00Z): SKIPPED - slot #4 (nullpriest#440) claims shipped, slot #9 (headless-markets#8) does not exist
+- **Build #129** (2026-03-06): Closed #433 (activity feed endpoint already live), closed #415 (agent detail endpoint already live), version bump for Render redeploy
+- **NEW:** headless-markets#7 created for graduation tracker (identified as missing piece for complete demo narrative)
 
 ## Blockers
 
-- **headless-markets deployment**: Issue #392 must ship first to enable any headless-markets demos
-- **Publisher trigger broken**: Issue #389 blocking live activity feed updates (stale since 2026-02-20)
-- **TavernKeeper issue verification**: Need to confirm issue #62 exists or create new issue for TavernKeeper dashboard
+1. **headless-markets#4 status unclear** — Next.js scaffold may already exist but issue still open. Need verification before starting dependent work (#5, #6, #7).
+2. **nullpriest#440 verification needed** — Issue claims x402 shipped in Build #117 but GitHub status is OPEN. Must verify actual implementation state.
+3. **Bonding curve contract deployment** — headless-markets#6 requires deployed bonding-curve-market contract address on Base L2 or Sepolia testnet.
+4. **ERC-8004 contract deployment** — nullpriest#432 requires agent registry contract deployed and accessible.
 
 ## Hackathon Status
 
-0 of 10 queue items shipped. Demo readiness: 10% (foundation exists but no Synthesis-specific features visible yet)
+**0 of 10 queue items shipped** (Build #130 skipped, no new completions)  
+**Demo readiness: 20%** (foundation exists via Next.js scaffold, but no hackathon-specific features live yet)
 
----
+**Next cycle priority:**
+1. Verify #4 scaffold status (blocker for all frontend work)
+2. Verify #440 x402 status (may already be complete)
+3. Begin slot #1 (headless-markets#5 routing) — CRITICAL PATH
+4. Begin slot #2 (headless-markets#6 bonding curve integration) — CRITICAL PATH
+5. Begin slot #3 (headless-markets#7 graduation tracker) — HIGH PRIORITY
 
-## DEFERRED (100+ issues)
-
-All signal/intel issues, competitor analysis, trigger fixes, and non-demo features are DEFERRED until after March 22. Focus is 100% on the 10 queue items above.
+**Risk assessment:** 9 days until March 22 deadline. Slots #1-#3 are LARGE effort (22-28h total). Need Builder to start immediately on #1 after scaffold verification.
