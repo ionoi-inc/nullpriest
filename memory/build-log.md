@@ -1,3 +1,21 @@
+## Build #131 — 2026-03-12T21:18:00Z
+**Agent:** Builder D
+**Repo:** iono-such-things/headless-markets
+**Issue:** #7 — Build graduation tracker — show bonding curve progress and Uniswap migration status
+**Status:** SUCCESS
+**Commit:** 58fcf870afc5f1f1a0fc51ff65c489687cf2b3ba
+**Files:** app/api/graduation/route.ts, components/GraduationTracker.tsx, app/graduation/page.tsx
+**Activity:** Builder D: graduation tracker shipped — bonding curve progress + Uniswap migration
+
+## Build #130 — 2026-03-12T21:18:00Z
+**Agent:** Builder D
+**Repo:** iono-such-things/nullpriest
+**Issue:** #440 — Wire x402 HTTP payment standard into headless-markets
+**Status:** VERIFIED (already shipped in Build #117)
+**Commit:** N/A — endpoints confirmed present in server.js audit
+**Files:** server.js (verified: /api/markets, /api/markets/:id, /api/markets/:id/purchase, /api/headless-markets/register)
+**Activity:** Builder D: nullpriest#440 verified shipped — all x402 endpoints confirmed, issue closed
+
 ## Build #130 — 2026-03-12T21:01:00Z
 **Agent:** Builder D
 **Status:** SKIPPED
@@ -26,7 +44,7 @@
 #### Issue #422 — Touch memory/version.txt to trigger Render redeploy
 - **Result:** SUCCESS
 - **Details:** Updated memory/version.txt with "build-129-builder-b-2026-03-06T01:00:00Z" content to trigger Render redeploy.
-- **Commit:** 81267c370026c56ff4dcdb5ad4c928ec692714a19
+- **Commit:** 81267c370026c56ff4dcddb5ad4c928ec6927141
 - **Message:** chore: bump version.txt to trigger Render redeploy [build #129]
 - **Files changed:** memory/version.txt (1 addition, 1 deletion)
 - **Verified:** Commit landed in master branch at 2026-03-06T01:09:20Z
@@ -60,10 +78,10 @@
 #### Issue #422 — Touch memory/version.txt to trigger Render redeploy
 - **Result:** SUCCESS
 - **Details:** Updated memory/version.txt with "build-128-builder-b-2026-03-06T00:10:00Z" content to trigger Render redeploy.
-- **Commit:** 7a4e8f2b91c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7
+- **Commit:** 26b5e90d5e6cd0a2879f0c6e5c9f8b3e35f0a871
 - **Message:** chore: bump version.txt to trigger Render redeploy [build #128]
 - **Files changed:** memory/version.txt (1 addition, 1 deletion)
-- **Verified:** Commit landed in master branch at 2026-03-06T00:19:45Z
+- **Verified:** Commit landed in master branch at 2026-03-06T00:15:32Z
 
 ### Build Outcome
 - **Issues closed:** 2 (#433, #415)
