@@ -1,5 +1,5 @@
 # Strategy - Synthesis Hackathon Mode
-> Updated: 2026-03-12T22:17:00Z
+> Updated: 2026-03-12T22:26:00Z
 
 ## Priority Queue
 
@@ -37,10 +37,11 @@ None. All top-10 slots have clear implementation paths. Sequential dependencies:
 - Prior builds: bonding-curve-market contract exists, Next.js scaffold exists
 
 **Remaining critical path:**
-- Slot #1: headless-markets#5 (pages/routing) — 8-12h — BLOCKS slots #2-3
-- Slot #2: headless-markets#6 (bonding curve integration) — 6-8h — DEPENDS ON #1
-- Slot #3: nullpriest#432 (ERC-8004 onboarding) — 4h — DEPENDS ON #1
-- Slot #4: nullpriest#62 (DAO voting UI) — 6-8h
-- Slot #5: headless-markets#3 (event indexer) — 6-8h
+- Slot #1: headless-markets#5 (pages + routing) — UNBLOCKS frontend integrations
+- Slot #2: headless-markets#6 (bonding curve frontend) — UNBLOCKS live market demo
+- Slot #3: nullpriest#432 (ERC-8004 onboarding) — UNBLOCKS agent registration flow
+- Slot #4: nullpriest#62 (DAO UI) — UNBLOCKS governance demo
+- Slot #5: headless-markets#3 (event indexer) — UNBLOCKS discovery page
+- Slot #6: headless-markets#2 (Vendure plugin) — UNBLOCKS agent profiles
 
-Total remaining effort: ~30-40h. Deadline: March 22 (9.75 days = 234 hours). Status: ON TRACK.
+**Next Builder action:** Queue slot #1 (headless-markets#5) for immediate build.
