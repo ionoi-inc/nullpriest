@@ -1,90 +1,105 @@
 # Strategy — Synthesis Hackathon Mode
 > Updated: 2026-03-12T19:15:04Z
 
-**HACKATHON DEADLINE: March 22, 2026 (10 days remaining)**
-
----
-
 ## Priority Queue
 
-### HACKATHON CRITICAL (Confirmed Open Issues)
+**SYNTHESIS HACKATHON (March 13-22, 2026) — DEMO DEADLINE: March 22**
 
-1. **nullpriest #440** — Wire x402 HTTP payment standard into headless-markets
-   - Effort: 2h | Assigned: Builder A | Status: QUEUED (commented)
-   - Context: x402 gate already live at /api/price in nullpriest. Wire same pattern into headless-markets payment flow. Competitors (nullpath) already using x402. Every cycle without this is compounding risk.
+These are the ONLY active issues until March 22. All other open issues (100+ in nullpriest) are DEFERRED.
 
-2. **nullpriest #432** — Add ERC-8004 agent registration to headless-markets onboarding
-   - Effort: 2h | Assigned: Builder A | Status: QUEUED (commented)
-   - Context: ERC-8004 is the emerging agent identity standard. Register agents on-chain during headless-markets onboarding flow. Competitor AgentBase already has agent registry live.
+### ACTIVE QUEUE
 
-### MISSING ISSUES (Need Human Action)
+1. **headless-markets#5** — build pages and routing — discovery, quorum, market, graduation flows
+   - Effort: 8-12h
+   - Assigned: builder-slot-1
+   - Status: OPEN (no labels)
+   - Priority: CRITICAL (visible demo foundation)
+   - Context: Need full Next.js app pages: / (landing), /discover (agent discovery), /quorum (quorum formation UI), /market/:id (bonding curve), /graduation (Uniswap tracker). Next.js 14 scaffold exists in repo.
 
-**CRITICAL FINDING:** The task recipe specified 5 hackathon issues, but only 2 exist as open issues:
+2. **headless-markets#6** — integrate bonding-curve-market contract with frontend
+   - Effort: 6-8h
+   - Assigned: builder-slot-2
+   - Status: OPEN (no labels)
+   - Priority: CRITICAL (core demo functionality)
+   - Context: Wire iono-such-things/bonding-curve-market Solidity contract to frontend using ethers.js/wagmi. Buy/sell UI, price chart, supply display.
 
-- **headless-markets #5** — NOT FOUND (repo has 0 open issues in search results)
-- **headless-markets #6** — NOT FOUND (repo has 0 open issues in search results)
-- **nullpriest #62** — NOT FOUND (no open issue with this number)
+3. **nullpriest#432** — ERC-8004 agent registration onboarding flow
+   - Effort: 4h
+   - Assigned: builder-slot-1
+   - Status: OPEN (no labels, 6 comments)
+   - Priority: HIGH (identity layer for demo)
+   - Context: Add ERC-8004 agent identity registration to headless-markets onboarding. Competitor AgentBase already has registry live. Establishes agent identity standard.
 
-**Recommendation:** Human must either:
-1. Create the missing headless-markets issues (#5 for frontend pages, #6 for bonding curve UI)
-2. Verify if headless-markets repo exists at iono-such-things/headless-markets
-3. Update task recipe with correct issue numbers if they were renumbered
+### NEEDS VERIFICATION
 
----
+4. **nullpriest#440** — wire x402 payments into headless-markets
+   - Status: OPEN but issue body says "CLOSED: Shipped in Build #117"
+   - Verification needed: Check if x402 is truly wired into headless-markets or just nullpriest
+   - If complete: remove from queue
+   - If incomplete: restore to ACTIVE (effort: 4h, priority: HIGH)
+
+5. **nullpriest#62** — quorum CTA + governance UI
+   - Status: CLOSED (closed 2026-03-01)
+   - Reason: Already shipped in Build #39
+   - Action: REMOVED from hackathon queue
+
+### REPLACEMENT CANDIDATES (if #440 and #62 are truly complete)
+
+From open issues scan, potential hackathon-relevant replacements:
+- **headless-markets#4** — Frontend Scaffolding - Next.js Setup (may be prerequisite to #5)
+- **headless-markets#2** — Vendure Plugin Development - AgentProfile (backend for agent data)
+- **headless-markets#3** — Cloudflare Workers - Event Indexer (blockchain event indexing)
 
 ## Completed This Cycle
 
-From build-log.md analysis (most recent builds #128-129):
-- Build #129 (2026-03-06): Closed #433 (activity endpoint), #415 (agent detail endpoint), touched version.txt
-- Build #128 (2026-03-06): Same confirmations
+*No completions yet — this is Strategy Cycle #1 for Synthesis Hackathon (March 12, 2026).*
 
-**No FAILED builds detected** — all recent builds show SUCCESS status. No re-queue needed.
-
----
+From build-log.md (recent pre-hackathon activity):
+- Build #129 (2026-03-06): Closed #433, #415, version.txt bump — SUCCESS
+- Build #128 (2026-03-06): Closed #433, #415, version.txt bump — SUCCESS
+- No FAILED builds detected in recent log — no re-queue needed
 
 ## Blockers
 
-### High Priority
-- **Missing Issues**: 3 of 5 hackathon issues don't exist yet. Cannot queue builders until created.
-- **Repo Verification**: headless-markets repo returned 0 open issues. May not exist or may be in different org.
+### Immediate Blockers
+1. **Label API unavailable** — Cannot programmatically add "agent-build" label via Pipedream GitHub actions. Manual labeling required or alternative API method needed.
+2. **Issue status confusion** — #440 and #62 status needs human verification before finalizing queue.
 
-### Medium Priority
-- **OpenRouter credits at 3%** (Issue #441): $92.41 remaining. Not hackathon-critical but will block all agents soon.
-- **Scout trigger stale** (Issue #476): Last ran 2026-02-22. Not hackathon-critical.
-- **Publisher trigger paused** (Issue #473): Not hackathon-critical.
-
----
+### Deferred Blockers (post-March 22)
+- OpenRouter credits at 3% ($92.41) — will need top-up but not blocking demo
+- Scout trigger stale (11+ days) — market intel can wait
+- 100+ duplicate/stale issues need cleanup
 
 ## Hackathon Status
 
-**2 of 5 core issues confirmed and queued**
-**3 of 5 core issues MISSING**
+- **Confirmed active issues:** 3 of 5 (headless-markets #5, #6, nullpriest #432)
+- **Needs verification:** 2 issues (#440 possibly complete, #62 closed)
+- **Shipped:** 0 confirmed hackathon completions this cycle
+- **Demo readiness:** ~15% (infrastructure exists, no end-to-end flow yet)
+- **Days remaining:** 10 days (March 12 → March 22)
+- **Target velocity:** Ship 3 confirmed issues + verify/replace 2 uncertain = 5 total
+- **Current blocker:** Need human decision on queue composition before builder assignment
 
-**Demo Readiness: 0%** (no hackathon issues shipped yet)
+## Strategy Notes
 
-**Risk Level: HIGH**
-- Only 2 of 5 critical issues exist
-- 10 days remaining but cannot deploy builders to missing issues
-- Need immediate human intervention to create/verify missing issues
+**SYNTHESIS MODE RULES:**
+- ONLY work on hackathon-priority issues until March 22
+- All other open issues (100+ in nullpriest repo) are IGNORED until post-hackathon
+- Builder capacity: 2 slots available
+- Demo must show: agent discovery → quorum formation → bonding curve market → payment flow
+- Success metric: Working end-to-end demo by March 22, not feature completeness
 
-**Next Actions:**
-1. ✅ Added comments to #440 and #432 marking them for Builder A
-2. ❌ Cannot add agent-build labels (GitHub label API unavailable via Pipedream per user memory)
-3. 🚨 HUMAN REQUIRED: Create or locate headless-markets #5, #6 and nullpriest #62
-4. Once all 5 issues exist, builders can proceed with full hackathon queue
+**Next Actions (requires human decision):**
+1. ✅ DONE: Fetched current strategy.md and build-log.md from GitHub
+2. ✅ DONE: Scanned all open issues in nullpriest and headless-markets repos
+3. ✅ DONE: Detected issue status discrepancies (#440 claims complete, #62 actually closed)
+4. ⚠️  BLOCKED: Cannot add "agent-build" label via available GitHub API actions
+5. ⚠️  NEEDS HUMAN: Verify #440 completion status and choose replacement for #62
+6. ⏭️  PENDING: Write this strategy.md to GitHub memory/strategy.md
+7. ⏭️  PENDING: Update activity feed with strategy cycle completion
 
----
-
-## Analysis Summary
-
-**Total open issues scanned:** 100 issues from both repos
-
-**Hackathon issues found:**
-- ✅ nullpriest #440 (x402 payments)
-- ✅ nullpriest #432 (ERC-8004 registration)
-- ❌ headless-markets #5 (NOT FOUND)
-- ❌ headless-markets #6 (NOT FOUND)
-- ❌ nullpriest #62 (NOT FOUND)
-
-**Strategy until missing issues resolved:**
-Focus Builder A on the 2 confirmed issues (#440, #432). Estimated 4h total effort. This buys time for human to create/locate the other 3 issues.
+**Recommended Human Actions:**
+1. Manually add "agent-build" label to: headless-markets #5, #6, nullpriest #432
+2. Close nullpriest #440 if truly complete, or reopen and clarify if incomplete
+3. Choose 1-2 replacement issues from headless-markets repo to fill queue to 5 total
+4. Approve builder assignment: slot-1 → headless-markets#5, slot-2 → headless-markets#6
