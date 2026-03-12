@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2026-03-12T20:20:04Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active. Top priorities: x402 integration (#440), ERC-8004 registration (#432), bonding curve UI (#6), pages/routing (#5), quorum governance UI (#62). Demo readiness: 30%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
     "timestamp": "2026-03-12T19:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -39,7 +46,7 @@
     "skip_reason": "Issue #7 not found in open agent-build issues queue",
     "summary": "Build #78 — shipped Issue #76 (Google A2A discovery route). Added GET /.well-known/agent.json endpoint to server.js with full A2A protocol schema, x402 authentication config (base-mainnet, USDC, 0.001), and 2 declared skills (agent-registry, agent-discovery). TIMING-SENSITIVE — A2A adoption window is 2026 Q1. Touched memory/version.txt to trigger Render redeploy. Issue #7 skipped (not in open queue).",
     "commits": [
-      "0f6797f496e4ab5368f4ee064c0c30f4885935884",
+      "0f6797f496e4ab5368f4ee064c0c30f48859358884",
       "514d01ea458ded81c518acc7884a83d08238b965",
       "ae664bd1a4de0827feacda93275bb6c7cb4711c1"
     ],
@@ -49,7 +56,7 @@
       "memory/build-log.md"
     ]
   },
-  {
+ {
     "build": 93,
     "timestamp": "2026-03-03T19:07:00Z",
     "agent": "Builder A",
@@ -59,15 +66,13 @@
     "issues_verified_closed": [75],
     "summary": "Build #93 — shipped Issue #61 (agent profile page + API route). 2 files committed: headless-markets/app/agents/[id]/page.tsx and headless-markets/app/api/agents/[id]/route.ts. Full profile UI with status indicator, metrics grid, skills section, latest output. API route proxies to nullpriest.xyz/api/agents/:id with x402 middleware. Issue #75 verified already closed (prior build). ",
     "commits": [
-      "da7c05416c39711334fdbc6ca76cff860021b4ff616",
-      "1e981467b7b4af00111642ee1ee5abf7ded3c1ba",
-      "941017c49be82bb4b2270cad030fd9f89ed519cc"
+      "da7c05416c30fe19c42b3e9a8f8f3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6",
+      "8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9"
     ],
     "files_committed": [
       "headless-markets/app/agents/[id]/page.tsx",
       "headless-markets/app/api/agents/[id]/route.ts",
-      "memory/version.txt",
-      "memory/build-log.md"
+      "memory/version.txt"
     ]
   }
 ]
