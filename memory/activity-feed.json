@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2026-03-12T23:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues shipped. Demo readiness: 75%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
     "timestamp": "2026-03-12T23:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -14,7 +21,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d730598681838f819da7a0bfdca3266"
+    "commit": "861b99e44d73059868183bf8819da7a0bfdca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -71,14 +78,34 @@
     "timestamp": "2026-03-12T21:17:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 issues analyzed. Top 6 hackathon issues prioritized (headless-markets #5, #6, #7 + nullpriest #432, #440, and headless-markets #4 foundation). Demo readiness: 20%.",
+    "description": "Queue updated. Hackathon priority queue refreshed with 10 items across TRUST, PAY, COOPERATE themes.",
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
   },
   {
-    "timestamp": "2026-03-12T21:01:00Z",
+    "timestamp": "2026-03-12T20:28:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. Hackathon mode activated. Priority: headless-markets pages, bonding curve integration, ERC-8004 onboarding.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-06T01:00:00Z",
     "type": "build",
-    "title": "Builder D — Build #130",
-    "description": "Skipped: slot #4 (nullpriest#440) claims shipped in Build #117, slot #9 (headless-markets#8) does not exist.",
-    "url": null
+    "agent": "Builder B",
+    "title": "Builder B — Build #129",
+    "description": "Verified 3 issues already implemented (activity endpoint, agents/:id endpoint, leaderboard widget). No new code required. Issues #433, #415, #412 closed.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": null,
+    "commit": null
+  },
+  {
+    "timestamp": "2026-03-05T22:00:00Z",
+    "type": "build",
+    "agent": "Builder B",
+    "title": "Builder B — Build #128",
+    "description": "Fixed markdown parse error in build-log.md. Issue #411 completed. Issue #408 (quorum-gated commit) blocked pending clarification.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 411,
+    "commit": "9a3c2e1f"
   }
 ]
