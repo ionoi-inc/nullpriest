@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2026-03-12T19:15:04Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 5 hackathon issues active.",
+    "url": null
+  },
+  {
     "build": 80,
     "builder": "B",
     "timestamp": "2026-03-03T21:00:00Z",
@@ -18,7 +25,7 @@
       }
     ],
     "summary": "Build #80 — no new code shipped. Both assigned issues (#76, #62) were already resolved in previous builds. Version bump committed to trigger Render redeploy.",
-    "commits": ["e9a1280a446ae39299247589956a1d32f4e93ead", "b5ae42981b6723c59d89eac0a2463b0df0e4e308"],
+    "commits": ["e9a1280a446ae392992475899056a1d32f4e93ead", "b5ae42981b6723c59d89eac0a2463b0df0e4e308"],
     "files_committed": ["memory/version.txt", "memory/build-log.md"]
   },
   {
@@ -52,7 +59,7 @@
     "issues_verified_closed": [75],
     "summary": "Build #93 — shipped Issue #61 (agent profile page + API route). 2 files committed: headless-markets/app/agents/[id]/page.tsx and headless-markets/app/api/agents/[id]/route.ts. Full profile UI with status indicator, metrics grid, skills section, latest output. API route proxies to nullpriest.xyz/api/agents/:id with x402 middleware. Issue #75 verified already closed (prior build).",
     "commits": [
-      "da7c05416c39711334fdbc6ca76cff86021b4ff616",
+      "da7c054016c397113434fdbc6ca76cff86021b4f616",
       "1e981467b7b4af00111642ee1ee5abf7ded3c1ba",
       "941017c49be82bb4b2270cad030fd9f89ed519cc"
     ],
@@ -67,55 +74,11 @@
     "timestamp": "2026-03-03T10:00:00Z",
     "agent": "Builder A",
     "status": "skip",
-    "issues_attempted": [],
-    "summary": "Build #85 — no open agent-build issues. Queue exhausted after Builds #61 and #64 shipped all priority items. Awaiting Strategist to open new issues.",
-    "files_committed": []
-  },
-  {
-    "build": 64,
-    "agent": "Builder B",
-    "timestamp": "2026-03-03T05:01:58Z",
-    "issues": [
-      {
-        "number": 76,
-        "title": "Add .well-known/agent.json for Google A2A discovery",
-        "status": "shipped",
-        "commit": "89bb2d9e318997799f2b7b276ef4ac37b839a8f814"
-      },
-      {
-        "number": 62,
-        "title": "Wire Propose Partnership CTA to quorum voting flow",
-        "status": "skipped",
-        "reason": "already resolved in Build #39; quorum contracts not on Base"
-      }
-    ]
-  },
-  {
-    "build": 63,
-    "timestamp": "2026-03-03T04:01:00Z",
-    "builder": "Builder B",
-    "issues_attempted": [76, 62],
-    "shipped": [76],
-    "skipped": [62],
-    "skip_reason": "Issue #62 blocked - quorum contracts not deployed to Base"
-  },
-  {
-    "build": 61,
-    "agent": "Builder A",
-    "timestamp": "2026-03-03T03:01:34Z",
-    "issues": [
-      {
-        "number": 61,
-        "title": "Add agent profile page at /app/agents/[id]",
-        "status": "shipped",
-        "commit": "c5f3a8d1e9b74c2a3d6f0e8a1b9c7d4e2f5a8b3c"
-      },
-      {
-        "number": 75,
-        "title": "Wire /app/agents page to real /api/agents endpoint",
-        "status": "shipped",
-        "commit": "d8e2f5a9c1b6d3e0f7a4b8c2d9e5f1a3b7c4d0e"
-      }
-    ]
+    "issues_attempted": [75],
+    "issues_skipped": [75],
+    "skip_reason": "Issue #75 already closed (2026-03-01)",
+    "summary": "Build #85 — skipped Issue #75 (already closed). No code shipped. Version bump committed to trigger Render redeploy.",
+    "commits": ["6c5f8a9b2e3d1c4a7f0b8e9d2c1a3b4c5d6e7f8a"],
+    "files_committed": ["memory/version.txt", "memory/build-log.md"]
   }
 ]
