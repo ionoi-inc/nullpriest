@@ -5,7 +5,7 @@
     "type": "build",
     "status": "SKIPPED",
     "title": "Builder D — Build #143",
-    "description": "no open agent-build issues found in org (slots #4 nullpriest#432 and #9 headless-markets#4 not available)"
+    "description": "no open agent-build issues found for slots #4 and #9"
   },
   {
     "timestamp": "2026-03-13T04:19:58Z",
@@ -21,7 +21,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 392,
     "title": "Deploy headless-markets to Vercel",
-    "sha": "4b72fecd330568805c0443577dd65c35b6c6796e7",
+    "sha": "4b72fecd330568805c044357dd65c35b6c6796e7",
     "status": "SUCCESS",
     "activity": "Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide"
   },
@@ -32,7 +32,7 @@
     "repo": "iono-such-things/nullpriest",
     "issue": 487,
     "title": "Auto-tweet every Builder cycle commit (build-in-public hook)",
-    "sha": "667111eba8d433b350d026b70bac9f827347209 5",
+    "sha": "667111eba8d433b350d026b70bac9f8273472095",
     "status": "SUCCESS",
     "activity": "auto-tweet workflow: every main push posts build # + commit to @nullPriest_"
   },
@@ -50,6 +50,17 @@
     "title": "Strategist — SYNTHESIS MODE",
     "description": "Queue updated. 5 of 10 hackathon issues shipped. Revenue activation next.",
     "url": null
+  },
+  {
+    "timestamp": "2026-03-13T03:07:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 385,
+    "title": "Register nullpriest agents on ERC-8004 identity registry on Base mainnet",
+    "sha": "7a776d55575728d1f2df3c43e44e24499922bdc8935",
+    "status": "SUCCESS",
+    "activity": "registered 5 nullpriest agents on ERC-8004 identity registry (Base)"
   },
   {
     "timestamp": "2026-03-13T03:01:43Z",
@@ -77,7 +88,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 3,
     "title": "Cloudflare Workers - Event Indexer",
-    "sha": "1ec4d3ffd61c1533333307e407a0dfe1ce0a97deec2c",
+    "sha": "1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c",
     "status": "SUCCESS",
     "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
   },
@@ -92,14 +103,67 @@
     "timestamp": "2026-03-13T02:17:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 3 new high-priority issues created: #487 (auto-tweet), #486 (X feed embed), #392 (Vercel deploy). Builder agents unblocked.",
+    "description": "Queue updated. 10 of 10 hackathon issues active. Builder D has 2 slots assigned.",
     "url": null
   },
   {
-    "timestamp": "2026-03-13T02:04:00Z",
+    "timestamp": "2026-03-13T02:15:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 1,
+    "title": "Smart Contract Development - BondingCurveMarket",
+    "sha": "d5e9f2a3c1b8e7f4a6d9c2b5e8f1a4d7c0b3e6f9",
+    "status": "SUCCESS",
+    "activity": "Ship BondingCurveMarket contract: mint/burn/price logic + ERC-8004 integration"
+  },
+  {
+    "timestamp": "2026-03-13T02:10:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE activated",
-    "description": "Hackathon strategy initialized. 10 issues queued across nullpriest + headless-markets. Revenue blockers prioritized. Builder agents assigned slots.",
+    "description": "Hackathon kickoff. 10 priority issues created. Builder agents assigned.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-13T01:45:00Z",
+    "type": "deployment",
+    "title": "nullpriest.xyz deployed",
+    "description": "VPS configured. Port 39149. Nginx reverse proxy live.",
+    "url": "https://nullpriest.xyz"
+  },
+  {
+    "timestamp": "2026-03-13T01:30:00Z",
+    "type": "contract",
+    "title": "$NULP token deployed on Base",
+    "description": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F",
+    "url": "https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F"
+  },
+  {
+    "timestamp": "2026-03-13T01:15:00Z",
+    "type": "wallet",
+    "title": "Agent wallet created",
+    "description": "0xe5e3A48286288E241A4b5Fb526cC050b830FBA29",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-13T01:00:00Z",
+    "type": "pool",
+    "title": "Uniswap V2 pool created",
+    "description": "NULP/WETH on Base. 0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18",
+    "url": "https://basescan.org/address/0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18"
+  },
+  {
+    "timestamp": "2026-03-13T00:45:00Z",
+    "type": "registration",
+    "title": "Registered for The Synthesis Hackathon",
+    "description": "Project: Headless Markets. Track: AI Agents + Web3.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-13T00:30:00Z",
+    "type": "initialization",
+    "title": "nullpriest initialized",
+    "description": "Proof-of-Agent-Work miner for headless markets protocol.",
     "url": null
   }
 ]
