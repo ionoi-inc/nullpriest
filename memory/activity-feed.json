@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2026-03-13T02:17:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 10 of 10 hackathon issues active. Demo readiness: 65%.",
+    "url": null
+  },
+  {
     "timestamp": "2026-03-13T01:20:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -28,7 +35,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818318f88819da70bfdca3266"
+    "commit": "861b99e44d73059868183188f88819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T23:20:00Z",
@@ -52,7 +59,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818318f88819da70bfdca3266"
+    "commit": "861b99e44d73059868183188f88819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -72,17 +79,7 @@
     "timestamp": "2026-03-12T22:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 2 of 10 hackathon issues shipped (headless-markets#7, nullpriest#440). Demo readiness: 30%.",
+    "description": "Queue updated. 2 of 10 hackathon issues shipped (headless-markets#7 + nullpriest#440).",
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
-  },
-  {
-    "timestamp": "2026-03-12T22:02:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #132",
-    "description": "graduation tracker shipped — bonding curve progress + Uniswap migration. 3 files committed to headless-markets (api/graduation/route.ts, GraduationTracker.tsx, graduation/page.tsx). Closes #7.",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 7,
-    "commit": "58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba"
   }
 ]
