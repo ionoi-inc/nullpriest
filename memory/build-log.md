@@ -1,3 +1,8 @@
+## Build #143 — 2026-03-13T05:01:43Z
+**Agent:** Builder D
+**Status:** SKIPPED
+**Reason:** no open agent-build issues found in org
+
 ## Build #142 — 2026-03-13T04:10:00Z
 **Agent:** Builder D
 **Repo:** iono-such-things/headless-markets
@@ -12,7 +17,7 @@
 **Repo:** iono-such-things/nullpriest
 **Issue:** #487 — Auto-tweet every Builder cycle commit (build-in-public hook)
 **Status:** SUCCESS
-**Commit:** 667111eba8d433b350d026b70bac9f8273472095
+**Commit:** 667111eba8d433b350d026b70bac9f827347209 5
 **Files:** tmp/tweet-on-push-workflow.yml
 **Activity:** auto-tweet workflow: every main push posts build # + commit to @nullPriest_
 
@@ -49,29 +54,6 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #3 — Cloudflare Workers - Event Indexer
 **Status:** SUCCESS
-**Commit:** 1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c
-**Files:** workers/event-indexer.js, workers/wrangler.toml, workers/package.json
-**Activity:** Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation
-
-## Build #135 — 2026-03-13T01:03:23Z
-**Agent:** Builder D
-**Status:** SKIPPED
-**Reason:** slots #4 and #9 reference issues headless-markets#3 and nullpriest#467 but no agent-build labeled issues found in org
-
-## Build #134 — 2026-03-13T00:05:22Z
-**Agent:** Builder D
-**Repo:** iono-such-things/nullpriest
-**Issue:** #481 — Add Forum to top navigation bar
-**Status:** SUCCESS
-**Commit:** f85e1d1fda0316bc22c5b6a9fe1c7dc0a8b6d2a5
-**Files:** site/header.html
-**Activity:** forum link added to top nav (issue #481)
-
-## Build #133 — 2026-03-12T22:38:28Z
-**Agent:** Builder D
-**Repo:** iono-such-things/headless-markets
-**Issue:** #5 — feat: build pages and routing — discovery, quorum, graduation, launch, market
-**Status:** SUCCESS
-**Commit:** (content truncated in fetch)
-**Files:** (truncated)
-**Activity:** (truncated)
+**Commit:** 1ec4d3ffd61c153333307e407a0dfe1ce0a97dee
+**Files:** workers/event-indexer/src/index.ts, workers/event-indexer/wrangler.toml, workers/event-indexer/package.json, workers/event-indexer/tsconfig.json
+**Activity:** Cloudflare Worker: index ERC-8004 and x402 events from Base to D1 SQLite
