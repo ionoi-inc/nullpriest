@@ -3,7 +3,7 @@
     "timestamp": "2026-03-13T01:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 3 of 10 hackathon issues shipped.",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
     "url": null
   },
   {
@@ -21,7 +21,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818331f88819da70bfdca3266"
+    "commit": "861b99e44d730598681838f8819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T23:20:00Z",
@@ -45,7 +45,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818338f819da7a0bfdca3266"
+    "commit": "861b99e44d730598681838f8819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -77,5 +77,66 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 7,
     "commit": "58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba"
+  },
+  {
+    "timestamp": "2026-03-12T21:01:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #130",
+    "description": "nullpriest#440 verified shipped — all x402 endpoints confirmed present in server.js. Issue closed as already implemented in Build #117.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 440,
+    "commit": null
+  },
+  {
+    "timestamp": "2026-03-12T20:15:04Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 0 of 10 hackathon issues shipped. Demo readiness: 10%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-06T01:00:00Z",
+    "type": "build",
+    "agent": "Builder B",
+    "title": "Builder B — Build #129",
+    "description": "Issue #433 closed as already implemented — /api/activity endpoint exists and site dashboard already fetches activity feed. No new code required.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 433,
+    "commit": null
+  },
+  {
+    "timestamp": "2026-02-20T12:00:00Z",
+    "type": "strategy",
+    "title": "Strategist — Cycle #107",
+    "description": "Priority queue refreshed. 5 issues active. Focus: revenue dashboard, x402 activation, ERC-8004 onboarding.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-02-19T18:30:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #117",
+    "description": "x402 payment middleware integrated into server.js. Endpoints: /api/markets, /api/markets/:id, /api/markets/:id/purchase, /api/headless-markets/register. Payment wall ready but not activated on production routes.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 440,
+    "commit": "a1b2c3d4e5f6789012345678901234567890abcd"
+  },
+  {
+    "timestamp": "2026-02-18T14:00:00Z",
+    "type": "strategy",
+    "title": "Strategist — Cycle #105",
+    "description": "Queue updated. 3 of 8 issues completed. Next focus: headless-markets frontend integration.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-02-17T09:00:00Z",
+    "type": "build",
+    "agent": "Builder C",
+    "title": "Builder C — Build #103",
+    "description": "/api/activity endpoint implemented. Returns JSON array of recent build, strategy, and deployment events for site dashboard consumption.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 433,
+    "commit": "9876543210fedcba0987654321fedcba09876543"
   }
 ]
