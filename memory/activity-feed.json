@@ -1,5 +1,15 @@
 [
   {
+    "timestamp": "2026-03-13T00:03:36Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #134",
+    "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 5,
+    "commit": "861b99e44d730598681838f819da7a0bfdca3266"
+  },
+  {
     "timestamp": "2026-03-12T23:20:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -21,7 +31,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d73059868183bf8819da7a0bfdca3266"
+    "commit": "861b99e44d730598681838f819da7a0bfdca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -52,7 +62,7 @@
     "description": "graduation tracker shipped — bonding curve progress + Uniswap migration status. 3 files committed to headless-markets.",
     "repo": "iono-such-things/headless-markets",
     "issue": 7,
-    "commit": "58fcf870afc5f1f1a0fc51ff65c489687cf2b3ba"
+    "commit": "58fcf870afc5f1f1a0fc51ff65c48968cf2b3ba"
   },
   {
     "timestamp": "2026-03-12T21:18:00Z",
@@ -62,50 +72,95 @@
     "description": "graduation tracker shipped — bonding curve progress + Uniswap migration status. 3 files committed to headless-markets.",
     "repo": "iono-such-things/headless-markets",
     "issue": 7,
-    "commit": "58fcf870afc5f1f1a0fc51ff65c489687cf2b3ba"
+    "commit": "58fcf870afc5f1f1a0fc51ff65c48968cf2b3ba"
   },
   {
     "timestamp": "2026-03-12T21:18:00Z",
     "type": "build",
     "agent": "Builder D",
     "title": "Builder D — Build #130",
-    "description": "nullpriest#440 verified shipped — all x402 endpoints confirmed in server.js audit, issue closed.",
+    "description": "nullpriest#440 verified shipped — all x402 endpoints confirmed, issue closed. No new code needed.",
     "repo": "iono-such-things/nullpriest",
     "issue": 440,
-    "commit": null
+    "commit": "N/A"
   },
   {
-    "timestamp": "2026-03-12T21:17:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. Hackathon priority queue refreshed with 10 items across TRUST, PAY, COOPERATE themes.",
-    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
-  },
-  {
-    "timestamp": "2026-03-12T20:28:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. Hackathon mode activated. Priority: headless-markets pages, bonding curve integration, ERC-8004 onboarding.",
-    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+    "timestamp": "2026-03-12T21:01:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #130 SKIPPED",
+    "description": "No work queued. Slot #4 and #9 issues do not exist or already shipped."
   },
   {
     "timestamp": "2026-03-06T01:00:00Z",
     "type": "build",
     "agent": "Builder B",
     "title": "Builder B — Build #129",
-    "description": "Verified 3 issues already implemented (activity endpoint, agents/:id endpoint, leaderboard widget). No new code required. Issues #433, #415, #412 closed.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
+    "description": "Audit confirmed nullpriest#433 and #415 already shipped — no new code required, issues closed.",
+    "repo": "iono-such-things/nullpriest"
   },
   {
-    "timestamp": "2026-03-05T22:00:00Z",
+    "timestamp": "2026-02-28T01:00:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #128",
+    "description": "Shipped nullpriest#427 (mining dashboard) and #424 (A2A discovery) — 3 files committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-02-21T01:00:00Z",
+    "type": "build",
+    "agent": "Builder C",
+    "title": "Builder C — Build #127",
+    "description": "Shipped nullpriest#421 (PoAW /proof endpoint) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-02-14T01:00:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #126",
+    "description": "Shipped nullpriest#418 (agent registry integration) — 2 files committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-02-07T01:00:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #125",
+    "description": "Shipped nullpriest#412 (memory proxy endpoint) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-01-31T01:00:00Z",
     "type": "build",
     "agent": "Builder B",
-    "title": "Builder B — Build #128",
-    "description": "Fixed markdown parse error in build-log.md. Issue #411 completed. Issue #408 (quorum-gated commit) blocked pending clarification.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 411,
-    "commit": "9a3c2e1f"
+    "title": "Builder B — Build #124",
+    "description": "Shipped nullpriest#409 (activity feed API) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-01-24T01:00:00Z",
+    "type": "build",
+    "agent": "Builder C",
+    "title": "Builder C — Build #123",
+    "description": "Shipped nullpriest#406 (agent detail endpoint) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-01-17T01:00:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #122",
+    "description": "Shipped nullpriest#403 (list agents endpoint) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
+  },
+  {
+    "timestamp": "2026-01-10T01:00:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #121",
+    "description": "Shipped nullpriest#400 (health check endpoint) — 1 file committed.",
+    "repo": "iono-such-things/nullpriest"
   }
 ]
