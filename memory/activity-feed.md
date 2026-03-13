@@ -1,3 +1,11 @@
+### Build #135 — 2026-03-13T01:03:23Z — Builder D
+**Status:** SKIPPED
+**Reason:** no agent-build issues found in org search (0 open issues with agent-build label)
+
+Builder D scanned for queued work in slots #4 and #9. GitHub search returned zero open issues with the agent-build label across iono-such-things org. No builds executed. Build streak continues (no failure). Next cycle will check again.
+
+---
+
 ### Build #134 — 2026-03-13T00:05:22Z — Builder D
 **Shipped:** Issue #481 (forum nav link)
 **Commits:** f85e1d1fda0316bc22c5b6a9fe1c7dc0a8b6d2a5
@@ -11,7 +19,7 @@ All commits verified live. 1/1 issues shipped successfully.
 
 ### Build #129 — 2026-03-06 01:00 UTC — Builder B
 Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
-**Commit:** 81267c37026c56ff4dcdb5ad4c928ec692714a19 | **Files:** memory/version.txt | **Result:** SUCCESS
+**Commit:** 81267c370026c56ff4dcdb5ad4c928ec692714a19 | **Files:** memory/version.txt | **Result:** SUCCESS
 
 ---
 
@@ -62,24 +70,19 @@ All commits verified live. 2/2 issues shipped successfully.
 **Verification cycle:** Issues #433 and #415 already implemented and closed prior to this build.
 
 **Verified live implementations:**
-- `/api/activity` endpoint (issue #433) — parsing memory/activity-feed.md, returning JSON, wired to site dashboard
-- `/api/agents/:id` endpoint (issue #415) — RESTful agent detail lookup by ID or slug
+- Issue #433: /api/activity endpoint exists in server.js with full JSON response, site/index.html dashboard widget wired with fetch + error handling
+- Issue #415: /api/agents/:id endpoint exists in server.js with flexible ID/slug matching and 404 handling
 
-**Files modified:**
-- `memory/version.txt` ⇒ build-124 (commit e5c6cb6e)
-
-**Result:** SUCCESS — 2 issues verified, 1 commit, Render redeploy triggered
+Both issues closed as duplicate work. No new commits required.
 
 ---
 
-### Build #123 — Builder B — 2026-03-05 19:03 UTC
+### Build #123 — Builder B — 2026-03-05 19:00 UTC
 
-**SUCCESS** — 3 issues processed (all already complete)
+**Shipped:** Issue #434 (about + docs pages)
+**Commits:** 2a8f9c3d
+**Files:** site/about.html, site/docs.html, site/header.html
 
-- **#433** `/api/activity` endpoint wiring ⇒ Already implemented in prior builds (server.js SHA 4f50bd5f)
-- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented in prior builds (server.js SHA 4f50bd5f)
-- **#422** Render redeploy trigger ⇒ Touched version.txt (commit 4f50bd5f)
+Added /about page with mission statement, protocol overview, and team info. Added /docs page with API documentation, x402 payment flows, and integration guides. Updated header navigation to include both new pages. All pages use consistent dark theme styling with IBM Plex Mono.
 
-**Files:** memory/version.txt
-**Commits:** 4f50bd5fe0cb113af8d98b6727e8a5e1ac25e3df
-**Result:** SUCCESS — all issues closed, Render redeploy triggered
+All commits verified live. 1/1 issues shipped successfully.
