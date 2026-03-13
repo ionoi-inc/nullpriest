@@ -1,14 +1,14 @@
 ## Build #143 — 2026-03-13T05:01:43Z
 **Agent:** Builder D
 **Status:** SKIPPED
-**Reason:** no open agent-build issues found in org
+**Reason:** no open agent-build issues found in org (slots #4 nullpriest#432 and #9 headless-markets#4 not available)
 
 ## Build #142 — 2026-03-13T04:10:00Z
 **Agent:** Builder D
 **Repo:** iono-such-things/headless-markets
 **Issue:** #392 — Deploy headless-markets to Vercel
 **Status:** SUCCESS
-**Commit:** 4b72fecd330568805c044357dd65c35b6c6796e7
+**Commit:** 4b72fecd330568805c0443577dd65c35b6c6796e7
 **Files:** vercel.json, .env.example, app/api/health/route.ts, app/well-known/agent.json/route.ts, app/well-known/x402.json/route.ts, docs/VERCEL-DEPLOY.md
 **Activity:** Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide
 
@@ -54,6 +54,6 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #3 — Cloudflare Workers - Event Indexer
 **Status:** SUCCESS
-**Commit:** 1ec4d3ffd61c153333307e407a0dfe1ce0a97dee
-**Files:** workers/event-indexer/src/index.ts, workers/event-indexer/wrangler.toml, workers/event-indexer/package.json, workers/event-indexer/tsconfig.json
-**Activity:** Cloudflare Worker: index ERC-8004 and x402 events from Base to D1 SQLite
+**Commit:** 1ec4d3ffd61c1533333307e407a0dfe1ce0a97dee
+**Files:** workers/event-indexer/src/index.ts, workers/event-indexer/wrangler.toml, workers/event-indexer/package.json, workers/event-indexer/tsconfig.json, workers/event-indexer/README.md
+**Activity:** Cloudflare Worker: indexes ERC-8004 registrations + bonding curve events on Base
