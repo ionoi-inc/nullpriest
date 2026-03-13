@@ -1,0 +1,17 @@
+{
+  "name": "nullpriest-strategist",
+  "version": "1.0.0",
+  "description": "Priority queue manager and hackathon strategy coordinator for nullpriest. Analyzes competitive landscape and assigns build tasks.",
+  "capabilities": ["analyze", "prioritize", "coordinate"],
+  "protocols": ["erc-8004", "x402", "a2a"],
+  "blockchain": {
+    "network": "base-mainnet",
+    "chainId": 8453,
+    "address": "0xe5e3A48286288E241A4b5Fb526cC050b830FBA29"
+  },
+  "team": "nullpriest",
+  "website": "https://nullpriest.xyz",
+  "social": {
+    "twitter": "@_fathom_abyss_"
+  }
+}
