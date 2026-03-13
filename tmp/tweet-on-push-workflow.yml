@@ -1,0 +1,102 @@
+name: Tweet on Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get commit info
+        id: commit
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          MSG=$(git log -1 --pretty=%s)
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
+          echo "msg=$MSG" >> $GITHUB_OUTPUT
+
+      - name: Extract build number and issue title
+        id: meta
+        run: |
+          MSG="${{ steps.commit.outputs.msg }}"
+          BUILD_NUM=$(echo "$MSG" | grep -oP 'Build #\K[0-9]+' || echo "")
+          ISSUE_TITLE=$(echo "$MSG" | sed 's/build: //i' | sed 's/ \[closes #[0-9]*\]//' | cut -c1-60)
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "issue_title=$ISSUE_TITLE" >> $GITHUB_OUTPUT
+
+      - name: Post tweet
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          TWEET_TEXT: "Build #${{ steps.meta.outputs.build_num }} shipped.\n${{ steps.meta.outputs.issue_title }}\n${{ steps.commit.outputs.sha }} -> nullpriest.xyz\n#BuildingInPublic #AO #x402"
+        run: |
+          node -e "
+          const crypto = require('crypto');
+          const https = require('https');
+          const apiKey = process.env.X_API_KEY;
+          const apiSecret = process.env.X_API_SECRET;
+          const accessToken = process.env.X_ACCESS_TOKEN;
+          const accessSecret = process.env.X_ACCESS_SECRET;
+          const tweet = process.env.TWEET_TEXT;
+          function percentEncode(str) {
+            return encodeURIComponent(str).replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+          }
+          const method = 'POST';
+          const url = 'https://api.twitter.com/2/tweets';
+          const nonce = crypto.randomBytes(16).toString('hex');
+          const timestamp = Math.floor(Date.now() / 1000).toString();
+          const oauthParams = {
+            oauth_consumer_key: apiKey,
+            oauth_nonce: nonce,
+            oauth_signature_method: 'HMAC-SHA1',
+            oauth_timestamp: timestamp,
+            oauth_token: accessToken,
+            oauth_version: '1.0'
+          };
+          const paramStr = Object.keys(oauthParams).sort().map(k => percentEncode(k) + '=' + percentEncode(oauthParams[k])).join('&');
+          const sigBase = method + '&' + percentEncode(url) + '&' + percentEncode(paramStr);
+          const sigKey = percentEncode(apiSecret) + '&' + percentEncode(accessSecret);
+          const signature = crypto.createHmac('sha1', sigKey).update(sigBase).digest('base64');
+          oauthParams.oauth_signature = signature;
+          const authHeader = 'OAuth ' + Object.keys(oauthParams).sort().map(k => percentEncode(k) + '=\"' + percentEncode(oauthParams[k]) + '\"').join(', ');
+          const body = JSON.stringify({ text: tweet });
+          const urlObj = new URL(url);
+          const options = {
+            hostname: urlObj.hostname,
+            path: urlObj.pathname,
+            method,
+            headers: {
+              'Authorization': authHeader,
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(body)
+            }
+          };
+          const req = https.request(options, res => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+              if (res.statusCode >= 200 && res.statusCode < 300) {
+                console.log('Tweet posted:', data);
+                process.exit(0);
+              } else {
+                console.error('X API error ' + res.statusCode + ':', data);
+                process.exit(0);
+              }
+            });
+          });
+          req.on('error', e => { console.error('Request error:', e.message); process.exit(0); });
+          req.write(body);
+          req.end();
+          " || true
+
+NOTE: Move this file to .github/workflows/tweet-on-push.yml to activate the workflow.
+The github-create-or-update-file-contents action has a bug preventing creation of new files in .github/workflows/ directory.
