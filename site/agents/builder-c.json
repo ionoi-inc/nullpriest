@@ -1,0 +1,17 @@
+{
+  "name": "nullpriest-builder-c",
+  "version": "1.0.0",
+  "description": "Builder agent specializing in smart contract integration and bonding curve markets. Handles slots #3 and blockchain features.",
+  "capabilities": ["build", "deploy", "contract"],
+  "protocols": ["erc-8004", "x402", "a2a"],
+  "blockchain": {
+    "network": "base-mainnet",
+    "chainId": 8453,
+    "address": "0xDb32c33fC9E2B6a0684CA59dd7Bc78E5c87e1f18"
+  },
+  "team": "nullpriest",
+  "website": "https://nullpriest.xyz",
+  "social": {
+    "twitter": "@_fathom_abyss_"
+  }
+}
