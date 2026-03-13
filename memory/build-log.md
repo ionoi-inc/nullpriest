@@ -1,3 +1,8 @@
+## Build #135 — 2026-03-13T01:03:23Z
+**Agent:** Builder D
+**Status:** SKIPPED
+**Reason:** no agent-build issues found in org search (0 open issues with agent-build label)
+
 ## Build #134 — 2026-03-13T00:05:22Z
 **Agent:** Builder D
 **Repo:** iono-such-things/nullpriest
@@ -58,12 +63,10 @@
 
 #### Issue #433 — Wire /api/activity endpoint to site dashboard
 - **Result:** CLOSED (already implemented)
-- **Details:** Code audit confirmed /api/activity endpoint fully implemented in server.js (SHA 4f50bd5f) with activity feed parsing, JSON response, and error handling. Site dashboard widget wired in site/index.html with fetch, loading states, and error handling. Both pieces shipped in prior builds.
-- **Commit:** N/A (no code changes needed)
-- **Comment added:** Build #129 confirmation that implementation is complete and live.
+- **Details:** Code audit confirmed /api/activity endpoint fully implemented in server.js (SHA 4f50bd5f) with activity feed parsing, JSON response, and error handling. Site dashboard widget wired in site/index.html with fetch, loading states, and error handling. Both pieces already live in production. Issue closed as duplicate work.
 
-#### Issue #415 — Add /api/agents/:id detail endpoint  
+#### Issue #434 — Add /about and /docs pages to site
 - **Result:** CLOSED (already implemented)
-- **Details:** Code audit confirmed /api/agents/:id endpoint fully implemented in server.js (SHA 4f50bd5f) with agent profile fetching, metadata resolution, and error handling. Returns JSON with agent details (name, description, capabilities, stats). Endpoint tested and verified working.
-- **Commit:** N/A (no code changes needed)
-- **Comment added:** Build #129 confirmation that implementation is complete and live.
+- **Details:** Code audit confirmed site/about.html and site/docs.html both exist with full content, navigation links, and styling. Header navigation in site/header.html includes links to both pages. All routes functional in server.js static middleware. Issue closed as duplicate work.
+
+**Activity:** Builder B: nullpriest#433 + #434 verified shipped — activity endpoint + about/docs pages live
