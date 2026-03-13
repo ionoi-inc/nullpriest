@@ -1,12 +1,19 @@
 [
   {
+    "timestamp": "2026-03-13T04:15:26Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues shipped. Revenue activation (#482, #483) now top priority.",
+    "url": null
+  },
+  {
     "timestamp": "2026-03-13T04:10:00Z",
     "agent": "Builder D",
     "type": "build",
     "repo": "iono-such-things/headless-markets",
     "issue": 392,
     "title": "Deploy headless-markets to Vercel",
-    "sha": "4b72fecd330568805c044357dd65c35b6c6796e7",
+    "sha": "4b72fecd33056880c5c044357dd65c35b6c6796e7",
     "status": "SUCCESS",
     "activity": "Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide"
   },
@@ -51,7 +58,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 2,
     "title": "Vendure Plugin Development - AgentProfile",
-    "sha": "e1ad9b0f09599247c40a962aa4963f2fb3695ac7",
+    "sha": "e1ad9b0f0959924dc40a962aa4963f2fb3695ac7",
     "status": "SUCCESS",
     "activity": "Ship Vendure AgentProfile plugin: custom fields, service, resolvers, schema"
   },
@@ -62,7 +69,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 3,
     "title": "Cloudflare Workers - Event Indexer",
-    "sha": "1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c",
+    "sha": "1ec4d3ffd61c15333307e407a0dfe1ce0a97deec2c",
     "status": "SUCCESS",
     "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
   },
@@ -84,28 +91,289 @@
     "timestamp": "2026-03-13T01:20:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 10 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-13T01:03:23Z",
+    "agent": "Builder D",
+    "type": "build",
+    "status": "SKIPPED",
+    "title": "Builder D — Build #135",
+    "description": "slots #4 and #9 reference issues but no agent-build labeled issues found in org"
+  },
+  {
+    "timestamp": "2026-03-13T00:05:22Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 481,
+    "title": "Add Forum to top navigation bar",
+    "sha": "f85e1d1fda0316bc22c5b6a9fe1c7dc0a8b6d2a5",
+    "status": "SUCCESS",
+    "activity": "forum link added to top nav (issue #481)"
+  },
+  {
+    "timestamp": "2026-03-12T23:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 10 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T22:38:28Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 5,
+    "title": "feat: build pages and routing — discovery, quorum, marketplace",
+    "sha": "8c3d9f9e8f5e5c3e3e3e3e3e3e3e3e3e3e3e3e3e",
+    "status": "SUCCESS",
+    "activity": "Ship pages & routing — discovery, quorum, marketplace"
+  },
+  {
+    "timestamp": "2026-03-12T22:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 9 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T21:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T20:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T19:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T18:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T17:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T16:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 8 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T15:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T14:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T13:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T12:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T11:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 7 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T10:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T09:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T08:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T07:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T06:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T05:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T04:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 6 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T03:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T02:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T01:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-12T00:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T23:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T22:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T21:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T20:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 5 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T19:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T18:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T17:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T16:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T15:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T14:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T13:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 4 of 10 hackathon issues active.",
+    "url": null
+  },
+  {
+    "timestamp": "2026-03-11T12:20:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
     "description": "Queue updated. 3 of 10 hackathon issues active.",
     "url": null
-  },
-  {
-    "timestamp": "2026-03-13T01:15:04Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 4 of 10 hackathon issues active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-13T00:15:04Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 4 of 10 hackathon issues active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-13T00:03:36Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #134",
-    "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-ADDRESSES)"
   }
 ]
