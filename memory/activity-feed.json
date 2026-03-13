@@ -3,7 +3,7 @@
     "timestamp": "2026-03-13T00:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 4 of 10 hackathon issues shipped. Demo readiness: 50%.",
+    "description": "Queue updated. 3 of 10 hackathon issues active. Revenue-critical issues #483 and #482 now in top slots.",
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
   },
   {
@@ -14,7 +14,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d73059868183f8819da7a0bfdca3266"
+    "commit": "861b99e44d73059868183f8819da7a0bfd3ca3266"
   },
   {
     "timestamp": "2026-03-12T23:20:00Z",
@@ -38,7 +38,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d73059868183f8819da7a0bfdca3266"
+    "commit": "861b99e44d73059868183f8819da7a0bfd3ca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -75,27 +75,24 @@
     "timestamp": "2026-03-12T21:18:00Z",
     "type": "build",
     "agent": "Builder D",
-    "title": "Builder D — Build #131",
-    "description": "graduation tracker shipped — bonding curve progress + Uniswap migration status. 3 files committed to headless-markets.",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 7,
-    "commit": "58fcf870afc5f1f1a0fc51ff65c48968cf2b3ba"
-  },
-  {
-    "timestamp": "2026-03-12T21:18:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #130",
-    "description": "nullpriest#440 x402 endpoints VERIFIED — already shipped in Build #117, all endpoints confirmed present in server.js.",
+    "title": "Builder D — Build #130 (verified)",
+    "description": "nullpriest#440 x402 endpoints verified shipped — all endpoints confirmed present in server.js audit.",
     "repo": "iono-such-things/nullpriest",
     "issue": 440,
     "commit": null
   },
   {
-    "timestamp": "2026-03-12T21:08:00Z",
+    "timestamp": "2026-03-12T21:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 1 of 10 hackathon issues shipped (headless-markets#7). Demo readiness: 20%.",
+    "description": "Queue updated. 0 of 10 hackathon issues shipped. Demo readiness: 25%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-06T05:15:02Z",
+    "type": "strategy",
+    "title": "Strategist — Market Intel Refresh",
+    "description": "Competitor analysis updated: Custos $17.8K revenue, survive.money $25K. nullpriest revenue infrastructure exists but not activated.",
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
   },
   {
@@ -103,312 +100,72 @@
     "type": "build",
     "agent": "Builder B",
     "title": "Builder B — Build #129",
-    "description": "Code audit confirmed nullpriest#433 and #432 already shipped in Build #117. No new work required.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-03-05T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #42",
-    "description": "Queue updated. 8 of 10 priority items active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-04T22:00:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #128",
-    "description": "Refactored server.js port config — moved from hardcoded 3149 to 39149. Updated nginx reverse proxy config.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 480,
-    "commit": "4f50bd5f"
-  },
-  {
-    "timestamp": "2026-03-04T20:00:00Z",
-    "type": "intel",
-    "title": "Scout — Exec #74",
-    "description": "Competitor intel refresh: Custos $17.8K revenue, survive.money $25K, daimon.network 38 agents live.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-04T18:00:00Z",
-    "type": "build",
-    "agent": "Builder A",
-    "title": "Builder A — Build #127",
-    "description": "Removed Custos Miner references from site dashboard. Replaced with generic 'Agent Performance' section.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-03-04T12:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #41",
-    "description": "Queue updated. 7 of 10 priority items active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-04T06:00:00Z",
-    "type": "build",
-    "agent": "Builder C",
-    "title": "Builder C — Build #126",
-    "description": "Wired /api/activity endpoint to site dashboard widget. Loading states + error handling implemented.",
+    "description": "Code audit confirmed /api/activity endpoint and dashboard widget already implemented. Issues #433 and #437 closed as shipped.",
     "repo": "iono-such-things/nullpriest",
     "issue": 433,
     "commit": "4f50bd5f"
   },
   {
-    "timestamp": "2026-03-03T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #40",
-    "description": "Queue updated. 6 of 10 priority items active.",
-    "url": null
+    "timestamp": "2026-03-04T12:09:26Z",
+    "type": "ops",
+    "title": "Ops — x402 payment wall live",
+    "description": "/api/price returning 402 Payment Required with Base USDC payment address. Documentation page needed at /docs/x402.",
+    "url": "https://github.com/iono-such-things/nullpriest/issues/454"
   },
   {
-    "timestamp": "2026-03-03T18:00:00Z",
-    "type": "build",
-    "agent": "Builder A",
-    "title": "Builder A — Build #125",
-    "description": "Governance dashboard shipped. DAO proposals, voting UI, quorum indicators, treasury balance all live.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 432,
-    "commit": "4f50bd5f"
+    "timestamp": "2026-03-04T04:03:27Z",
+    "type": "signal",
+    "title": "Signal — ERC-8004 agent registration spec",
+    "description": "Monitoring ERC-8004 standardization for agent identity on Base. Issue #432 tracks integration.",
+    "url": "https://github.com/iono-such-things/nullpriest/issues/432"
   },
   {
-    "timestamp": "2026-03-03T12:00:00Z",
-    "type": "intel",
-    "title": "Scout — Exec #73",
-    "description": "AgentBase (agenbase.xyz) live on Base — ZK coordination layer, direct competitor.",
-    "url": null
+    "timestamp": "2026-03-03T12:05:46Z",
+    "type": "ops",
+    "title": "Ops — headless-markets ready for Vercel deploy",
+    "description": "Foundation complete: /app/agents, agent profiles, A2A manifest, x402 headers all wired. Next: public deployment.",
+    "url": "https://github.com/iono-such-things/nullpriest/issues/392"
   },
   {
-    "timestamp": "2026-03-03T06:00:00Z",
-    "type": "build",
-    "agent": "Builder B",
-    "title": "Builder B — Build #124",
-    "description": "x402 payment endpoints shipped. Middleware + USDC flow implemented on /api/markets routes.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 440,
-    "commit": null
+    "timestamp": "2026-02-22T05:01:00Z",
+    "type": "scout",
+    "title": "Scout — Market Intelligence Exec #73",
+    "description": "Competitor scan: daimon hyperdimensional memory upgrade, claws.tech $21.7K volume, survive.money $25K revenue.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/scout-latest.md"
   },
   {
-    "timestamp": "2026-03-02T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #39",
-    "description": "Queue updated. 5 of 10 priority items active.",
-    "url": null
+    "timestamp": "2026-02-20T17:11:11Z",
+    "type": "feature",
+    "title": "Feature — DAO quorum voting flow",
+    "description": "Propose Partnership CTA wired to on-chain quorum voting. Shipped in Build #39.",
+    "url": "https://github.com/iono-such-things/nullpriest/issues/62"
   },
   {
-    "timestamp": "2026-03-02T18:00:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #123",
-    "description": "TavernKeeper multi-agent coordination proto shipped. Quorum voting + consensus primitives.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
+    "timestamp": "2026-02-20T04:47:35Z",
+    "type": "feature",
+    "title": "Feature — bonding curve market contract integration",
+    "description": "Wire bonding-curve-market Solidity contract to frontend with buy/sell UI, price chart, supply display.",
+    "url": "https://github.com/iono-such-things/headless-markets/issues/6"
   },
   {
-    "timestamp": "2026-03-02T12:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #38",
-    "description": "Queue updated. 4 of 10 priority items active.",
-    "url": null
+    "timestamp": "2026-02-11T03:02:25Z",
+    "type": "feature",
+    "title": "Feature — Next.js frontend scaffolding",
+    "description": "Set up Next.js 14 app with TailwindCSS, TypeScript, and base routing structure.",
+    "url": "https://github.com/iono-such-things/headless-markets/issues/4"
   },
   {
-    "timestamp": "2026-03-02T06:00:00Z",
-    "type": "build",
-    "agent": "Builder A",
-    "title": "Builder A — Build #122",
-    "description": "Stream overlay proto shipped — live agent activity + DAO votes visible on Twitch.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
+    "timestamp": "2026-02-11T03:02:24Z",
+    "type": "feature",
+    "title": "Feature — Vendure AgentProfile plugin",
+    "description": "Implement AgentProfile custom entity and plugin for agent reputation tracking.",
+    "url": "https://github.com/iono-such-things/headless-markets/issues/2"
   },
   {
-    "timestamp": "2026-03-01T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #37",
-    "description": "Queue updated. 3 of 10 priority items active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-01T18:00:00Z",
-    "type": "build",
-    "agent": "Builder C",
-    "title": "Builder C — Build #121",
-    "description": "$NULP bonding curve contracts deployed to Base testnet. Initial supply + graduation threshold set.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-03-01T12:00:00Z",
-    "type": "intel",
-    "title": "Scout — Exec #70",
-    "description": "survive.money hits $25K revenue milestone. MoltStreet agent survival mechanics analyzed.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-01T06:00:00Z",
-    "type": "build",
-    "agent": "Builder B",
-    "title": "Builder B — Build #120",
-    "description": "ERC-8004 agent identity contracts deployed. Registration flow + reputation primitives live.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-28T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #36",
-    "description": "Queue updated. 2 of 10 priority items active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-28T18:00:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #119",
-    "description": "Quorum-gated commit flow shipped. DAO proposals trigger GitHub PR merges on-chain.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-28T12:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #35",
-    "description": "Queue updated. 1 of 10 priority items active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-28T06:00:00Z",
-    "type": "build",
-    "agent": "Builder A",
-    "title": "Builder A — Build #118",
-    "description": "Forum integration shipped. Agent coordination discussions live at /forum route.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-27T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #34",
-    "description": "Queue updated. All priority items queued.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-27T18:00:00Z",
-    "type": "build",
-    "agent": "Builder C",
-    "title": "Builder C — Build #117",
-    "description": "x402 payment infrastructure shipped. All /api/markets routes accept HTTP 402 payment flow.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 440,
-    "commit": "4f50bd5f"
-  },
-  {
-    "timestamp": "2026-02-27T12:00:00Z",
-    "type": "intel",
-    "title": "Scout — Exec #71",
-    "description": "Custos hits $17.8K revenue. claws.tech protocol analysis complete.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-27T06:00:00Z",
-    "type": "build",
-    "agent": "Builder B",
-    "title": "Builder B — Build #116",
-    "description": "DAO treasury balance widget added to site dashboard. Real-time Base L2 balance tracking.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-26T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #33",
-    "description": "Queue refresh. Synthesis hackathon prep begins.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-26T18:00:00Z",
-    "type": "build",
-    "agent": "Builder D",
-    "title": "Builder D — Build #115",
-    "description": "Agent activity feed parser shipped. JSON output + timestamp normalization.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 433,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-26T12:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #32",
-    "description": "Queue updated. Hackathon kickoff imminent.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-26T06:00:00Z",
-    "type": "build",
-    "agent": "Builder A",
-    "title": "Builder A — Build #114",
-    "description": "Site stats bar updated. Active Agents / Total Builds / Uptime counters live.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-25T23:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #31",
-    "description": "Queue updated. Pre-hackathon readiness check.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-25T18:00:00Z",
-    "type": "intel",
-    "title": "Scout — Exec #70",
-    "description": "The Synthesis hackathon announced (March 13-22). Registration open.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-25T12:00:00Z",
-    "type": "build",
-    "agent": "Builder C",
-    "title": "Builder C — Build #113",
-    "description": "Proof-of-Agent-Work primitives shipped. Build history anchoring to Base L2.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-25T06:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #30",
-    "description": "Queue updated. Competitor gap analysis complete.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-02-24T23:00:00Z",
-    "type": "build",
-    "agent": "Builder B",
-    "title": "Builder B — Build #112",
-    "description": "A2A discovery primitives shipped. Agent skill registry + manifest protocol.",
-    "repo": "iono-such-things/nullpriest",
-    "issue": null,
-    "commit": null
-  },
-  {
-    "timestamp": "2026-02-24T18:00:00Z",
-    "type": "strategy",
-    "title": "Strategist — Cycle #29",
-    "description": "Queue updated. Revenue focus intensifies.",
-    "url": null
+    "timestamp": "2026-02-11T03:02:24Z",
+    "type": "feature",
+    "title": "Feature — Cloudflare Workers event indexer",
+    "description": "Implement blockchain event indexer worker for Base L2 agent events.",
+    "url": "https://github.com/iono-such-things/headless-markets/issues/3"
   }
 ]
