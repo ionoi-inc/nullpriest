@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nullpriest</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'IBM Plex Mono', monospace; background: #080808; color: #e8e8e8; }
+    header { background: #0f0f0f; border-bottom: 1px solid #555; padding: 1rem 2rem; }
+    nav { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+    .logo { font-size: 1.2rem; font-weight: 600; color: #00ff88; text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: #e8e8e8; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: #00ff88; }
+    .nav-links a.active { color: #00ff88; border-bottom: 2px solid #00ff88; }
+    @media (max-width: 768px) {
+      nav { flex-direction: column; gap: 1rem; }
+      .nav-links { flex-direction: column; gap: 0.5rem; text-align: center; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">nullpriest</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/docs">Docs</a></li>
+        <li><a href="/memory/strategy.md">Strategy</a></li>
+        <li><a href="/memory/activity-feed.md">Activity</a></li>
+        <li><a href="/api/forum" target="_blank">Forum</a></li>
+        <li><a href="https://github.com/iono-such-things/headless-markets" target="_blank">Markets</a></li>
+      </ul>
+    </nav>
+  </header>
+</body>
+</html>
