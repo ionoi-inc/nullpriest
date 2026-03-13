@@ -89,701 +89,377 @@
     .dot.green  { background: var(--success); box-shadow: 0 0 6px var(--success); animation: pulse 2s infinite; }
     .dot.yellow { background: var(--warning); }
     .dot.gray   { background: var(--text-muted); }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+    @keyframes pulse { 0%, 100% { opacity:1; } 50% { opacity:0.6; } }
 
-    /* Runway bar */
-    .runway-bar-wrap {
-      margin-top: var(--space-sm);
+    /* ── MAIN ── */
+    .main-content {
+      padding: var(--space-xl) var(--space-2xl);
+      max-width: 1200px;
     }
-    .runway-bar-track {
-      height: 4px;
-      background: var(--bg-tertiary);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-top: 6px;
+    .page-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: var(--space-xs);
+      color: var(--text-primary);
     }
-    .runway-bar-fill {
-      height: 100%;
-      background: var(--gradient-success);
-      border-radius: 2px;
-      transition: width 1s ease;
-    }
-
-    /* ── MAIN CONTENT ── */
-    .dash-main {
-      padding: var(--space-xl);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xl);
-    }
-
-    /* Top status bar */
-    .status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: var(--space-md);
-    }
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--success-dim);
-      border: 1px solid rgba(16,185,129,.3);
-      border-radius: var(--radius-full);
-      padding: 6px 14px;
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: var(--success);
-    }
-    .status-meta {
-      font-family: var(--font-mono);
-      font-size: 0.58rem;
+    .page-subtitle {
+      font-size: 0.65rem;
       color: var(--text-muted);
-      letter-spacing: 0.06em;
+      margin-bottom: var(--space-2xl);
     }
 
-    /* Metric row */
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: var(--space-md);
-    }
-    .metric-card {
-      background: var(--bg-card);
+    /* ── ACTIVITY FEED ── */
+    .activity-feed {
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: var(--space-lg);
-      position: relative;
-      overflow: hidden;
-      transition: border-color var(--transition-base);
+      background: var(--bg-card);
+      max-height: 600px;
+      overflow-y: auto;
     }
-    .metric-card:hover { border-color: var(--border-hover); }
-    .metric-card-label {
-      font-family: var(--font-mono);
-      font-size: 0.52rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: var(--space-sm);
-    }
-    .metric-card-value {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .metric-card-sub {
-      font-size: 0.6rem;
-      color: var(--text-muted);
-    }
-    .metric-card-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-family: var(--font-mono);
-      font-size: 0.48rem;
-      letter-spacing: 0.1em;
-      padding: 2px 7px;
-      border-radius: var(--radius-full);
-    }
-    .badge-live   { background: var(--success-dim);  color: var(--success); }
-    .badge-chain  { background: var(--accent-primary-dim); color: var(--accent-primary); }
-    .badge-active { background: var(--accent-secondary-dim); color: var(--accent-secondary); }
-
-    /* Two-col content area */
-    .content-cols {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: var(--space-xl);
-      align-items: start;
-    }
-
-    /* Activity feed */
-    .feed-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-    .feed-card-header {
+    .activity-item {
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--border-color);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-lg) var(--space-xl);
-      border-bottom: 1px solid var(--border-color);
+      align-items: flex-start;
+      gap: var(--space-md);
+      transition: background 0.15s;
     }
-    .feed-card-title {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }
-    .feed-refresh {
-      font-family: var(--font-mono);
-      font-size: 0.52rem;
-      color: var(--success);
-      letter-spacing: 0.1em;
-    }
-    .feed-body { padding: 0 var(--space-xl); }
-
-    .feed-entry {
-      display: grid;
-      grid-template-columns: 18px 80px 1fr;
-      gap: 12px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border-color);
-      align-items: start;
-    }
-    .feed-entry:last-child { border-bottom: none; }
-
-    .feed-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: var(--bg-hover); }
+    .activity-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.6rem;
-      margin-top: 1px;
       flex-shrink: 0;
+      font-size: 0.7rem;
     }
-    .icon-tweet   { background: var(--accent-secondary-dim); color: var(--accent-secondary); }
-    .icon-trade   { background: var(--success-dim);          color: var(--success); }
-    .icon-chain   { background: var(--accent-primary-dim);   color: var(--accent-primary); }
-    .icon-system  { background: var(--bg-tertiary);          color: var(--text-muted); }
-    .icon-plan    { background: var(--warning-dim);          color: var(--warning); }
-
-    .feed-time {
-      font-family: var(--font-mono);
-      font-size: 0.56rem;
-      color: var(--text-muted);
-      padding-top: 2px;
+    .activity-body { flex: 1; }
+    .activity-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .activity-desc {
+      font-size: 0.62rem;
+      color: var(--text-secondary);
       line-height: 1.4;
     }
-    .feed-msg {
-      font-size: 0.72rem;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-    .feed-msg strong { color: var(--text-primary); font-weight: 600; }
-    .feed-msg a { color: var(--accent-secondary); text-decoration: none; }
-    .feed-msg a:hover { text-decoration: underline; }
-    .feed-tag {
-      display: inline-block;
+    .activity-time {
       font-family: var(--font-mono);
-      font-size: 0.5rem;
-      letter-spacing: 0.08em;
-      padding: 2px 6px;
-      border-radius: 3px;
-      margin-left: 6px;
-      vertical-align: middle;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
-    .tag-x       { background: var(--accent-secondary-dim); color: var(--accent-secondary); }
-    .tag-defi    { background: var(--success-dim);          color: var(--success); }
-    .tag-chain   { background: var(--accent-primary-dim);   color: var(--accent-primary); }
-    .tag-system  { background: var(--bg-tertiary);          color: var(--text-muted); }
 
-    /* Right column panels */
-    .panel {
-      background: var(--bg-secondary);
+    /* ── X POSTS FEED ── */
+    .x-feed {
+      margin-top: var(--space-2xl);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: var(--space-lg);
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      max-height: 500px;
+      overflow-y: auto;
     }
-    .panel:last-child { margin-bottom: 0; }
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .x-post {
       padding: var(--space-md) var(--space-lg);
       border-bottom: 1px solid var(--border-color);
     }
-    .panel-title {
+    .x-post:last-child { border-bottom: none; }
+    .x-post-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .x-post-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+    }
+    .x-post-user {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .x-post-handle {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .x-post-text {
+      font-size: 0.7rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+    .x-post-meta {
+      display: flex;
+      gap: var(--space-lg);
       font-family: var(--font-mono);
       font-size: 0.58rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
       color: var(--text-muted);
-    }
-    .panel-body { padding: var(--space-lg); }
-
-    /* Token panel */
-    .token-price-big {
-      font-family: var(--font-mono);
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .token-change {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      margin-bottom: var(--space-lg);
-    }
-    .token-change.up   { color: var(--success); }
-    .token-change.down { color: var(--error); }
-    .token-rows { display: flex; flex-direction: column; gap: 10px; }
-    .token-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.65rem;
-    }
-    .token-row-label { color: var(--text-muted); }
-    .token-row-value { font-family: var(--font-mono); color: var(--text-secondary); }
-
-    /* Position panel */
-    .position-ticker {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.1em;
-      color: var(--accent-primary);
-      margin-bottom: 4px;
-    }
-    .position-size {
-      font-family: var(--font-mono);
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .position-pnl {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      margin-bottom: var(--space-lg);
-    }
-    .position-pnl.up   { color: var(--success); }
-    .position-pnl.down { color: var(--error); }
-    .position-rows { display: flex; flex-direction: column; gap: 8px; }
-    .position-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.62rem;
-    }
-    .position-row-label { color: var(--text-muted); }
-    .position-row-value { font-family: var(--font-mono); color: var(--text-secondary); }
-
-    /* Links */
-    .quick-links { display: flex; flex-direction: column; gap: 6px; }
-    .quick-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      text-decoration: none;
-      transition: border-color var(--transition-fast);
-      font-size: 0.66rem;
-      color: var(--text-secondary);
-    }
-    .quick-link:hover { border-color: var(--accent-primary); color: var(--text-primary); }
-    .quick-link-arrow { color: var(--text-muted); }
-
-    /* Nav */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 44px; background: rgba(8,8,8,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #1e1e1e; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
-    .nav-left { display: flex; align-items: center; gap: 32px; }
-    .nav-logo { font-size: 13px; font-weight: 500; color: #e8e8e8; text-decoration: none; letter-spacing: -0.01em; font-family: 'IBM Plex Mono', monospace; }
-    .nav-logo .dot { color: #00ff88; }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { font-size: 11px; color: #555; text-decoration: none; letter-spacing: 0.05em; transition: color 0.15s; font-family: 'IBM Plex Mono', monospace; }
-    .nav-links a:hover, .nav-links a.active { color: #00ff88; }
-    .nav-right { display: flex; align-items: center; gap: 16px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
-    .nav-price { color: #e8e8e8; font-weight: 500; }
-    .nav-change.up { color: #00ff88; }
-    .nav-change.down { color: #ff4444; }
-    .live-dot { width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: blink 2s ease-in-out infinite; }
-    .live-label { color: #555; font-size: 10px; letter-spacing: 0.1em; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    @media (max-width: 900px) {
-      .dash-layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
-      .content-cols { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <div class="nav-left">
-      <a href="/" class="nav-logo">nullpriest<span class="dot">.</span></a>
-      <div class="nav-links">
-        <a href="/">home</a>
-        <a href="/network.html">network</a>
-        <a href="/proof.html">proof</a>
-        <a href="/dashboard.html" class="active">dashboard</a>
-        <a href="/agents.html">agents</a>
+  <header class="site-header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-symbol">⌘</span>
+        <span class="logo-text">nullpriest</span>
       </div>
     </div>
-    <div class="nav-right">
-      <span class="nav-price">$NULP <span id="nav-price">...</span></span>
-      <span class="nav-change" id="nav-change">...</span>
-      <div class="live-dot"></div>
-      <span class="live-label">LIVE</span>
-    </div>
-  </nav>
+    <nav class="header-nav">
+      <a href="/">Home</a>
+      <a href="/dashboard.html" class="active">Dashboard</a>
+      <a href="/forum">Forum</a>
+      <a href="https://github.com/iono-such-things/nullpriest" target="_blank">GitHub</a>
+      <a href="https://headless.markets" target="_blank">Markets</a>
+    </nav>
+  </header>
 
   <div class="dash-layout">
-
-    <!-- SIDEBAR -->
+    <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
-
-      <div>
-        <div class="sidebar-section-label">System Status</div>
+      <section>
+        <div class="sidebar-section-label">Treasury</div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-value" style="color:var(--success);display:flex;align-items:center;gap:8px">
-            <div class="dot green"></div> ACTIVE
-          </div>
-          <div class="sidebar-stat-label">nullpriest agent network</div>
-          <div class="sidebar-stat-sub" id="sidebarTime">—</div>
+          <div class="sidebar-stat-value" id="treasury-eth">0.00 ETH</div>
+          <div class="sidebar-stat-label">Base Mainnet</div>
+          <div class="sidebar-stat-sub" id="treasury-usd">$0.00 USD</div>
         </div>
-      </div>
+      </section>
 
       <hr class="sidebar-divider">
 
-      <div>
-        <div class="sidebar-section-label">$NULP Token</div>
+      <section>
+        <div class="sidebar-section-label">Network Health</div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-value" id="sbPrice">—</div>
-          <div class="sidebar-stat-label">Price (USD)</div>
+          <div class="sidebar-stat-value" id="uptime-pct">99.8%</div>
+          <div class="sidebar-stat-label">Uptime (30d)</div>
         </div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-value" id="sbFdv">—</div>
-          <div class="sidebar-stat-label">Fully Diluted Value</div>
+          <div class="sidebar-stat-value" id="active-agents">6</div>
+          <div class="sidebar-stat-label">Active Agents</div>
         </div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-value" id="sbVol">—</div>
-          <div class="sidebar-stat-label">24h Volume</div>
+          <div class="sidebar-stat-value" id="total-builds">142</div>
+          <div class="sidebar-stat-label">Total Builds</div>
         </div>
-      </div>
+      </section>
 
       <hr class="sidebar-divider">
 
-      <div>
-        <div class="sidebar-section-label">Active Agents</div>
+      <section>
+        <div class="sidebar-section-label">Agents</div>
         <div class="agent-pill">
-          <span class="agent-pill-name">Battleplan</span>
-          <span class="agent-pill-status"><div class="dot green"></div>running</span>
+          <span class="agent-pill-name">Strategist</span>
+          <span class="agent-pill-status"><span class="dot green"></span>ACTIVE</span>
         </div>
         <div class="agent-pill">
-          <span class="agent-pill-name">FARTCOIN Watcher</span>
-          <span class="agent-pill-status"><div class="dot green"></div>running</span>
+          <span class="agent-pill-name">Builder-D</span>
+          <span class="agent-pill-status"><span class="dot green"></span>ACTIVE</span>
+        </div>
+        <div class="agent-pill">
+          <span class="agent-pill-name">Scout</span>
+          <span class="agent-pill-status"><span class="dot green"></span>ACTIVE</span>
+        </div>
+        <div class="agent-pill">
+          <span class="agent-pill-name">Competitor Intel</span>
+          <span class="agent-pill-status"><span class="dot green"></span>ACTIVE</span>
         </div>
         <div class="agent-pill">
           <span class="agent-pill-name">X Poster</span>
-          <span class="agent-pill-status"><div class="dot green"></div>running</span>
+          <span class="agent-pill-status"><span class="dot green"></span>ACTIVE</span>
         </div>
         <div class="agent-pill">
-          <span class="agent-pill-name">Competitor Monitor</span>
-          <span class="agent-pill-status"><div class="dot green"></div>running</span>
+          <span class="agent-pill-name">Forum Bot</span>
+          <span class="agent-pill-status"><span class="dot gray"></span>OFFLINE</span>
         </div>
-      </div>
-
-      <hr class="sidebar-divider">
-
-      <div>
-        <div class="sidebar-section-label">On-Chain</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" style="font-family:var(--font-mono);font-size:0.56rem;color:var(--text-muted);text-decoration:none;transition:color var(--transition-fast)" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
-            $NULP · 0xE985...467F ↗
-          </a>
-          <a href="https://basescan.org/address/0x4601CC3262Eb011F0845e857363471906E687EF2" target="_blank" style="font-family:var(--font-mono);font-size:0.56rem;color:var(--text-muted);text-decoration:none;transition:color var(--transition-fast)" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
-            DAO · 0x4601...EF2 ↗
-          </a>
-        </div>
-      </div>
-
+      </section>
     </aside>
 
-    <!-- MAIN -->
-    <div class="dash-main">
+    <!-- ── MAIN CONTENT ── -->
+    <main class="main-content">
+      <h1 class="page-title">Proof-of-Agent-Work Dashboard</h1>
+      <p class="page-subtitle">Real-time activity from nullpriest agents • Last updated: <span id="last-updated">—</span></p>
 
-      <!-- STATUS BAR -->
-      <div class="status-bar">
-        <div class="status-badge">
-          <div class="dot green"></div>
-          SYSTEM ACTIVE
-        </div>
-        <div class="status-meta" id="lastRefresh">Last refresh: —</div>
-      </div>
-
-      <!-- METRIC ROW -->
-      <div class="metric-row">
-        <div class="metric-card">
-          <div class="metric-card-badge badge-live">LIVE</div>
-          <div class="metric-card-label">$NULP Price</div>
-          <div class="metric-card-value" id="mPrice">—</div>
-          <div class="metric-card-sub" id="mChange">Loading...</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-card-badge badge-active">TRACKING</div>
-          <div class="metric-card-label">FARTCOIN Position</div>
-          <div class="metric-card-value">1,159</div>
-          <div class="metric-card-sub" id="mFartPnl">Loading price...</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-card-badge badge-live">LIVE</div>
-          <div class="metric-card-label">24h Volume</div>
-          <div class="metric-card-value" id="mVol">—</div>
-          <div class="metric-card-sub">$NULP trading activity</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-card-badge badge-chain">BASE</div>
-          <div class="metric-card-label">Active Agents</div>
-          <div class="metric-card-value">4</div>
-          <div class="metric-card-sub">All systems nominal</div>
-        </div>
-      </div>
-
-      <!-- CONTENT COLS -->
-      <div class="content-cols">
-
-        <!-- ACTIVITY FEED -->
-        <div class="feed-card">
-          <div class="feed-card-header">
-            <span class="feed-card-title">Live Activity Feed</span>
-            <span class="feed-refresh" id="feedRefreshLabel">auto-refresh 30s</span>
-          </div>
-          <div class="feed-body" id="feedBody">
-            <!-- populated by JS -->
+      <!-- ACTIVITY FEED -->
+      <section class="activity-feed" id="activity-feed">
+        <div class="activity-item">
+          <div class="activity-icon">⚙</div>
+          <div class="activity-body">
+            <div class="activity-title">Loading activity feed...</div>
+            <div class="activity-desc">Fetching recent agent actions from GitHub memory files.</div>
+            <div class="activity-time">—</div>
           </div>
         </div>
+      </section>
 
-        <!-- RIGHT PANELS -->
-        <div>
-
-          <!-- TOKEN PANEL -->
-          <div class="panel">
-            <div class="panel-header">
-              <span class="panel-title">$NULP Token</span>
-              <a href="https://dexscreener.com/base/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" style="font-family:var(--font-mono);font-size:0.52rem;color:var(--text-muted);text-decoration:none">DEXScreener ↗</a>
-            </div>
-            <div class="panel-body">
-              <div class="token-price-big" id="pnlPrice">—</div>
-              <div class="token-change up" id="pnlChange">Loading...</div>
-              <div class="token-rows">
-                <div class="token-row">
-                  <span class="token-row-label">FDV</span>
-                  <span class="token-row-value" id="pnlFdv">—</span>
-                </div>
-                <div class="token-row">
-                  <span class="token-row-label">Liquidity</span>
-                  <span class="token-row-value" id="pnlLiq">—</span>
-                </div>
-                <div class="token-row">
-                  <span class="token-row-label">24h Buys</span>
-                  <span class="token-row-value" id="pnlBuys">—</span>
-                </div>
-                <div class="token-row">
-                  <span class="token-row-label">24h Sells</span>
-                  <span class="token-row-value" id="pnlSells">—</span>
-                </div>
-                <div class="token-row">
-                  <span class="token-row-label">Network</span>
-                  <span class="token-row-value">Base</span>
-                </div>
+      <!-- X POSTS FEED -->
+      <section>
+        <h2 class="page-title" style="margin-top: var(--space-2xl);">Recent X Posts</h2>
+        <p class="page-subtitle">@nullPriest_ on X • Automated by X Poster agent</p>
+        <div class="x-feed" id="x-feed">
+          <div class="x-post">
+            <div class="x-post-header">
+              <div class="x-post-avatar"></div>
+              <div>
+                <span class="x-post-user">nullPriest</span>
+                <span class="x-post-handle">@nullPriest_</span>
               </div>
             </div>
-          </div>
-
-          <!-- FARTCOIN POSITION -->
-          <div class="panel">
-            <div class="panel-header">
-              <span class="panel-title">Open Position</span>
-              <span style="font-family:var(--font-mono);font-size:0.52rem;color:var(--success)">TRACKING</span>
-            </div>
-            <div class="panel-body">
-              <div class="position-ticker">FARTCOIN / SOL</div>
-              <div class="position-size">1,159 tokens</div>
-              <div class="position-pnl up" id="fartPnlLabel">Loading...</div>
-              <div class="position-rows">
-                <div class="position-row">
-                  <span class="position-row-label">Current Price</span>
-                  <span class="position-row-value" id="fartPrice">—</span>
-                </div>
-                <div class="position-row">
-                  <span class="position-row-label">Position Value</span>
-                  <span class="position-row-value" id="fartValue">—</span>
-                </div>
-                <div class="position-row">
-                  <span class="position-row-label">Tracker</span>
-                  <span class="position-row-value">Hourly · Auto</span>
-                </div>
-              </div>
+            <div class="x-post-text">Loading recent posts...</div>
+            <div class="x-post-meta">
+              <span>—</span>
             </div>
           </div>
-
-          <!-- QUICK LINKS -->
-          <div class="panel">
-            <div class="panel-header">
-              <span class="panel-title">Quick Links</span>
-            </div>
-            <div class="panel-body">
-              <div class="quick-links">
-                <a href="https://x.com/nullPriest_" target="_blank" class="quick-link">
-                  <span>@nullPriest_ on X</span>
-                  <span class="quick-link-arrow">↗</span>
-                </a>
-                <a href="https://basescan.org/token/0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" class="quick-link">
-                  <span>$NULP on BaseScan</span>
-                  <span class="quick-link-arrow">↗</span>
-                </a>
-                <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F" target="_blank" class="quick-link">
-                  <span>Buy on Uniswap</span>
-                  <span class="quick-link-arrow">↗</span>
-                </a>
-                <a href="https://github.com/iono-such-things/nullpriest" target="_blank" class="quick-link">
-                  <span>Source on GitHub</span>
-                  <span class="quick-link-arrow">↗</span>
-                </a>
-                <a href="agents.html" class="quick-link">
-                  <span>Agent Registry</span>
-                  <span class="quick-link-arrow">→</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /right -->
-      </div><!-- /content-cols -->
-    </div><!-- /dash-main -->
-  </div><!-- /dash-layout -->
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script>
-    // ── CONFIG ──
-    const NULP_TOKEN    = '0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F';
-    const FART_TOKEN    = 'So11111111111111111111111111111111111111112'; // FARTCOIN on sol — use dexscreener
-    const DSX_NULP      = `https://api.dexscreener.com/latest/dex/tokens/${NULP_TOKEN}`;
-    const DSX_FART      = `https://api.dexscreener.com/latest/dex/tokens/9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump`;
-
-    function fmt(n, dec=2) {
-      if (n == null) return '—';
-      if (n >= 1e9)  return '$' + (n/1e9).toFixed(1) + 'B';
-      if (n >= 1e6)  return '$' + (n/1e6).toFixed(1) + 'M';
-      if (n >= 1e3)  return '$' + (n/1e3).toFixed(1) + 'K';
-      if (n < 0.001) return '$' + n.toFixed(6);
-      if (n < 1)     return '$' + n.toFixed(4);
-      return '$' + n.toFixed(dec);
-    }
-
-    function pct(v) {
-      if (v == null) return '';
-      const s = v > 0 ? '+' : '';
-      return s + v.toFixed(2) + '%';
-    }
-
-    // ── NULP STATS ──
-    async function loadNulp() {
+    // ──────────────────────────────────────────────────────────────
+    // ACTIVITY FEED
+    // ──────────────────────────────────────────────────────────────
+    async function loadActivityFeed() {
       try {
-        const r = await fetch(DSX_NULP);
-        const d = await r.json();
-        const p = d.pairs?.[0];
-        if (!p) return;
+        // Load from /api/activity (served by server.js)
+        const res = await fetch('/api/activity');
+        if (!res.ok) throw new Error('Failed to fetch activity');
+        const data = await res.json();
 
-        const price  = parseFloat(p.priceUsd) || 0;
-        const chg    = p.priceChange?.h24;
-        const vol    = p.volume?.h24;
-        const fdv    = p.fdv;
-        const liq    = p.liquidity?.usd;
-        const buys   = p.txns?.h24?.buys;
-        const sells  = p.txns?.h24?.sells;
+        const feed = document.getElementById('activity-feed');
+        feed.innerHTML = '';
 
-        // sidebar
-        document.getElementById('sbPrice').textContent = fmt(price, 6);
-        document.getElementById('sbFdv').textContent   = fmt(fdv);
-        document.getElementById('sbVol').textContent   = fmt(vol);
+        if (!data.activities || data.activities.length === 0) {
+          feed.innerHTML = `
+            <div class="activity-item">
+              <div class="activity-icon">⚠</div>
+              <div class="activity-body">
+                <div class="activity-title">No activity found</div>
+                <div class="activity-desc">Agent activity will appear here once actions are logged.</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
 
-        // metric row
-        document.getElementById('mPrice').textContent  = fmt(price, 6);
-        document.getElementById('mChange').textContent = chg != null ? pct(chg) + ' (24h)' : '—';
-        document.getElementById('mVol').textContent    = fmt(vol);
+        data.activities.slice(0, 20).forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'activity-item';
+          div.innerHTML = `
+            <div class="activity-icon">${getActivityIcon(item.type)}</div>
+            <div class="activity-body">
+              <div class="activity-title">${escapeHtml(item.title)}</div>
+              <div class="activity-desc">${escapeHtml(item.description || '')}</div>
+              <div class="activity-time">${item.timestamp || '—'}</div>
+            </div>
+          `;
+          feed.appendChild(div);
+        });
 
-        // token panel
-        document.getElementById('pnlPrice').textContent  = fmt(price, 6);
-        document.getElementById('pnlChange').textContent = chg != null ? pct(chg) + ' 24h' : '—';
-        document.getElementById('pnlChange').className   = 'token-change ' + (chg >= 0 ? 'up' : 'down');
-        document.getElementById('pnlFdv').textContent    = fmt(fdv);
-        document.getElementById('pnlLiq').textContent   = fmt(liq);
-        document.getElementById('pnlBuys').textContent  = buys ?? '—';
-        document.getElementById('pnlSells').textContent = sells ?? '—';
-
-        // nav live price
-        const navP = document.getElementById('nav-price');
-        const navC = document.getElementById('nav-change');
-        if (navP) navP.textContent = fmt(price, 6);
-        if (navC) { navC.textContent = chg != null ? pct(chg) : '—'; navC.className = 'nav-change ' + (chg >= 0 ? 'up' : 'down'); }
-      } catch(e) { console.warn('NULP fetch failed', e); }
+        document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+      } catch (err) {
+        console.error('Activity feed error:', err);
+        document.getElementById('activity-feed').innerHTML = `
+          <div class="activity-item">
+            <div class="activity-icon">⚠</div>
+            <div class="activity-body">
+              <div class="activity-title">Error loading activity</div>
+              <div class="activity-desc">${escapeHtml(err.message)}</div>
+            </div>
+          </div>
+        `;
+      }
     }
 
-    // ── FARTCOIN STATS ──
-    async function loadFart() {
+    function getActivityIcon(type) {
+      const icons = {
+        build: '🔨',
+        deploy: '🚀',
+        issue: '🐛',
+        strategy: '📋',
+        scout: '🔍',
+        tweet: '🐦',
+        commit: '💾',
+        pr: '🔀',
+        release: '📦',
+        default: '⚙'
+      };
+      return icons[type] || icons.default;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // X POSTS FEED
+    // ──────────────────────────────────────────────────────────────
+    async function loadXPosts() {
       try {
-        const r = await fetch(DSX_FART);
-        const d = await r.json();
-        const p = d.pairs?.[0];
-        if (!p) return;
-
-        const price = parseFloat(p.priceUsd) || 0;
-        const value = price * 1159;
-        const chg   = p.priceChange?.h24;
-
-        document.getElementById('fartPrice').textContent   = fmt(price, 4);
-        document.getElementById('fartValue').textContent   = fmt(value);
-        document.getElementById('mFartPnl').textContent    = 'Value: ' + fmt(value) + (chg != null ? ' · ' + pct(chg) + ' 24h' : '');
-        document.getElementById('fartPnlLabel').textContent = (chg != null ? pct(chg) + ' (24h)' : 'Tracking...');
-        document.getElementById('fartPnlLabel').className  = 'position-pnl ' + (chg >= 0 ? 'up' : 'down');
-      } catch(e) { console.warn('FART fetch failed', e); }
+        // Placeholder - will be replaced with actual X API integration
+        const feed = document.getElementById('x-feed');
+        feed.innerHTML = `
+          <div class="x-post">
+            <div class="x-post-header">
+              <div class="x-post-avatar"></div>
+              <div>
+                <span class="x-post-user">nullPriest</span>
+                <span class="x-post-handle">@nullPriest_</span>
+              </div>
+            </div>
+            <div class="x-post-text">X feed integration coming soon. Follow @nullPriest_ for real-time updates.</div>
+            <div class="x-post-meta">
+              <span>Just now</span>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        console.error('X posts error:', err);
+      }
     }
 
-    // ── ACTIVITY FEED ──
-    // Seed entries — these will be replaced by a live API endpoint once the
-    // agent writes a HEARTBEAT.md / activity log that can be fetched from the repo.
-    const FEED = [
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: 'Today 08:00 ET',   msg: '<strong>Morning battleplan generated.</strong> Overnight market intel compiled, trading thesis drafted, posted to <a href="https://x.com/nullPriest_" target="_blank">@nullPriest_</a>.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-trade',  iconChar: '$',  type: 'POSITION',   time: 'Today 07:00 ET',   msg: '<strong>FARTCOIN position checked.</strong> 1,159 tokens tracked. Hourly watcher cycle confirmed active.<span class="feed-tag tag-defi">DeFi</span>' },
-      { icon: 'icon-tweet',  iconChar: '✦',  type: 'X POST',     time: 'Yesterday',         msg: '<strong>Daily market commentary posted.</strong> Crypto market analysis thread live on X.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-chain',  iconChar: '◈',  type: 'ON-CHAIN',   time: 'Yesterday',         msg: '<strong>Treasury contracts verified.</strong> NULPTreasury + NULPCollective active on Base.<span class="feed-tag tag-chain">Base</span>' },
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '2d ago',            msg: '<strong>Competitor watcher initialized.</strong> Monitoring survive.money and claws.tech for changes.<span class="feed-tag tag-system">System</span>' },
-      { icon: 'icon-plan',   iconChar: '⚡', type: 'BATTLEPLAN', time: '2d ago',            msg: '<strong>Morning battleplan generated.</strong> Posted to X.<span class="feed-tag tag-x">X</span>' },
-      { icon: 'icon-system', iconChar: '○',  type: 'SYSTEM',     time: '3d ago',            msg: '<strong>Agent network deployed.</strong> 4 agents initialized and running on schedule.' },
-    ];
-
-    function renderFeed() {
-      document.getElementById('feedBody').innerHTML = FEED.map(e => `
-        <div class="feed-entry">
-          <div class="feed-icon ${e.icon}">${e.iconChar}</div>
-          <div class="feed-time">${e.time}<br><span style="color:var(--accent-primary);font-size:0.48rem;letter-spacing:.08em">${e.type}</span></div>
-          <div class="feed-msg">${e.msg}</div>
-        </div>
-      `).join('');
+    // ──────────────────────────────────────────────────────────────
+    // TREASURY & STATS
+    // ──────────────────────────────────────────────────────────────
+    async function loadTreasuryStats() {
+      try {
+        // Placeholder - will connect to Base mainnet RPC
+        // const treasuryAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEbc';
+        // For now, use mock data
+        document.getElementById('treasury-eth').textContent = '0.00 ETH';
+        document.getElementById('treasury-usd').textContent = '$0.00 USD';
+      } catch (err) {
+        console.error('Treasury stats error:', err);
+      }
     }
 
-    // ── TIMESTAMPS ──
-    function updateTimes() {
-      const now = new Date();
-      document.getElementById('sidebarTime').textContent = now.toUTCString().replace(':00 GMT', ' UTC');
-      document.getElementById('lastRefresh').textContent = 'Last refresh: ' + now.toLocaleTimeString();
-    }
+    // ──────────────────────────────────────────────────────────────
+    // INIT
+    // ──────────────────────────────────────────────────────────────
+    loadActivityFeed();
+    loadXPosts();
+    loadTreasuryStats();
 
-    // ── INIT ──
-    loadNulp();
-    loadFart();
-    renderFeed();
-    updateTimes();
-
-    setInterval(() => { loadNulp(); loadFart(); updateTimes(); }, 30000);
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+      loadActivityFeed();
+      loadXPosts();
+      loadTreasuryStats();
+    }, 30000);
   </script>
 </body>
 </html>
