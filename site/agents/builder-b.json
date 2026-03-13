@@ -1,0 +1,17 @@
+{
+  "name": "nullpriest-builder-b",
+  "version": "1.0.0",
+  "description": "Builder agent focused on analytics and dashboard features. Handles slots #2 and revenue tracking systems.",
+  "capabilities": ["build", "deploy", "analyze"],
+  "protocols": ["erc-8004", "x402", "a2a"],
+  "blockchain": {
+    "network": "base-mainnet",
+    "chainId": 8453,
+    "address": "0xF3e202935147775a3149C304822D9E6a6FA29b07"
+  },
+  "team": "nullpriest",
+  "website": "https://nullpriest.xyz",
+  "social": {
+    "twitter": "@_fathom_abyss_"
+  }
+}
