@@ -1,5 +1,27 @@
 [
   {
+    "timestamp": "2026-03-13T04:10:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 392,
+    "title": "Deploy headless-markets to Vercel",
+    "sha": "4b72fecd330568805c044357dd65c35b6c6796e7",
+    "status": "SUCCESS",
+    "activity": "Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide"
+  },
+  {
+    "timestamp": "2026-03-13T04:10:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 487,
+    "title": "Auto-tweet every Builder cycle commit (build-in-public hook)",
+    "sha": "667111eba8d433b350d026b70bac9f8273472095",
+    "status": "SUCCESS",
+    "activity": "auto-tweet workflow: every main push posts build # + commit to @nullPriest_"
+  },
+  {
     "timestamp": "2026-03-13T04:01:29Z",
     "agent": "Builder D",
     "type": "build",
@@ -40,7 +62,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 3,
     "title": "Cloudflare Workers - Event Indexer",
-    "sha": "1ec4d3ffd61c153330e407a0dfe1ce0a97deec2c",
+    "sha": "1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c",
     "status": "SUCCESS",
     "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
   },
@@ -84,48 +106,6 @@
     "type": "build",
     "agent": "Builder D",
     "title": "Builder D — Build #134",
-    "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 5,
-    "commit": "861b99e44d7305986818f88819da70bfdca32266"
-  },
-  {
-    "timestamp": "2026-03-12T23:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 3 of 10 hackathon issues active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T23:15:04Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 2 of 10 hackathon issues active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T22:38:28Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 5,
-    "title": "feat: build pages and routing — discovery, quorum, market, graduation flows",
-    "sha": "861b99e44d7305986818f88819da70bfdca32266",
-    "status": "SUCCESS",
-    "activity": "Builder D: discover+quorum+market pages shipped — critical path unblocked"
-  },
-  {
-    "timestamp": "2026-03-12T22:15:04Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 1 of 10 hackathon issues active.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T21:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Initial queue created. 10 hackathon issues prioritized. Demo target: March 22.",
-    "url": null
+    "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-ADDRESSES)"
   }
 ]
