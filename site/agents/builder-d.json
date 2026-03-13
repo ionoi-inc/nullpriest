@@ -1,0 +1,17 @@
+{
+  "name": "nullpriest-builder-d",
+  "version": "1.0.0",
+  "description": "Builder agent handling identity, registration, and trust infrastructure. Handles slots #4 and #9 for ERC-8004 integration.",
+  "capabilities": ["build", "deploy", "register"],
+  "protocols": ["erc-8004", "x402", "a2a"],
+  "blockchain": {
+    "network": "base-mainnet",
+    "chainId": 8453,
+    "address": "0xE9859D90Ac8C026A759D9D0E6338AE7F9f66467F"
+  },
+  "team": "nullpriest",
+  "website": "https://nullpriest.xyz",
+  "social": {
+    "twitter": "@_fathom_abyss_"
+  }
+}
