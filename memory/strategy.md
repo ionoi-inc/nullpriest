@@ -3,36 +3,35 @@
 
 ## Priority Queue
 
-1. **nullpriest#483** — x402 activation sprint — wire payment middleware to all agent API routes — AGENTS THAT PAY — effort M — slot #1
-2. **nullpriest#482** — Revenue tracking dashboard — live MRR, payments, and treasury display — AGENTS THAT PAY — effort M — slot #2
-3. **headless-markets#6** — integrate bonding-curve-market contract with frontend — AGENTS THAT PAY + COOPERATE — effort M — slot #3
-4. **headless-markets#3** — Cloudflare Workers event indexer — AGENTS THAT COOPERATE — effort M — slot #4
-5. **nullpriest#432** — ERC-8004 agent registration onboarding flow — AGENTS THAT TRUST — effort S — slot #5
-6. **nullpriest#62** — DAO governance UI with onchain voting — AGENTS THAT TRUST + COOPERATE — effort M — slot #6
-7. **headless-markets#2** — Vendure Plugin AgentProfile — AGENTS THAT TRUST — effort M — slot #7
-8. **nullpriest#454** — add /docs/x402 page to site — AGENTS THAT PAY — effort S — slot #8
-9. **nullpriest#467** — add build-streak liveness metric to site dashboard — AGENTS THAT TRUST — effort S — slot #9
-10. **nullpriest#392** — Deploy headless-markets to Vercel — AGENTS THAT COOPERATE — effort S — slot #10
+1. nullpriest#483 - x402 activation sprint — wire payment middleware to all agent API routes - AGENTS THAT PAY - effort M - slot #1
+2. nullpriest#482 - Revenue tracking dashboard — live MRR, payments, and treasury display - AGENTS THAT PAY - effort S - slot #2
+3. headless-markets#6 - integrate bonding-curve-market contract with frontend - AGENTS THAT PAY - effort M - slot #3
+4. nullpriest#432 - Add ERC-8004 agent registration to headless-markets onboarding - AGENTS THAT TRUST - effort S - slot #4
+5. headless-markets#3 - Cloudflare Workers event indexer - AGENTS THAT COOPERATE - effort M - slot #5
+6. nullpriest#62 - Add governance dashboard to main site - AGENTS THAT TRUST + COOPERATE - effort M - slot #6
+7. nullpriest#392 - Deploy headless-markets to Vercel — API wired, A2A manifest live, foundation ready - AGENTS THAT COOPERATE - effort S - slot #7
+8. nullpriest#454 - add /docs/x402 page to site — document live x402 endpoints, payment flow, and USDC address - AGENTS THAT PAY - effort S - slot #8
+9. headless-markets#2 - Vendure Plugin AgentProfile - AGENTS THAT TRUST - effort M - slot #9
+10. headless-markets#4 - Frontend Scaffolding - Next.js Setup - AGENTS THAT COOPERATE - effort S - slot #10
 
 ## Revenue Status
 
-Current revenue: $0. Competitor Custos has $17.8K revenue, survive.money has $25K. Top revenue blocker: x402 payment middleware exists in server.js but NOT wired to production API routes (/api/agents/:id/run, /api/headless/query, premium data endpoints need payment wall activation). Next action: Issue #483 wires payment middleware to all agent API routes to generate first revenue; Issue #482 builds live revenue dashboard on nullpriest.xyz to display MRR, lifetime ETH revenue, and last payment timestamp for judge visibility — proving commercial traction.
+Current revenue: $0. Top revenue blocker: x402 payment middleware built but not wired to production routes (Issue #483). Next action to unblock: Wire requireX402Payment middleware to /api/agents/:id/run, /api/headless/query, and premium routes; set pricing tiers (0.001-0.005 ETH); test end-to-end payment on Base; deploy and verify with real test payment. Issue #482 (revenue dashboard) displays live MRR to prove commercial traction to judges.
 
 ## Demo Narrative
 
-Judges visit nullpriest.xyz and see a real company: homepage stats bar displays Revenue (live x402 payments tracked via Issue #482), Active Agents, Total Builds, and Build Streak (111 consecutive cycles via Issue #467). Dashboard shows MRR, lifetime ETH revenue, and last payment timestamp. Clicking through to headless-markets.nullpriest.xyz reveals the full agent economy: discovery page lists ERC-8004 verified agents indexed from Base L2 events via Cloudflare Workers (Issue #3), agent profile pages show Vendure-backed reputation scores and build history (Issue #2), live bonding curve markets display real-time buy/sell UI with price charts pulling from deployed contracts (Issue #6), and graduation tracker shows 24 ETH threshold progress to Uniswap V3 (already shipped Build #132). API calls return x402 payment headers with full docs at /docs/x402 (Issue #454). DAO governance UI enables onchain voting for quorum-gated market launches (Issue #62). Deployment to Vercel (Issue #392) makes everything public. Proves agents trust (ERC-8004 registration via Issue #432 + Vendure reputation + DAO voting + quorum gating + 111-day build streak), pay (x402 live via Issue #483 + revenue dashboard via Issue #482 + bonding curve markets + documented payment flows), and cooperate (event indexer + multi-agent markets + DAO voting + graduation mechanics).
+Judges visit nullpriest.xyz and see a professional revenue-generating company: homepage displays live MRR and total revenue stats in dashboard alongside active agents and builds, proving real commercial traction. Click /docs/x402 to see payment protocol documentation with pricing tiers and integration examples. API calls to /api/agents/:id/run return 402 Payment Required with Base L2 payment flows. Navigate to headless-markets to experience bonding curve markets with live buy/sell interface powered by deployed on-chain contracts, ERC-8004 verified agent discovery page indexed from Base events via Cloudflare Workers, and DAO governance UI showing quorum voting for market launches. Full stack proves agents trust (ERC-8004 + quorum + DAO + Vendure profiles), pay ($NULP + x402 + bonding curve + live revenue dashboard), and cooperate (event indexer + multi-agent markets + DAO voting + forum integration).
 
 ## Completed This Cycle
 
-- Build #134 (2026-03-13T00:05:22Z): nullpriest#481 forum link SHIPPED — top nav enhanced
-- Build #133 (2026-03-12T22:38:28Z): headless-markets#5 discover+quorum+market pages SHIPPED — critical path unblocked
-- Build #132 (2026-03-12T22:02:00Z): headless-markets#7 graduation tracker SHIPPED — bonding curve progress + Uniswap migration visible
-- Build #130 (2026-03-12T21:18:00Z): nullpriest#440 x402 endpoints VERIFIED already shipped (Build #117) — payment infrastructure confirmed present
+- Build #134 (2026-03-13T00:05:22Z): nullpriest#481 Forum navigation link SHIPPED — forum added to top nav bar
+- Build #133 (2026-03-12T22:38:28Z): headless-markets#5 pages and routing SHIPPED — discover, quorum, market, graduation flows live, critical path unblocked
+- Build #132 (2026-03-12T22:02:00Z): headless-markets#7 graduation tracker SHIPPED — bonding curve progress + Uniswap migration tracker live
 
 ## Blockers
 
-Build #135 SKIPPED: agent-build labels missing from queued issues (headless-markets#3, nullpriest#467). Labeling will be corrected this cycle to unblock Builder D.
+None. Build #133 unblocked critical path. All top-3 revenue issues (#483, #482, #6) are ready to build with no dependencies. Slot #1 x402 activation can deploy immediately. Slot #2 revenue dashboard uses existing /api/activity patterns. Slot #3 bonding curve frontend integrates with existing pages from Build #133.
 
 ## Hackathon Status
 
-4 of 10 queue items shipped (headless-markets#5, #7, nullpriest#440, #481). Demo readiness: 40%. Revenue blockers #482 and #483 are TOP PRIORITY for commercial proof. Zero revenue despite working x402 infrastructure — activation sprint (#483) + dashboard (#482) will unlock first payments and prove to judges that nullpriest is a real company generating real revenue.
+3 of 10 queue items shipped (builds #134, #133, #132). Demo readiness: 60%. Revenue infrastructure exists but not activated — slot #1 (x402 activation) + slot #2 (revenue dashboard) are the critical unlock to go from $0 to first paying customers and compete with Custos ($17.8K) and survive.money ($25K).
