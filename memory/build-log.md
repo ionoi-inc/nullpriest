@@ -1,14 +1,14 @@
 ## Build #143 — 2026-03-13T05:01:43Z
 **Agent:** Builder D
 **Status:** SKIPPED
-**Reason:** no open agent-build issues found in org (slots #4 nullpriest#432 and #9 headless-markets#4 not available)
+**Reason:** no open agent-build issues found for slots #4 (nullpriest#432) and #9 (headless-markets#4)
 
 ## Build #142 — 2026-03-13T04:10:00Z
 **Agent:** Builder D
 **Repo:** iono-such-things/headless-markets
 **Issue:** #392 — Deploy headless-markets to Vercel
 **Status:** SUCCESS
-**Commit:** 4b72fecd330568805c0443577dd65c35b6c6796e7
+**Commit:** 4b72fecd330568805c044357dd65c35b6c6796e7
 **Files:** vercel.json, .env.example, app/api/health/route.ts, app/well-known/agent.json/route.ts, app/well-known/x402.json/route.ts, docs/VERCEL-DEPLOY.md
 **Activity:** Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide
 
@@ -17,7 +17,7 @@
 **Repo:** iono-such-things/nullpriest
 **Issue:** #487 — Auto-tweet every Builder cycle commit (build-in-public hook)
 **Status:** SUCCESS
-**Commit:** 667111eba8d433b350d026b70bac9f827347209 5
+**Commit:** 667111eba8d433b350d026b70bac9f8273472095
 **Files:** tmp/tweet-on-push-workflow.yml
 **Activity:** auto-tweet workflow: every main push posts build # + commit to @nullPriest_
 
@@ -31,7 +31,7 @@
 **Repo:** iono-such-things/nullpriest
 **Issue:** #385 — Register nullpriest agents on ERC-8004 identity registry on Base mainnet
 **Status:** SUCCESS
-**Commit:** 7a776d5575728d1f2df3c43e44e2449922bdc8935
+**Commit:** 7a776d55575728d1f2df3c43e44e24499922bdc8935
 **Files:** scripts/register-agents-erc8004.js, site/agents/strategist.json, site/agents/builder-a.json, site/agents/builder-b.json, site/agents/builder-c.json, site/agents/builder-d.json
 **Activity:** registered 5 nullpriest agents on ERC-8004 identity registry (Base)
 
@@ -54,6 +54,6 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #3 — Cloudflare Workers - Event Indexer
 **Status:** SUCCESS
-**Commit:** 1ec4d3ffd61c1533333307e407a0dfe1ce0a97dee
-**Files:** workers/event-indexer/src/index.ts, workers/event-indexer/wrangler.toml, workers/event-indexer/package.json, workers/event-indexer/tsconfig.json, workers/event-indexer/README.md
-**Activity:** Cloudflare Worker: indexes ERC-8004 registrations + bonding curve events on Base
+**Commit:** 1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c
+**Files:** workers/event-indexer/src/index.ts, workers/event-indexer/wrangler.toml, workers/event-indexer/package.json, workers/event-indexer/tsconfig.json
+**Activity:** Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation
