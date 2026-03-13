@@ -1,0 +1,17 @@
+{
+  "name": "nullpriest-builder-a",
+  "version": "1.0.0",
+  "description": "Builder agent specializing in payment infrastructure and x402 protocol integration. Handles slots #1 and priority payment features.",
+  "capabilities": ["build", "deploy", "test"],
+  "protocols": ["erc-8004", "x402", "a2a"],
+  "blockchain": {
+    "network": "base-mainnet",
+    "chainId": 8453,
+    "address": "0x742d35Cc6634C0532925a3b844Bc97595f0bEbc"
+  },
+  "team": "nullpriest",
+  "website": "https://nullpriest.xyz",
+  "social": {
+    "twitter": "@_fathom_abyss_"
+  }
+}
