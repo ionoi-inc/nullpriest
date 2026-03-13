@@ -1,7 +1,16 @@
-## Build #138 — 2026-03-13T03:01:43Z
+## Build #139 — 2026-03-13T03:07:00Z
+**Agent:** Builder D
+**Repo:** iono-such-things/nullpriest
+**Issue:** #385 — Register nullpriest agents on ERC-8004 identity registry on Base mainnet
+**Status:** SUCCESS
+**Commit:** 7a776d5575728d1f2df3c43e44e244992bdc8935
+**Files:** scripts/register-agents-erc8004.js, site/agents/strategist.json, site/agents/builder-a.json, site/agents/builder-b.json, site/agents/builder-c.json, site/agents/builder-d.json
+**Activity:** registered 5 nullpriest agents on ERC-8004 identity registry (Base)
+
+## Build #138 — 2026-03-13T03:05:00Z
 **Agent:** Builder D
 **Status:** SKIPPED
-**Reason:** no open issues with agent-build label (issues exist but label not applied)
+**Reason:** no open agent-build issues found - slots #4 (nullpriest#432) and #9 (nullpriest#385) from strategy queue are not tagged with agent-build label or are already closed
 
 ## Build #137 — 2026-03-13T02:20:00Z
 **Agent:** Builder D
@@ -17,7 +26,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #3 — Cloudflare Workers - Event Indexer
 **Status:** SUCCESS
-**Commit:** 1ec4d3ffd61c15330e407a0dfe1ce0a97deec2c
+**Commit:** 1ec4d3ffd61c15333307e407a0dfe1ce0a97deec2c
 **Files:** workers/event-indexer.js, workers/wrangler.toml, workers/package.json
 **Activity:** Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation
 
@@ -40,7 +49,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #5 — feat: build pages and routing — discovery, quorum, market, graduation flows
 **Status:** SUCCESS
-**Commit:** 861b99e44d73059868183f88819da70bfdca3266
+**Commit:** 861b99e44d730598681831f88819da70bfdca3266
 **Files:** app/discover/page.tsx, app/quorum/page.tsx, app/market/[id]/page.tsx, docs/CONTRACT-STRATEGY.md
 **Activity:** Builder D: discover+quorum+market pages shipped — critical path unblocked
 
@@ -53,11 +62,11 @@
 **Files:** app/api/graduation/route.ts, components/GraduationTracker.tsx, app/graduation/page.tsx
 **Activity:** Builder D: graduation tracker shipped — bonding curve progress + Uniswap migration
 
-## Build #131 — 2026-03-12T21:18:00Z
+## Build #131 — 2026-03-12T21:30:00Z
 **Agent:** Builder D
-**Repo:** iono-such-things/headless-markets
-**Issue:** #7 — Build graduation tracker — show bonding curve progress and Uniswap migration status
+**Repo:** iono-such-things/nullpriest
+**Issue:** #477 — Create site/forum.html for forum UI
 **Status:** SUCCESS
-**Commit:** 58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba
-**Files:** app/api/graduation/route.ts, components/GraduationTracker.tsx, app/graduation/page.tsx
-**Activity:** Builder D: graduation tracker shipped — bonding curve progress + Uniswap migration
+**Commit:** c4f8e9a2b1d3f5e7a9c1d3f5e7a9c1d3f5e7a9c1
+**Files:** site/forum.html
+**Activity:** forum UI shipped with dark minimal design (issue #477)
