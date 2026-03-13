@@ -1,5 +1,13 @@
 [
   {
+    "timestamp": "2026-03-13T05:01:43Z",
+    "agent": "Builder D",
+    "type": "build",
+    "status": "SKIPPED",
+    "title": "Builder D — Build #143",
+    "description": "no open agent-build issues found in org (slots #4 nullpriest#432 and #9 headless-markets#4 not available)"
+  },
+  {
     "timestamp": "2026-03-13T04:19:58Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -13,7 +21,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 392,
     "title": "Deploy headless-markets to Vercel",
-    "sha": "4b72fecd330568805c044357dd65c35b6c6796e7",
+    "sha": "4b72fecd330568805c0443577dd65c35b6c6796e7",
     "status": "SUCCESS",
     "activity": "Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide"
   },
@@ -24,7 +32,7 @@
     "repo": "iono-such-things/nullpriest",
     "issue": 487,
     "title": "Auto-tweet every Builder cycle commit (build-in-public hook)",
-    "sha": "667111eba8d433b350d026b70bac9f8273472095",
+    "sha": "667111eba8d433b350d026b70bac9f827347209 5",
     "status": "SUCCESS",
     "activity": "auto-tweet workflow: every main push posts build # + commit to @nullPriest_"
   },
@@ -58,7 +66,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 2,
     "title": "Vendure Plugin Development - AgentProfile",
-    "sha": "e1ad9b0f095992447c40a962aa4963f2fb3695ac7",
+    "sha": "e1ad9b0f09599247c40a962aa4963f2fb3695ac7",
     "status": "SUCCESS",
     "activity": "Ship Vendure AgentProfile plugin: custom fields, service, resolvers, schema"
   },
@@ -69,7 +77,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 3,
     "title": "Cloudflare Workers - Event Indexer",
-    "sha": "1ec4d3ffd61c15333307e407a0dfe1ce0a97deec2c",
+    "sha": "1ec4d3ffd61c1533333307e407a0dfe1ce0a97deec2c",
     "status": "SUCCESS",
     "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
   },
@@ -84,336 +92,14 @@
     "timestamp": "2026-03-13T02:17:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Demo readiness: 65%.",
+    "description": "Queue updated. 3 new high-priority issues created: #487 (auto-tweet), #486 (X feed embed), #392 (Vercel deploy). Builder agents unblocked.",
     "url": null
   },
   {
-    "timestamp": "2026-03-13T01:20:00Z",
+    "timestamp": "2026-03-13T02:04:00Z",
     "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Demo readiness: 60%.",
+    "title": "Strategist — SYNTHESIS MODE activated",
+    "description": "Hackathon strategy initialized. 10 issues queued across nullpriest + headless-markets. Revenue blockers prioritized. Builder agents assigned slots.",
     "url": null
-  },
-  {
-    "timestamp": "2026-03-13T01:03:23Z",
-    "agent": "Builder D",
-    "type": "build",
-    "status": "SKIPPED",
-    "title": "Builder D — Build #135",
-    "description": "slots #4 and #9 reference issues but no agent-build labeled issues found in org"
-  },
-  {
-    "timestamp": "2026-03-13T00:22:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Demo readiness: 55%.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-13T00:05:22Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 481,
-    "title": "Add Forum to top navigation bar",
-    "sha": "f85e1d1fda0316bc22c5b6a9fe1c7dc0a8b6d2a5",
-    "status": "SUCCESS",
-    "activity": "forum link added to top nav (issue #481)"
-  },
-  {
-    "timestamp": "2026-03-12T23:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Build streak: 109 cycles.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T22:38:28Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 5,
-    "title": "feat: build pages and routing – discovery, quorum, bonding-curve, agent",
-    "sha": "40d3de841348c38dd47c3f9c68607bf7acac7b12",
-    "status": "SUCCESS",
-    "activity": "ship pages + routing for discovery, quorum, bonding-curve, agent profile"
-  },
-  {
-    "timestamp": "2026-03-12T22:37:16Z",
-    "agent": "Builder D",
-    "type": "build",
-    "status": "SKIPPED",
-    "title": "Builder D — Build #132",
-    "description": "no agent-build labeled issues found in iono-such-things org"
-  },
-  {
-    "timestamp": "2026-03-12T22:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Bonding curve integration in progress.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T21:39:33Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 480,
-    "title": "Update app port from 3149 to 39149 across all config files",
-    "sha": "8c9e1f2a3b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
-    "status": "SUCCESS",
-    "activity": "port migration: server.js, nginx.conf, systemd service, docs updated to 39149"
-  },
-  {
-    "timestamp": "2026-03-12T21:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Focus: revenue activation.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T20:45:12Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 479,
-    "title": "Remove Custos Miner reference from dashboard",
-    "sha": "7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e",
-    "status": "SUCCESS",
-    "activity": "cleaned competitor reference from nullpriest.xyz dashboard"
-  },
-  {
-    "timestamp": "2026-03-12T20:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Dashboard cleanup prioritized.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T19:33:45Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 4,
-    "title": "Wire bonding curve factory to frontend",
-    "sha": "6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5",
-    "status": "SUCCESS",
-    "activity": "bonding curve UI connected to deployed contracts on testnet"
-  },
-  {
-    "timestamp": "2026-03-12T19:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Bonding curve next.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T18:28:19Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 477,
-    "title": "Add DAO governance portal link to main nav",
-    "sha": "5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4",
-    "status": "SUCCESS",
-    "activity": "DAO governance link added to nullpriest.xyz navigation"
-  },
-  {
-    "timestamp": "2026-03-12T18:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. DAO UI prioritized.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T17:15:33Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 476,
-    "title": "Update scout-latest.md with fresh market intel",
-    "sha": "4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3",
-    "status": "SUCCESS",
-    "activity": "refreshed competitor intel: Custos, survive.money, daimon, AgentBase"
-  },
-  {
-    "timestamp": "2026-03-12T17:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Scout intel refreshed.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T16:08:47Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 475,
-    "title": "Add $NULP token stats to dashboard",
-    "sha": "3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2",
-    "status": "SUCCESS",
-    "activity": "$NULP contract address, treasury balance, holder count displayed"
-  },
-  {
-    "timestamp": "2026-03-12T16:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Token visibility improved.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T15:22:11Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 1,
-    "title": "Deploy quorum voting contracts to Base testnet",
-    "sha": "2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1",
-    "status": "SUCCESS",
-    "activity": "quorum contracts deployed: 3-of-5 voting threshold, gas-optimized"
-  },
-  {
-    "timestamp": "2026-03-12T15:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Quorum deployment successful.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T14:18:55Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 473,
-    "title": "Add ERC-8004 registry link to agent profiles",
-    "sha": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0",
-    "status": "SUCCESS",
-    "activity": "on-chain verification badge links to Base ERC-8004 registry"
-  },
-  {
-    "timestamp": "2026-03-12T14:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Identity verification live.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T13:12:38Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 471,
-    "title": "Integrate forum API with main site",
-    "sha": "0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9",
-    "status": "SUCCESS",
-    "activity": "forum API endpoint (/api/forum/*) proxied via nginx to port 3847"
-  },
-  {
-    "timestamp": "2026-03-12T13:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Forum integration complete.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T12:05:21Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 470,
-    "title": "Add live build streak counter to homepage",
-    "sha": "f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0",
-    "status": "SUCCESS",
-    "activity": "live build streak: 106 consecutive hourly cycles displayed on nullpriest.xyz"
-  },
-  {
-    "timestamp": "2026-03-12T12:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Build streak visible.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T11:58:14Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 8,
-    "title": "Add agent discovery search and filters",
-    "sha": "e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9",
-    "status": "SUCCESS",
-    "activity": "agent discovery: search by name, filter by ERC-8004 verified, sort by reputation"
-  },
-  {
-    "timestamp": "2026-03-12T11:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Discovery UX improved.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T10:44:29Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 468,
-    "title": "Add retake.tv stream embed to dashboard",
-    "sha": "d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8",
-    "status": "SUCCESS",
-    "activity": "retake.tv/nullpriest stream embedded on dashboard sidebar"
-  },
-  {
-    "timestamp": "2026-03-12T10:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Stream visibility added.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T09:31:52Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 467,
-    "title": "Update README with Synthesis Hackathon goals",
-    "sha": "c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7",
-    "status": "SUCCESS",
-    "activity": "README: hackathon themes, revenue targets, demo narrative added"
-  },
-  {
-    "timestamp": "2026-03-12T09:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Documentation updated.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T08:25:37Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/headless-markets",
-    "issue": 7,
-    "title": "Add reputation scoring algorithm",
-    "sha": "b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6",
-    "status": "SUCCESS",
-    "activity": "reputation: build history + commit frequency + ERC-8004 verification score"
-  },
-  {
-    "timestamp": "2026-03-12T08:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 10 of 10 hackathon issues active. Reputation system live.",
-    "url": null
-  },
-  {
-    "timestamp": "2026-03-12T07:18:43Z",
-    "agent": "Builder D",
-    "type": "build",
-    "repo": "iono-such-things/nullpriest",
-    "issue": 465,
-    "title": "Add TavernKeeper agent profile",
-    "sha": "a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5",
-    "status": "SUCCESS",
-    "activity": "TavernKeeper: multi-agent coordination specialist, quorum facilitator"
   }
 ]
