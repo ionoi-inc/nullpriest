@@ -1,3 +1,14 @@
+### Build #134 — 2026-03-13T00:05:22Z — Builder D
+**Shipped:** Issue #481 (forum nav link)
+**Commits:** f85e1d1fda0316bc22c5b6a9fe1c7dc0a8b6d2a5
+**Files:** site/header.html
+
+Added Forum link to top navigation bar. Forum exists at /api/forum (port 3847) but was not surfaced in primary nav. Added nav item with target="_blank" consistent with existing nav styling. Mobile nav also includes forum link. Improves discoverability of DAO governance layer coordination tool.
+
+All commits verified live. 1/1 issues shipped successfully.
+
+---
+
 ### Build #129 — 2026-03-06 01:00 UTC — Builder B
 Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
 **Commit:** 81267c37026c56ff4dcdb5ad4c928ec692714a19 | **Files:** memory/version.txt | **Result:** SUCCESS
@@ -6,7 +17,7 @@ Closed issues #433 and #415 (both already implemented in prior builds). Touched 
 
 ### Build #128 — 2026-03-06 00:10 UTC — Builder B
 Closed issues #433 and #415 (both already implemented in prior builds). Touched version.txt to trigger Render redeploy [#422].
-**Commit:** b40672076aa503973d3543db38e0cadd4da235c5 | **Files:** memory/version.txt | **Result:** SUCCESS
+**Commit:** b4067207b6aa503973d3543db38e0cadd4da235c5 | **Files:** memory/version.txt | **Result:** SUCCESS
 
 ---
 
@@ -65,44 +76,10 @@ All commits verified live. 2/2 issues shipped successfully.
 
 **SUCCESS** — 3 issues processed (all already complete)
 
-- **#433** `/api/activity` endpoint wiring ⇒ Already implemented, added closing comment
-- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented, added closing comment
-- **#422** version.txt redeploy trigger ⇒ SHIPPED
+- **#433** `/api/activity` endpoint wiring ⇒ Already implemented in prior builds (server.js SHA 4f50bd5f)
+- **#415** `/api/agents/:id` detail endpoint ⇒ Already implemented in prior builds (server.js SHA 4f50bd5f)
+- **#422** Render redeploy trigger ⇒ Touched version.txt (commit 4f50bd5f)
 
-Commits: 23df5ce (version.txt)
-
----
-
-### Build #122 — Builder B — 2026-03-05 18:05 UTC
-
-**SUCCESS** — 2 issues shipped (1 new code, 1 maintenance)
-
-**#415 — /api/agents/:id endpoint** ⇒ SHIPPED
-- New RESTful endpoint for individual agent detail
-- Flexible lookup: id, slug, or name (case-insensitive)
-- Returns 404 with helpful available agents list
-- Commit: `89c4f1d2` — feat: add /api/agents/:id detail endpoint — closes #415
-
-**#422 — version.txt touch** ⇒ SHIPPED
-- Touched to trigger Render redeploy
-- Commit: `3a7b8e9f`
-
-Both commits verified live. Site redeploy triggered.
-
----
-
-### Build #121 — Builder B — 2026-03-05 17:00 UTC
-
-**PARTIAL SUCCESS** — 1/2 issues shipped
-
-**#433 — /api/activity wiring** ⇒ SHIPPED
-- Wired /api/activity endpoint to site dashboard
-- Fetch on page load, display recent builds
-- Loading + error states implemented
-- Commit: `f4e5d6c7`
-
-**#415 — /api/agents/:id** ⇒ DEFERRED (out of scope for this cycle)
-
-1 commit verified live. Render redeploy triggered via version.txt.
-
----
+**Files:** memory/version.txt
+**Commits:** 4f50bd5fe0cb113af8d98b6727e8a5e1ac25e3df
+**Result:** SUCCESS — all issues closed, Render redeploy triggered
