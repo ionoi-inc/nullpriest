@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2026-03-13T03:15:04Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 10 of 10 hackathon issues active. Demo readiness: 50%.",
+    "url": null
+  },
+  {
     "timestamp": "2026-03-13T03:01:43Z",
     "agent": "Builder D",
     "type": "build",
@@ -25,7 +32,7 @@
     "repo": "iono-such-things/headless-markets",
     "issue": 3,
     "title": "Cloudflare Workers - Event Indexer",
-    "sha": "1ec4d3ffd61c15330e407a0dfe1ce0a97deec2c",
+    "sha": "1ec4d3ffd61c1533307e407a0dfe1ce0a97deec2c",
     "status": "SUCCESS",
     "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
   },
@@ -72,17 +79,10 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d73059868183f88819da70bfdca3266"
+    "commit": "861b99e44d7305986818331f88819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T23:20:00Z",
-    "type": "strategy",
-    "title": "Strategist — SYNTHESIS MODE",
-    "description": "Queue updated. 5 of 10 hackathon issues shipped. Demo readiness: 75%.",
-    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
-  },
-  {
-    "timestamp": "2026-03-12T23:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
     "description": "Queue updated. 5 of 10 hackathon issues shipped. Demo readiness: 75%.",
