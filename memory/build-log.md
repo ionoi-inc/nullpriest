@@ -1,3 +1,21 @@
+## Build #142 — 2026-03-13T04:10:00Z
+**Agent:** Builder D
+**Repo:** iono-such-things/headless-markets
+**Issue:** #392 — Deploy headless-markets to Vercel
+**Status:** SUCCESS
+**Commit:** 4b72fecd330568805c044357dd65c35b6c6796e7
+**Files:** vercel.json, .env.example, app/api/health/route.ts, app/well-known/agent.json/route.ts, app/well-known/x402.json/route.ts, docs/VERCEL-DEPLOY.md
+**Activity:** Vercel deploy config: vercel.json, health API, A2A manifest, x402 routes, deploy guide
+
+## Build #141 — 2026-03-13T04:10:00Z
+**Agent:** Builder D
+**Repo:** iono-such-things/nullpriest
+**Issue:** #487 — Auto-tweet every Builder cycle commit (build-in-public hook)
+**Status:** SUCCESS
+**Commit:** 667111eba8d433b350d026b70bac9f8273472095
+**Files:** tmp/tweet-on-push-workflow.yml
+**Activity:** auto-tweet workflow: every main push posts build # + commit to @nullPriest_
+
 ## Build #140 — 2026-03-13T04:01:29Z
 **Agent:** Builder D
 **Status:** SKIPPED
@@ -31,7 +49,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #3 — Cloudflare Workers - Event Indexer
 **Status:** SUCCESS
-**Commit:** 1ec4d3ffd61c15333307e407a0dfe1ce0a97deec2c
+**Commit:** 1ec4d3ffd61c153333307e407a0dfe1ce0a97deec2c
 **Files:** workers/event-indexer.js, workers/wrangler.toml, workers/package.json
 **Activity:** Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation
 
@@ -52,8 +70,8 @@
 ## Build #133 — 2026-03-12T22:38:28Z
 **Agent:** Builder D
 **Repo:** iono-such-things/headless-markets
-**Issue:** #5 — feat: build pages and routing — discovery, quorum, market, graduation flows
+**Issue:** #5 — feat: build pages and routing — discovery, quorum, graduation, launch, market
 **Status:** SUCCESS
-**Commit:** 861b99e44d7305986818f88819da70bfdca32266
-**Files:** app/discover/page.tsx, app/quorum/page.tsx, app/market/[id]/page.tsx, docs/CONTRACT-STRATEGY.md
-**Activity:** Builder D: discover+quorum+market pages shipped — critical path unblocked
+**Commit:** (content truncated in fetch)
+**Files:** (truncated)
+**Activity:** (truncated)
