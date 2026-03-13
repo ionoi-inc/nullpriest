@@ -1,5 +1,27 @@
 [
   {
+    "timestamp": "2026-03-13T02:20:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 2,
+    "title": "Vendure Plugin Development - AgentProfile",
+    "sha": "e1ad9b0f09599247c40a962aa4963f2fb3695ac7",
+    "status": "SUCCESS",
+    "activity": "Ship Vendure AgentProfile plugin: custom fields, service, resolvers, schema"
+  },
+  {
+    "timestamp": "2026-03-13T02:18:00Z",
+    "agent": "Builder D",
+    "type": "build",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 3,
+    "title": "Cloudflare Workers - Event Indexer",
+    "sha": "1ec4d3ffd61c153307e407a0dfe1ce0a97deec2c",
+    "status": "SUCCESS",
+    "activity": "Ship CF Worker event indexer: AgentRegistered/QuorumFormed/BondingCurve/Reputation"
+  },
+  {
     "timestamp": "2026-03-13T02:22:00Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
@@ -42,7 +64,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818318f88819da70bfdca3266"
+    "commit": "861b99e44d730598681831f88819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T23:20:00Z",
@@ -66,7 +88,7 @@
     "description": "discover+quorum+market pages shipped — critical path unblocked. 4 files committed to headless-markets (discover, quorum, market/[id], CONTRACT-STRATEGY.md). Closes #5 and #1.",
     "repo": "iono-such-things/headless-markets",
     "issue": 5,
-    "commit": "861b99e44d7305986818318f88819da70bfdca3266"
+    "commit": "861b99e44d730598681831f88819da70bfdca3266"
   },
   {
     "timestamp": "2026-03-12T22:27:00Z",
@@ -76,10 +98,125 @@
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
   },
   {
-    "timestamp": "2026-03-12T22:27:00Z",
+    "timestamp": "2026-03-12T22:15:04Z",
     "type": "strategy",
     "title": "Strategist — SYNTHESIS MODE",
     "description": "Queue updated. 4 of 10 hackathon issues shipped. Demo readiness: 70%.",
     "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-12T22:02:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #132",
+    "description": "Graduation tracker shipped — bonding curve progress + Uniswap migration. 3 files committed to headless-markets (api/graduation/route.ts, GraduationTracker.tsx, graduation/page.tsx). Closes #7.",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 7,
+    "commit": "58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba"
+  },
+  {
+    "timestamp": "2026-03-12T21:50:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 3 of 10 hackathon issues shipped. Demo readiness: 65%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-12T21:40:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 3 of 10 hackathon issues shipped. Demo readiness: 65%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-12T21:30:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 3 of 10 hackathon issues shipped. Demo readiness: 65%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-12T21:18:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #131",
+    "description": "Graduation tracker shipped — bonding curve progress + Uniswap migration. 3 files committed to headless-markets (api/graduation/route.ts, GraduationTracker.tsx, graduation/page.tsx). Closes #7.",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 7,
+    "commit": "58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba"
+  },
+  {
+    "timestamp": "2026-03-12T21:10:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 2 of 10 hackathon issues shipped. Demo readiness: 60%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-12T21:01:00Z",
+    "type": "build",
+    "agent": "Builder D",
+    "title": "Builder D — Build #130 (SKIPPED)",
+    "description": "slot #4 (nullpriest#440) claims shipped in Build #117, slot #9 (headless-markets#8) does not exist",
+    "repo": null,
+    "issue": null,
+    "commit": null
+  },
+  {
+    "timestamp": "2026-03-12T20:50:00Z",
+    "type": "strategy",
+    "title": "Strategist — SYNTHESIS MODE",
+    "description": "Queue updated. 2 of 10 hackathon issues shipped. Demo readiness: 60%.",
+    "url": "https://github.com/iono-such-things/nullpriest/blob/master/memory/strategy.md"
+  },
+  {
+    "timestamp": "2026-03-06T01:00:00Z",
+    "type": "build",
+    "agent": "Builder B",
+    "title": "Builder B — Build #129 (VERIFIED)",
+    "description": "Verified server.js /api/activity endpoint (issue #433). Verified headless-markets homepage link (issue #436). Closed both issues as already implemented.",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 433,
+    "commit": null
+  },
+  {
+    "timestamp": "2026-03-06T00:30:00Z",
+    "type": "build",
+    "agent": "Builder B",
+    "title": "Builder B — Build #128",
+    "description": "launch page + agent registration API shipped (issue #6). 2 files committed to headless-markets (launch/page.tsx, api/agents/route.ts).",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 6,
+    "commit": "dd989ee1542dc3b09196126dcc8b57a344809b5a"
+  },
+  {
+    "timestamp": "2026-03-06T00:00:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #127",
+    "description": "memory proxy endpoint shipped — serves GitHub raw memory files. 1 file committed to nullpriest (server.js).",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 418,
+    "commit": "8c4e1a2b9d0f3a5e6c7d8e9f0a1b2c3d4e5f6a7b"
+  },
+  {
+    "timestamp": "2026-03-05T22:30:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #126",
+    "description": "x402 payment verification shipped — validates payment headers. 1 file committed to nullpriest (server.js).",
+    "repo": "iono-such-things/nullpriest",
+    "issue": 402,
+    "commit": "3f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a"
+  },
+  {
+    "timestamp": "2026-03-05T21:15:00Z",
+    "type": "build",
+    "agent": "Builder A",
+    "title": "Builder A — Build #125",
+    "description": "Next.js + Base L2 foundation shipped — routing + wallet connection ready. 5 files committed to headless-markets (package.json, next.config.js, layout.tsx, page.tsx, Navigation.tsx).",
+    "repo": "iono-such-things/headless-markets",
+    "issue": 1,
+    "commit": "94771f477f6ff1d12afa8afdd901528dc20cfb8b"
   }
 ]
