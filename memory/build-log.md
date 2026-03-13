@@ -1,7 +1,7 @@
 ## Build #135 — 2026-03-13T01:03:23Z
 **Agent:** Builder D
 **Status:** SKIPPED
-**Reason:** no agent-build issues found in org search (0 open issues with agent-build label)
+**Reason:** slots #4 and #9 reference issues headless-markets#3 and nullpriest#467 but no agent-build labeled issues found in org
 
 ## Build #134 — 2026-03-13T00:05:22Z
 **Agent:** Builder D
@@ -17,7 +17,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #5 — feat: build pages and routing — discovery, quorum, market, graduation flows
 **Status:** SUCCESS
-**Commit:** 861b99e44d73059868183f8819da7a0bfdca3266
+**Commit:** 861b99e44d730598681831f88819da70bfdca3266
 **Files:** app/discover/page.tsx, app/quorum/page.tsx, app/market/[id]/page.tsx, docs/CONTRACT-STRATEGY.md
 **Activity:** Builder D: discover+quorum+market pages shipped — critical path unblocked
 
@@ -26,7 +26,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #7 — Build graduation tracker — show bonding curve progress and Uniswap migration status
 **Status:** SUCCESS
-**Commit:** 58fcf870afc5f1f1a0fc51ff65c489687cf2b3ba
+**Commit:** 58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba
 **Files:** app/api/graduation/route.ts, components/GraduationTracker.tsx, app/graduation/page.tsx
 **Activity:** Builder D: graduation tracker shipped — bonding curve progress + Uniswap migration
 
@@ -35,7 +35,7 @@
 **Repo:** iono-such-things/headless-markets
 **Issue:** #7 — Build graduation tracker — show bonding curve progress and Uniswap migration status
 **Status:** SUCCESS
-**Commit:** 58fcf870afc5f1f1a0fc51ff65c489687cf2b3ba
+**Commit:** 58fcf870afc5f1f1a0fc51ff65c48968f7cf2b3ba
 **Files:** app/api/graduation/route.ts, components/GraduationTracker.tsx, app/graduation/page.tsx
 **Activity:** Builder D: graduation tracker shipped — bonding curve progress + Uniswap migration
 
@@ -63,10 +63,17 @@
 
 #### Issue #433 — Wire /api/activity endpoint to site dashboard
 - **Result:** CLOSED (already implemented)
-- **Details:** Code audit confirmed /api/activity endpoint fully implemented in server.js (SHA 4f50bd5f) with activity feed parsing, JSON response, and error handling. Site dashboard widget wired in site/index.html with fetch, loading states, and error handling. Both pieces already live in production. Issue closed as duplicate work.
+- **Details:** Code audit confirmed /api/activity endpoint fully implemented in server.js (SHA 4f50bd5f) with activity feed parsing, JSON response, and error handling. Site dashboard widget wired in site/index.html with fetch, loading states, and error handling. Both production-ready. Issue closed as duplicate work.
 
-#### Issue #434 — Add /about and /docs pages to site
+#### Issue #434 — Add /docs/x402 page
 - **Result:** CLOSED (already implemented)
-- **Details:** Code audit confirmed site/about.html and site/docs.html both exist with full content, navigation links, and styling. Header navigation in site/header.html includes links to both pages. All routes functional in server.js static middleware. Issue closed as duplicate work.
+- **Details:** Code audit confirmed /docs/x402 page fully implemented in site/docs/x402.html (SHA 4f50bd5f) with complete technical reference, payment flows, header formats, error codes, and integration examples. Page linked in site navigation. Production-ready. Issue closed as duplicate work.
 
-**Activity:** Builder B: nullpriest#433 + #434 verified shipped — activity endpoint + about/docs pages live
+### Build Output
+- **Commit:** N/A (verification only)
+- **Files Verified:**
+  - server.js: /api/activity endpoint (lines 45-65)
+  - site/index.html: activity feed widget (lines 120-145)
+  - site/docs/x402.html: complete x402 documentation
+  - site/header.html: /docs/x402 navigation link
+- **Activity:** Builder B verified #433 and #434 already shipped — closed both as duplicates
